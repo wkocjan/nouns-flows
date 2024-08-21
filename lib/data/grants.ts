@@ -1,0 +1,100 @@
+export type Grant = {
+  id: string
+  imageUrl: string
+  title: string
+  tagline: string
+  budget: number
+  votes: number
+}
+
+export function getGrantsForCategory(categoryId: string): Grant[] {
+  const count = 3 + (categoryId.charCodeAt(categoryId.length - 1) % 5)
+  return [...grants]
+    .map((g) => ({ ...g, id: g.id + categoryId }))
+    .sort(() => 0.5 - Math.random())
+    .slice(0, count)
+}
+
+export const grants: Grant[] = [
+  {
+    id: "grant-1",
+    imageUrl:
+      "https://revolution.mypinata.cloud/ipfs/QmZJiq3RttEKd8PaK2AfZyKD1XszU1eBgVUg33YexM71uK",
+    title: "Community Garden Project",
+    tagline: "Creating a sustainable green space for local residents",
+    budget: 150,
+    votes: 42,
+  },
+  {
+    id: "grant-2",
+    imageUrl:
+      "https://revolution.mypinata.cloud/ipfs/Qma43CeHGZ6uRcxcC4LocxX2K1RVGzMemhMhnoNV7ZTmu3",
+    title: "Nouns Hackathon",
+    tagline: "48-hour coding event to build Nouns-inspired projects",
+    budget: 200,
+    votes: 35,
+  },
+  {
+    id: "grant-3",
+    imageUrl:
+      "https://revolution.mypinata.cloud/ipfs/QmfZMtW2vDcdfH3TZdNAbMNm4Z1y16QHjuFwf8ff2NANAt",
+    title: "Nouns Art Exhibition",
+    tagline: "Showcasing Nouns-inspired artwork from the community",
+    budget: 175,
+    votes: 28,
+  },
+  {
+    id: "grant-4",
+    imageUrl:
+      "https://revolution.mypinata.cloud/ipfs/QmZJiq3RttEKd8PaK2AfZyKD1XszU1eBgVUg33YexM71uK",
+    title: "Decentralized Voting App",
+    tagline: "Building a user-friendly mobile app for DAO governance",
+    budget: 250,
+    votes: 39,
+  },
+  {
+    id: "grant-5",
+    imageUrl:
+      "https://revolution.mypinata.cloud/ipfs/Qma43CeHGZ6uRcxcC4LocxX2K1RVGzMemhMhnoNV7ZTmu3",
+    title: "Nouns Podcast Series",
+    tagline: "Weekly discussions on Nouns ecosystem and NFT culture",
+    budget: 100,
+    votes: 22,
+  },
+  {
+    id: "grant-6",
+    imageUrl:
+      "https://revolution.mypinata.cloud/ipfs/Qma43CeHGZ6uRcxcC4LocxX2K1RVGzMemhMhnoNV7ZTmu3",
+    title: "Local Food Bank Support",
+    tagline: "Providing meals and groceries to families in need",
+    budget: 300,
+    votes: 55,
+  },
+  {
+    id: "grant-7",
+    imageUrl:
+      "https://revolution.mypinata.cloud/ipfs/QmZJiq3RttEKd8PaK2AfZyKD1XszU1eBgVUg33YexM71uK",
+    title: "Nouns Education Initiative",
+    tagline: "Developing curriculum to teach Web3 concepts in schools",
+    budget: 225,
+    votes: 31,
+  },
+  {
+    id: "grant-8",
+    imageUrl:
+      "https://revolution.mypinata.cloud/ipfs/Qma43CeHGZ6uRcxcC4LocxX2K1RVGzMemhMhnoNV7ZTmu3",
+    title: "Nounish Merch Store",
+    tagline: "Creating and distributing Nouns-themed merchandise",
+    budget: 180,
+    votes: 26,
+  },
+  {
+    id: "grant-9",
+    imageUrl:
+      "https://revolution.mypinata.cloud/ipfs/QmfZMtW2vDcdfH3TZdNAbMNm4Z1y16QHjuFwf8ff2NANAt",
+    title: "Nouns Community Outreach",
+    tagline: "Organizing workshops to introduce Nouns to new audiences",
+    budget: 160,
+    votes: 33,
+  },
+]
