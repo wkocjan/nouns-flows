@@ -4,6 +4,7 @@ import { Grant } from "@/lib/data/grants"
 import { Handle, Node, NodeProps, Position } from "@xyflow/react"
 import Image from "next/image"
 import { memo } from "react"
+import { Badge } from "@/components/ui/badge"
 
 function GrantNode(props: NodeProps<Node<{ grant: Grant }, "grant">>) {
   const { targetPosition = Position.Left, data, width, height } = props
@@ -11,7 +12,7 @@ function GrantNode(props: NodeProps<Node<{ grant: Grant }, "grant">>) {
 
   return (
     <div
-      className="pointer-events-auto flex cursor-auto rounded-lg bg-card p-2.5"
+      className="pointer-events-auto flex cursor-auto rounded-lg border bg-card p-2.5"
       style={{ width, height }}
     >
       <div className="flex grow flex-col items-center justify-center">
@@ -31,14 +32,14 @@ function GrantNode(props: NodeProps<Node<{ grant: Grant }, "grant">>) {
             {tagline}
           </div> */}
         <div className="mt-2 flex items-center space-x-1">
-          <div className="rounded-md bg-primary px-1.5 py-0.5 text-[11px] font-medium text-primary-foreground">
+          <Badge>
             {Intl.NumberFormat("en", {
               style: "currency",
               currency: "USD",
               maximumFractionDigits: 0,
             }).format(budget)}
             /month
-          </div>
+          </Badge>
         </div>
       </div>
 

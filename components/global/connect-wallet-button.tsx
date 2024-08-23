@@ -1,7 +1,7 @@
 "use client"
 
-import { Avatar, ConnectKitButton } from "connectkit"
 import { Button } from "@/components/ui/button"
+import { Avatar, ConnectKitButton } from "connectkit"
 
 export const ConnectWalletButton = () => {
   return (
@@ -14,7 +14,7 @@ export const ConnectWalletButton = () => {
                 <button onClick={show}>
                   <Avatar
                     address={address}
-                    size={28}
+                    size={26}
                     name={ensName || truncatedAddress}
                   />
                 </button>

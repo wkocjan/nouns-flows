@@ -1,45 +1,86 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
+import { HamburgerMenuIcon } from "@radix-ui/react-icons"
+import Link from "next/link"
 import { useSelectedLayoutSegments } from "next/navigation"
 
 const options = [
-  { name: "Categories", href: "/", icon: null },
-  { name: "Diagram", href: "/diagram", icon: null },
-  { name: "Apply for a grant", href: "/apply", icon: null },
-  { name: "About", href: "/about", icon: null },
+  { name: "Categories", href: "/" },
+  { name: "Diagram", href: "/diagram" },
+  { name: "Apply for a grant", href: "/apply" },
+  { name: "About", href: "/about" },
 ] as const
 
-export function Menu() {
-  const segments = useSelectedLayoutSegments()
+export function MenuMobile() {
+  const menu = useMenu()
 
   return (
-    <div className="border-b">
-      <nav className="-mb-px flex space-x-8">
-        {options.map((option) => {
-          const isCurrent = option.href === `/${segments[0] || ""}`
-          return (
-            <a
-              key={option.name}
-              href={option.href}
-              className={cn("group border-b-2 px-1 pb-3 font-medium", {
-                "border-primary text-primary": isCurrent,
-                "border-transparent text-muted-foreground hover:border-muted-foreground hover:text-foreground":
-                  !isCurrent,
-              })}
-            >
-              {/* <tab.icon
-                  aria-hidden="true"
-                  className={cn(
-                    tab.current ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground',
-                    '-ml-0.5 mr-2 h-5 w-5',
-                  )}
-                /> */}
-              <span>{option.name}</span>
-            </a>
-          )
-        })}
-      </nav>
+    <div className="md:hidden">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon">
+            <HamburgerMenuIcon className="size-5" />
+            <span className="sr-only">Toggle menu</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          {menu.map(({ name, href, isCurrent }) => (
+            <DropdownMenuItem key={name} asChild>
+              <Link
+                href={href}
+                className={cn("w-full px-2 py-1.5", {
+                  "text-primary": isCurrent,
+                  "text-muted-foreground hover:text-foreground": !isCurrent,
+                })}
+              >
+                {name}
+              </Link>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   )
+}
+
+export function MenuDesktop() {
+  const menu = useMenu()
+
+  return (
+    <>
+      <nav className="hidden md:flex md:flex-row md:space-x-8">
+        {menu.map(({ name, href, isCurrent }) => (
+          <Link
+            key={name}
+            href={href}
+            className={cn("group px-1 font-medium tracking-tight", {
+              "text-primary": isCurrent,
+              "text-muted-foreground hover:text-foreground": !isCurrent,
+            })}
+          >
+            {name}
+          </Link>
+        ))}
+      </nav>
+    </>
+  )
+}
+
+function useMenu() {
+  const segments = useSelectedLayoutSegments()
+
+  return options.map((option) => {
+    return {
+      ...option,
+      isCurrent: option.href === `/${segments[0] || ""}`,
+    }
+  })
 }

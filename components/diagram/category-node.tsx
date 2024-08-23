@@ -1,6 +1,7 @@
 "use client"
 
 import { Category } from "@/lib/data/categories"
+import { Badge } from "@/components/ui/badge"
 import { Handle, Node, NodeProps, Position } from "@xyflow/react"
 import { memo } from "react"
 
@@ -18,7 +19,7 @@ function CategoryNode(
 
   return (
     <div
-      className="pointer-events-auto flex cursor-auto rounded-lg bg-card p-2.5"
+      className="pointer-events-auto flex cursor-auto rounded-lg border bg-card p-2.5"
       style={{ width, height }}
     >
       <div className="flex grow items-center justify-center">
@@ -30,14 +31,14 @@ function CategoryNode(
           </h2>
 
           <div className="mt-2 flex items-center space-x-1">
-            <div className="rounded-md bg-primary px-1.5 py-0.5 text-xs font-medium text-primary-foreground">
+            <Badge>
               {Intl.NumberFormat("en", {
                 style: "currency",
                 currency: "USD",
                 maximumFractionDigits: 0,
               }).format(budget)}
               /month
-            </div>
+            </Badge>
           </div>
         </div>
       </div>

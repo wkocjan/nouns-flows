@@ -19,7 +19,7 @@ function PoolNode(props: NodeProps<IPoolNode>) {
 
   return (
     <div
-      className="pointer-events-auto inline-block cursor-auto rounded-lg bg-card px-6 py-4"
+      className="pointer-events-auto inline-block cursor-auto rounded-lg border bg-card px-6 py-4"
       style={{ width, height }}
     >
       <div className="flex flex-col items-center justify-center">

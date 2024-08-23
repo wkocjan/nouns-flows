@@ -2,6 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ConnectKitProvider } from "connectkit"
+import { useTheme } from "next-themes"
 import { PropsWithChildren } from "react"
 import { WagmiProvider } from "wagmi"
 import { config } from "./config"
@@ -9,10 +10,14 @@ import { config } from "./config"
 const queryClient = new QueryClient()
 
 export default function Wagmi({ children }: PropsWithChildren) {
+  const { resolvedTheme } = useTheme()
+
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <ConnectKitProvider>{children}</ConnectKitProvider>
+        <ConnectKitProvider mode={resolvedTheme === "dark" ? "dark" : "light"}>
+          {children}
+        </ConnectKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   )

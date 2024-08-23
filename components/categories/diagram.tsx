@@ -97,9 +97,10 @@ export const CategoriesDiagram = (props: Props) => {
         defaultNodes={[...layout.nodes, ...grantNodes]}
         defaultEdges={edges}
         fitView
-        minZoom={0.75}
         maxZoom={1}
+        colorMode="system"
         nodesDraggable={false}
+        snapToGrid
         nodesFocusable={false}
         edgesFocusable={false}
         elementsSelectable={false}
@@ -116,9 +117,9 @@ export const CategoriesDiagram = (props: Props) => {
           type: "smoothstep",
         }}
       >
-        <Background />
-        <Controls />
-        <MiniMap />
+        <Background gap={32} />
+        {/* <Controls /> */}
+        {/* <MiniMap /> */}
       </ReactFlow>
     </div>
   )

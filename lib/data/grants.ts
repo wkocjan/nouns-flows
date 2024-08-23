@@ -5,10 +5,16 @@ export type Grant = {
   tagline: string
   budget: number
   votes: number
+
+  isApproved: boolean
+  isChallenged: boolean
+  earned: number
+  users: `0x${string}`[]
+  daysLeft?: number
 }
 
 export function getGrantsForCategory(categoryId: string): Grant[] {
-  const count = 3 + (categoryId.charCodeAt(categoryId.length - 1) % 5)
+  const count = 4 + (categoryId.charCodeAt(categoryId.length - 1) % 6)
   return [...grants]
     .map((g) => ({ ...g, id: g.id + categoryId }))
     .sort(() => 0.5 - Math.random())
@@ -24,6 +30,10 @@ export const grants: Grant[] = [
     tagline: "Creating a sustainable green space for local residents",
     budget: 150,
     votes: 42,
+    isApproved: true,
+    isChallenged: false,
+    earned: 50,
+    users: ["0x1234567890abcdef", "0xfedcba0987654321"],
   },
   {
     id: "grant-2",
@@ -33,6 +43,10 @@ export const grants: Grant[] = [
     tagline: "48-hour coding event to build Nouns-inspired projects",
     budget: 200,
     votes: 35,
+    isApproved: false,
+    isChallenged: true,
+    earned: 75,
+    users: ["0x1234567890abcdef", "0xfedcba0987654321"],
   },
   {
     id: "grant-3",
@@ -42,6 +56,10 @@ export const grants: Grant[] = [
     tagline: "Showcasing Nouns-inspired artwork from the community",
     budget: 175,
     votes: 28,
+    isApproved: true,
+    isChallenged: false,
+    earned: 100,
+    users: ["0x1234567890abcdef"],
   },
   {
     id: "grant-4",
@@ -51,6 +69,11 @@ export const grants: Grant[] = [
     tagline: "Building a user-friendly mobile app for DAO governance",
     budget: 250,
     votes: 39,
+    isApproved: false,
+    isChallenged: true,
+    earned: 125,
+    users: ["0x1234567890abcdef", "0xfedcba0987654321"],
+    daysLeft: 2,
   },
   {
     id: "grant-5",
@@ -60,6 +83,10 @@ export const grants: Grant[] = [
     tagline: "Weekly discussions on Nouns ecosystem and NFT culture",
     budget: 100,
     votes: 22,
+    isApproved: true,
+    isChallenged: false,
+    earned: 50,
+    users: ["0x1234567890abcdef"],
   },
   {
     id: "grant-6",
@@ -69,6 +96,11 @@ export const grants: Grant[] = [
     tagline: "Providing meals and groceries to families in need",
     budget: 300,
     votes: 55,
+    isApproved: false,
+    isChallenged: true,
+    earned: 150,
+    users: ["0x1234567890abcdef", "0xfedcba0987654321"],
+    daysLeft: 6,
   },
   {
     id: "grant-7",
@@ -78,6 +110,10 @@ export const grants: Grant[] = [
     tagline: "Developing curriculum to teach Web3 concepts in schools",
     budget: 225,
     votes: 31,
+    isApproved: true,
+    isChallenged: false,
+    earned: 75,
+    users: ["0x1234567890abcdef", "0xfedcba0987654321"],
   },
   {
     id: "grant-8",
@@ -87,6 +123,11 @@ export const grants: Grant[] = [
     tagline: "Creating and distributing Nouns-themed merchandise",
     budget: 180,
     votes: 26,
+    isApproved: false,
+    isChallenged: true,
+    earned: 100,
+    users: ["0x1234567890abcdef", "0xfedcba0987654321"],
+    daysLeft: 3,
   },
   {
     id: "grant-9",
@@ -96,5 +137,10 @@ export const grants: Grant[] = [
     tagline: "Organizing workshops to introduce Nouns to new audiences",
     budget: 160,
     votes: 33,
+    isApproved: true,
+    isChallenged: false,
+    earned: 50,
+    users: ["0x1234567890abcdef", "0xfedcba0987654321"],
+    daysLeft: 5,
   },
 ]

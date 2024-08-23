@@ -7,6 +7,12 @@ export type Category = {
   votes: number
 }
 
+export function getCategory(categoryId: string): Category {
+  const category = categories.find((c) => c.id === categoryId)
+  if (!category) throw new Error(`Category ${categoryId} not found`)
+  return category
+}
+
 export const categories: Category[] = [
   {
     id: "category-1",
@@ -62,23 +68,23 @@ export const categories: Category[] = [
     budget: 800,
     votes: 120,
   },
-  // {
-  //   id: "category-7",
-  //   imageUrl:
-  //     "https://revolution.mypinata.cloud/ipfs/QmfZMtW2vDcdfH3TZdNAbMNm4Z1y16QHjuFwf8ff2NANAt",
-  //   title: "Education & Research",
-  //   tagline:
-  //     "Funding initiatives that advance knowledge in the Nouns ecosystem",
-  //   budget: 600,
-  //   votes: 90,
-  // },
-  // {
-  //   id: "category-8",
-  //   imageUrl:
-  //     "https://revolution.mypinata.cloud/ipfs/QmZJiq3RttEKd8PaK2AfZyKD1XszU1eBgVUg33YexM71uK",
-  //   title: "Ecosystem Growth",
-  //   tagline: "Supporting projects that expand the Nouns ecosystem",
-  //   budget: 1200,
-  //   votes: 150,
-  // },
+  {
+    id: "category-7",
+    imageUrl:
+      "https://revolution.mypinata.cloud/ipfs/QmfZMtW2vDcdfH3TZdNAbMNm4Z1y16QHjuFwf8ff2NANAt",
+    title: "Education & Research",
+    tagline:
+      "Funding initiatives that advance knowledge in the Nouns ecosystem",
+    budget: 600,
+    votes: 90,
+  },
+  {
+    id: "category-8",
+    imageUrl:
+      "https://revolution.mypinata.cloud/ipfs/QmZJiq3RttEKd8PaK2AfZyKD1XszU1eBgVUg33YexM71uK",
+    title: "Ecosystem Growth",
+    tagline: "Supporting projects that expand the Nouns ecosystem",
+    budget: 1200,
+    votes: 150,
+  },
 ]

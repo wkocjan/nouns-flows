@@ -1,5 +1,5 @@
 import { ConnectWalletButton } from "@/components/global/connect-wallet-button"
-import { Menu } from "@/components/global/menu"
+import { MenuDesktop, MenuMobile } from "@/components/global/menu"
 import { ModeToggle } from "@/components/global/mode-toggle"
 import { ThemeProvider } from "@/components/global/theme-provider"
 import Wagmi from "@/lib/wagmi/wagmi-provider"
@@ -32,30 +32,29 @@ export default function RootLayout(
           disableTransitionOnChange
         >
           <Wagmi>
-            <nav className="bg-card py-4 shadow">
-              <div className="container flex items-center justify-between">
-                <h2>
-                  <Link
-                    href="/"
-                    className="flex items-center font-medium text-card-foreground"
-                  >
-                    <Image
-                      src={Noggles}
-                      alt="Nouns Flows"
-                      className="mr-2.5 h-7 w-auto"
-                    />
-                    Nouns Flows
-                  </Link>
-                </h2>
-                <div className="flex items-center space-x-2.5">
+            <nav className="container flex items-center justify-between py-4 md:py-5">
+              <h2>
+                <Link
+                  href="/"
+                  className="flex items-center font-medium text-card-foreground max-sm:text-sm"
+                >
+                  <Image
+                    src={Noggles}
+                    alt="Nouns Flows"
+                    className="mr-2.5 h-5 w-auto md:h-7"
+                  />
+                  Nouns Flows
+                </Link>
+              </h2>
+              <MenuDesktop />
+              <div className="flex items-center space-x-2.5">
+                <span className="max-sm:hidden">
                   <ModeToggle />
-                  <ConnectWalletButton />
-                </div>
+                </span>
+                <ConnectWalletButton />
+                <MenuMobile />
               </div>
             </nav>
-            <div className="container mt-6">
-              <Menu />
-            </div>
             {children}
           </Wagmi>
         </ThemeProvider>
