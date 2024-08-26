@@ -16,7 +16,7 @@ export const config = createConfig(
 
     walletConnectProjectId: `${process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID}`,
 
-    appName: "Nouns Grants",
+    appName: "Nouns Flows",
     appDescription: "",
     appUrl: "https://nouns-grants.vercel.app/",
     appIcon: "https://nouns-grants.vercel.app/noggles.svg",
