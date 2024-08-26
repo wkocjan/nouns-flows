@@ -4,15 +4,7 @@ import grantNode from "@/components/diagram/grant-node"
 import PoolNode, { IPoolNode } from "@/components/diagram/pool-node"
 import { Category } from "@/lib/data/categories"
 import { getGrantsForCategory } from "@/lib/data/grants"
-import {
-  Background,
-  Controls,
-  Edge,
-  MiniMap,
-  Node,
-  Position,
-  ReactFlow,
-} from "@xyflow/react"
+import { Background, Edge, Node, Position, ReactFlow } from "@xyflow/react"
 
 import "@xyflow/react/dist/style.css"
 

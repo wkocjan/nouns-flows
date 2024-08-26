@@ -14,7 +14,7 @@ export type Grant = {
 }
 
 export function getGrantsForCategory(categoryId: string): Grant[] {
-  const count = 4 + (categoryId.charCodeAt(categoryId.length - 1) % 6)
+  const count = Math.floor(Math.random() * 6) + 4
   return [...grants]
     .map((g) => ({ ...g, id: g.id + categoryId }))
     .sort(() => 0.5 - Math.random())
@@ -33,7 +33,10 @@ export const grants: Grant[] = [
     isApproved: true,
     isChallenged: false,
     earned: 50,
-    users: ["0x1234567890abcdef", "0xfedcba0987654321"],
+    users: [
+      "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52",
+      "0x289715ffbb2f4b482e2917d2f183feab564ec84f",
+    ],
   },
   {
     id: "grant-2",
@@ -46,7 +49,10 @@ export const grants: Grant[] = [
     isApproved: false,
     isChallenged: true,
     earned: 75,
-    users: ["0x1234567890abcdef", "0xfedcba0987654321"],
+    users: [
+      "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52",
+      "0x289715ffbb2f4b482e2917d2f183feab564ec84f",
+    ],
   },
   {
     id: "grant-3",
@@ -59,7 +65,7 @@ export const grants: Grant[] = [
     isApproved: true,
     isChallenged: false,
     earned: 100,
-    users: ["0x1234567890abcdef"],
+    users: ["0x6cc34d9fb4ae289256fc1896308d387aee2bcc52"],
   },
   {
     id: "grant-4",
@@ -70,9 +76,12 @@ export const grants: Grant[] = [
     budget: 250,
     votes: 39,
     isApproved: false,
-    isChallenged: true,
+    isChallenged: false,
     earned: 125,
-    users: ["0x1234567890abcdef", "0xfedcba0987654321"],
+    users: [
+      "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52",
+      "0x289715ffbb2f4b482e2917d2f183feab564ec84f",
+    ],
     daysLeft: 2,
   },
   {
@@ -86,7 +95,7 @@ export const grants: Grant[] = [
     isApproved: true,
     isChallenged: false,
     earned: 50,
-    users: ["0x1234567890abcdef"],
+    users: ["0x6cc34d9fb4ae289256fc1896308d387aee2bcc52"],
   },
   {
     id: "grant-6",
@@ -99,7 +108,10 @@ export const grants: Grant[] = [
     isApproved: false,
     isChallenged: true,
     earned: 150,
-    users: ["0x1234567890abcdef", "0xfedcba0987654321"],
+    users: [
+      "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52",
+      "0x289715ffbb2f4b482e2917d2f183feab564ec84f",
+    ],
     daysLeft: 6,
   },
   {
@@ -113,7 +125,10 @@ export const grants: Grant[] = [
     isApproved: true,
     isChallenged: false,
     earned: 75,
-    users: ["0x1234567890abcdef", "0xfedcba0987654321"],
+    users: [
+      "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52",
+      "0x289715ffbb2f4b482e2917d2f183feab564ec84f",
+    ],
   },
   {
     id: "grant-8",
@@ -124,9 +139,12 @@ export const grants: Grant[] = [
     budget: 180,
     votes: 26,
     isApproved: false,
-    isChallenged: true,
+    isChallenged: false,
     earned: 100,
-    users: ["0x1234567890abcdef", "0xfedcba0987654321"],
+    users: [
+      "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52",
+      "0x289715ffbb2f4b482e2917d2f183feab564ec84f",
+    ],
     daysLeft: 3,
   },
   {
@@ -137,10 +155,13 @@ export const grants: Grant[] = [
     tagline: "Organizing workshops to introduce Nouns to new audiences",
     budget: 160,
     votes: 33,
-    isApproved: true,
+    isApproved: false,
     isChallenged: false,
     earned: 50,
-    users: ["0x1234567890abcdef", "0xfedcba0987654321"],
+    users: [
+      "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52",
+      "0x289715ffbb2f4b482e2917d2f183feab564ec84f",
+    ],
     daysLeft: 5,
   },
 ]

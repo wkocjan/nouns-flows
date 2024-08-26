@@ -7,7 +7,7 @@ export type Category = {
   votes: number
 }
 
-export function getCategory(categoryId: string): Category {
+export async function getCategory(categoryId: string): Promise<Category> {
   const category = categories.find((c) => c.id === categoryId)
   if (!category) throw new Error(`Category ${categoryId} not found`)
   return category

@@ -1,4 +1,6 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import "server-only"
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import {
   Breadcrumb,
@@ -10,11 +12,11 @@ import {
 } from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
 import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
+import { Input } from "@/components/ui/input"
 import {
   Table,
   TableBody,
@@ -23,9 +25,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { UserProfile } from "@/components/user-profile/user-profile"
 import { getCategory } from "@/lib/data/categories"
 import { getGrantsForCategory } from "@/lib/data/grants"
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import Image from "next/image"
+import Link from "next/link"
+import { CategoryHeader } from "./components/CategoryHeader"
 
 interface Props {
   params: {
@@ -33,10 +39,10 @@ interface Props {
   }
 }
 
-export default function CategoryPage(props: Props) {
+export default async function CategoryPage(props: Props) {
   const { categoryId } = props.params
 
-  const category = getCategory(categoryId)
+  const category = await getCategory(categoryId)
   const grants = getGrantsForCategory(categoryId)
 
   return (
@@ -55,57 +61,18 @@ export default function CategoryPage(props: Props) {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <Card className="mb-6">
-        <CardHeader className="flex flex-col items-center justify-between space-y-4 p-4 md:flex-row md:space-y-0 md:p-6">
-          <div className="flex flex-col items-center text-center md:flex-row md:space-x-4 md:text-left">
-            <Image
-              src={category.imageUrl}
-              alt={category.title}
-              className="mb-2 rounded-lg object-cover md:mb-0"
-              height="60"
-              width="60"
-            />
-            <div>
-              <CardTitle className="text-xl font-bold">
-                {category.title}
-              </CardTitle>
-              <CardDescription className="text-sm">
-                {category.tagline}
-              </CardDescription>
-            </div>
-          </div>
-          <div className="grid w-full grid-cols-2 gap-4 text-sm md:w-auto md:grid-cols-4">
-            <div className="text-center">
-              <p className="mb-1 text-muted-foreground">Grants</p>
-              <p className="font-medium">{grants.length}</p>
-            </div>
-            <div className="text-center">
-              <p className="mb-1 text-muted-foreground">Budget</p>
-              <p className="font-medium">
-                $
-                {grants
-                  .reduce((sum, grant) => sum + grant.budget, 0)
-                  .toLocaleString()}
-              </p>
-            </div>
-            <div className="text-center">
-              <p className="mb-1 text-muted-foreground">Total Votes</p>
-              <p className="font-medium">
-                {grants
-                  .reduce((sum, grant) => sum + grant.votes, 0)
-                  .toLocaleString()}
-              </p>
-            </div>
-            <div className="text-center">
-              <p className="mb-1 text-muted-foreground">Your Vote</p>
-              <p className="font-medium">0%</p>
-            </div>
-          </div>
-        </CardHeader>
-      </Card>
+      <CategoryHeader category={category} grants={grants} />
 
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-bold">Grants</h2>
+      <div className="mb-4 mt-10 flex items-center justify-between">
+        <div className="flex items-center space-x-7">
+          <h2 className="text-xl font-semibold">Approved Grants</h2>
+          <h2 className="group flex items-center space-x-2 text-xl font-semibold">
+            <span className="opacity-50 duration-100 ease-in-out group-hover:opacity-100">
+              Awaiting Submissions
+            </span>{" "}
+            <Badge variant="default">3</Badge>
+          </h2>
+        </div>
         <Button>Voting on/off</Button>
       </div>
 
@@ -114,11 +81,10 @@ export default function CategoryPage(props: Props) {
           <TableRow>
             <TableHead className="w-[350px]">Name</TableHead>
             <TableHead>Builders</TableHead>
-            <TableHead>Budget</TableHead>
-            <TableHead>Earned</TableHead>
-            <TableHead>Total Votes</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead className="text-center">Earned</TableHead>
+            <TableHead className="text-center">Budget</TableHead>
+            <TableHead className="text-center">Total Votes</TableHead>
+            <TableHead className="text-right">Your Vote</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -134,32 +100,62 @@ export default function CategoryPage(props: Props) {
                     width="48"
                   />
                   <div>
-                    <p className="text-[15px] font-medium">{grant.title}</p>
-                    {/* <p className="text-wrap text-[13px] leading-tight text-muted-foreground">
-                      {grant.tagline}
-                    </p> */}
+                    <h4 className="mb-1 text-[15px] font-medium">
+                      {grant.title}
+                    </h4>
+                    {grant.isChallenged && (
+                      <HoverCard openDelay={250}>
+                        <HoverCardTrigger>
+                          <Badge variant="warning">
+                            <ExclamationTriangleIcon className="mr-1" />
+                            Challenged
+                          </Badge>
+                        </HoverCardTrigger>
+                        <HoverCardContent className="w-80">
+                          <div className="flex space-x-1 whitespace-normal">
+                            Remaining days + your vote + button
+                          </div>
+                        </HoverCardContent>
+                      </HoverCard>
+                    )}
                   </div>
                 </div>
               </TableCell>
               <TableCell>
                 <div className="flex space-x-0.5">
                   {grant.users.map((user) => (
-                    <Avatar key={user} className="size-6">
-                      <AvatarFallback>T</AvatarFallback>
-                    </Avatar>
+                    <Link href="#" key={user}>
+                      <UserProfile address={user}>
+                        {(profile) => (
+                          <Avatar className="size-7 bg-accent text-xs">
+                            <AvatarImage
+                              src={profile.pfp_url}
+                              alt={profile.display_name}
+                            />
+                            <AvatarFallback>
+                              {profile.display_name[0].toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                        )}
+                      </UserProfile>
+                    </Link>
                   ))}
                 </div>
               </TableCell>
-              <TableCell>
-                <Badge>${grant.budget.toLocaleString()}</Badge>
+              <TableCell className="text-center">
+                ${grant.earned.toLocaleString("en-US")}
               </TableCell>
-              <TableCell>${grant.earned.toLocaleString()}</TableCell>
-              <TableCell>{grant.votes.toLocaleString()}</TableCell>
-              <TableCell className="flex flex-col items-start space-y-2">
-                {grant.isApproved && <Badge>Approved</Badge>}
+              <TableCell className="text-center">
+                <Badge>${grant.budget.toLocaleString("en-US")}/mo</Badge>
+              </TableCell>
+              <TableCell className="text-center">
+                {grant.votes.toLocaleString("en-US")}
+              </TableCell>
+              {/* <TableCell className="flex flex-col items-start space-y-2">
+                {grant.isApproved && <Badge variant="success">Approved</Badge>}
 
                 {grant.isChallenged && (
-                  <Badge variant="destructive">In Challenge</Badge>
+                  <Badge variant="warning">Challenged</Badge>
                 )}
 
                 {!grant.isApproved && (grant.daysLeft || 0) > 0 && (
@@ -171,12 +167,12 @@ export default function CategoryPage(props: Props) {
                     {grant.daysLeft} days left
                   </p>
                 )}
-              </TableCell>
+              </TableCell> */}
 
-              <TableCell className="text-right">
-                <Button size="sm" variant="outline">
-                  Challenge
-                </Button>
+              <TableCell className="w-[100px] max-w-[100px]">
+                <div className="flex justify-end">
+                  <Input placeholder="0" />
+                </div>
               </TableCell>
             </TableRow>
           ))}
