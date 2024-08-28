@@ -2,6 +2,7 @@ import { ConnectWalletButton } from "@/components/global/connect-wallet-button"
 import { MenuDesktop, MenuMobile } from "@/components/global/menu"
 import { ModeToggle } from "@/components/global/mode-toggle"
 import { ThemeProvider } from "@/components/global/theme-provider"
+import { Toaster } from "@/components/ui/sonner"
 import Wagmi from "@/lib/wagmi/wagmi-provider"
 import Noggles from "@/public/noggles.svg"
 import type { Metadata } from "next"
@@ -56,6 +57,7 @@ export default function RootLayout(
               </div>
             </nav>
             {children}
+            <Toaster />
           </Wagmi>
         </ThemeProvider>
       </body>

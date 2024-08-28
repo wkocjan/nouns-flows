@@ -39,11 +39,11 @@ export const CategoryHeader = (props: Props) => {
         </div>
         <div className="grid w-full grid-cols-2 gap-4 text-sm md:w-auto md:grid-cols-4">
           <div className="text-center">
-            <p className="mb-1 text-muted-foreground">Grants</p>
+            <p className="mb-1.5 text-muted-foreground">Grants</p>
             <p className="font-medium">{grants.length}</p>
           </div>
           <div className="text-center">
-            <p className="mb-1 text-muted-foreground">Budget</p>
+            <p className="mb-1.5 text-muted-foreground">Budget</p>
             <Badge>
               $
               {grants
@@ -53,7 +53,7 @@ export const CategoryHeader = (props: Props) => {
             </Badge>
           </div>
           <div className="text-center">
-            <p className="mb-1 text-muted-foreground">Total Votes</p>
+            <p className="mb-1.5 text-muted-foreground">Total Votes</p>
             <p className="font-medium">
               {grants
                 .reduce((sum, grant) => sum + grant.votes, 0)
@@ -61,7 +61,7 @@ export const CategoryHeader = (props: Props) => {
             </p>
           </div>
           <div className="text-center">
-            <p className="mb-1 text-muted-foreground">Your Vote</p>
+            <p className="mb-1.5 text-muted-foreground">Your Vote</p>
             <p className="font-medium">0%</p>
           </div>
         </div>

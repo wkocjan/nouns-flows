@@ -5,7 +5,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import { PropsWithChildren } from "react"
-import { Profile } from "./getUserProfile"
+import { Profile } from "./get-user-profile"
 
 interface Props {
   profile: Profile
