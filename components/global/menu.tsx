@@ -14,7 +14,7 @@ import { useSelectedLayoutSegments } from "next/navigation"
 
 const options = [
   { name: "Categories", href: "/" },
-  { name: "Diagram", href: "/diagram" },
+  { name: "Explore", href: "/explore" },
   { name: "Apply for a grant", href: "/apply" },
   { name: "About", href: "/about" },
 ] as const
@@ -61,10 +61,13 @@ export function MenuDesktop() {
           <Link
             key={name}
             href={href}
-            className={cn("group px-1 font-medium tracking-tight", {
-              "text-primary": isCurrent,
-              "text-muted-foreground hover:text-foreground": !isCurrent,
-            })}
+            className={cn(
+              "underline-primary group px-1 font-medium tracking-tight underline-offset-8",
+              {
+                "text-primary underline": isCurrent,
+                "text-muted-foreground hover:text-foreground": !isCurrent,
+              },
+            )}
           >
             {name}
           </Link>

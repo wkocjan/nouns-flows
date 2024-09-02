@@ -2,15 +2,16 @@ import { ConnectWalletButton } from "@/components/global/connect-wallet-button"
 import { MenuDesktop, MenuMobile } from "@/components/global/menu"
 import { ModeToggle } from "@/components/global/mode-toggle"
 import { ThemeProvider } from "@/components/global/theme-provider"
+import { Toaster } from "@/components/ui/sonner"
 import Wagmi from "@/lib/wagmi/wagmi-provider"
 import Noggles from "@/public/noggles.svg"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Roboto_Mono } from "next/font/google"
 import Image from "next/image"
 import Link from "next/link"
 import "./globals.css"
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
+const mono = Roboto_Mono({ subsets: ["latin"], variable: "--font-mono" })
 
 export const metadata: Metadata = {
   title: "Nouns Flows",
@@ -24,7 +25,7 @@ export default function RootLayout(
 
   return (
     <html lang="en" suppressHydrationWarning className="h-full">
-      <body className={`${inter.variable} flex h-full flex-col`}>
+      <body className={`${mono.variable} flex h-full flex-col`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -56,6 +57,7 @@ export default function RootLayout(
               </div>
             </nav>
             {children}
+            <Toaster />
           </Wagmi>
         </ThemeProvider>
       </body>

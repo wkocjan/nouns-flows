@@ -1,4 +1,4 @@
-import { getFarcasterUserByEthAddress } from "@/lib/farcaster/getUser"
+import { getFarcasterUserByEthAddress } from "@/lib/farcaster/get-user"
 import { getShortEthAddress } from "@/lib/utils"
 
 export type Profile = {

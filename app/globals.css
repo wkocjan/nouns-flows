@@ -7,7 +7,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background font-sans text-foreground;
+    @apply bg-background font-mono text-foreground;
   }
 }
 
@@ -19,7 +19,7 @@
     --card-foreground: 221 5% 15%;
     --popover: 221 23% 97%;
     --popover-foreground: 221 95% 10%;
-    --primary: 221 38% 42%;
+    --primary: 221 45% 45%;
     --primary-foreground: 0 0% 100%;
     --secondary: 221 23% 90%;
     --secondary-foreground: 0 0% 0%;

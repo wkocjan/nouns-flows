@@ -26,6 +26,9 @@ const buttonVariants = cva(
         lg: "h-10 rounded-md px-8",
         icon: "h-9 w-9",
       },
+      loading: {
+        true: "animate-pulse",
+      },
     },
     defaultVariants: {
       variant: "default",
@@ -41,7 +44,7 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, loading, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
     return (
       <Comp
