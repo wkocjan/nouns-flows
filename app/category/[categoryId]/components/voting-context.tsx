@@ -8,7 +8,7 @@ import { useAccount } from "wagmi"
 
 interface VotingContextType {
   activate: () => void
-  deactivate: () => void
+  cancel: () => void
   isActive: boolean
 
   votes: Vote[]
@@ -50,7 +50,10 @@ export const VotingProvider = (
       value={{
         isActive,
         activate: () => setIsActive(true),
-        deactivate: () => setIsActive(false),
+        cancel: () => {
+          setIsActive(false)
+          setVotes(userVotes)
+        },
         votes,
         saveVotes: async () => {
           await prepareWallet()

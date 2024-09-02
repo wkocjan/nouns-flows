@@ -7,7 +7,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background font-sans text-foreground;
+    @apply bg-background font-mono text-foreground;
   }
 }
 

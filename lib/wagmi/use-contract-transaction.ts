@@ -52,6 +52,7 @@ export const useContractTransaction = (args: {
         ),
         {
           id: toastId,
+          duration: 3000,
         },
       )
       setCallbackHandled(true)
