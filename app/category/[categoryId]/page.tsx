@@ -19,9 +19,8 @@ import { UserProfile } from "@/components/user-profile/user-profile"
 import { getGrantsForCategory } from "@/lib/data/grants"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import Image from "next/image"
-import Link from "next/link"
-import { VotingInput } from "./components/voting-input"
 import { VotingBar } from "./components/voting-bar"
+import { VotingInput } from "./components/voting-input"
 
 interface Props {
   params: {
@@ -84,21 +83,19 @@ export default async function CategoryPage(props: Props) {
               <TableCell>
                 <div className="flex space-x-0.5">
                   {grant.users.map((user) => (
-                    <Link href="#" key={user}>
-                      <UserProfile address={user}>
-                        {(profile) => (
-                          <Avatar className="size-7 bg-accent text-xs">
-                            <AvatarImage
-                              src={profile.pfp_url}
-                              alt={profile.display_name}
-                            />
-                            <AvatarFallback>
-                              {profile.display_name[0].toUpperCase()}
-                            </AvatarFallback>
-                          </Avatar>
-                        )}
-                      </UserProfile>
-                    </Link>
+                    <UserProfile address={user} key={user}>
+                      {(profile) => (
+                        <Avatar className="size-7 bg-accent text-xs">
+                          <AvatarImage
+                            src={profile.pfp_url}
+                            alt={profile.display_name}
+                          />
+                          <AvatarFallback>
+                            {profile.display_name[0].toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                      )}
+                    </UserProfile>
                   ))}
                 </div>
               </TableCell>
@@ -113,7 +110,7 @@ export default async function CategoryPage(props: Props) {
               </TableCell>
 
               <TableCell className="w-[100px] max-w-[100px] text-center">
-                <VotingInput grant={grant} />
+                <VotingInput recipient={grant.id} />
               </TableCell>
             </TableRow>
           ))}

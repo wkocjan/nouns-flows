@@ -5,6 +5,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { Category } from "@/lib/data/categories"
 import { Grant } from "@/lib/data/grants"
 import Image from "next/image"
@@ -40,7 +45,32 @@ export const CategoryHeader = (props: Props) => {
         <div className="grid w-full grid-cols-2 gap-4 text-sm md:w-auto md:grid-cols-4">
           <div className="text-center">
             <p className="mb-1.5 text-muted-foreground">Grants</p>
-            <p className="font-medium">{grants.length}</p>
+            <div className="space-x-1">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Badge variant="success">
+                    {grants.filter((g) => g.isApproved).length}
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent>Approved</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Badge variant="warning">
+                    {grants.filter((g) => g.isChallenged).length}
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent>Challenged</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Badge variant="outline">
+                    {grants.filter((g) => !g.isApproved).length}
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent>Awaiting</TooltipContent>
+              </Tooltip>
+            </div>
           </div>
           <div className="text-center">
             <p className="mb-1.5 text-muted-foreground">Budget</p>

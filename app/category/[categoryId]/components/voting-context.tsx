@@ -17,11 +17,8 @@ interface VotingContextType {
   isLoading: boolean
 
   allocatedBps: number
-  remainingBps: number
   votedCount: number
 }
-
-export const PERCENTAGE_SCALE = 1e6
 
 const VotingContext = createContext<VotingContextType | null>(null)
 
@@ -42,8 +39,6 @@ export const VotingProvider = (
   })
 
   const { address } = useAccount()
-
-  const allocatedBps = votes.reduce((acc, v) => acc + v.bps, 0) || 0
 
   return (
     <VotingContext.Provider
@@ -69,14 +64,14 @@ export const VotingProvider = (
         },
         updateVote: (vote: Vote) => {
           const { recipient, bps } = vote
+
           setVotes([
             ...votes.filter((v) => v.recipient !== recipient),
-            { recipient, bps },
+            ...(bps > 0 ? [{ recipient, bps }] : []),
           ])
         },
         isLoading,
-        allocatedBps,
-        remainingBps: PERCENTAGE_SCALE - allocatedBps,
+        allocatedBps: votes.reduce((acc, v) => acc + v.bps, 0) || 0,
         votedCount: votes.filter((v) => v.bps > 0).length || 0,
       }}
     >

@@ -10,6 +10,7 @@ import {
   useWriteContract,
   type BaseError,
 } from "wagmi"
+import { explorerUrl } from "../utils"
 
 export const useContractTransaction = (args: {
   chainId: number
@@ -37,7 +38,7 @@ export const useContractTransaction = (args: {
       toast.loading("Transaction in progress...", {
         action: {
           label: "View",
-          onClick: () => window.open(`https://basescan.org/tx/${hash}`), // TODO: make the url dynamic for other chains
+          onClick: () => window.open(explorerUrl(hash, chainId)),
         },
         id: toastId,
       })

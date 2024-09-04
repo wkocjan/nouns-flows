@@ -8,9 +8,13 @@ declare module "wagmi" {
   }
 }
 
+const chains = [base, baseSepolia, mainnet] as const
+
+export type SupportedChainId = (typeof chains)[number]["id"]
+
 export const config = createConfig(
   getDefaultConfig({
-    chains: [base, baseSepolia, mainnet],
+    chains,
     transports: {
       [base.id]: http(
         `https://base-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`,
