@@ -1,5 +1,5 @@
-import { CategoriesDiagram } from "@/components/categories/diagram"
 import { categories } from "@/lib/data/categories"
+import { CategoriesDiagram } from "./diagram"
 
 export default function ExplorePage() {
   return (

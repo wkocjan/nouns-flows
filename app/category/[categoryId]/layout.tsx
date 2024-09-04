@@ -9,7 +9,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { getCategory } from "@/lib/data/categories"
-import { grants } from "@/lib/data/grants"
+import { getGrantsForCategory, grants } from "@/lib/data/grants"
 import { GRANTS_CONTRACT } from "@/lib/wagmi/contracts"
 import { PropsWithChildren } from "react"
 import { base } from "viem/chains"
@@ -27,6 +27,8 @@ export default async function CategoryLayout(props: PropsWithChildren<Props>) {
   const { categoryId } = props.params
 
   const category = await getCategory(categoryId)
+
+  const grants = getGrantsForCategory(categoryId)
 
   return (
     <VotingProvider chainId={base.id} userVotes={[]} contract={GRANTS_CONTRACT}>
@@ -47,7 +49,10 @@ export default async function CategoryLayout(props: PropsWithChildren<Props>) {
 
         <CategoryHeader category={category} grants={grants} />
 
-        <CategorySubmenu categoryId={categoryId} />
+        <CategorySubmenu
+          categoryId={categoryId}
+          awaitingCount={grants.filter((g) => !g.isApproved).length}
+        />
 
         {children}
       </div>

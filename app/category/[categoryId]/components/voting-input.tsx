@@ -1,35 +1,54 @@
 "use client"
 
 import { Input } from "@/components/ui/input"
-import { Grant } from "@/lib/data/grants"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { useVoting } from "./voting-context"
 
 interface Props {
-  grant: Grant
+  recipient: string
 }
 
 export const VotingInput = (props: Props) => {
-  const { grant } = props
+  const { recipient } = props
   const { votes, updateVote, isActive, activate } = useVoting()
+
+  const currentVote = votes.find((v) => v.recipient === recipient)
 
   if (!isActive)
     return (
-      <button type="button" onClick={() => activate()}>
-        {votes.find((v) => v.recipient === grant.id)?.bps || 0}
-      </button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button type="button" onClick={() => activate()}>
+            {currentVote?.bps || 0 / 100}
+          </button>
+        </TooltipTrigger>
+        <TooltipContent>Click to edit</TooltipContent>
+      </Tooltip>
     )
 
   return (
-    <Input
-      placeholder="0"
-      value={votes.find((v) => v.recipient === grant.id)?.bps || ""}
-      onChange={(e) =>
-        updateVote({ recipient: grant.id, bps: parseFloat(e.target.value) })
-      }
-      min={0}
-      max={100}
-      type="number"
-      step="1"
-    />
+    <div className="relative">
+      <Input
+        placeholder="0"
+        value={currentVote ? currentVote.bps / 100 : ""}
+        onChange={(e) =>
+          updateVote({
+            recipient,
+            bps: parseFloat(e.target.value) * 100,
+          })
+        }
+        min={0}
+        max={100}
+        type="number"
+        step="1"
+      />
+      <span className="absolute right-2 top-1/2 -translate-y-1/2 transform text-gray-500">
+        %
+      </span>
+    </div>
   )
 }

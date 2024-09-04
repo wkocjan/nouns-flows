@@ -8,10 +8,11 @@ import { VotingToggle } from "./voting-toggle"
 
 interface Props {
   categoryId: string
+  awaitingCount: number
 }
 
 export const CategorySubmenu = (props: Props) => {
-  const { categoryId } = props
+  const { categoryId, awaitingCount } = props
 
   const segment = useSelectedLayoutSegment()
 
@@ -46,7 +47,7 @@ export const CategorySubmenu = (props: Props) => {
             Awaiting Submissions
           </span>{" "}
           <Badge variant="default" className="rounded-full">
-            3
+            {awaitingCount}
           </Badge>
         </Link>
       </div>

@@ -80,21 +80,19 @@ export default async function CategoryCandidatesPage(props: Props) {
             <TableCell>
               <div className="flex space-x-0.5">
                 {grant.users.map((user) => (
-                  <Link href="#" key={user}>
-                    <UserProfile address={user}>
-                      {(profile) => (
-                        <Avatar className="size-7 bg-accent text-xs">
-                          <AvatarImage
-                            src={profile.pfp_url}
-                            alt={profile.display_name}
-                          />
-                          <AvatarFallback>
-                            {profile.display_name[0].toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                      )}
-                    </UserProfile>
-                  </Link>
+                  <UserProfile address={user} key={user}>
+                    {(profile) => (
+                      <Avatar className="size-7 bg-accent text-xs">
+                        <AvatarImage
+                          src={profile.pfp_url}
+                          alt={profile.display_name}
+                        />
+                        <AvatarFallback>
+                          {profile.display_name[0].toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                    )}
+                  </UserProfile>
                 ))}
               </div>
             </TableCell>
