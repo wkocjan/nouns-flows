@@ -56,5 +56,8 @@
     "prisma": "^5.19.1",
     "tailwindcss": "^3.4.10",
     "typescript": "^5.0.4"
+  },
+  "prisma": {
+    "schema": "lib/database/schema.prisma"
   }
 }
