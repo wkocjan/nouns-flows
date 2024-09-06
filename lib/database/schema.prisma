@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Draft {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  imageUrl    String
+  user        String
+  isPrivate   Boolean  @default(true)
+  isPublished Boolean  @default(false)
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+
+  @@index([user], map: "user_1")
+  @@index([isPrivate], map: "isPrivate_1")
+  @@index([isPublished], map: "isPublished_1")
+  @@map("drafts")
+}

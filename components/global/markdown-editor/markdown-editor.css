@@ -1,0 +1,8 @@
+.bn-container[data-markdown-editor][data-color-scheme] {
+  --bn-colors-editor-background: transparent;
+  --bn-font-family: inherit;
+  --bn-border-radius: var(--radius);
+}
+
+.bn-container[data-markdown-editor][data-color-scheme="dark"] {
+}
