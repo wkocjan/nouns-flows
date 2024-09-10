@@ -19,10 +19,14 @@ export const VotingBar = (props: Props) => {
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-30 border-t-2 bg-background/50 backdrop-blur-xl">
-      <div className="container mx-auto grid grid-cols-4 py-4">
+      <div className="container mx-auto flex py-4 max-sm:items-center max-sm:justify-center md:grid md:grid-cols-4">
+        <Progress
+          value={allocatedBps / 100}
+          className="absolute inset-x-0 top-0 h-[3px] md:hidden"
+        />
         <div
           className={cn(
-            "col-span-2 col-start-2 flex items-center justify-center space-x-2.5 transition-opacity",
+            "flex items-center justify-center space-x-2.5 transition-opacity max-sm:hidden md:col-span-2 md:col-start-2",
             { "opacity-0": allocatedBps === 0 },
           )}
         >

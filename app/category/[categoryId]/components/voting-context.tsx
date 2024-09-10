@@ -1,9 +1,15 @@
 "use client"
 
 import { Vote } from "@/lib/data/votes"
-import { grantsAbi } from "@/lib/wagmi/contracts"
+import { grantsAbi } from "@/lib/wagmi/abi"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
-import { PropsWithChildren, createContext, useContext, useState } from "react"
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react"
 import { useAccount } from "wagmi"
 
 interface VotingContextType {
@@ -39,6 +45,17 @@ export const VotingProvider = (
   })
 
   const { address } = useAccount()
+
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && isActive) setIsActive(false)
+    }
+
+    document.addEventListener("keydown", handleEscape)
+    return () => {
+      document.removeEventListener("keydown", handleEscape)
+    }
+  }, [isActive])
 
   return (
     <VotingContext.Provider

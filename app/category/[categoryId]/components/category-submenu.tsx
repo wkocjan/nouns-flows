@@ -16,26 +16,28 @@ export const CategorySubmenu = (props: Props) => {
 
   const segment = useSelectedLayoutSegment()
 
+  const isApproved = segment === null
   const isCandidates = segment === "candidates"
+  const isDrafts = segment === "drafts"
 
   return (
     <div className="mb-4 mt-10 flex items-center justify-between">
-      <div className="flex min-h-9 items-center space-x-7">
+      <div className="flex min-h-9 items-center space-x-5 md:space-x-7">
         <Link
           href={`/category/${categoryId}`}
-          className="group flex items-center space-x-2 text-xl font-semibold"
+          className="group flex items-center space-x-2 text-lg font-semibold md:text-xl"
         >
           <span
             className={cn({
               "opacity-50 duration-100 ease-in-out group-hover:opacity-100":
-                isCandidates,
+                !isApproved,
             })}
           >
-            Approved Grants
+            Approved
           </span>
         </Link>
         <Link
-          className="group flex items-center space-x-2 text-xl font-semibold"
+          className="group flex items-center space-x-2 text-lg font-semibold md:text-xl"
           href={`/category/${categoryId}/candidates`}
         >
           <span
@@ -44,15 +46,28 @@ export const CategorySubmenu = (props: Props) => {
                 !isCandidates,
             })}
           >
-            Awaiting Submissions
+            Awaiting
           </span>{" "}
           <Badge variant="default" className="rounded-full">
             {awaitingCount}
           </Badge>
         </Link>
+        <Link
+          className="group flex items-center space-x-2 text-lg font-semibold md:text-xl"
+          href={`/category/${categoryId}/drafts`}
+        >
+          <span
+            className={cn({
+              "opacity-50 duration-100 ease-in-out group-hover:opacity-100":
+                !isDrafts,
+            })}
+          >
+            Drafts
+          </span>{" "}
+        </Link>
       </div>
 
-      {!isCandidates && <VotingToggle />}
+      {isApproved && <VotingToggle />}
     </div>
   )
 }

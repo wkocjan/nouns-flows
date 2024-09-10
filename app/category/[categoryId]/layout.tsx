@@ -8,9 +8,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { NOUNS_FLOW_PROXY } from "@/lib/config"
 import { getCategory } from "@/lib/data/categories"
-import { getGrantsForCategory, grants } from "@/lib/data/grants"
-import { GRANTS_CONTRACT } from "@/lib/wagmi/contracts"
+import { getGrantsForCategory } from "@/lib/data/grants"
 import { PropsWithChildren } from "react"
 import { base } from "viem/chains"
 import { CategoryHeader } from "./components/category-header"
@@ -31,7 +31,11 @@ export default async function CategoryLayout(props: PropsWithChildren<Props>) {
   const grants = getGrantsForCategory(categoryId)
 
   return (
-    <VotingProvider chainId={base.id} userVotes={[]} contract={GRANTS_CONTRACT}>
+    <VotingProvider
+      chainId={base.id}
+      userVotes={[]}
+      contract={NOUNS_FLOW_PROXY}
+    >
       <div className="container mt-2.5 pb-24 md:mt-6">
         <Breadcrumb className="mb-4">
           <BreadcrumbList>

@@ -15,7 +15,13 @@ export default function Wagmi({ children }: PropsWithChildren) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <ConnectKitProvider mode={resolvedTheme === "dark" ? "dark" : "light"}>
+        <ConnectKitProvider
+          mode={resolvedTheme === "dark" ? "dark" : "light"}
+          customTheme={{
+            "--ck-font-family": "var(--font-mono)",
+            "--ck-border-radius": "var(--radius)",
+          }}
+        >
           {children}
         </ConnectKitProvider>
       </QueryClientProvider>

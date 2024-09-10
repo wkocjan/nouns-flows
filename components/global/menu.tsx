@@ -15,7 +15,7 @@ import { useSelectedLayoutSegments } from "next/navigation"
 const options = [
   { name: "Categories", href: "/" },
   { name: "Explore", href: "/explore" },
-  { name: "Apply for a grant", href: "/apply" },
+  { name: "Apply", href: "/apply" },
   { name: "About", href: "/about" },
 ] as const
 
@@ -23,7 +23,7 @@ export function MenuMobile() {
   const menu = useMenu()
 
   return (
-    <div className="md:hidden">
+    <div className="lg:hidden">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon">
@@ -56,7 +56,7 @@ export function MenuDesktop() {
 
   return (
     <>
-      <nav className="hidden md:flex md:flex-row md:space-x-8">
+      <nav className="hidden md:space-x-8 lg:flex lg:flex-row">
         {menu.map(({ name, href, isCurrent }) => (
           <Link
             key={name}
