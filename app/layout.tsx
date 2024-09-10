@@ -1,5 +1,5 @@
-import { ConnectWalletButton } from "@/components/global/connect-wallet-button"
 import { MenuDesktop, MenuMobile } from "@/components/global/menu"
+import { MenuAvatar } from "@/components/global/menu-avatar"
 import { ModeToggle } from "@/components/global/mode-toggle"
 import { ThemeProvider } from "@/components/global/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
@@ -54,7 +54,7 @@ export default function RootLayout(
                   <span className="max-sm:hidden">
                     <ModeToggle />
                   </span>
-                  <ConnectWalletButton />
+                  <MenuAvatar />
                   <MenuMobile />
                 </div>
               </nav>

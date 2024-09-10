@@ -58,10 +58,8 @@ export default async function CategoryPage(props: Props) {
                     src={grant.imageUrl}
                     width="48"
                   />
-                  <div>
-                    <h4 className="mb-1 text-[15px] font-medium">
-                      {grant.title}
-                    </h4>
+                  <div className="shrink-0">
+                    <h4 className="mb-1 text-[15px]">{grant.title}</h4>
                     {grant.isChallenged && (
                       <HoverCard openDelay={250}>
                         <HoverCardTrigger>

@@ -2,6 +2,22 @@
   --bn-colors-editor-background: transparent;
   --bn-font-family: inherit;
   --bn-border-radius: var(--radius);
+
+  h1 {
+    @apply text-xl tracking-tight;
+  }
+
+  h2 {
+    @apply text-lg tracking-tight;
+  }
+
+  h3 {
+    @apply text-base tracking-tight;
+  }
+
+  .bn-block-outer {
+    @apply my-1;
+  }
 }
 
 .bn-container[data-markdown-editor][data-color-scheme="dark"] {

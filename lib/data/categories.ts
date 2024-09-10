@@ -13,6 +13,10 @@ export async function getCategory(categoryId: string): Promise<Category> {
   return category
 }
 
+export async function getCategories(): Promise<Category[]> {
+  return categories
+}
+
 export const categories: Category[] = [
   {
     id: "category-1",

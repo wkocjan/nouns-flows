@@ -16,9 +16,7 @@ export function useFileUpload() {
       const key = await createKey()
       if (!key) throw new Error("Failed to create API key")
 
-      const hash = await pinFile(file, key.JWT)
-      toast.success(`File uploaded!`)
-      return hash
+      return await pinFile(file, key.JWT)
     } catch (error) {
       console.error("Upload error:", error)
       toast.error((error as Error).message || "Couldn't upload file")

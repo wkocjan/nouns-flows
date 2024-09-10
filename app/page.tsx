@@ -1,16 +1,5 @@
 import { Badge } from "@/components/ui/badge"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card"
+import { Card, CardContent } from "@/components/ui/card"
 import {
   Table,
   TableBody,
@@ -19,8 +8,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { NOUNS_FLOW_PROXY } from "@/lib/config"
 import { categories } from "@/lib/data/categories"
-import { GRANTS_CONTRACT } from "@/lib/wagmi/contracts"
 import Image from "next/image"
 import Link from "next/link"
 import { base } from "viem/chains"
@@ -28,28 +22,28 @@ import { VotingBar } from "./category/[categoryId]/components/voting-bar"
 import { VotingProvider } from "./category/[categoryId]/components/voting-context"
 import { VotingInput } from "./category/[categoryId]/components/voting-input"
 import { VotingToggle } from "./category/[categoryId]/components/voting-toggle"
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/components/ui/tooltip"
 
 export default function Home() {
   return (
-    <VotingProvider chainId={base.id} userVotes={[]} contract={GRANTS_CONTRACT}>
-      <main className="container mt-2.5 pb-24 md:mt-6">
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div className="space-y-1.5">
-                <CardTitle>Welcome to Nouns Flows</CardTitle>
-                <CardDescription>
-                  Here are some categories to explore. Better copy coming soon.
-                </CardDescription>
-              </div>
-              <VotingToggle />
-            </div>
-          </CardHeader>
+    <VotingProvider
+      chainId={base.id}
+      userVotes={[]}
+      contract={NOUNS_FLOW_PROXY}
+    >
+      <main className="container mt-2.5 pb-24 md:mt-8">
+        <div className="flex flex-col max-sm:space-y-2.5 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h3 className="font-semibold leading-none tracking-tight">
+              Welcome to Nouns Flows
+            </h3>
+            <p className="mt-1.5 text-sm text-muted-foreground">
+              Here are some categories to explore. Better copy coming soon.
+            </p>
+          </div>
+          <VotingToggle />
+        </div>
+
+        <Card className="mt-6">
           <CardContent>
             <Table>
               <TableHeader>

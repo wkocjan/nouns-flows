@@ -1,7 +1,10 @@
 "use client"
 
 import { Input } from "@/components/ui/input"
+import { getIpfsUrl } from "@/lib/pinata/get-file-url"
 import { useFileUpload } from "@/lib/pinata/use-file-upload"
+import { UpdateIcon } from "@radix-ui/react-icons"
+import Image from "next/image"
 import { useState } from "react"
 import { toast } from "sonner"
 
@@ -22,7 +25,7 @@ export function FileInput({
   const [hash, setHash] = useState<string>()
 
   return (
-    <>
+    <div className="relative">
       <Input
         type="file"
         onChange={async (e) => {
@@ -43,8 +46,23 @@ export function FileInput({
         }}
         accept={accept}
         disabled={isUploading}
+        className="pr-6"
       />
       <input type="hidden" name={name} value={hash} />
-    </>
+      <div className="absolute inset-y-0 right-0 flex items-center pl-3">
+        {hash && (
+          <Image
+            src={getIpfsUrl(hash)}
+            alt=" "
+            width={32}
+            height={32}
+            className="mr-0.5 aspect-square h-full rounded-lg"
+          />
+        )}
+        {isUploading && (
+          <UpdateIcon className="mr-3 size-4 animate-spin text-muted-foreground" />
+        )}
+      </div>
+    </div>
   )
 }
