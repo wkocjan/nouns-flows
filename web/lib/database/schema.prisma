@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Draft {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  image       String
+  users       String[]
+  isPrivate   Boolean  @default(true)
+  isOnchain   Boolean  @default(false)
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  flowId      String
+
+  @@index([isPrivate], map: "isPrivate_1")
+  @@index([isOnchain], map: "isOnchain_1")
+  @@index([flowId], map: "flowId_1")
+  @@index([createdAt], map: "createdAt_1")
+  @@map("Draft")
+}
+
+model Grant {
+  id          String  @id
+  recipient   String
+  isFlow      Int
+  title       String
+  description String
+  image       String
+  tagline     String?
+  url         String?
+  isRemoved   Int
+  blockNumber String
+  parent      String?
+
+  // Indexes managed by Pounder - no need to define them here
+
+  @@map("Grant")
+}
+
+// Needs to be defined in the schema here so that Prisma's db:push won't delete it
+model PonderMeta {
+  key   String @id
+  value String
+
+  @@map("_ponder_meta")
+}
