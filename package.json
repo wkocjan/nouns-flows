@@ -8,9 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "prebuild": "prisma migrate deploy",
-    "db:push": "prisma db push --schema lib/database/schema.prisma",
+    "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev --name",
-    "db:generate": "prisma generate --schema lib/database/schema.prisma",
+    "db:generate": "prisma generate",
     "db:studio": "prisma studio"
   },
   "dependencies": {
