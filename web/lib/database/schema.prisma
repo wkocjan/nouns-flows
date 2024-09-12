@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
 }
 
 datasource db {
@@ -26,9 +27,9 @@ model Draft {
   @@map("Draft")
 }
 
-model Grant {
+view Grant {
   id          String  @id
-  recipient   String
+  recipient   String  @unique
   isFlow      Int
   title       String
   description String
@@ -39,13 +40,13 @@ model Grant {
   blockNumber String
   parent      String?
 
-  // Indexes managed by Pounder - no need to define them here
+  subgrants   Grant[] @relation("Subgrants")
+  parentGrant Grant?  @relation("Subgrants", fields: [parent], references: [recipient])
 
   @@map("Grant")
 }
 
-// Needs to be defined in the schema here so that Prisma's db:push won't delete it
-model PonderMeta {
+view PonderMeta {
   key   String @id
   value String
 

@@ -1,12 +1,6 @@
 import "server-only"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card"
 import {
   Table,
   TableBody,
@@ -16,9 +10,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { UserProfile } from "@/components/user-profile/user-profile"
-import { getGrantsForCategory } from "@/lib/data/grants"
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
+import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
+import { getFlowWithGrants } from "./components/getFlowWithGrants"
 import { VotingBar } from "./components/voting-bar"
 import { VotingInput } from "./components/voting-input"
 
@@ -31,7 +25,7 @@ interface Props {
 export default async function FlowPage(props: Props) {
   const { flowId } = props.params
 
-  const grants = getGrantsForCategory(flowId)
+  const flow = await getFlowWithGrants(flowId)
 
   return (
     <>
@@ -47,7 +41,7 @@ export default async function FlowPage(props: Props) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {grants.map((grant) => (
+          {flow.subgrants.map((grant) => (
             <TableRow key={grant.id}>
               <TableCell className="font-medium">
                 <div className="flex items-center space-x-4">
@@ -55,12 +49,12 @@ export default async function FlowPage(props: Props) {
                     alt={`${grant.title} image`}
                     className="rounded-lg object-cover"
                     height="48"
-                    src={grant.imageUrl}
+                    src={getIpfsUrl(grant.image)}
                     width="48"
                   />
                   <div className="shrink-0">
                     <h4 className="mb-1 text-[15px]">{grant.title}</h4>
-                    {grant.isChallenged && (
+                    {/* {grant.isChallenged && (
                       <HoverCard openDelay={250}>
                         <HoverCardTrigger>
                           <Badge variant="warning">
@@ -74,37 +68,39 @@ export default async function FlowPage(props: Props) {
                           </div>
                         </HoverCardContent>
                       </HoverCard>
-                    )}
+                    )} */}
                   </div>
                 </div>
               </TableCell>
               <TableCell>
                 <div className="flex space-x-0.5">
-                  {grant.users.map((user) => (
-                    <UserProfile address={user} key={user}>
-                      {(profile) => (
-                        <Avatar className="size-7 bg-accent text-xs">
-                          <AvatarImage
-                            src={profile.pfp_url}
-                            alt={profile.display_name}
-                          />
-                          <AvatarFallback>
-                            {profile.display_name[0].toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                      )}
-                    </UserProfile>
-                  ))}
+                  <UserProfile
+                    address={getEthAddress(grant.recipient)}
+                    key={grant.recipient}
+                  >
+                    {(profile) => (
+                      <Avatar className="size-7 bg-accent text-xs">
+                        <AvatarImage
+                          src={profile.pfp_url}
+                          alt={profile.display_name}
+                        />
+                        <AvatarFallback>
+                          {profile.display_name[0].toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                    )}
+                  </UserProfile>
                 </div>
               </TableCell>
               <TableCell className="text-center">
-                ${grant.earned.toLocaleString("en-US")}
+                ?{/* ${grant.earned.toLocaleString("en-US")} */}
               </TableCell>
               <TableCell className="text-center">
-                <Badge>${grant.budget.toLocaleString("en-US")}/mo</Badge>
+                ?
+                {/* <Badge>${grant.budget.toLocaleString("en-US")}/mo</Badge> */}
               </TableCell>
               <TableCell className="text-center">
-                {grant.votes.toLocaleString("en-US")}
+                ?{/* {grant.votes.toLocaleString("en-US")} */}
               </TableCell>
 
               <TableCell className="w-[100px] max-w-[100px] text-center">

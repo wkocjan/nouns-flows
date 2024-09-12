@@ -1,6 +1,6 @@
 "use client"
 
-import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { useSelectedLayoutSegment } from "next/navigation"
@@ -8,11 +8,10 @@ import { VotingToggle } from "./voting-toggle"
 
 interface Props {
   flowId: string
-  awaitingCount: number
 }
 
 export const FlowSubmenu = (props: Props) => {
-  const { flowId, awaitingCount } = props
+  const { flowId } = props
 
   const segment = useSelectedLayoutSegment()
 
@@ -47,10 +46,7 @@ export const FlowSubmenu = (props: Props) => {
             })}
           >
             Awaiting
-          </span>{" "}
-          <Badge variant="default" className="rounded-full">
-            {awaitingCount}
-          </Badge>
+          </span>
         </Link>
         <Link
           className="group flex items-center space-x-2 text-lg font-semibold md:text-xl"
@@ -63,11 +59,16 @@ export const FlowSubmenu = (props: Props) => {
             })}
           >
             Drafts
-          </span>{" "}
+          </span>
         </Link>
       </div>
 
       {isApproved && <VotingToggle />}
+      {(isDrafts || isCandidates) && (
+        <Link href={`/apply/${flowId}`}>
+          <Button variant="secondary">Apply for a grant</Button>
+        </Link>
+      )}
     </div>
   )
 }

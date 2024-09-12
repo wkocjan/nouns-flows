@@ -9,12 +9,11 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { NOUNS_FLOW_PROXY } from "@/lib/config"
-import { getGrantsForCategory } from "@/lib/data/grants"
-import database from "@/lib/database"
 import { PropsWithChildren } from "react"
 import { base } from "viem/chains"
 import { FlowHeader } from "./components/flow-header"
 import { FlowSubmenu } from "./components/flow-submenu"
+import { getFlowWithGrants } from "./components/getFlowWithGrants"
 import { VotingProvider } from "./components/voting-context"
 
 interface Props {
@@ -26,11 +25,7 @@ export default async function FlowLayout(props: PropsWithChildren<Props>) {
   const { children } = props
   const { flowId } = props.params
 
-  const flow = await database.grant.findFirstOrThrow({
-    where: { id: flowId, isFlow: 1 },
-  })
-
-  const grants = getGrantsForCategory(flowId)
+  const flow = await getFlowWithGrants(flowId)
 
   return (
     <VotingProvider
@@ -55,10 +50,7 @@ export default async function FlowLayout(props: PropsWithChildren<Props>) {
 
         <FlowHeader flow={flow} />
 
-        <FlowSubmenu
-          flowId={flowId}
-          awaitingCount={grants.filter((g) => !g.isApproved).length}
-        />
+        <FlowSubmenu flowId={flowId} />
 
         {children}
       </div>

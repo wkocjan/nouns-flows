@@ -1,8 +1,9 @@
 import "server-only"
 
 import { Card, CardContent } from "@/components/ui/card"
-import { ApplyForm } from "./components/ApplyForm"
+import { Markdown } from "@/components/ui/markdown"
 import database from "@/lib/database"
+import { ApplyForm } from "./components/ApplyForm"
 
 interface Props {
   params: {
@@ -14,7 +15,7 @@ export default async function ApplyFlowPage(props: Props) {
   const { flowId } = props.params
 
   const flow = await database.grant.findFirstOrThrow({
-    where: { id: flowId, isFlow: 1 },
+    where: { id: flowId, isFlow: 1, isRemoved: 0 },
   })
 
   return (
@@ -36,28 +37,9 @@ export default async function ApplyFlowPage(props: Props) {
             <h4 className="text-lg font-medium">{flow.title}</h4>
             <p className="mt-1 text-sm text-muted-foreground">{flow.tagline}</p>
           </div>
-          <div className="mt-6 space-y-2">
-            <h5 className="text-sm font-medium">Requirements:</h5>
-            <ul className="list-inside list-disc space-y-1.5 text-sm leading-relaxed text-muted-foreground">
-              <li>
-                Ensure your proposal aligns with the category&apos;s goals and
-                objectives.
-              </li>
-              <li>
-                Provide a clear and concise description of your project or
-                initiative.
-              </li>
-              <li>
-                Demonstrate how your project will benefit the Nouns community
-                and ecosystem.
-              </li>
-            </ul>
+          <div className="mt-6 space-y-2 text-sm">
+            <Markdown>{flow.description}</Markdown>
           </div>
-          <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
-            Please review all requirements carefully before submitting your
-            application. Incomplete or non-compliant applications may not be
-            considered.
-          </p>
         </div>
       </div>
     </main>

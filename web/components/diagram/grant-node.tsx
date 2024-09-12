@@ -1,14 +1,17 @@
 "use client"
 
-import { Grant } from "@/lib/data/grants"
+import { Badge } from "@/components/ui/badge"
+import { getIpfsUrl } from "@/lib/utils"
+import { Grant } from "@prisma/client"
 import { Handle, Node, NodeProps, Position } from "@xyflow/react"
 import Image from "next/image"
 import { memo } from "react"
-import { Badge } from "@/components/ui/badge"
 
 function GrantNode(props: NodeProps<Node<{ grant: Grant }, "grant">>) {
   const { targetPosition = Position.Left, data, width, height } = props
-  const { imageUrl, title, tagline, budget } = data.grant
+  const { image, title } = data.grant
+
+  const budget = "123"
 
   return (
     <div
@@ -17,7 +20,7 @@ function GrantNode(props: NodeProps<Node<{ grant: Grant }, "grant">>) {
     >
       <div className="flex grow flex-col items-center justify-center">
         <Image
-          src={imageUrl}
+          src={getIpfsUrl(image)}
           alt={title}
           width={32}
           height={32}
@@ -28,9 +31,7 @@ function GrantNode(props: NodeProps<Node<{ grant: Grant }, "grant">>) {
           {title}
           {/* </Link> */}
         </h2>
-        {/* <div className="line-clamp-2 max-w-48 text-xs text-card-foreground/70">
-            {tagline}
-          </div> */}
+
         <div className="mt-2 flex items-center space-x-1">
           <Badge>
             {Intl.NumberFormat("en", {

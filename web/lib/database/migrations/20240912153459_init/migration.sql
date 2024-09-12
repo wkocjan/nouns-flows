@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "drafts" (
+CREATE TABLE "Draft" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
@@ -9,19 +9,19 @@ CREATE TABLE "drafts" (
     "isOnchain" BOOLEAN NOT NULL DEFAULT false,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "categoryId" TEXT NOT NULL,
+    "flowId" TEXT NOT NULL,
 
-    CONSTRAINT "drafts_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Draft_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE INDEX "isPrivate_1" ON "drafts"("isPrivate");
+CREATE INDEX "isPrivate_1" ON "Draft"("isPrivate");
 
 -- CreateIndex
-CREATE INDEX "isOnchain_1" ON "drafts"("isOnchain");
+CREATE INDEX "isOnchain_1" ON "Draft"("isOnchain");
 
 -- CreateIndex
-CREATE INDEX "categoryId_1" ON "drafts"("categoryId");
+CREATE INDEX "flowId_1" ON "Draft"("flowId");
 
 -- CreateIndex
-CREATE INDEX "createdAt_1" ON "drafts"("createdAt");
+CREATE INDEX "createdAt_1" ON "Draft"("createdAt");
