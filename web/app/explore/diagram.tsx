@@ -2,20 +2,17 @@ import { autoLayoutDiagram } from "@/components/diagram/auto-layout"
 import FlowNode from "@/components/diagram/flow-node"
 import grantNode from "@/components/diagram/grant-node"
 import PoolNode, { IPoolNode } from "@/components/diagram/pool-node"
-import { getGrantsForCategory } from "@/lib/data/grants"
-import { Grant } from "@prisma/client"
 import { Background, Edge, Node, Position, ReactFlow } from "@xyflow/react"
 
 import "@xyflow/react/dist/style.css"
+import { FlowWithGrants } from "../flow/[flowId]/components/getFlowWithGrants"
 
 type Props = {
-  grants: Grant[]
+  flows: FlowWithGrants[]
 }
 
 export const FullDiagram = (props: Props) => {
-  const { grants } = props
-
-  const flows = grants.filter((g) => g.isFlow === 1)
+  const { flows } = props
 
   const mainNodes: Node[] = []
   const edges: Edge[] = []
@@ -59,10 +56,9 @@ export const FullDiagram = (props: Props) => {
   layout.nodes
     .filter((n) => n.type === "flow")
     .forEach((node) => {
-      const flow = node.data.flow as Grant
-      const grants = getGrantsForCategory(flow.id)
+      const flow = node.data.flow as FlowWithGrants
 
-      grants.forEach((grant, index) => {
+      flow.subgrants.forEach((grant, index) => {
         grantNodes.push({
           type: "grant",
           id: grant.id,

@@ -14,6 +14,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { NOUNS_FLOW_PROXY } from "@/lib/config"
+import database from "@/lib/database"
+import { getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
 import { base } from "viem/chains"
@@ -21,12 +23,13 @@ import { VotingBar } from "./flow/[flowId]/components/voting-bar"
 import { VotingProvider } from "./flow/[flowId]/components/voting-context"
 import { VotingInput } from "./flow/[flowId]/components/voting-input"
 import { VotingToggle } from "./flow/[flowId]/components/voting-toggle"
-import database from "@/lib/database"
-import { getIpfsUrl } from "@/lib/utils"
 
 export default async function Home() {
   const flows = await database.grant.findMany({
-    where: { isFlow: 1, isRemoved: 0 },
+    where: { isFlow: 1, isRemoved: 0, parent: NOUNS_FLOW_PROXY },
+    include: {
+      _count: { select: { subgrants: { where: { isFlow: 0, isRemoved: 0 } } } },
+    },
   })
 
   return (
@@ -87,32 +90,32 @@ export default async function Home() {
                     <TableCell className="space-x-1 text-center">
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Badge variant="success">2</Badge>
+                          <Badge variant="success">
+                            {flow._count.subgrants}
+                          </Badge>
                         </TooltipTrigger>
                         <TooltipContent>Approved</TooltipContent>
                       </Tooltip>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Badge variant="warning">2</Badge>
+                          <Badge variant="warning">?</Badge>
                         </TooltipTrigger>
                         <TooltipContent>Challenged</TooltipContent>
                       </Tooltip>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Badge variant="outline">2</Badge>
+                          <Badge variant="outline">?</Badge>
                         </TooltipTrigger>
                         <TooltipContent>Awaiting</TooltipContent>
                       </Tooltip>
                     </TableCell>
                     <TableCell className="text-center">
                       <Badge>
-                        20
-                        {/* ${flow.budget.toLocaleString("en-US")}/mo */}
+                        ?{/* ${flow.budget.toLocaleString("en-US")}/mo */}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-center">
-                      20
-                      {/* {flow.votes} */}
+                      ?{/* {flow.votes} */}
                     </TableCell>
                     <TableCell className="w-[100px] max-w-[100px] text-center">
                       <VotingInput recipient={flow.id} />

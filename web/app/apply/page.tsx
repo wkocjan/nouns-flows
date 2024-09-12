@@ -36,7 +36,7 @@ export default async function ApplyPage() {
                       alt={flow.title}
                       width={64}
                       height={64}
-                      className="mb-4 rounded-full object-cover"
+                      className="mb-4 size-16 rounded-full object-cover"
                     />
                     <h3 className="text-center text-lg font-semibold transition-colors group-hover:text-primary">
                       {flow.title}
@@ -45,7 +45,7 @@ export default async function ApplyPage() {
                       {flow.tagline}
                     </p>
                     <Badge className="mt-2">
-                      00/mo
+                      ?/mo
                       {/* ${flow.budget.toLocaleString("en-US")}/mo */}
                     </Badge>
                   </div>

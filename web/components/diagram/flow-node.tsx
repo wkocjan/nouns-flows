@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge"
 import { Grant } from "@prisma/client"
 import { Handle, Node, NodeProps, Position } from "@xyflow/react"
+import Link from "next/link"
 import { memo } from "react"
 
 function FlowNode(props: NodeProps<Node<{ flow: Grant }, "flow">>) {
@@ -13,9 +14,9 @@ function FlowNode(props: NodeProps<Node<{ flow: Grant }, "flow">>) {
     height,
     data,
   } = props
-  const { title } = data.flow
+  const { title, id } = data.flow
 
-  const budget = "100"
+  const budget = "123"
 
   return (
     <div
@@ -25,9 +26,12 @@ function FlowNode(props: NodeProps<Node<{ flow: Grant }, "flow">>) {
       <div className="flex grow items-center justify-center">
         <div className="ml-2.5 flex flex-col items-center pr-1.5">
           <h2 className="line-clamp-1 font-medium">
-            {/* <Link href={url} className="hover:text-primary duration-100"> */}
-            {title}
-            {/* </Link> */}
+            <Link
+              href={`/flow/${id}`}
+              className="duration-100 hover:text-primary"
+            >
+              {title}
+            </Link>
           </h2>
 
           <div className="mt-2 flex items-center space-x-1">
