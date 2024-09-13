@@ -18,6 +18,7 @@ async function handleRecipientCreated(params: {
     id: `${recipientId}_${recipient.recipient.toLowerCase()}`,
     data: {
       recipient: recipient.recipient.toLowerCase(),
+      recipientId: recipientId.toString(),
       blockNumber: event.block.number.toString(),
       isFlow: recipient.recipientType === 1,
       isRemoved: recipient.removed,

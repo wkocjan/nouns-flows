@@ -5,6 +5,7 @@ export default createSchema((p) => ({
     {
       id: p.string(),
       recipient: p.string(),
+      recipientId: p.string(),
       isFlow: p.boolean(),
       title: p.string(),
       description: p.string(),
@@ -16,10 +17,28 @@ export default createSchema((p) => ({
       parent: p.string().optional(),
     },
     {
+      recipientIdIndex: p.index("recipientId"),
       isFlowIndex: p.index("isFlow"),
       isRemovedIndex: p.index("isRemoved"),
       parentIndex: p.index("parent"),
       recipientIndex: p.index("recipient"),
+    }
+  ),
+  Vote: p.createTable(
+    {
+      id: p.string(),
+      contract: p.string(),
+      recipientId: p.string(),
+      tokenId: p.string(),
+      bps: p.string(),
+      totalUnits: p.string(),
+      voter: p.string(),
+      blockNumber: p.string(),
+    },
+    {
+      voterIndex: p.index("voter"),
+      contractIndex: p.index("contract"),
+      recipientIdIndex: p.index("recipientId"),
     }
   ),
 }));
