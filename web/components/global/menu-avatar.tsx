@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { useVotingPower } from "@/lib/voting-power/useVotingPower"
+import { useVotingPower } from "@/lib/voting/use-voting-power"
 import { Avatar, ConnectKitButton } from "connectkit"
 
 export const MenuAvatar = () => {
@@ -18,11 +18,7 @@ export const MenuAvatar = () => {
                   onClick={show}
                   className="flex items-center space-x-1.5 rounded-full bg-secondary pr-2.5 transition-opacity hover:bg-accent"
                 >
-                  <Avatar
-                    address={address}
-                    size={26}
-                    name={ensName || truncatedAddress}
-                  />
+                  <Avatar address={address} size={26} name={ensName || truncatedAddress} />
                   <span className="min-w-2 py-0.5 text-xs font-semibold text-secondary-foreground">
                     {votingPower?.toString()}
                   </span>

@@ -7,3 +7,5 @@ export const NOUNS_TOKEN = "0xda7c313e392e75c6179f5f9cd8952075ac3e1ec5" // Nouns
 
 // 1 Noun = VOTING_POWER_SCALE votes
 export const VOTING_POWER_SCALE = BigInt(1000)
+
+export const NOUNS_SUBGRAPH_ID = "5qcR6rAfDMZCVGuZ6DDois7y4zyXqsyqvaqhE6NRRraW"

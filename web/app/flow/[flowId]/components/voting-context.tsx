@@ -1,25 +1,24 @@
 "use client"
 
-import { Vote } from "@/lib/data/votes"
+import { getEthAddress } from "@/lib/utils"
+import { generateOwnerProofs } from "@/lib/voting/owner-proofs/proofs"
+import { useDelegatedTokens } from "@/lib/voting/use-delegated-tokens"
 import { NounsFlowAbi } from "@/lib/wagmi/abi"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
-import {
-  PropsWithChildren,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react"
+import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react"
+import { toast } from "sonner"
 import { useAccount } from "wagmi"
+
+type UserVote = { recipientId: string; bps: number }
 
 interface VotingContextType {
   activate: () => void
   cancel: () => void
   isActive: boolean
 
-  votes: Vote[]
+  votes: UserVote[]
   saveVotes: () => void
-  updateVote: (vote: Vote) => void
+  updateVote: (vote: UserVote) => void
   isLoading: boolean
 
   allocatedBps: number
@@ -30,14 +29,14 @@ const VotingContext = createContext<VotingContextType | null>(null)
 
 export const VotingProvider = (
   props: PropsWithChildren<{
-    userVotes: Vote[]
+    userVotes: UserVote[]
     contract: `0x${string}`
     chainId: number
   }>,
 ) => {
   const { children, userVotes, contract, chainId } = props
   const [isActive, setIsActive] = useState(false)
-  const [votes, setVotes] = useState<Vote[]>(userVotes)
+  const [votes, setVotes] = useState<UserVote[]>(userVotes)
 
   const { writeContract, prepareWallet, isLoading } = useContractTransaction({
     chainId,
@@ -45,6 +44,7 @@ export const VotingProvider = (
   })
 
   const { address } = useAccount()
+  const { tokenIds } = useDelegatedTokens(address?.toLocaleLowerCase())
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -68,23 +68,51 @@ export const VotingProvider = (
         },
         votes,
         saveVotes: async () => {
-          await prepareWallet()
+          if (!tokenIds.length || !address) return toast.error("No delegated tokens found")
+
+          const toastId = toast.loading("Preparing vote...")
+
+          const proofs = await generateOwnerProofs({
+            tokenIds,
+            delegators: [getEthAddress(address)],
+          })
+
+          if (typeof proofs === "string") {
+            return toast.error("Failed to generate token ownership proofs", {
+              description: proofs,
+            })
+          }
+
+          const owners = tokenIds.map(() => getEthAddress(address))
+          const recipientIds = votes.map((vote) => BigInt(vote.recipientId))
+          const percentAllocations = votes.map((vote) => vote.bps)
+          const { ownershipStorageProofs, delegateStorageProofs, ...baseProofParams } = proofs
+
+          await prepareWallet(toastId)
 
           writeContract({
             account: address,
             abi: NounsFlowAbi,
-            functionName: "setFlowImpl", // temp
+            functionName: "castVotes",
             address: contract,
             chainId,
-            args: [address!!],
+            args: [
+              owners,
+              [tokenIds],
+              recipientIds,
+              percentAllocations,
+              baseProofParams,
+              [ownershipStorageProofs],
+              delegateStorageProofs,
+            ],
           })
         },
-        updateVote: (vote: Vote) => {
-          const { recipient, bps } = vote
+        updateVote: (vote: UserVote) => {
+          const { recipientId, bps } = vote
 
           setVotes([
-            ...votes.filter((v) => v.recipient !== recipient),
-            ...(bps > 0 ? [{ recipient, bps }] : []),
+            ...votes.filter((v) => v.recipientId !== recipientId),
+            ...(bps > 0 ? [{ recipientId, bps }] : []),
           ])
         },
         isLoading,
