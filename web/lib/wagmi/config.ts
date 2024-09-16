@@ -31,7 +31,7 @@ export const config = createConfig(
 
     appName: "Nouns Flows",
     appDescription: "",
-    appUrl: "https://nouns-grants.vercel.app/",
-    appIcon: "https://nouns-grants.vercel.app/noggles.svg",
+    appUrl: "https://flows.wtf/",
+    appIcon: "https://flows.wtf/noggles.svg",
   }),
 )

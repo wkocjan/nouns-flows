@@ -19,9 +19,7 @@ export const metadata: Metadata = {
   description: "Protocol for streaming funds to Nouns builders",
 }
 
-export default function RootLayout(
-  props: Readonly<{ children: React.ReactNode }>,
-) {
+export default function RootLayout(props: Readonly<{ children: React.ReactNode }>) {
   const { children } = props
 
   return (
@@ -41,11 +39,7 @@ export default function RootLayout(
                     href="/"
                     className="flex items-center font-medium text-card-foreground max-sm:text-sm"
                   >
-                    <Image
-                      src={Noggles}
-                      alt="Nouns Flows"
-                      className="mr-2.5 h-5 w-auto md:h-7"
-                    />
+                    <Image src={Noggles} alt="Nouns Flows" className="mr-2.5 h-5 w-auto md:h-7" />
                     Nouns Flows
                   </Link>
                 </h2>

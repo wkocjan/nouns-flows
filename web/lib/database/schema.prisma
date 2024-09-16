@@ -30,6 +30,7 @@ model Draft {
 view Grant {
   id          String  @id
   recipient   String  @unique
+  recipientId String
   isFlow      Int
   title       String
   description String
@@ -44,6 +45,19 @@ view Grant {
   parentGrant Grant?  @relation("Subgrants", fields: [parent], references: [recipient])
 
   @@map("Grant")
+}
+
+view Vote {
+  id          String @id
+  contract    String
+  recipientId String
+  tokenId     String
+  bps         Int
+  voter       String
+  blockNumber String
+  isStale     Int
+  totalUnits  String
+  votesCount  String
 }
 
 view PonderMeta {

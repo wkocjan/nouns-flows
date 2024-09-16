@@ -2,18 +2,14 @@
 
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
-import { useVoting } from "./voting-context"
+import { useVoting } from "@/lib/voting/voting-context"
 
 interface Props {}
 
 export const VotingBar = (props: Props) => {
-  const { isActive, cancel, saveVotes, allocatedBps } = useVoting()
+  const { isActive, cancel, saveVotes, allocatedBps, isLoading } = useVoting()
 
   if (!isActive) return null
 
@@ -30,31 +26,23 @@ export const VotingBar = (props: Props) => {
             { "opacity-0": allocatedBps === 0 },
           )}
         >
-          <strong className="flex min-w-10 justify-end text-sm tabular-nums">
-            0%
-          </strong>
+          <strong className="flex min-w-10 justify-end text-sm tabular-nums">0%</strong>
           <Progress value={allocatedBps / 100} className="max-w-96" />
-          <strong className="min-w-10 text-sm tabular-nums">
-            {allocatedBps / 100}%
-          </strong>
+          <strong className="min-w-10 text-sm tabular-nums">{allocatedBps / 100}%</strong>
         </div>
         <div className="flex justify-end space-x-2.5">
-          <Button variant="link" type="button" onClick={cancel}>
+          <Button variant="link" type="button" onClick={cancel} disabled={isLoading}>
             Cancel
           </Button>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button onClick={saveVotes} disabled={allocatedBps !== 10000}>
+              <Button onClick={saveVotes} disabled={allocatedBps !== 10000 || isLoading}>
                 Save votes
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              {allocatedBps < 10000 && (
-                <span>Allocate remaining {100 - allocatedBps / 100}%</span>
-              )}
-              {allocatedBps > 10000 && (
-                <span>You over allocated {allocatedBps / 100 - 100}%</span>
-              )}
+              {allocatedBps < 10000 && <span>Allocate remaining {100 - allocatedBps / 100}%</span>}
+              {allocatedBps > 10000 && <span>You over allocated {allocatedBps / 100 - 100}%</span>}
               {allocatedBps === 10000 && <span>Looking good!</span>}
             </TooltipContent>
           </Tooltip>

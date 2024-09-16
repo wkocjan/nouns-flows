@@ -74,19 +74,11 @@ export default async function FlowPage(props: Props) {
               </TableCell>
               <TableCell>
                 <div className="flex space-x-0.5">
-                  <UserProfile
-                    address={getEthAddress(grant.recipient)}
-                    key={grant.recipient}
-                  >
+                  <UserProfile address={getEthAddress(grant.recipient)} key={grant.recipient}>
                     {(profile) => (
                       <Avatar className="size-7 bg-accent text-xs">
-                        <AvatarImage
-                          src={profile.pfp_url}
-                          alt={profile.display_name}
-                        />
-                        <AvatarFallback>
-                          {profile.display_name[0].toUpperCase()}
-                        </AvatarFallback>
+                        <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
+                        <AvatarFallback>{profile.display_name[0].toUpperCase()}</AvatarFallback>
                       </Avatar>
                     )}
                   </UserProfile>
@@ -96,15 +88,14 @@ export default async function FlowPage(props: Props) {
                 ?{/* ${grant.earned.toLocaleString("en-US")} */}
               </TableCell>
               <TableCell className="text-center">
-                ?
-                {/* <Badge>${grant.budget.toLocaleString("en-US")}/mo</Badge> */}
+                ?{/* <Badge>${grant.budget.toLocaleString("en-US")}/mo</Badge> */}
               </TableCell>
               <TableCell className="text-center">
                 ?{/* {grant.votes.toLocaleString("en-US")} */}
               </TableCell>
 
               <TableCell className="w-[100px] max-w-[100px] text-center">
-                <VotingInput recipient={grant.id} />
+                <VotingInput recipientId={grant.recipientId} />
               </TableCell>
             </TableRow>
           ))}

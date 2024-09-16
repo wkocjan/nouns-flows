@@ -8,19 +8,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { NOUNS_FLOW_PROXY } from "@/lib/config"
 import database from "@/lib/database"
 import { getIpfsUrl } from "@/lib/utils"
+import { VotingProvider } from "@/lib/voting/voting-context"
 import Image from "next/image"
 import Link from "next/link"
 import { base } from "viem/chains"
 import { VotingBar } from "./flow/[flowId]/components/voting-bar"
-import { VotingProvider } from "./flow/[flowId]/components/voting-context"
 import { VotingInput } from "./flow/[flowId]/components/voting-input"
 import { VotingToggle } from "./flow/[flowId]/components/voting-toggle"
 
@@ -33,17 +29,11 @@ export default async function Home() {
   })
 
   return (
-    <VotingProvider
-      chainId={base.id}
-      userVotes={[]}
-      contract={NOUNS_FLOW_PROXY}
-    >
+    <VotingProvider chainId={base.id} contract={NOUNS_FLOW_PROXY}>
       <main className="container mt-2.5 pb-24 md:mt-8">
         <div className="flex flex-col max-sm:space-y-2.5 md:flex-row md:items-center md:justify-between">
           <div>
-            <h3 className="font-semibold leading-none tracking-tight">
-              Welcome to Nouns Flows
-            </h3>
+            <h3 className="font-semibold leading-none tracking-tight">Welcome to Nouns Flows</h3>
             <p className="mt-1.5 text-sm text-muted-foreground">
               Here are some flows to explore. Better copy coming soon.
             </p>
@@ -90,9 +80,7 @@ export default async function Home() {
                     <TableCell className="space-x-1 text-center">
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Badge variant="success">
-                            {flow._count.subgrants}
-                          </Badge>
+                          <Badge variant="success">{flow._count.subgrants}</Badge>
                         </TooltipTrigger>
                         <TooltipContent>Approved</TooltipContent>
                       </Tooltip>
@@ -110,15 +98,11 @@ export default async function Home() {
                       </Tooltip>
                     </TableCell>
                     <TableCell className="text-center">
-                      <Badge>
-                        ?{/* ${flow.budget.toLocaleString("en-US")}/mo */}
-                      </Badge>
+                      <Badge>?{/* ${flow.budget.toLocaleString("en-US")}/mo */}</Badge>
                     </TableCell>
-                    <TableCell className="text-center">
-                      ?{/* {flow.votes} */}
-                    </TableCell>
+                    <TableCell className="text-center">?{/* {flow.votes} */}</TableCell>
                     <TableCell className="w-[100px] max-w-[100px] text-center">
-                      <VotingInput recipient={flow.id} />
+                      <VotingInput recipientId={flow.recipientId} />
                     </TableCell>
                   </TableRow>
                 ))}

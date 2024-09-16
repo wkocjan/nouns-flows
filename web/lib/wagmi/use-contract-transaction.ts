@@ -19,12 +19,7 @@ export const useContractTransaction = (args: {
   const { chainId, onSuccess } = args
   const [toastId, setToastId] = useState<number | string>()
   const [callbackHandled, setCallbackHandled] = useState(false)
-  const {
-    data: hash,
-    isPending,
-    error,
-    ...writeContractRest
-  } = useWriteContract()
+  const { data: hash, isPending, error, ...writeContractRest } = useWriteContract()
   const { isLoading, isSuccess } = useWaitForTransactionReceipt({ hash })
 
   const { chainId: connectedChainId, isConnected } = useAccount()
@@ -46,16 +41,12 @@ export const useContractTransaction = (args: {
     }
 
     if (error) {
-      toast.error(
-        ((error as BaseError).shortMessage || error.message).replace(
-          "User ",
-          "You ",
-        ),
-        {
-          id: toastId,
-          duration: 3000,
-        },
-      )
+      console.error(error)
+      toast.error(((error as BaseError).shortMessage || error.message).replace("User ", "You "), {
+        id: toastId,
+        duration: 3000,
+        description: "Check browser console for more details",
+      })
       setCallbackHandled(true)
       return
     }
@@ -75,7 +66,8 @@ export const useContractTransaction = (args: {
     isConfirmed: isSuccess,
     isLoading: isLoading || isPending,
     hash,
-    prepareWallet: async () => {
+    error,
+    prepareWallet: async (toastId?: number | string) => {
       setCallbackHandled(false)
 
       if (!isConnected) return setOpen(true)
@@ -89,7 +81,8 @@ export const useContractTransaction = (args: {
         }
       }
 
-      setToastId(toast.loading("Confirm in your wallet..."))
+      const newToastId = toast.loading("Confirm in your wallet...", { id: toastId })
+      setToastId(newToastId)
     },
     ...writeContractRest,
   }
