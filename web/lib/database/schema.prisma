@@ -52,10 +52,12 @@ view Vote {
   contract    String
   recipientId String
   tokenId     String
-  bps         String
-  totalUnits  String
+  bps         Int
   voter       String
   blockNumber String
+  isStale     Int
+  totalUnits  String
+  votesCount  String
 }
 
 view PonderMeta {

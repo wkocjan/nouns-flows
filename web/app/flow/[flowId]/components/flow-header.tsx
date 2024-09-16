@@ -1,13 +1,10 @@
 import { Badge } from "@/components/ui/badge"
 import { Card, CardHeader } from "@/components/ui/card"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { getIpfsUrl } from "@/lib/utils"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import { FlowDescription } from "./flow-description"
+import { FlowHeaderUserVotes } from "./flow-header-user-votes"
 import { FlowWithGrants } from "./getFlowWithGrants"
 
 interface Props {
@@ -81,10 +78,13 @@ export const FlowHeader = (props: Props) => {
                 .toLocaleString("en-US")} */}
             </p>
           </div>
-          <div className="text-center">
-            <p className="mb-1.5 text-muted-foreground">Your Vote</p>
-            <p className="font-medium">?%</p>
-          </div>
+
+          {flow.parent && (
+            <FlowHeaderUserVotes
+              parent={getEthAddress(flow.parent)}
+              recipientId={flow.recipientId}
+            />
+          )}
         </div>
       </CardHeader>
     </Card>

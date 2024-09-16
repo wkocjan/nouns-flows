@@ -12,11 +12,11 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { NOUNS_FLOW_PROXY } from "@/lib/config"
 import database from "@/lib/database"
 import { getIpfsUrl } from "@/lib/utils"
+import { VotingProvider } from "@/lib/voting/voting-context"
 import Image from "next/image"
 import Link from "next/link"
 import { base } from "viem/chains"
 import { VotingBar } from "./flow/[flowId]/components/voting-bar"
-import { VotingProvider } from "./flow/[flowId]/components/voting-context"
 import { VotingInput } from "./flow/[flowId]/components/voting-input"
 import { VotingToggle } from "./flow/[flowId]/components/voting-toggle"
 
@@ -29,7 +29,7 @@ export default async function Home() {
   })
 
   return (
-    <VotingProvider chainId={base.id} userVotes={[]} contract={NOUNS_FLOW_PROXY}>
+    <VotingProvider chainId={base.id} contract={NOUNS_FLOW_PROXY}>
       <main className="container mt-2.5 pb-24 md:mt-8">
         <div className="flex flex-col max-sm:space-y-2.5 md:flex-row md:items-center md:justify-between">
           <div>

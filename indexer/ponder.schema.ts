@@ -30,15 +30,18 @@ export default createSchema((p) => ({
       contract: p.string(),
       recipientId: p.string(),
       tokenId: p.string(),
-      bps: p.string(),
-      totalUnits: p.string(),
+      bps: p.int(),
       voter: p.string(),
       blockNumber: p.string(),
+      isStale: p.boolean(),
+      totalUnits: p.string(),
+      votesCount: p.string(),
     },
     {
       voterIndex: p.index("voter"),
       contractIndex: p.index("contract"),
       recipientIdIndex: p.index("recipientId"),
+      isStaleIndex: p.index("isStale"),
     }
   ),
 }));

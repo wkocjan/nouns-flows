@@ -1,15 +1,17 @@
 "use client"
 
-import { getEthAddress } from "@/lib/utils"
 import { generateOwnerProofs } from "@/lib/voting/owner-proofs/proofs"
-import { useDelegatedTokens } from "@/lib/voting/use-delegated-tokens"
+import { useDelegatedTokens } from "@/lib/voting/delegated-tokens/use-delegated-tokens"
 import { NounsFlowAbi } from "@/lib/wagmi/abi"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
+import { Vote } from "@prisma/client"
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react"
 import { toast } from "sonner"
 import { useAccount } from "wagmi"
+import { PERCENTAGE_SCALE } from "../config"
+import { useUserVotes } from "./user-votes/use-user-votes"
 
-type UserVote = { recipientId: string; bps: number }
+type UserVote = Pick<Vote, "bps" | "recipientId">
 
 interface VotingContextType {
   activate: () => void
@@ -28,23 +30,30 @@ interface VotingContextType {
 const VotingContext = createContext<VotingContextType | null>(null)
 
 export const VotingProvider = (
-  props: PropsWithChildren<{
-    userVotes: UserVote[]
-    contract: `0x${string}`
-    chainId: number
-  }>,
+  props: PropsWithChildren<{ contract: `0x${string}`; chainId: number }>,
 ) => {
-  const { children, userVotes, contract, chainId } = props
+  const { children, contract, chainId } = props
   const [isActive, setIsActive] = useState(false)
-  const [votes, setVotes] = useState<UserVote[]>(userVotes)
+  const [votes, setVotes] = useState<UserVote[]>()
+  const { address } = useAccount()
+
+  const { votes: userVotes, mutate } = useUserVotes(contract, address)
 
   const { writeContract, prepareWallet, isLoading } = useContractTransaction({
     chainId,
-    onSuccess: console.debug,
+    onSuccess: async () => {
+      setVotes(await mutate())
+      setIsActive(false)
+    },
   })
 
-  const { address } = useAccount()
-  const { tokenIds } = useDelegatedTokens(address?.toLocaleLowerCase())
+  const { tokens } = useDelegatedTokens(address?.toLocaleLowerCase())
+
+  useEffect(() => {
+    if (typeof votes !== "undefined") return
+    if (!userVotes.length) return
+    setVotes(userVotes)
+  }, [votes, userVotes])
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -66,26 +75,26 @@ export const VotingProvider = (
           setIsActive(false)
           setVotes(userVotes)
         },
-        votes,
+        votes: votes || [],
         saveVotes: async () => {
-          if (!tokenIds.length || !address) return toast.error("No delegated tokens found")
+          if (!votes) return
+          if (!tokens.length || !address) return toast.error("No delegated tokens found")
 
           const toastId = toast.loading("Preparing vote...")
 
-          const proofs = await generateOwnerProofs({
-            tokenIds,
-            delegators: [getEthAddress(address)],
-          })
+          const tokenIds = tokens.map(({ id }) => id)
+          const delegators = tokens.map((token) => token.owner)
 
-          if (typeof proofs === "string") {
+          const proofs = await generateOwnerProofs(tokenIds, delegators)
+
+          if (proofs.error !== false) {
             return toast.error("Failed to generate token ownership proofs", {
-              description: proofs,
+              description: proofs.error,
             })
           }
 
-          const owners = tokenIds.map(() => getEthAddress(address))
           const recipientIds = votes.map((vote) => BigInt(vote.recipientId))
-          const percentAllocations = votes.map((vote) => vote.bps)
+          const percentAllocations = votes.map((vote) => (vote.bps / 10000) * PERCENTAGE_SCALE)
           const { ownershipStorageProofs, delegateStorageProofs, ...baseProofParams } = proofs
 
           await prepareWallet(toastId)
@@ -97,8 +106,10 @@ export const VotingProvider = (
             address: contract,
             chainId,
             args: [
-              owners,
-              [tokenIds],
+              delegators,
+              delegators.map((delegator) =>
+                tokens.filter((token) => token.owner === delegator).map((token) => token.id),
+              ),
               recipientIds,
               percentAllocations,
               baseProofParams,
@@ -111,13 +122,13 @@ export const VotingProvider = (
           const { recipientId, bps } = vote
 
           setVotes([
-            ...votes.filter((v) => v.recipientId !== recipientId),
+            ...(votes || []).filter((v) => v.recipientId !== recipientId),
             ...(bps > 0 ? [{ recipientId, bps }] : []),
           ])
         },
         isLoading,
-        allocatedBps: votes.reduce((acc, v) => acc + v.bps, 0) || 0,
-        votedCount: votes.filter((v) => v.bps > 0).length || 0,
+        allocatedBps: votes?.reduce((acc, v) => acc + v.bps, 0) || 0,
+        votedCount: votes?.filter((v) => v.bps > 0).length || 0,
       }}
     >
       {children}

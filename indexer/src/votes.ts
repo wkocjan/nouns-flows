@@ -14,7 +14,17 @@ async function handleVoteCast(params: {
   const blockNumber = event.block.number.toString();
   const voter = event.transaction.from.toLowerCase();
   const contract = event.log.address.toLowerCase();
-  // const votesCount = totalUnits / bps;
+  const votesCount = bps / totalUnits;
+
+  await Vote.updateMany({
+    where: {
+      contract,
+      voter,
+      isStale: false,
+      blockNumber: { not: blockNumber },
+    },
+    data: { isStale: true },
+  });
 
   await Vote.create({
     id: `${contract}_${recipientId}_${voter}_${blockNumber}`,
@@ -22,10 +32,12 @@ async function handleVoteCast(params: {
       contract,
       recipientId: recipientId.toString(),
       tokenId: tokenId.toString(),
-      bps: bps.toString(),
-      totalUnits: totalUnits.toString(),
+      bps: Number(bps),
       voter,
       blockNumber,
+      isStale: false,
+      totalUnits: totalUnits.toString(),
+      votesCount: votesCount.toString(),
     },
   });
 }

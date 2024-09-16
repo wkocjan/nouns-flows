@@ -95,7 +95,7 @@ export default async function FlowPage(props: Props) {
               </TableCell>
 
               <TableCell className="w-[100px] max-w-[100px] text-center">
-                <VotingInput recipient={grant.recipientId} />
+                <VotingInput recipientId={grant.recipientId} />
               </TableCell>
             </TableRow>
           ))}

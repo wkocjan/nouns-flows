@@ -15,12 +15,18 @@ import { getBeaconBlock } from "./getBeaconBlock"
 import { getBeaconRootAndL2Timestamp } from "./getBeaconRootAndL2Timestamp"
 import { getExecutionStateRootProof } from "./getExecutionStateRootProof"
 
-const l2Client = createPublicClient({ chain: base, transport: http() })
-const l1Client = createPublicClient({ chain: mainnet, transport: http() })
+const l2Client = createPublicClient({
+  chain: base,
+  transport: http(`https://base-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`),
+  batch: { multicall: true },
+})
+const l1Client = createPublicClient({
+  chain: mainnet,
+  transport: http(`https://eth-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`),
+  batch: { multicall: true },
+})
 
-export async function generateOwnerProofs(args: { tokenIds: bigint[]; delegators: Address[] }) {
-  const { tokenIds, delegators } = args
-
+export async function generateOwnerProofs(tokenIds: bigint[], delegators: Address[]) {
   try {
     // Step 1: Get the latest beacon root and L2 timestamp
     // This function retrieves the parentBeaconBlockRoot and timestamp from the latest L2 block
@@ -86,9 +92,10 @@ export async function generateOwnerProofs(args: { tokenIds: bigint[]; delegators
       accountProof: ownerProofs[0].accountProof, // same for all
       ownershipStorageProofs: ownerProofs.map((proof) => proof.storageProof[0].proof),
       delegateStorageProofs: delegateProofs.map((proof) => proof.storageProof[0].proof),
+      error: false as const,
     }
   } catch (e) {
     console.error(e)
-    return (e as Error).message
+    return { error: (e as Error).message || "Chain generated error" }
   }
 }

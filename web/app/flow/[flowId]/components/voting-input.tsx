@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { useVoting } from "./voting-context"
+import { useVoting } from "@/lib/voting/voting-context"
 
 interface Props {
   recipientId: string
@@ -19,7 +19,7 @@ export const VotingInput = (props: Props) => {
       <Tooltip>
         <TooltipTrigger asChild>
           <button type="button" onClick={() => activate()}>
-            {currentVote?.bps || 0 / 100}
+            {(currentVote?.bps || 0) / 100}%
           </button>
         </TooltipTrigger>
         <TooltipContent>Click to edit</TooltipContent>
