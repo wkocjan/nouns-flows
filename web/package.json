@@ -7,7 +7,7 @@
     "build": "pnpm db:generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "prebuild": "prisma migrate deploy",
+    "prebuild": "prisma generate && prisma migrate deploy",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev --name",
     "db:generate": "prisma generate",
