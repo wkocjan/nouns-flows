@@ -5,6 +5,10 @@ import { NounsFlowAbi } from "./abis/NounsFlowAbi";
 import { parseAbiItem } from "viem";
 
 export default createConfig({
+  database: {
+    kind: "postgres",
+    schema: "public",
+  },
   networks: {
     base: {
       chainId: base.id,
