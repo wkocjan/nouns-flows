@@ -8,7 +8,7 @@ export default createConfig({
   database: {
     kind: "postgres",
     schema: "public",
-    publishSchema: undefined,
+    publishSchema: "public_view",
   },
   networks: {
     base: {
