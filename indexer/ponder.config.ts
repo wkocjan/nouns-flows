@@ -7,8 +7,6 @@ import { parseAbiItem } from "viem";
 export default createConfig({
   database: {
     kind: "postgres",
-    schema: "public",
-    publishSchema: "public_view",
   },
   networks: {
     base: {

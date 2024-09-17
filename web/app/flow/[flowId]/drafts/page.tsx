@@ -49,15 +49,13 @@ export default async function FlowDraftsPage(props: Props) {
               <div className="flex items-center space-x-4">
                 <Image
                   alt={`${draft.title}`}
-                  className="rounded-lg object-cover"
+                  className="aspect-square size-12 rounded-lg object-cover"
                   height="48"
                   src={getPinataUrl(draft.image)}
                   width="48"
                 />
                 <div>
-                  <h4 className="mb-1 text-[15px] font-medium">
-                    {draft.title}
-                  </h4>
+                  <h4 className="mb-1 text-[15px] font-medium">{draft.title}</h4>
                 </div>
               </div>
             </TableCell>
@@ -67,13 +65,8 @@ export default async function FlowDraftsPage(props: Props) {
                   <UserProfile address={user as `0x${string}`} key={user}>
                     {(profile) => (
                       <Avatar className="size-7 bg-accent text-xs">
-                        <AvatarImage
-                          src={profile.pfp_url}
-                          alt={profile.display_name}
-                        />
-                        <AvatarFallback>
-                          {profile.display_name[0].toUpperCase()}
-                        </AvatarFallback>
+                        <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
+                        <AvatarFallback>{profile.display_name[0].toUpperCase()}</AvatarFallback>
                       </Avatar>
                     )}
                   </UserProfile>

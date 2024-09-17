@@ -1,11 +1,12 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["views"]
+  previewFeatures = ["views", "multiSchema"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["public", "web"]
 }
 
 model Draft {
@@ -25,6 +26,7 @@ model Draft {
   @@index([flowId], map: "flowId_1")
   @@index([createdAt], map: "createdAt_1")
   @@map("Draft")
+  @@schema("web")
 }
 
 view Grant {
@@ -47,6 +49,7 @@ view Grant {
   parentGrant Grant?  @relation("Subgrants", fields: [parent], references: [recipient])
 
   @@map("Grant")
+  @@schema("public")
 }
 
 view Vote {
@@ -59,6 +62,8 @@ view Vote {
   blockNumber String
   isStale     Int
   votesCount  String
+
+  @@schema("public")
 }
 
 view PonderMeta {
@@ -66,4 +71,5 @@ view PonderMeta {
   value String
 
   @@map("_ponder_meta")
+  @@schema("public")
 }
