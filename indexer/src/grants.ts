@@ -1,4 +1,4 @@
-import { ponder, type Event, type Context } from "@/generated";
+import { ponder, type Context, type Event } from "@/generated";
 
 ponder.on("NounsFlowChildren:RecipientCreated", handleRecipientCreated);
 ponder.on("NounsFlow:RecipientCreated", handleRecipientCreated);
@@ -14,8 +14,10 @@ async function handleRecipientCreated(params: {
   const { Grant } = context.db;
   const { recipient, recipientId } = event.args;
 
+  const contract = event.log.address.toLowerCase() as `0x${string}`;
+
   await Grant.create({
-    id: `${recipientId}_${recipient.recipient.toLowerCase()}`,
+    id: `${recipientId}_${contract}`,
     data: {
       recipient: recipient.recipient.toLowerCase(),
       recipientId: recipientId.toString(),
@@ -23,6 +25,8 @@ async function handleRecipientCreated(params: {
       isFlow: recipient.recipientType === 1,
       isRemoved: recipient.removed,
       parent: event.transaction.to?.toLowerCase(),
+      votesCount: "0",
+      monthlyFlowRate: "0",
       ...recipient.metadata,
     },
   });

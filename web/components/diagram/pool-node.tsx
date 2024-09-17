@@ -23,23 +23,15 @@ function PoolNode(props: NodeProps<IPoolNode>) {
       style={{ width, height }}
     >
       <div className="flex flex-col items-center justify-center">
-        <Image
-          src={logoUrl}
-          width={48}
-          height={48}
-          alt={name}
-          className="size-12 rounded-lg"
-        />
-        <div className="mt-2.5 text-lg font-medium text-card-foreground">
-          {name}
-        </div>
+        <Image src={logoUrl} width={48} height={48} alt={name} className="size-12 rounded-lg" />
+        <div className="mt-2.5 text-lg font-medium text-card-foreground">{name}</div>
         <div className="mt-2 rounded-md bg-primary px-1.5 py-0.5 text-xs font-medium text-primary-foreground">
           {Intl.NumberFormat("en", {
             style: "currency",
             currency: "USD",
             maximumFractionDigits: 0,
           }).format(budget)}
-          /month
+          /mo
         </div>
       </div>
 

@@ -1,4 +1,5 @@
 import { ponder, type Context, type Event } from "@/generated";
+import { formatEther, getAddress } from "viem";
 
 ponder.on("NounsFlow:VoteCast", handleVoteCast);
 ponder.on("NounsFlowChildren:VoteCast", handleVoteCast);
@@ -8,26 +9,29 @@ async function handleVoteCast(params: {
   context: Context<"NounsFlow:VoteCast">;
 }) {
   const { event, context } = params;
-  const { Vote } = context.db;
   const { recipientId, tokenId, bps, totalUnits } = event.args;
 
   const blockNumber = event.block.number.toString();
   const voter = event.transaction.from.toLowerCase();
-  const contract = event.log.address.toLowerCase();
-  const votesCount = bps / totalUnits;
+  const contract = event.log.address.toLowerCase() as `0x${string}`;
+  const votesCount = bps / (totalUnits / BigInt(1e18));
 
-  await Vote.updateMany({
-    where: {
-      contract,
-      voter,
-      isStale: false,
-      blockNumber: { not: blockNumber },
-    },
-    data: { isStale: true },
-  });
+  const affectedRecipientIds = new Set([recipientId.toString()]);
 
-  await Vote.create({
-    id: `${contract}_${recipientId}_${voter}_${blockNumber}`,
+  (
+    await context.db.Vote.updateMany({
+      where: {
+        contract,
+        tokenId: tokenId.toString(),
+        isStale: false,
+        blockNumber: { not: blockNumber },
+      },
+      data: { isStale: true },
+    })
+  ).forEach((r) => affectedRecipientIds.add(r.recipientId));
+
+  await context.db.Vote.create({
+    id: `${contract}_${recipientId}_${voter}_${blockNumber}_${tokenId}`,
     data: {
       contract,
       recipientId: recipientId.toString(),
@@ -36,8 +40,56 @@ async function handleVoteCast(params: {
       voter,
       blockNumber,
       isStale: false,
-      totalUnits: totalUnits.toString(),
       votesCount: votesCount.toString(),
     },
   });
+
+  for (const affectedRecipientId of affectedRecipientIds) {
+    const [votesCount, monthlyFlowRate] = await Promise.all([
+      getGrantVotesCount(context, contract, affectedRecipientId),
+      getGrantBudget(context, contract, affectedRecipientId),
+    ]);
+
+    await context.db.Grant.update({
+      id: `${affectedRecipientId}_${contract}`,
+      data: { votesCount, monthlyFlowRate },
+    });
+  }
+}
+
+async function getGrantVotesCount(
+  context: Context<"NounsFlow:VoteCast">,
+  contract: `0x${string}`,
+  recipientId: string
+) {
+  const votes = await context.db.Vote.findMany({
+    where: { contract, recipientId, isStale: false },
+  });
+
+  return votes.items
+    .reduce((acc, v) => acc + BigInt(v.votesCount), BigInt(0))
+    .toString();
+}
+
+async function getGrantBudget(
+  context: Context<"NounsFlow:VoteCast">,
+  contract: `0x${string}`,
+  recipientId: string
+) {
+  const grant = await context.db.Grant.findUnique({
+    id: `${recipientId}_${contract}`,
+  });
+
+  if (!grant) {
+    throw new Error(`Could not find recipient ${recipientId} on ${contract}`);
+  }
+
+  const memberTotalFlowRate = await context.client.readContract({
+    address: contract,
+    abi: context.contracts.NounsFlow.abi,
+    functionName: "getMemberTotalFlowRate",
+    args: [getAddress(grant.recipient)],
+  });
+
+  return formatEther(memberTotalFlowRate * BigInt(60 * 60 * 24 * 30));
 }

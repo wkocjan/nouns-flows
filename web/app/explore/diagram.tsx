@@ -9,10 +9,11 @@ import { FlowWithGrants } from "../flow/[flowId]/components/getFlowWithGrants"
 
 type Props = {
   flows: FlowWithGrants[]
+  budget: number
 }
 
 export const FullDiagram = (props: Props) => {
-  const { flows } = props
+  const { flows, budget } = props
 
   const mainNodes: Node[] = []
   const edges: Edge[] = []
@@ -24,7 +25,7 @@ export const FullDiagram = (props: Props) => {
     data: {
       name: `Nouns Flows`,
       logoUrl: "/noggles.svg",
-      budget: 10000,
+      budget,
     },
     connectable: false,
     width: 240,

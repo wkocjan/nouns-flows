@@ -1,30 +1,11 @@
 "use server"
 
 import { NOUNS_TOKEN } from "@/lib/config"
-import {
-  createPublicClient,
-  encodeAbiParameters,
-  http,
-  keccak256,
-  PublicClient,
-  toHex,
-  type Address,
-} from "viem"
-import { base, mainnet } from "viem/chains"
+import { l1Client, l2Client } from "@/lib/viem/client"
+import { encodeAbiParameters, keccak256, PublicClient, toHex, type Address } from "viem"
 import { getBeaconBlock } from "./getBeaconBlock"
 import { getBeaconRootAndL2Timestamp } from "./getBeaconRootAndL2Timestamp"
 import { getExecutionStateRootProof } from "./getExecutionStateRootProof"
-
-const l2Client = createPublicClient({
-  chain: base,
-  transport: http(`https://base-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`),
-  batch: { multicall: true },
-})
-const l1Client = createPublicClient({
-  chain: mainnet,
-  transport: http(`https://eth-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`),
-  batch: { multicall: true },
-})
 
 export async function generateOwnerProofs(tokenIds: bigint[], delegators: Address[]) {
   try {

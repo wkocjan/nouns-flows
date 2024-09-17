@@ -15,6 +15,8 @@ export default createSchema((p) => ({
       isRemoved: p.boolean(),
       blockNumber: p.string(),
       parent: p.string().optional(),
+      votesCount: p.string(),
+      monthlyFlowRate: p.string(),
     },
     {
       recipientIdIndex: p.index("recipientId"),
@@ -34,7 +36,6 @@ export default createSchema((p) => ({
       voter: p.string(),
       blockNumber: p.string(),
       isStale: p.boolean(),
-      totalUnits: p.string(),
       votesCount: p.string(),
     },
     {

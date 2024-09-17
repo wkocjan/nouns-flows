@@ -98,9 +98,16 @@ export default async function Home() {
                       </Tooltip>
                     </TableCell>
                     <TableCell className="text-center">
-                      <Badge>?{/* ${flow.budget.toLocaleString("en-US")}/mo */}</Badge>
+                      <Badge>
+                        {Intl.NumberFormat("en", {
+                          style: "currency",
+                          currency: "USD",
+                          maximumFractionDigits: 0,
+                        }).format(Number(flow.monthlyFlowRate))}
+                        /mo
+                      </Badge>
                     </TableCell>
-                    <TableCell className="text-center">?{/* {flow.votes} */}</TableCell>
+                    <TableCell className="text-center">{flow.votesCount}</TableCell>
                     <TableCell className="w-[100px] max-w-[100px] text-center">
                       <VotingInput recipientId={flow.recipientId} />
                     </TableCell>

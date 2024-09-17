@@ -1,6 +1,7 @@
 import "server-only"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
 import {
   Table,
   TableBody,
@@ -34,7 +35,6 @@ export default async function FlowPage(props: Props) {
           <TableRow>
             <TableHead className="w-[350px]">Name</TableHead>
             <TableHead>Builders</TableHead>
-            <TableHead className="text-center">Earned</TableHead>
             <TableHead className="text-center">Budget</TableHead>
             <TableHead className="text-center">Total Votes</TableHead>
             <TableHead className="text-center">Your Vote</TableHead>
@@ -84,15 +84,18 @@ export default async function FlowPage(props: Props) {
                   </UserProfile>
                 </div>
               </TableCell>
+
               <TableCell className="text-center">
-                ?{/* ${grant.earned.toLocaleString("en-US")} */}
+                <Badge>
+                  {Intl.NumberFormat("en", {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 0,
+                  }).format(Number(grant.monthlyFlowRate))}
+                  /mo
+                </Badge>
               </TableCell>
-              <TableCell className="text-center">
-                ?{/* <Badge>${grant.budget.toLocaleString("en-US")}/mo</Badge> */}
-              </TableCell>
-              <TableCell className="text-center">
-                ?{/* {grant.votes.toLocaleString("en-US")} */}
-              </TableCell>
+              <TableCell className="text-center">{grant.votesCount}</TableCell>
 
               <TableCell className="w-[100px] max-w-[100px] text-center">
                 <VotingInput recipientId={grant.recipientId} />

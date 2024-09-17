@@ -9,9 +9,7 @@ import { memo } from "react"
 
 function GrantNode(props: NodeProps<Node<{ grant: Grant }, "grant">>) {
   const { targetPosition = Position.Left, data, width, height } = props
-  const { image, title } = data.grant
-
-  const budget = "123"
+  const { image, title, monthlyFlowRate } = data.grant
 
   return (
     <div
@@ -38,8 +36,8 @@ function GrantNode(props: NodeProps<Node<{ grant: Grant }, "grant">>) {
               style: "currency",
               currency: "USD",
               maximumFractionDigits: 0,
-            }).format(budget)}
-            /month
+            }).format(Number(monthlyFlowRate))}
+            /mo
           </Badge>
         </div>
       </div>

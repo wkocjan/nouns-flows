@@ -14,9 +14,7 @@ function FlowNode(props: NodeProps<Node<{ flow: Grant }, "flow">>) {
     height,
     data,
   } = props
-  const { title, id } = data.flow
-
-  const budget = "123"
+  const { title, id, monthlyFlowRate } = data.flow
 
   return (
     <div
@@ -26,10 +24,7 @@ function FlowNode(props: NodeProps<Node<{ flow: Grant }, "flow">>) {
       <div className="flex grow items-center justify-center">
         <div className="ml-2.5 flex flex-col items-center pr-1.5">
           <h2 className="line-clamp-1 font-medium">
-            <Link
-              href={`/flow/${id}`}
-              className="duration-100 hover:text-primary"
-            >
+            <Link href={`/flow/${id}`} className="duration-100 hover:text-primary">
               {title}
             </Link>
           </h2>
@@ -40,8 +35,8 @@ function FlowNode(props: NodeProps<Node<{ flow: Grant }, "flow">>) {
                 style: "currency",
                 currency: "USD",
                 maximumFractionDigits: 0,
-              }).format(budget)}
-              /month
+              }).format(Number(monthlyFlowRate))}
+              /mo
             </Badge>
           </div>
         </div>

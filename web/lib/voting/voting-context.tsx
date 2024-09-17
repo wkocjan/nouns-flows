@@ -1,10 +1,11 @@
 "use client"
 
-import { generateOwnerProofs } from "@/lib/voting/owner-proofs/proofs"
 import { useDelegatedTokens } from "@/lib/voting/delegated-tokens/use-delegated-tokens"
+import { generateOwnerProofs } from "@/lib/voting/owner-proofs/proofs"
 import { NounsFlowAbi } from "@/lib/wagmi/abi"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { Vote } from "@prisma/client"
+import { useRouter } from "next/navigation"
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react"
 import { toast } from "sonner"
 import { useAccount } from "wagmi"
@@ -36,13 +37,17 @@ export const VotingProvider = (
   const [isActive, setIsActive] = useState(false)
   const [votes, setVotes] = useState<UserVote[]>()
   const { address } = useAccount()
+  const router = useRouter()
 
   const { votes: userVotes, mutate } = useUserVotes(contract, address)
 
   const { writeContract, prepareWallet, isLoading } = useContractTransaction({
     chainId,
     onSuccess: async () => {
-      setVotes(await mutate())
+      setTimeout(() => {
+        mutate()
+        router.refresh()
+      }, 2500) // refresh votes data when ingestion should be finished
       setIsActive(false)
     },
   })
@@ -81,9 +86,8 @@ export const VotingProvider = (
           if (!tokens.length || !address) return toast.error("No delegated tokens found")
 
           const toastId = toast.loading("Preparing vote...")
-
           const tokenIds = tokens.map(({ id }) => id)
-          const delegators = tokens.map((token) => token.owner)
+          const delegators = Array.from(new Set(tokens.map((token) => token.owner)))
 
           const proofs = await generateOwnerProofs(tokenIds, delegators)
 

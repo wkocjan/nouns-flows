@@ -2,18 +2,18 @@
 
 import { PERCENTAGE_SCALE } from "@/lib/config"
 import database from "@/lib/database"
-import { getEthAddress } from "@/lib/utils"
 
-export async function getUserVotes(contract: `0x${string}`, voter: string | undefined) {
-  if (!voter) return []
+export async function getTokenVotes(contract: `0x${string}`, tokenIds: string[]) {
+  if (!tokenIds.length) return []
 
   const votes = await database.vote.findMany({
     select: { bps: true, recipientId: true },
     where: {
       contract,
-      voter: getEthAddress(voter),
+      tokenId: { in: tokenIds },
       isStale: 0,
     },
+    distinct: ["recipientId"],
   })
 
   return votes.map((vote) => ({ ...vote, bps: (vote.bps / PERCENTAGE_SCALE) * 10000 }))

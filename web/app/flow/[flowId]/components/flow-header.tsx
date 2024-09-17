@@ -62,21 +62,17 @@ export const FlowHeader = (props: Props) => {
           <div className="text-center">
             <p className="mb-1.5 text-muted-foreground">Budget</p>
             <Badge>
-              ?
-              {/* {grants
-                .reduce((sum, grant) => sum + grant.budget, 0)
-                .toLocaleString("en-US")} */}
+              {Intl.NumberFormat("en", {
+                style: "currency",
+                currency: "USD",
+                maximumFractionDigits: 0,
+              }).format(Number(flow.monthlyFlowRate))}
               /mo
             </Badge>
           </div>
           <div className="text-center">
             <p className="mb-1.5 text-muted-foreground">Total Votes</p>
-            <p className="font-medium">
-              ?
-              {/* {grants
-                .reduce((sum, grant) => sum + grant.votes, 0)
-                .toLocaleString("en-US")} */}
-            </p>
+            <p className="font-medium">{flow.votesCount} </p>
           </div>
 
           {flow.parent && (

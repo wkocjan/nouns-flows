@@ -1,5 +1,5 @@
 import { getDefaultConfig } from "connectkit"
-import { createConfig, http } from "wagmi"
+import { createConfig, webSocket } from "wagmi"
 import { base, baseSepolia, mainnet } from "wagmi/chains"
 
 declare module "wagmi" {
@@ -16,14 +16,14 @@ export const config = createConfig(
   getDefaultConfig({
     chains,
     transports: {
-      [base.id]: http(
-        `https://base-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`,
+      [base.id]: webSocket(
+        `wss://base-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`,
       ),
-      [baseSepolia.id]: http(
-        `https://base-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`,
+      [baseSepolia.id]: webSocket(
+        `wss://base-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`,
       ),
-      [mainnet.id]: http(
-        `https://eth-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`,
+      [mainnet.id]: webSocket(
+        `wss://eth-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`,
       ),
     },
 
