@@ -13,7 +13,8 @@ import {
 import { UserProfile } from "@/components/user-profile/user-profile"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
-import { getFlowWithGrants } from "./components/getFlowWithGrants"
+import Link from "next/link"
+import { getFlowWithGrants } from "./components/get-flow-with-grants"
 import { VotingBar } from "./components/voting-bar"
 import { VotingInput } from "./components/voting-input"
 
@@ -33,7 +34,7 @@ export default async function FlowPage(props: Props) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[350px]">Name</TableHead>
+            <TableHead colSpan={2}>Name</TableHead>
             <TableHead>Builders</TableHead>
             <TableHead className="text-center">Budget</TableHead>
             <TableHead className="text-center">Total Votes</TableHead>
@@ -43,18 +44,26 @@ export default async function FlowPage(props: Props) {
         <TableBody>
           {flow.subgrants.map((grant) => (
             <TableRow key={grant.id}>
-              <TableCell className="font-medium">
-                <div className="flex items-center space-x-4">
-                  <Image
-                    alt={`${grant.title} image`}
-                    className="rounded-lg object-cover"
-                    height="48"
-                    src={getIpfsUrl(grant.image)}
-                    width="48"
-                  />
-                  <div className="shrink-0">
-                    <h4 className="mb-1 text-[15px]">{grant.title}</h4>
-                    {/* {grant.isChallenged && (
+              <TableCell className="w-[64px] min-w-[64px]">
+                <Image
+                  src={getIpfsUrl(flow.image)}
+                  alt={flow.title}
+                  width={64}
+                  height={64}
+                  className="aspect-square size-12 rounded-md object-cover"
+                />
+              </TableCell>
+              <TableCell>
+                <h4 className="mb-1 text-[15px]">
+                  <Link
+                    href={`/grant/${grant.id}`}
+                    className="font-medium duration-100 ease-out hover:text-primary"
+                    tabIndex={-1}
+                  >
+                    {grant.title}
+                  </Link>
+                </h4>
+                {/* {grant.isChallenged && (
                       <HoverCard openDelay={250}>
                         <HoverCardTrigger>
                           <Badge variant="warning">
@@ -69,8 +78,6 @@ export default async function FlowPage(props: Props) {
                         </HoverCardContent>
                       </HoverCard>
                     )} */}
-                  </div>
-                </div>
               </TableCell>
               <TableCell>
                 <div className="flex space-x-0.5">

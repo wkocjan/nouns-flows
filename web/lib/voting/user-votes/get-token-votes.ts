@@ -7,7 +7,7 @@ export async function getTokenVotes(contract: `0x${string}`, tokenIds: string[])
   if (!tokenIds.length) return []
 
   const votes = await database.vote.findMany({
-    select: { bps: true, recipientId: true },
+    select: { bps: true, recipientId: true, votesCount: true },
     where: {
       contract,
       tokenId: { in: tokenIds },

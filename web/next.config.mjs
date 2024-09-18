@@ -13,6 +13,11 @@ const nextConfig = {
         hostname: "ipfs.io",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "noun.pics",
+        pathname: "/**",
+      },
     ],
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",

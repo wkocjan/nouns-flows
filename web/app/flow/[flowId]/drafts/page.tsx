@@ -36,7 +36,7 @@ export default async function FlowDraftsPage(props: Props) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="lg:w-[350px]">Name</TableHead>
+          <TableHead colSpan={2}>Name</TableHead>
           <TableHead>User(s)</TableHead>
           <TableHead className="text-center">Submitted</TableHead>
           <TableHead className="text-right">Action</TableHead>
@@ -45,19 +45,17 @@ export default async function FlowDraftsPage(props: Props) {
       <TableBody>
         {drafts.map((draft) => (
           <TableRow key={draft.id}>
-            <TableCell className="font-medium">
-              <div className="flex items-center space-x-4">
-                <Image
-                  alt={`${draft.title}`}
-                  className="aspect-square size-12 rounded-lg object-cover"
-                  height="48"
-                  src={getPinataUrl(draft.image)}
-                  width="48"
-                />
-                <div>
-                  <h4 className="mb-1 text-[15px] font-medium">{draft.title}</h4>
-                </div>
-              </div>
+            <TableCell className="w-[64px] min-w-[64px]">
+              <Image
+                src={getPinataUrl(draft.image)}
+                alt={draft.title}
+                width={64}
+                height={64}
+                className="size-12 rounded-md object-cover"
+              />
+            </TableCell>
+            <TableCell>
+              <h4 className="text-[15px] font-medium">{draft.title}</h4>
             </TableCell>
             <TableCell>
               <div className="flex space-x-0.5">

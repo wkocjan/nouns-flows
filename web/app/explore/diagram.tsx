@@ -3,9 +3,8 @@ import FlowNode from "@/components/diagram/flow-node"
 import grantNode from "@/components/diagram/grant-node"
 import PoolNode, { IPoolNode } from "@/components/diagram/pool-node"
 import { Background, Edge, Node, Position, ReactFlow } from "@xyflow/react"
-
 import "@xyflow/react/dist/style.css"
-import { FlowWithGrants } from "../flow/[flowId]/components/getFlowWithGrants"
+import { FlowWithGrants } from "../flow/[flowId]/components/get-flow-with-grants"
 
 type Props = {
   flows: FlowWithGrants[]

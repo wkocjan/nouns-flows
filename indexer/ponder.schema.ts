@@ -14,7 +14,7 @@ export default createSchema((p) => ({
       url: p.string().optional(),
       isRemoved: p.boolean(),
       blockNumber: p.string(),
-      parent: p.string().optional(),
+      parent: p.string(),
       votesCount: p.string(),
       monthlyFlowRate: p.string(),
     },
