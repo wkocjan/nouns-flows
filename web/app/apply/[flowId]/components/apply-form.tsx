@@ -8,7 +8,7 @@ import { MarkdownInput } from "@/components/ui/markdown-input"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { useAccount } from "wagmi"
-import { saveDraft } from "./saveDraft"
+import { saveDraft } from "./save-draft"
 
 interface Props {
   flowId: string
@@ -32,8 +32,8 @@ export function ApplyForm(props: Props) {
 
   return (
     <form action={handleSubmit} className="space-y-6">
-      <input type="hidden" name="flowId" value={flowId} />
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <input type="hidden" name="flowId" value={flowId} />
         <div className="space-y-1.5">
           <Label>Title</Label>
           <Input placeholder="My project..." name="title" />
@@ -41,10 +41,7 @@ export function ApplyForm(props: Props) {
 
         <div className="space-y-1.5">
           <Label>Image (square)</Label>
-          <FileInput
-            name="image"
-            accept="image/jpeg,image/png,image/webp,image/svg+xml"
-          />
+          <FileInput name="image" accept="image/jpeg,image/png,image/webp,image/svg+xml" />
         </div>
       </div>
 

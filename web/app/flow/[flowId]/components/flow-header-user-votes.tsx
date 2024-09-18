@@ -16,7 +16,7 @@ export const FlowHeaderUserVotes = (props: Props) => {
   const votesCount = votes.find((v) => v.recipientId === recipientId)?.bps || 0
 
   return (
-    <div className="text-center">
+    <div className="md:text-center">
       <p className="mb-1.5 text-muted-foreground">Your Vote</p>
       <p className="font-medium">{votesCount / 100}%</p>
     </div>

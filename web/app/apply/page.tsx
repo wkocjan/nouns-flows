@@ -13,12 +13,10 @@ export default async function ApplyPage() {
   return (
     <main className="container mt-8 pb-12">
       <div className="mx-auto max-w-screen-lg">
-        <h3 className="font-semibold leading-none tracking-tight">
-          Apply for a Grant
-        </h3>
+        <h3 className="font-semibold leading-none tracking-tight">Apply for a Grant</h3>
         <p className="mt-1.5 text-balance text-sm text-muted-foreground">
-          Start your grant application by selecting the flow that best fits your
-          project. Each flow has a specific focus and budget.
+          Start your grant application by selecting the flow that best fits your project. Each flow
+          has a specific focus and budget.
         </p>
 
         <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -41,12 +39,14 @@ export default async function ApplyPage() {
                     <h3 className="text-center text-lg font-semibold transition-colors group-hover:text-primary">
                       {flow.title}
                     </h3>
-                    <p className="mb-2 text-center text-sm text-muted-foreground">
-                      {flow.tagline}
-                    </p>
+                    <p className="mb-2 text-center text-sm text-muted-foreground">{flow.tagline}</p>
                     <Badge className="mt-2">
-                      ?/mo
-                      {/* ${flow.budget.toLocaleString("en-US")}/mo */}
+                      {Intl.NumberFormat("en", {
+                        style: "currency",
+                        currency: "USD",
+                        maximumFractionDigits: 0,
+                      }).format(Number(flow.monthlyFlowRate))}
+                      /mo
                     </Badge>
                   </div>
                 </CardContent>

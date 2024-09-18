@@ -41,12 +41,12 @@ view Grant {
   url             String?
   isRemoved       Int
   blockNumber     String
-  parent          String?
+  parent          String
   votesCount      String
   monthlyFlowRate String
 
   subgrants   Grant[] @relation("Subgrants")
-  parentGrant Grant?  @relation("Subgrants", fields: [parent], references: [recipient])
+  parentGrant Grant  @relation("Subgrants", fields: [parent], references: [recipient])
 
   @@map("Grant")
   @@schema("public")

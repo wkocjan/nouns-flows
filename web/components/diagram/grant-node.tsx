@@ -5,11 +5,12 @@ import { getIpfsUrl } from "@/lib/utils"
 import { Grant } from "@prisma/client"
 import { Handle, Node, NodeProps, Position } from "@xyflow/react"
 import Image from "next/image"
+import Link from "next/link"
 import { memo } from "react"
 
 function GrantNode(props: NodeProps<Node<{ grant: Grant }, "grant">>) {
   const { targetPosition = Position.Left, data, width, height } = props
-  const { image, title, monthlyFlowRate } = data.grant
+  const { image, title, monthlyFlowRate, id } = data.grant
 
   return (
     <div
@@ -25,9 +26,9 @@ function GrantNode(props: NodeProps<Node<{ grant: Grant }, "grant">>) {
           className="size-8 rounded-full"
         />
         <h2 className="mt-1 line-clamp-1 text-[13px] font-medium text-card-foreground">
-          {/* <Link href={url} className="hover:text-primary duration-100"> */}
-          {title}
-          {/* </Link> */}
+          <Link href={`/grant/${id}`} className="duration-100 hover:text-primary">
+            {title}
+          </Link>
         </h2>
 
         <div className="mt-2 flex items-center space-x-1">

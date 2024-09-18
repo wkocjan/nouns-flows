@@ -3,9 +3,9 @@
 import { NOUNS_TOKEN } from "@/lib/config"
 import { l1Client, l2Client } from "@/lib/viem/client"
 import { encodeAbiParameters, keccak256, PublicClient, toHex, type Address } from "viem"
-import { getBeaconBlock } from "./getBeaconBlock"
-import { getBeaconRootAndL2Timestamp } from "./getBeaconRootAndL2Timestamp"
-import { getExecutionStateRootProof } from "./getExecutionStateRootProof"
+import { getBeaconBlock } from "./get-beacon-block"
+import { getBeaconRootAndL2Timestamp } from "./get-beacon-root-and-l2-timestamp"
+import { getExecutionStateRootProof } from "./get-execution-state-root-proof"
 
 export async function generateOwnerProofs(tokenIds: bigint[], delegators: Address[]) {
   try {

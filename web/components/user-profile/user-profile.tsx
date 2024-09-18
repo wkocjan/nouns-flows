@@ -32,11 +32,7 @@ const UserProfileInner = async (props: Props) => {
   const profile = await getUserProfile(address)
 
   if (withPopover) {
-    return (
-      <UserProfilePopover profile={profile}>
-        {children(profile)}
-      </UserProfilePopover>
-    )
+    return <UserProfilePopover profile={profile}>{children(profile)}</UserProfilePopover>
   }
 
   return children(profile)

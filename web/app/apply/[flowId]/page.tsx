@@ -3,7 +3,7 @@ import "server-only"
 import { Card, CardContent } from "@/components/ui/card"
 import { Markdown } from "@/components/ui/markdown"
 import database from "@/lib/database"
-import { ApplyForm } from "./components/ApplyForm"
+import { ApplyForm } from "./components/apply-form"
 
 interface Props {
   params: {
@@ -20,9 +20,7 @@ export default async function ApplyFlowPage(props: Props) {
 
   return (
     <main className="container mt-8 pb-12">
-      <h3 className="font-semibold leading-none tracking-tight">
-        Apply for a Grant
-      </h3>
+      <h3 className="font-semibold leading-none tracking-tight">Apply for a Grant</h3>
       <p className="mt-1.5 text-balance text-sm text-muted-foreground">
         Outline your project and its potential impact.
       </p>
