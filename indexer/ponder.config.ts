@@ -17,6 +17,7 @@ const SECONDS_PER_BLOCK = 12;
 export default createConfig({
   database: {
     kind: "postgres",
+    schema: "public",
   },
   networks: {
     base: {
