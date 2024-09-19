@@ -88,7 +88,7 @@ export default async function GrantPage({ params }: Props) {
               <CardTitle>About</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
                 <div>
                   <h4 className="text-sm text-muted-foreground">Builders</h4>
                   <div className="mt-1.5 flex space-x-0.5">
@@ -112,6 +112,16 @@ export default async function GrantPage({ params }: Props) {
                     }).format(Number(grant.monthlyFlowRate))}
                     /mo
                   </Badge>
+                </div>
+                <div>
+                  <h4 className="text-sm text-muted-foreground">Total Earned</h4>
+                  <p className="mt-1.5 text-xl font-medium">
+                    {Intl.NumberFormat("en", {
+                      style: "currency",
+                      currency: "USD",
+                      maximumFractionDigits: 0,
+                    }).format(Number(grant.totalEarned))}
+                  </p>
                 </div>
                 <div>
                   <h4 className="text-sm text-muted-foreground">Total Votes</h4>

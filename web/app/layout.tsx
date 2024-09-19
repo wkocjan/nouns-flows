@@ -1,6 +1,7 @@
 import { MenuDesktop, MenuMobile } from "@/components/global/menu"
 import { MenuAvatar } from "@/components/global/menu-avatar"
 import { ModeToggle } from "@/components/global/mode-toggle"
+import { RecipientPopover } from "@/components/global/recipient-popover/recipient-popover"
 import { ThemeProvider } from "@/components/global/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
   description: "Protocol for streaming funds to Nouns builders",
 }
 
-export default function RootLayout(props: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout(props: Readonly<{ children: React.ReactNode }>) {
   const { children } = props
 
   return (
@@ -48,6 +49,7 @@ export default function RootLayout(props: Readonly<{ children: React.ReactNode }
                   <span className="max-sm:hidden">
                     <ModeToggle />
                   </span>
+                  <RecipientPopover />
                   <MenuAvatar />
                   <MenuMobile />
                 </div>

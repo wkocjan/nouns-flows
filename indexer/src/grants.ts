@@ -1,4 +1,5 @@
 import { ponder, type Context, type Event } from "@/generated";
+import { NOUNS_FLOW } from "../ponder.config";
 
 ponder.on("NounsFlowChildren:RecipientCreated", handleRecipientCreated);
 ponder.on("NounsFlow:RecipientCreated", handleRecipientCreated);
@@ -24,9 +25,11 @@ async function handleRecipientCreated(params: {
       blockNumber: event.block.number.toString(),
       isFlow: recipient.recipientType === 1,
       isRemoved: recipient.removed,
-      parent: event.transaction.to?.toLowerCase(),
+      parent: event.transaction.to?.toLowerCase() || NOUNS_FLOW,
       votesCount: "0",
       monthlyFlowRate: "0",
+      updatedAt: Number(event.block.timestamp),
+      totalEarned: "0",
       ...recipient.metadata,
     },
   });

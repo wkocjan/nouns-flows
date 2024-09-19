@@ -44,9 +44,10 @@ view Grant {
   parent          String
   votesCount      String
   monthlyFlowRate String
+  totalEarned     String
 
   subgrants   Grant[] @relation("Subgrants")
-  parentGrant Grant  @relation("Subgrants", fields: [parent], references: [recipient])
+  parentGrant Grant   @relation("Subgrants", fields: [parent], references: [recipient])
 
   @@map("Grant")
   @@schema("public")

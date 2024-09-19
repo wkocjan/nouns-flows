@@ -48,6 +48,7 @@ export default async function Home() {
                 <TableRow>
                   <TableHead colSpan={2}>Name</TableHead>
                   <TableHead className="text-center"># Grants</TableHead>
+                  <TableHead className="text-center">Total Earned</TableHead>
                   <TableHead className="text-center">Budget</TableHead>
                   <TableHead className="text-center">Total Votes</TableHead>
                   <TableHead className="text-center">Your Vote</TableHead>
@@ -96,6 +97,13 @@ export default async function Home() {
                         </TooltipTrigger>
                         <TooltipContent>Awaiting</TooltipContent>
                       </Tooltip>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {Intl.NumberFormat("en", {
+                        style: "currency",
+                        currency: "USD",
+                        maximumFractionDigits: 0,
+                      }).format(Number(flow.totalEarned))}
                     </TableCell>
                     <TableCell className="text-center">
                       <Badge>

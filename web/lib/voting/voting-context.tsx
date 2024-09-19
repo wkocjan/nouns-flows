@@ -47,7 +47,7 @@ export const VotingProvider = (
       setTimeout(() => {
         mutate()
         router.refresh()
-      }, 2500) // refresh votes data when ingestion should be finished
+      }, 3000) // refresh votes data when ingestion should be finished
       setIsActive(false)
     },
   })

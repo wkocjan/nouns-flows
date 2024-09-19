@@ -36,6 +36,7 @@ export default async function FlowPage(props: Props) {
           <TableRow>
             <TableHead colSpan={2}>Name</TableHead>
             <TableHead>Builders</TableHead>
+            <TableHead className="text-center">Total Earned</TableHead>
             <TableHead className="text-center">Budget</TableHead>
             <TableHead className="text-center">Total Votes</TableHead>
             <TableHead className="text-center">Your Vote</TableHead>
@@ -90,6 +91,14 @@ export default async function FlowPage(props: Props) {
                     )}
                   </UserProfile>
                 </div>
+              </TableCell>
+
+              <TableCell className="text-center">
+                {Intl.NumberFormat("en", {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 0,
+                }).format(Number(flow.totalEarned))}
               </TableCell>
 
               <TableCell className="text-center">

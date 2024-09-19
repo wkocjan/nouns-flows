@@ -17,6 +17,8 @@ export default createSchema((p) => ({
       parent: p.string(),
       votesCount: p.string(),
       monthlyFlowRate: p.string(),
+      totalEarned: p.string(),
+      updatedAt: p.int(),
     },
     {
       recipientIdIndex: p.index("recipientId"),
