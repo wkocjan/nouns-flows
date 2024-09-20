@@ -18,6 +18,7 @@ export default createSchema((p) => ({
       votesCount: p.string(),
       monthlyFlowRate: p.string(),
       totalEarned: p.string(),
+      claimableBalance: p.string(),
       updatedAt: p.int(),
     },
     {
@@ -26,6 +27,7 @@ export default createSchema((p) => ({
       isRemovedIndex: p.index("isRemoved"),
       parentIndex: p.index("parent"),
       recipientIndex: p.index("recipient"),
+      updatedAtIndex: p.index("updatedAt"),
     }
   ),
   Vote: p.createTable(

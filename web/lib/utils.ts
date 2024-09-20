@@ -14,11 +14,7 @@ export function getShortEthAddress(address?: string | null) {
   return `${address.substring(0, 5)}...${address.substring(address.length - 3)}`
 }
 
-export function explorerUrl(
-  address: string,
-  chainId: number,
-  type: "tx" | "address" = "tx",
-) {
+export function explorerUrl(address: string, chainId: number, type: "tx" | "address" = "tx") {
   const explorerDomain: Record<SupportedChainId, string> = {
     [mainnet.id]: "etherscan.io",
     [base.id]: "basescan.org",

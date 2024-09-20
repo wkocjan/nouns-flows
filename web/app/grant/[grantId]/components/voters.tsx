@@ -1,12 +1,11 @@
+/* eslint-disable @next/next/no-img-element */
 import "server-only"
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database"
 import { getEthAddress } from "@/lib/utils"
-import Image from "next/image"
-import { Suspense } from "react"
 
 interface Props {
   contract: `0x${string}`
@@ -16,9 +15,10 @@ interface Props {
 export const Voters = async (props: Props) => {
   const { contract, recipientId } = props
 
-  const votes = database.vote.findMany({
-    select: { tokenId: true, voter: true },
+  const votes = database.vote.groupBy({
+    by: ["voter"],
     where: { contract, recipientId, isStale: 0 },
+    _count: { tokenId: true },
   })
 
   return (
@@ -27,29 +27,22 @@ export const Voters = async (props: Props) => {
         <CardTitle>Voters</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-wrap gap-2">
-          <Suspense>
-            {(await votes).map((v) => (
-              <Tooltip key={v.tokenId}>
-                <TooltipTrigger asChild>
-                  <Image
-                    src={`https://noun.pics/${v.tokenId}.svg`}
-                    alt="Noun"
-                    className="aspect-square size-8 rounded-full"
-                    width={32}
-                    height={32}
-                  />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <h3 className="text-sm font-medium">Noun {v.tokenId}</h3>
-                  by{" "}
-                  <UserProfile address={getEthAddress(v.voter)}>
-                    {(profile) => <span>{profile.display_name}</span>}
-                  </UserProfile>
-                </TooltipContent>
-              </Tooltip>
-            ))}
-          </Suspense>
+        <div className="grid grid-cols-2 gap-4">
+          {(await votes).map((v) => (
+            <UserProfile address={getEthAddress(v.voter)} key={v.voter}>
+              {(profile) => (
+                <div className="flex items-center">
+                  <Avatar className="mr-2.5 aspect-square size-7 rounded-full">
+                    <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
+                    <AvatarFallback>{profile.display_name[0].toUpperCase()}</AvatarFallback>
+                  </Avatar>
+
+                  <span className="mr-1 text-sm font-medium">{profile.display_name}</span>
+                  <span className="text-xs text-muted-foreground">({v._count.tokenId})</span>
+                </div>
+              )}
+            </UserProfile>
+          ))}
         </div>
       </CardContent>
     </Card>

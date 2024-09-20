@@ -15,6 +15,7 @@ import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import { FlowHeaderUserVotes } from "./flow-header-user-votes"
 import { FlowWithGrants } from "./get-flow-with-grants"
+import { Currency } from "@/components/ui/currency"
 
 interface Props {
   flow: FlowWithGrants
@@ -86,11 +87,7 @@ export const FlowHeader = (props: Props) => {
           <div className="md:text-center">
             <p className="mb-1.5 text-muted-foreground">Budget</p>
             <Badge>
-              {Intl.NumberFormat("en", {
-                style: "currency",
-                currency: "USD",
-                maximumFractionDigits: 0,
-              }).format(Number(flow.monthlyFlowRate))}
+              <Currency>{flow.monthlyFlowRate}</Currency>
               /mo
             </Badge>
           </div>

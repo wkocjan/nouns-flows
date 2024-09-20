@@ -1,9 +1,7 @@
 import "server-only"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import {
   Table,
   TableBody,
@@ -13,10 +11,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { UserProfile } from "@/components/user-profile/user-profile"
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
+import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import { getFlowWithGrants } from "../components/get-flow-with-grants"
-import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 
 interface Props {
   params: {
@@ -52,7 +49,7 @@ export default async function FlowCandidatesPage(props: Props) {
               />
             </TableCell>
             <TableCell>
-              <h4 className="text-[15px] font-medium">{grant.title}</h4>
+              <h4 className="text-sm font-medium md:text-base">{grant.title}</h4>
             </TableCell>
             <TableCell>
               <div className="flex space-x-0.5">

@@ -1,4 +1,5 @@
 import { ponder } from "@/generated";
+import { getClaimableBalance } from "./lib/claimable-balance";
 import { getMonthlyFlowRate } from "./lib/monthly-flow";
 import { getTotalEarned } from "./lib/total-earned";
 
@@ -12,9 +13,10 @@ ponder.on("Balance:block", async (params) => {
   });
 
   for (const grant of items) {
-    const [totalEarned, monthlyFlowRate] = await Promise.all([
+    const [totalEarned, monthlyFlowRate, claimableBalance] = await Promise.all([
       getTotalEarned(context, grant.parent, grant.recipient),
       getMonthlyFlowRate(context, grant.parent, grant.recipient),
+      getClaimableBalance(context, grant.parent, grant.recipient),
     ]);
 
     await context.db.Grant.update({
@@ -22,6 +24,7 @@ ponder.on("Balance:block", async (params) => {
       data: {
         totalEarned,
         monthlyFlowRate,
+        claimableBalance,
         updatedAt: Number(event.block.timestamp),
       },
     });

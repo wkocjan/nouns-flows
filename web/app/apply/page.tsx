@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
+import { Currency } from "@/components/ui/currency"
 import database from "@/lib/database"
 import { getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
@@ -41,11 +42,7 @@ export default async function ApplyPage() {
                     </h3>
                     <p className="mb-2 text-center text-sm text-muted-foreground">{flow.tagline}</p>
                     <Badge className="mt-2">
-                      {Intl.NumberFormat("en", {
-                        style: "currency",
-                        currency: "USD",
-                        maximumFractionDigits: 0,
-                      }).format(Number(flow.monthlyFlowRate))}
+                      <Currency>{flow.monthlyFlowRate}</Currency>
                       /mo
                     </Badge>
                   </div>

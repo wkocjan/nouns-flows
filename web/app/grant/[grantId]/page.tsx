@@ -9,14 +9,15 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Currency } from "@/components/ui/currency"
 import { Markdown } from "@/components/ui/markdown"
 import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
+import { ClaimableBalance } from "./components/claimable-balance"
 import { UserVotes } from "./components/user-votes"
 import { Voters } from "./components/voters"
-import { Suspense } from "react"
 
 interface Props {
   params: {
@@ -90,11 +91,11 @@ export default async function GrantPage({ params }: Props) {
             <CardContent>
               <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
                 <div>
-                  <h4 className="text-sm text-muted-foreground">Builders</h4>
-                  <div className="mt-1.5 flex space-x-0.5">
+                  <h4 className="text-[13px] text-muted-foreground">Builders</h4>
+                  <div className="mt-1 flex space-x-0.5">
                     <UserProfile address={getEthAddress(grant.recipient)} key={grant.recipient}>
                       {(profile) => (
-                        <Avatar className="size-8 bg-accent text-xs">
+                        <Avatar className="size-7 bg-accent text-xs">
                           <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
                           <AvatarFallback>{profile.display_name[0].toUpperCase()}</AvatarFallback>
                         </Avatar>
@@ -103,39 +104,35 @@ export default async function GrantPage({ params }: Props) {
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-sm text-muted-foreground">Budget</h4>
-                  <Badge className="mt-2 text-sm">
-                    {Intl.NumberFormat("en", {
-                      style: "currency",
-                      currency: "USD",
-                      maximumFractionDigits: 0,
-                    }).format(Number(grant.monthlyFlowRate))}
+                  <h4 className="text-[13px] text-muted-foreground">Budget</h4>
+                  <Badge className="mt-2">
+                    <Currency>{grant.monthlyFlowRate}</Currency>
                     /mo
                   </Badge>
                 </div>
                 <div>
-                  <h4 className="text-sm text-muted-foreground">Total Earned</h4>
-                  <p className="mt-1.5 text-xl font-medium">
-                    {Intl.NumberFormat("en", {
-                      style: "currency",
-                      currency: "USD",
-                      maximumFractionDigits: 0,
-                    }).format(Number(grant.totalEarned))}
+                  <h4 className="text-[13px] text-muted-foreground">Total Earned</h4>
+                  <p className="mt-1 text-lg font-medium">
+                    <Currency>{grant.totalEarned}</Currency>
                   </p>
                 </div>
                 <div>
-                  <h4 className="text-sm text-muted-foreground">Total Votes</h4>
-                  <p className="mt-1.5 text-xl font-medium">{grant.votesCount}</p>
+                  <h4 className="text-[13px] text-muted-foreground">Total Votes</h4>
+                  <p className="mt-1 text-lg font-medium">{grant.votesCount}</p>
                 </div>
                 <div>
-                  <h4 className="text-sm text-muted-foreground">Your Vote</h4>
-                  <p className="mt-1.5 text-xl font-medium">
+                  <h4 className="text-[13px] text-muted-foreground">Your Vote</h4>
+                  <p className="mt-1 text-lg font-medium">
                     <UserVotes
                       recipientId={grant.recipientId}
                       contract={getEthAddress(grant.parent)}
                     />
                   </p>
                 </div>
+                <ClaimableBalance
+                  recipient={grant.recipient}
+                  claimableBalance={grant.claimableBalance}
+                />
               </div>
             </CardContent>
           </Card>

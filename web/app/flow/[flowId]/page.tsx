@@ -2,6 +2,7 @@ import "server-only"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import { Currency } from "@/components/ui/currency"
 import {
   Table,
   TableBody,
@@ -55,7 +56,7 @@ export default async function FlowPage(props: Props) {
                 />
               </TableCell>
               <TableCell>
-                <h4 className="mb-1 text-[15px]">
+                <h4 className="mb-1 text-sm md:text-base">
                   <Link
                     href={`/grant/${grant.id}`}
                     className="font-medium duration-100 ease-out hover:text-primary"
@@ -94,20 +95,12 @@ export default async function FlowPage(props: Props) {
               </TableCell>
 
               <TableCell className="text-center">
-                {Intl.NumberFormat("en", {
-                  style: "currency",
-                  currency: "USD",
-                  maximumFractionDigits: 0,
-                }).format(Number(flow.totalEarned))}
+                <Currency>{grant.totalEarned}</Currency>
               </TableCell>
 
               <TableCell className="text-center">
                 <Badge>
-                  {Intl.NumberFormat("en", {
-                    style: "currency",
-                    currency: "USD",
-                    maximumFractionDigits: 0,
-                  }).format(Number(grant.monthlyFlowRate))}
+                  <Currency>{grant.monthlyFlowRate}</Currency>
                   /mo
                 </Badge>
               </TableCell>

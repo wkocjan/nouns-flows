@@ -30,6 +30,7 @@ async function handleRecipientCreated(params: {
       monthlyFlowRate: "0",
       updatedAt: Number(event.block.timestamp),
       totalEarned: "0",
+      claimableBalance: "0",
       ...recipient.metadata,
     },
   });

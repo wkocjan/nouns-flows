@@ -1,6 +1,7 @@
 "use client"
 
 import { Badge } from "@/components/ui/badge"
+import { Currency } from "@/components/ui/currency"
 import { Grant } from "@prisma/client"
 import { Handle, Node, NodeProps, Position } from "@xyflow/react"
 import Link from "next/link"
@@ -31,11 +32,7 @@ function FlowNode(props: NodeProps<Node<{ flow: Grant }, "flow">>) {
 
           <div className="mt-2 flex items-center space-x-1">
             <Badge>
-              {Intl.NumberFormat("en", {
-                style: "currency",
-                currency: "USD",
-                maximumFractionDigits: 0,
-              }).format(Number(monthlyFlowRate))}
+              <Currency>{monthlyFlowRate}</Currency>
               /mo
             </Badge>
           </div>

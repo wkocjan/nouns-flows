@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
+import { Currency } from "@/components/ui/currency"
 import {
   Table,
   TableBody,
@@ -99,19 +100,11 @@ export default async function Home() {
                       </Tooltip>
                     </TableCell>
                     <TableCell className="text-center">
-                      {Intl.NumberFormat("en", {
-                        style: "currency",
-                        currency: "USD",
-                        maximumFractionDigits: 0,
-                      }).format(Number(flow.totalEarned))}
+                      <Currency>{flow.totalEarned}</Currency>
                     </TableCell>
                     <TableCell className="text-center">
                       <Badge>
-                        {Intl.NumberFormat("en", {
-                          style: "currency",
-                          currency: "USD",
-                          maximumFractionDigits: 0,
-                        }).format(Number(flow.monthlyFlowRate))}
+                        <Currency>{flow.monthlyFlowRate}</Currency>
                         /mo
                       </Badge>
                     </TableCell>

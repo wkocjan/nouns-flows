@@ -55,7 +55,7 @@ export default async function FlowDraftsPage(props: Props) {
               />
             </TableCell>
             <TableCell>
-              <h4 className="text-[15px] font-medium">{draft.title}</h4>
+              <h4 className="text-sm font-medium md:text-base">{draft.title}</h4>
             </TableCell>
             <TableCell>
               <div className="flex space-x-0.5">

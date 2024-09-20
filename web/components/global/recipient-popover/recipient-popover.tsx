@@ -1,11 +1,14 @@
 "use client"
 
 import { Badge } from "@/components/ui/badge"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Button } from "@/components/ui/button"
+import { Currency } from "@/components/ui/currency"
+import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { getIpfsUrl } from "@/lib/utils"
+import { DownloadIcon } from "@radix-ui/react-icons"
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useAccount } from "wagmi"
 import { useUserGrants } from "./use-user-grants"
 
@@ -13,6 +16,7 @@ export const RecipientPopover = () => {
   const [isVisible, setIsVisible] = useState(false)
   const { address } = useAccount()
   const { grants } = useUserGrants(address)
+  const closeRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     setIsVisible(!!address && grants.length > 0)
@@ -20,29 +24,21 @@ export const RecipientPopover = () => {
 
   if (!isVisible) return null
 
+  const totalClaimable = grants.reduce((acc, grant) => acc + Number(grant.claimableBalance), 0)
   const yearlyEarnings = 12 * grants.reduce((acc, grant) => acc + Number(grant.monthlyFlowRate), 0)
 
   return (
     <Popover>
       <PopoverTrigger>
         <Badge className="h-[26px] rounded-full text-xs">
-          {new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: "USD",
-            maximumFractionDigits: 0,
-          }).format(21)}
+          <Currency>{totalClaimable}</Currency>
         </Badge>
       </PopoverTrigger>
       <PopoverContent className="md:w-[440px]" collisionPadding={32}>
+        <PopoverClose ref={closeRef} className="hidden" />
         <div>
           <p className="text-sm text-muted-foreground">
-            You&apos;re earning{" "}
-            {new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-              maximumFractionDigits: 0,
-            }).format(yearlyEarnings)}{" "}
-            per year.
+            You&apos;re earning <Currency>{yearlyEarnings}</Currency> per year.
           </p>
           <div className="mt-4">
             <div className="mb-2 grid grid-cols-4 gap-2 text-xs font-medium text-muted-foreground">
@@ -62,12 +58,26 @@ export const RecipientPopover = () => {
                     width={24}
                     height={24}
                   />
-                  <Link href={`/grants/${grant.id}`} className="truncate text-sm hover:underline">
+                  <Link
+                    href={`/grant/${grant.id}`}
+                    className="truncate text-sm hover:underline"
+                    onClick={() => closeRef.current?.click()}
+                  >
                     {grant.title}
                   </Link>
                 </div>
-                <div className="text-center text-sm">${grant.totalEarned}</div>
-                <div className="text-center text-sm">$0</div>
+                <Currency as="div" className="text-center text-sm font-medium">
+                  {grant.totalEarned}
+                </Currency>
+                <div className="flex items-center justify-center">
+                  <Button variant="ghost" disabled={Number(grant.claimableBalance) <= 0}>
+                    <Currency as="div" className="text-center text-sm">
+                      {grant.claimableBalance}
+                    </Currency>
+                    <DownloadIcon className="ml-1 size-3.5" />
+                    <span className="sr-only">Claim</span>
+                  </Button>
+                </div>
               </div>
             ))}
           </div>

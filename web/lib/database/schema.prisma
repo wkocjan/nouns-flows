@@ -30,21 +30,22 @@ model Draft {
 }
 
 view Grant {
-  id              String  @id
-  recipient       String  @unique
-  recipientId     String
-  isFlow          Int
-  title           String
-  description     String
-  image           String
-  tagline         String?
-  url             String?
-  isRemoved       Int
-  blockNumber     String
-  parent          String
-  votesCount      String
-  monthlyFlowRate String
-  totalEarned     String
+  id               String  @id
+  recipient        String  @unique
+  recipientId      String
+  isFlow           Int
+  title            String
+  description      String
+  image            String
+  tagline          String?
+  url              String?
+  isRemoved        Int
+  blockNumber      String
+  parent           String
+  votesCount       String
+  monthlyFlowRate  String
+  totalEarned      String
+  claimableBalance String
 
   subgrants   Grant[] @relation("Subgrants")
   parentGrant Grant   @relation("Subgrants", fields: [parent], references: [recipient])
