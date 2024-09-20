@@ -1,5 +1,5 @@
 import { ponder, type Context, type Event } from "@/generated";
-import { formatEther, getAddress } from "viem";
+import { getMonthlyFlowRate } from "./lib/monthly-flow";
 
 ponder.on("NounsFlow:VoteCast", handleVoteCast);
 ponder.on("NounsFlowChildren:VoteCast", handleVoteCast);
@@ -47,7 +47,7 @@ async function handleVoteCast(params: {
   for (const affectedRecipientId of affectedRecipientIds) {
     const [votesCount, monthlyFlowRate] = await Promise.all([
       getGrantVotesCount(context, contract, affectedRecipientId),
-      getGrantBudget(context, contract, affectedRecipientId),
+      getGrantBudget(context as Context, contract, affectedRecipientId),
     ]);
 
     await context.db.Grant.update({
@@ -72,7 +72,7 @@ async function getGrantVotesCount(
 }
 
 async function getGrantBudget(
-  context: Context<"NounsFlow:VoteCast">,
+  context: Context,
   contract: `0x${string}`,
   recipientId: string
 ) {
@@ -84,12 +84,5 @@ async function getGrantBudget(
     throw new Error(`Could not find recipient ${recipientId} on ${contract}`);
   }
 
-  const memberTotalFlowRate = await context.client.readContract({
-    address: contract,
-    abi: context.contracts.NounsFlow.abi,
-    functionName: "getMemberTotalFlowRate",
-    args: [getAddress(grant.recipient)],
-  });
-
-  return formatEther(memberTotalFlowRate * BigInt(60 * 60 * 24 * 30));
+  return getMonthlyFlowRate(context, contract, grant.recipient);
 }

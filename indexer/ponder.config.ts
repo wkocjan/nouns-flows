@@ -2,6 +2,7 @@ import { createConfig } from "@ponder/core";
 import { createPublicClient, http, parseAbiItem } from "viem";
 import { base } from "viem/chains";
 import { NounsFlowAbi } from "./abis/NounsFlowAbi";
+import { isDevelopment } from "./src/lib/utils";
 
 const client = createPublicClient({
   chain: base,
@@ -47,14 +48,9 @@ export default createConfig({
     },
   },
   blocks: {
-    PoolBalance: {
+    Balance: {
       network: "base",
-      interval: 300 / SECONDS_PER_BLOCK, // every 5 minutes
-      startBlock: currentBlock,
-    },
-    TotalEarned: {
-      network: "base",
-      interval: 60 / SECONDS_PER_BLOCK, // every 1 minute
+      interval: (isDevelopment() ? 3600 : 60) / SECONDS_PER_BLOCK, // 1 hour in dev, 1 minute otherwise
       startBlock: currentBlock,
     },
   },
