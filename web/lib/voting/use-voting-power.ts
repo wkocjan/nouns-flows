@@ -3,7 +3,7 @@
 import { NOUNS_TOKEN, VOTING_POWER_SCALE } from "@/lib/config"
 import { mainnet } from "viem/chains"
 import { useAccount, useReadContract } from "wagmi"
-import { NounsTokenAbi } from "../wagmi/abi"
+import { nounsTokenAbi } from "../abis"
 
 export function useVotingPower() {
   const { address } = useAccount()
@@ -11,7 +11,7 @@ export function useVotingPower() {
   const { data, ...rest } = useReadContract({
     address: NOUNS_TOKEN,
     chainId: mainnet.id,
-    abi: NounsTokenAbi,
+    abi: nounsTokenAbi,
     functionName: "getCurrentVotes",
     args: address ? [address] : undefined,
     query: { enabled: !!address },

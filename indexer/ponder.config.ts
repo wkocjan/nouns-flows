@@ -1,7 +1,7 @@
 import { createConfig } from "@ponder/core";
 import { createPublicClient, http, parseAbiItem } from "viem";
 import { base } from "viem/chains";
-import { NounsFlowAbi } from "./abis/NounsFlowAbi";
+import { nounsFlowAddress, nounsFlowImplAbi } from "./abis";
 import { isDevelopment } from "./src/lib/utils";
 
 const client = createPublicClient({
@@ -11,8 +11,7 @@ const client = createPublicClient({
 
 const currentBlock = Number(await client.getBlockNumber());
 
-export const NOUNS_FLOW = "0xe6a3ca8bf49e974a2cc6002f5984a97fd418e913" as const;
-const START_BLOCK = 19640603;
+const START_BLOCK = 20118986;
 const SECONDS_PER_BLOCK = 12;
 
 export default createConfig({
@@ -29,15 +28,15 @@ export default createConfig({
   },
   contracts: {
     NounsFlow: {
-      abi: NounsFlowAbi,
-      address: NOUNS_FLOW,
+      abi: nounsFlowImplAbi,
+      address: nounsFlowAddress[8453],
       network: "base",
       startBlock: START_BLOCK,
     },
     NounsFlowChildren: {
-      abi: NounsFlowAbi,
+      abi: nounsFlowImplAbi,
       factory: {
-        address: NOUNS_FLOW,
+        address: nounsFlowAddress[8453],
         event: parseAbiItem(
           "event FlowRecipientCreated(uint256 indexed recipientId, address indexed recipient)"
         ),
