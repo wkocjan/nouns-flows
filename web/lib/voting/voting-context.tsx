@@ -2,13 +2,14 @@
 
 import { useDelegatedTokens } from "@/lib/voting/delegated-tokens/use-delegated-tokens"
 import { generateOwnerProofs } from "@/lib/voting/owner-proofs/proofs"
-import { NounsFlowAbi } from "@/lib/wagmi/abi"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { Vote } from "@prisma/client"
 import { useRouter } from "next/navigation"
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react"
 import { toast } from "sonner"
+import { toHex } from "viem"
 import { useAccount } from "wagmi"
+import { nounsFlowAbi } from "../abis"
 import { PERCENTAGE_SCALE } from "../config"
 import { useUserVotes } from "./user-votes/use-user-votes"
 
@@ -97,7 +98,7 @@ export const VotingProvider = (
             })
           }
 
-          const recipientIds = votes.map((vote) => BigInt(vote.recipientId))
+          const recipientIds = votes.map((vote) => toHex(vote.recipientId))
           const percentAllocations = votes.map((vote) => (vote.bps / 10000) * PERCENTAGE_SCALE)
           const { ownershipStorageProofs, delegateStorageProofs, ...baseProofParams } = proofs
 
@@ -105,7 +106,7 @@ export const VotingProvider = (
 
           writeContract({
             account: address,
-            abi: NounsFlowAbi,
+            abi: nounsFlowAbi,
             functionName: "castVotes",
             address: contract,
             chainId,
