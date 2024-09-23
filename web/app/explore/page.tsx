@@ -1,4 +1,4 @@
-import { nounsFlowAbi } from "@/lib/abis"
+import { nounsFlowImplAbi } from "@/lib/abis"
 import { NOUNS_FLOW } from "@/lib/config"
 import database from "@/lib/database"
 import { l2Client } from "@/lib/viem/client"
@@ -27,7 +27,7 @@ const getMonthlyFlowRate = unstable_cache(
   async () => {
     const totalFlowRate = await l2Client.readContract({
       address: NOUNS_FLOW,
-      abi: nounsFlowAbi,
+      abi: nounsFlowImplAbi,
       functionName: "getTotalFlowRate",
     })
 

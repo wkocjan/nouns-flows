@@ -9,7 +9,7 @@ import { PropsWithChildren, createContext, useContext, useEffect, useState } fro
 import { toast } from "sonner"
 import { toHex } from "viem"
 import { useAccount } from "wagmi"
-import { nounsFlowAbi } from "../abis"
+import { nounsFlowImplAbi } from "../abis"
 import { PERCENTAGE_SCALE } from "../config"
 import { useUserVotes } from "./user-votes/use-user-votes"
 
@@ -106,7 +106,7 @@ export const VotingProvider = (
 
           writeContract({
             account: address,
-            abi: nounsFlowAbi,
+            abi: nounsFlowImplAbi,
             functionName: "castVotes",
             address: contract,
             chainId,
