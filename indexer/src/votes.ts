@@ -9,12 +9,12 @@ async function handleVoteCast(params: {
   context: Context<"NounsFlow:VoteCast">;
 }) {
   const { event, context } = params;
-  const { recipientId, tokenId, bps, totalUnits } = event.args;
+  const { recipientId, tokenId, bps, totalWeight } = event.args;
 
   const blockNumber = event.block.number.toString();
   const voter = event.transaction.from.toLowerCase();
   const contract = event.log.address.toLowerCase() as `0x${string}`;
-  const votesCount = bps / (totalUnits / BigInt(1e18));
+  const votesCount = bps / (totalWeight / BigInt(1e18));
 
   const affectedRecipientIds = new Set([recipientId.toString()]);
 
