@@ -16,7 +16,7 @@ export const FlowSubmenu = (props: Props) => {
   const segment = useSelectedLayoutSegment()
 
   const isApproved = segment === null
-  const isCandidates = segment === "candidates"
+  const isApplications = segment === "applications"
   const isDrafts = segment === "drafts"
 
   return (
@@ -36,11 +36,11 @@ export const FlowSubmenu = (props: Props) => {
         </Link>
         <Link
           className="group flex items-center space-x-2 text-lg font-medium md:text-xl"
-          href={`/flow/${flowId}/candidates`}
+          href={`/flow/${flowId}/applications`}
         >
           <span
             className={cn({
-              "opacity-50 duration-100 ease-in-out group-hover:opacity-100": !isCandidates,
+              "opacity-50 duration-100 ease-in-out group-hover:opacity-100": !isApplications,
             })}
           >
             Awaiting
@@ -62,7 +62,7 @@ export const FlowSubmenu = (props: Props) => {
 
       <div className="max-sm:hidden">
         {isApproved && <VotingToggle />}
-        {(isDrafts || isCandidates) && (
+        {(isDrafts || isApplications) && (
           <Link href={`/apply/${flowId}`}>
             <Button variant="secondary">Apply for a grant</Button>
           </Link>

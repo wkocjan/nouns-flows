@@ -14,6 +14,7 @@ import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database"
 import { getPinataUrl } from "@/lib/pinata/get-file-url"
 import Image from "next/image"
+import Link from "next/link"
 
 interface Props {
   params: {
@@ -55,7 +56,13 @@ export default async function FlowDraftsPage(props: Props) {
               />
             </TableCell>
             <TableCell>
-              <h4 className="text-sm font-medium md:text-base">{draft.title}</h4>
+              <Link
+                href={`/draft/${draft.id}`}
+                className="text-sm font-medium duration-100 ease-out hover:text-primary md:text-base"
+                tabIndex={-1}
+              >
+                {draft.title}
+              </Link>
             </TableCell>
             <TableCell>
               <div className="flex space-x-0.5">

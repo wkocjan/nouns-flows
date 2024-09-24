@@ -1,18 +1,24 @@
-import { createConfig } from "@ponder/core";
-import { createPublicClient, http, parseAbiItem } from "viem";
-import { base } from "viem/chains";
-import { nounsFlowAddress, nounsFlowImplAbi } from "./abis";
-import { isDevelopment } from "./src/lib/utils";
+import { createConfig } from "@ponder/core"
+import { createPublicClient, http, parseAbiItem } from "viem"
+import { base } from "viem/chains"
+import {
+  flowTcrAddress,
+  flowTcrImplAbi,
+  nounsFlowAddress,
+  nounsFlowImplAbi,
+  tcrFactoryAddress,
+  tcrFactoryImplAbi,
+} from "./abis"
 
 const client = createPublicClient({
   chain: base,
   transport: http(process.env.PONDER_RPC_URL_8453),
-});
+})
 
-const currentBlock = Number(await client.getBlockNumber());
+const currentBlock = Number(await client.getBlockNumber())
 
-const START_BLOCK = 20118986;
-const SECONDS_PER_BLOCK = 12;
+const START_BLOCK = 20118986
+const SECONDS_PER_BLOCK = 12
 
 export default createConfig({
   database: {
@@ -45,12 +51,36 @@ export default createConfig({
       network: "base",
       startBlock: START_BLOCK,
     },
+    NounsFlowTcr: {
+      abi: flowTcrImplAbi,
+      address: flowTcrAddress[8453],
+      network: "base",
+      startBlock: START_BLOCK,
+    },
+    NounsFlowTcrChildren: {
+      abi: flowTcrImplAbi,
+      factory: {
+        address: tcrFactoryAddress[8453],
+        event: parseAbiItem(
+          "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy)"
+        ),
+        parameter: "flowTCRProxy",
+      },
+      network: "base",
+      startBlock: START_BLOCK,
+    },
+    NounsFlowTcrFactory: {
+      abi: tcrFactoryImplAbi,
+      address: tcrFactoryAddress[8453],
+      network: "base",
+      startBlock: START_BLOCK,
+    },
   },
   blocks: {
     Balance: {
       network: "base",
-      interval: (isDevelopment() ? 3600 : 60) / SECONDS_PER_BLOCK, // 1 hour in dev, 1 minute otherwise
+      interval: (process.env.NODE_ENV === "development" ? 3600 : 60) / SECONDS_PER_BLOCK, // 1 hour in dev, 1 minute otherwise
       startBlock: currentBlock,
     },
   },
-});
+})

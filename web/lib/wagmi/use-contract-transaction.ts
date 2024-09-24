@@ -15,8 +15,9 @@ import { explorerUrl } from "../utils"
 export const useContractTransaction = (args: {
   chainId: number
   onSuccess?: (hash: string) => void
+  loading?: string
 }) => {
-  const { chainId, onSuccess } = args
+  const { chainId, loading = "Transaction in progress...", onSuccess } = args
   const [toastId, setToastId] = useState<number | string>()
   const [callbackHandled, setCallbackHandled] = useState(false)
   const { data: hash, isPending, error, ...writeContractRest } = useWriteContract()
@@ -30,7 +31,7 @@ export const useContractTransaction = (args: {
     if (callbackHandled || !toastId) return
 
     if (isLoading && hash) {
-      toast.loading("Transaction in progress...", {
+      toast.loading(loading, {
         action: {
           label: "View",
           onClick: () => window.open(explorerUrl(hash, chainId)),
@@ -81,9 +82,10 @@ export const useContractTransaction = (args: {
         }
       }
 
-      const newToastId = toast.loading("Confirm in your wallet...", { id: toastId })
+      const newToastId = toast.loading(loading, { id: toastId })
       setToastId(newToastId)
     },
+    toastId,
     ...writeContractRest,
   }
 }

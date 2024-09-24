@@ -5,8 +5,8 @@ import { z } from "zod"
 
 const schema = z.object({
   title: z.string().trim().min(1, "Title is required"),
-  image: z.string().trim().min(1, "Image is required"),
   description: z.string().trim().min(1, "Description is required"),
+  image: z.string().trim().min(1, "Image is required"),
   flowId: z.string().trim().min(1, "Flow is required"),
   users: z
     .array(

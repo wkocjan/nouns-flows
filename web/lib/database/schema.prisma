@@ -20,6 +20,8 @@ model Draft {
   updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
   flowId      String
+  flow        Grant    @relation(fields: [flowId], references: [id])
+  isFlow      Boolean  @default(false)
 
   @@index([isPrivate], map: "isPrivate_1")
   @@index([isOnchain], map: "isOnchain_1")
@@ -33,6 +35,7 @@ view Grant {
   id               String  @id
   recipient        String  @unique
   recipientId      String
+  isTopLevel       Int
   isFlow           Int
   title            String
   description      String
@@ -46,9 +49,16 @@ view Grant {
   monthlyFlowRate  String
   totalEarned      String
   claimableBalance String
+  tcr              String
+  arbitrator       String
+  erc20            String
 
   subgrants   Grant[] @relation("Subgrants")
   parentGrant Grant   @relation("Subgrants", fields: [parent], references: [recipient])
+
+  drafts        Draft[]
+  applications  Application @relation(fields: [applicationId], references: [id])
+  applicationId String
 
   @@map("Grant")
   @@schema("public")
@@ -73,5 +83,25 @@ view PonderMeta {
   value String
 
   @@map("_ponder_meta")
+  @@schema("public")
+}
+
+view Application {
+  id          String  @id
+  flowId      String
+  recipient   String
+  submitter   String
+  title       String
+  description String
+  image       String
+  tagline     String
+  url         String
+  isFlow      Int
+  blockNumber String
+  status      Int
+  updatedAt   Int
+  Grant       Grant[]
+
+  @@map("Application")
   @@schema("public")
 }

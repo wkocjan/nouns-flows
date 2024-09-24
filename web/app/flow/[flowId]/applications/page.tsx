@@ -11,9 +11,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { UserProfile } from "@/components/user-profile/user-profile"
+import database from "@/lib/database"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
-import { getFlowWithGrants } from "../components/get-flow-with-grants"
 
 interface Props {
   params: {
@@ -21,10 +21,10 @@ interface Props {
   }
 }
 
-export default async function FlowCandidatesPage(props: Props) {
+export default async function FlowApplicationsPage(props: Props) {
   const { flowId } = props.params
 
-  const flow = await getFlowWithGrants(flowId)
+  const applications = await database.application.findMany({ where: { flowId } })
 
   return (
     <Table>
@@ -37,23 +37,26 @@ export default async function FlowCandidatesPage(props: Props) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {flow.subgrants.map((grant) => (
-          <TableRow key={grant.id}>
+        {applications.map((application) => (
+          <TableRow key={application.id}>
             <TableCell className="w-[64px] min-w-[64px]">
               <Image
-                src={getIpfsUrl(flow.image)}
-                alt={flow.title}
+                src={getIpfsUrl(application.image)}
+                alt={application.title}
                 width={64}
                 height={64}
                 className="size-12 rounded-md object-cover"
               />
             </TableCell>
             <TableCell>
-              <h4 className="text-sm font-medium md:text-base">{grant.title}</h4>
+              <h4 className="text-sm font-medium md:text-base">{application.title}</h4>
             </TableCell>
             <TableCell>
               <div className="flex space-x-0.5">
-                <UserProfile address={getEthAddress(grant.recipient)} key={grant.recipient}>
+                <UserProfile
+                  address={getEthAddress(application.recipient)}
+                  key={application.recipient}
+                >
                   {(profile) => (
                     <Avatar className="size-7 bg-accent text-xs">
                       <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
@@ -66,15 +69,15 @@ export default async function FlowCandidatesPage(props: Props) {
 
             <TableCell className="text-center">
               Approval in 3 days
-              {/* {!grant.isChallenged && `Approval in 3 days`} */}
-              {/* {grant.isChallenged && `Voting ends in 2 days`} */}
+              {/* {!application.isChallenged && `Approval in 3 days`} */}
+              {/* {application.isChallenged && `Voting ends in 2 days`} */}
             </TableCell>
 
             <TableCell className="w-[100px] max-w-[100px]">
               <div className="flex justify-end">
                 <Button variant="outline">Challenge</Button>
-                {/* {grant.isChallenged && <Button>Vote</Button>}
-                {!grant.isChallenged && (
+                {/* {application.isChallenged && <Button>Vote</Button>}
+                {!application.isChallenged && (
                   <Button variant="outline">Challenge</Button>
                 )} */}
               </div>

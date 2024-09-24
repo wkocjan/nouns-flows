@@ -14,7 +14,7 @@ import { PropsWithChildren } from "react"
 import { base } from "viem/chains"
 import { FlowHeader } from "./components/flow-header"
 import { FlowSubmenu } from "./components/flow-submenu"
-import { getFlowWithGrants } from "./components/get-flow-with-grants"
+import { getFlowWithGrants } from "@/lib/database/queries/get-flow-with-grants"
 
 interface Props {
   params: {

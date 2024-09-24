@@ -15,7 +15,7 @@ import { UserProfile } from "@/components/user-profile/user-profile"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
-import { getFlowWithGrants } from "./components/get-flow-with-grants"
+import { getFlowWithGrants } from "@/lib/database/queries/get-flow-with-grants"
 import { VotingBar } from "./components/voting-bar"
 import { VotingInput } from "./components/voting-input"
 
