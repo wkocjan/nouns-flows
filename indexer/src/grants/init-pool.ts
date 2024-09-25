@@ -1,6 +1,11 @@
 import { ponder } from "@/generated"
 import { zeroAddress } from "viem"
-import { erc20VotesArbitratorAddress, erc20VotesMintableAddress, flowTcrAddress } from "../../abis"
+import {
+  erc20VotesArbitratorAddress,
+  erc20VotesMintableAddress,
+  flowTcrAddress,
+  tokenEmitterAddress,
+} from "../../abis"
 
 ponder.on("NounsFlow:Initialized", async (params) => {
   const { context } = params
@@ -32,6 +37,7 @@ ponder.on("NounsFlow:Initialized", async (params) => {
       tcr: flowTcrAddress[8453].toLowerCase(),
       erc20: erc20VotesMintableAddress[8453].toLowerCase(),
       arbitrator: erc20VotesArbitratorAddress[8453].toLowerCase(),
+      tokenEmitter: tokenEmitterAddress[8453].toLowerCase(),
       ...metadata,
     },
   })

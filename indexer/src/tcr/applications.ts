@@ -1,5 +1,6 @@
 import { ponder, type Context, type Event } from "@/generated"
-import { decodeAbiParameters, decodeEventLog, parseAbiParameters } from "viem"
+import { decodeAbiParameters } from "viem"
+import { RecipientType } from "../enums"
 
 ponder.on("NounsFlowTcr:ItemSubmitted", handleItemSubmitted)
 ponder.on("NounsFlowTcrChildren:ItemSubmitted", handleItemSubmitted)
@@ -9,14 +10,14 @@ async function handleItemSubmitted(params: {
   context: Context<"NounsFlowTcr:ItemSubmitted">
 }) {
   const { event, context } = params
-  const { _submitter, _data, _itemID } = event.args
+  const { _submitter, _data, _itemID, _evidenceGroupID } = event.args
 
-  const contract = event.log.address.toLowerCase() as `0x${string}`
-
-  const { items } = await context.db.Grant.findMany({ where: { tcr: contract } })
+  const { items } = await context.db.Grant.findMany({
+    where: { tcr: event.log.address.toLowerCase() },
+  })
 
   const flow = items?.[0]
-  if (!flow) throw new Error("Parent flow not found for TCR item")
+  if (!flow) throw new Error("Flow not found for TCR item")
 
   const [recipient, metadata, recipientType] = decodeAbiParameters(
     [
@@ -45,8 +46,11 @@ async function handleItemSubmitted(params: {
       recipient: recipient.toString(),
       status: 0,
       blockNumber: event.block.number.toString(),
-      isFlow: recipientType === 1,
+      isFlow: recipientType === RecipientType.FlowContract,
       updatedAt: Number(event.block.timestamp),
+      evidenceGroupID: _evidenceGroupID.toString(),
+      isDisputed: false,
+      isResolved: false,
       ...metadata,
     },
   })

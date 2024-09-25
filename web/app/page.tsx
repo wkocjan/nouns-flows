@@ -10,10 +10,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { NOUNS_FLOW } from "@/lib/config"
 import database from "@/lib/database"
 import { getPool } from "@/lib/database/queries/get-pool"
-import { getIpfsUrl } from "@/lib/utils"
+import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import { VotingProvider } from "@/lib/voting/voting-context"
 import Image from "next/image"
 import Link from "next/link"
@@ -26,14 +25,14 @@ export default async function Home() {
   const pool = await getPool()
 
   const flows = await database.grant.findMany({
-    where: { isFlow: 1, isRemoved: 0, parent: NOUNS_FLOW },
+    where: { isFlow: 1, isRemoved: 0, isTopLevel: 0 },
     include: {
-      _count: { select: { subgrants: { where: { isFlow: 0, isRemoved: 0 } } } },
+      _count: { select: { subgrants: { where: { isRemoved: 0 } } } },
     },
   })
 
   return (
-    <VotingProvider chainId={base.id} contract={NOUNS_FLOW}>
+    <VotingProvider chainId={base.id} contract={getEthAddress(pool.recipient)}>
       <main className="container mt-2.5 pb-24 md:mt-8">
         <div className="flex flex-col max-sm:space-y-2.5 md:flex-row md:items-center md:justify-between">
           <div>

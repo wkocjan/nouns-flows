@@ -1,5 +1,6 @@
 import { ponder, type Context, type Event } from "@/generated"
 import { zeroAddress } from "viem"
+import { RecipientType } from "../enums"
 
 ponder.on("NounsFlowChildren:RecipientCreated", handleRecipientCreated)
 ponder.on("NounsFlow:RecipientCreated", handleRecipientCreated)
@@ -24,7 +25,7 @@ async function handleRecipientCreated(params: {
       recipientId: recipientId.toString(),
       blockNumber: event.block.number.toString(),
       isTopLevel: false,
-      isFlow: recipient.recipientType === 1,
+      isFlow: recipient.recipientType === RecipientType.FlowContract,
       isRemoved: recipient.removed,
       parent: event.transaction.to?.toLowerCase() || zeroAddress,
       votesCount: "0",
@@ -35,6 +36,7 @@ async function handleRecipientCreated(params: {
       arbitrator: "",
       erc20: "",
       tcr: "",
+      tokenEmitter: "",
       ...recipient.metadata,
     },
   })

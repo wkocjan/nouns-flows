@@ -10,18 +10,20 @@ datasource db {
 }
 
 model Draft {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  image       String
-  users       String[]
-  isPrivate   Boolean  @default(true)
-  isOnchain   Boolean  @default(false)
-  updatedAt   DateTime @updatedAt
-  createdAt   DateTime @default(now())
-  flowId      String
-  flow        Grant    @relation(fields: [flowId], references: [id])
-  isFlow      Boolean  @default(false)
+  id              Int      @id @default(autoincrement())
+  title           String
+  description     String
+  image           String
+  users           String[]
+  isPrivate       Boolean  @default(true)
+  isOnchain       Boolean  @default(false)
+  updatedAt       DateTime @updatedAt
+  createdAt       DateTime @default(now())
+  flowId          String
+  isFlow          Boolean  @default(false)
+  transactionHash String?
+
+  flow Grant @relation(fields: [flowId], references: [id])
 
   @@index([isPrivate], map: "isPrivate_1")
   @@index([isOnchain], map: "isOnchain_1")
@@ -53,12 +55,10 @@ view Grant {
   arbitrator       String
   erc20            String
 
-  subgrants   Grant[] @relation("Subgrants")
-  parentGrant Grant   @relation("Subgrants", fields: [parent], references: [recipient])
-
-  drafts        Draft[]
-  applications  Application @relation(fields: [applicationId], references: [id])
-  applicationId String
+  flow         Grant         @relation("Subgrants", fields: [parent], references: [recipient])
+  subgrants    Grant[]       @relation("Subgrants")
+  drafts       Draft[]
+  applications Application[]
 
   @@map("Grant")
   @@schema("public")
@@ -87,7 +87,7 @@ view PonderMeta {
 }
 
 view Application {
-  id          String  @id
+  id          String @id
   flowId      String
   recipient   String
   submitter   String
@@ -100,7 +100,8 @@ view Application {
   blockNumber String
   status      Int
   updatedAt   Int
-  Grant       Grant[]
+
+  flow Grant? @relation(fields: [flowId], references: [id])
 
   @@map("Application")
   @@schema("public")

@@ -1,109 +1,173 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { flowTcrAddress, flowTcrImplAbi } from "@/lib/abis"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { flowTcrImplAbi } from "@/lib/abis"
+import { RecipientType } from "@/lib/enums"
+import { useTcrData } from "@/lib/tcr/use-tcr-data"
 import { useTcrToken } from "@/lib/tcr/use-tcr-token"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { Draft, Grant } from "@prisma/client"
-import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
-import { encodeAbiParameters } from "viem"
+import { encodeAbiParameters, formatEther } from "viem"
 import { base } from "viem/chains"
-import { useAccount, useReadContract } from "wagmi"
+import { useAccount } from "wagmi"
+import { updateDraft } from "./update-draft"
 
 interface Props {
-  draft: Draft & { flow: Grant }
+  draft: Draft
+  flow: Grant
 }
 
 const chainId = base.id
 
 export function DraftPublishButton(props: Props) {
-  const { draft } = props
+  const { draft, flow } = props
   const { address } = useAccount()
-  const [text, setText] = useState("Sponsor")
+  const router = useRouter()
+  const ref = useRef<HTMLButtonElement>(null)
+
+  const { addItemCost, challengePeriodFormatted } = useTcrData(getEthAddress(flow.tcr), chainId)
+  const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr), chainId)
+
+  const { prepareWallet, writeContract, toastId, isLoading } = useContractTransaction({
+    chainId,
+    onSuccess: async (hash) => {
+      await updateDraft(draft.id, hash)
+      ref.current?.click() // close dialog
+      router.push(`/flow/${flow.id}/applications`)
+    },
+  })
 
   const isOwner = draft.users.some((user) => user.toLowerCase() === address?.toLowerCase())
-
-  const { prepareWallet, writeContract, toastId } = useContractTransaction({
-    chainId,
-    onSuccess: console.debug,
-  })
-
-  const { data: submissionBaseDeposit } = useReadContract({
-    abi: flowTcrImplAbi,
-    address: flowTcrAddress[8453],
-    functionName: "submissionBaseDeposit",
-    chainId,
-  })
-
-  const token = useTcrToken(getEthAddress(draft.flow.erc20), getEthAddress(draft.flow.tcr))
+  const [action, setAction] = useState("Sponsor")
 
   useEffect(() => {
-    setText(isOwner ? "Publish" : "Sponsor")
+    setAction(isOwner ? "Publish" : "Sponsor")
   }, [isOwner])
 
+  const hasEnoughBalance = token.balance >= addItemCost
+  const hasEnoughAllowance = token.allowance >= addItemCost
+
   return (
-    <Button
-      type="button"
-      onClick={async () => {
-        try {
-          await prepareWallet()
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button type="button" ref={ref}>
+          {action}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-screen-sm">
+        <DialogHeader>
+          <DialogTitle className="text-center text-lg font-medium">
+            {action} &quot;{draft.title}&quot; {draft.isFlow ? "Category" : "Grant"}
+          </DialogTitle>
+        </DialogHeader>
+        <ul className="my-4 space-y-6">
+          <li className="flex items-start space-x-4">
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
+              1
+            </span>
+            <p>Publishing will kick off the challenge period.</p>
+          </li>
+          <li className="flex items-start space-x-4">
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
+              2
+            </span>
+            <p>
+              For {challengePeriodFormatted}, anyone can challenge this submission. After that,
+              voting begins. If not challenged, your item will be accepted.
+            </p>
+          </li>
+          <li className="flex items-start space-x-4">
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
+              3
+            </span>
+            <div>
+              <p>
+                Publishing costs {formatEther(addItemCost)} {token.symbol}. You may lose this amount
+                if your submission is challenged and rejected.
+              </p>
+              <p className="mt-2.5 text-sm text-muted-foreground">
+                Your {token.symbol} balance: {formatEther(token.balance)}
+              </p>
+            </div>
+          </li>
+        </ul>
+        <div className="flex justify-end space-x-2">
+          <Button
+            variant={hasEnoughBalance ? "outline" : "default"}
+            type="button"
+            onClick={() => window.alert("Coming soon!")}
+          >
+            Buy {token.symbol}
+          </Button>
+          <Button
+            disabled={!hasEnoughBalance || token.isApproving || isLoading}
+            loading={token.isApproving || isLoading}
+            type="button"
+            onClick={async () => {
+              if (!hasEnoughAllowance) {
+                return token.approve(addItemCost)
+              }
 
-          if (!submissionBaseDeposit)
-            throw new Error("Couldn't read the submission deposit.Please reload the page")
+              try {
+                await prepareWallet()
 
-          if (token.balance < submissionBaseDeposit) {
-            throw new Error("Not enough tokens")
-          }
-
-          if (token.allowance < submissionBaseDeposit) {
-            return await token.approve(submissionBaseDeposit)
-          }
-
-          writeContract({
-            account: address,
-            abi: flowTcrImplAbi,
-            functionName: "addItem",
-            address: flowTcrAddress[8453],
-            chainId,
-            args: [
-              encodeAbiParameters(
-                [
-                  { name: "recipient", type: "address" },
-                  {
-                    name: "metadata",
-                    type: "tuple",
-                    components: [
-                      { name: "title", type: "string" },
-                      { name: "description", type: "string" },
-                      { name: "image", type: "string" },
-                      { name: "tagline", type: "string" },
-                      { name: "url", type: "string" },
-                    ],
-                  },
-                  { name: "recipientType", type: "uint8" },
-                ],
-                [
-                  getEthAddress(draft.users[0]),
-                  {
-                    title: draft.title,
-                    description: draft.description,
-                    image: draft.image,
-                    tagline: "",
-                    url: "",
-                  },
-                  1, // 1 flow
-                ],
-              ),
-            ],
-          })
-        } catch (e: any) {
-          toast.error(e.message, { id: toastId })
-        }
-      }}
-    >
-      {text}
-    </Button>
+                writeContract({
+                  account: address,
+                  abi: flowTcrImplAbi,
+                  functionName: "addItem",
+                  address: getEthAddress(flow.tcr),
+                  chainId,
+                  args: [
+                    encodeAbiParameters(
+                      [
+                        { name: "recipient", type: "address" },
+                        {
+                          name: "metadata",
+                          type: "tuple",
+                          components: [
+                            { name: "title", type: "string" },
+                            { name: "description", type: "string" },
+                            { name: "image", type: "string" },
+                            { name: "tagline", type: "string" },
+                            { name: "url", type: "string" },
+                          ],
+                        },
+                        { name: "recipientType", type: "uint8" },
+                      ],
+                      [
+                        getEthAddress(draft.users[0]),
+                        {
+                          title: draft.title,
+                          description: draft.description,
+                          image: draft.image,
+                          tagline: "",
+                          url: "",
+                        },
+                        draft.isFlow ? RecipientType.FlowContract : RecipientType.ExternalAccount,
+                      ],
+                    ),
+                  ],
+                })
+              } catch (e: any) {
+                toast.error(e.message, { id: toastId })
+              }
+            }}
+          >
+            {!hasEnoughAllowance && "Approve and "} {action}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }

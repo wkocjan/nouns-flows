@@ -1,3 +1,4 @@
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Currency } from "@/components/ui/currency"
@@ -5,10 +6,11 @@ import database from "@/lib/database"
 import { getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 
 export default async function ApplyPage() {
   const flows = await database.grant.findMany({
-    where: { isFlow: 1, isRemoved: 0 },
+    where: { isFlow: 1, isRemoved: 0, isTopLevel: 0 },
   })
 
   return (
@@ -20,37 +22,53 @@ export default async function ApplyPage() {
           has a specific focus and budget.
         </p>
 
-        <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {flows.map((flow) => (
-            <Link
-              href={`/apply/${flow.id}`}
-              key={flow.id}
-              className="group transition-transform md:hover:-translate-y-2"
-            >
-              <Card>
-                <CardContent className="p-4">
-                  <div className="flex flex-col items-center">
-                    <Image
-                      src={getIpfsUrl(flow.image)}
-                      alt={flow.title}
-                      width={64}
-                      height={64}
-                      className="mb-4 size-16 rounded-full object-cover"
-                    />
-                    <h3 className="text-center text-lg font-semibold transition-colors group-hover:text-primary">
-                      {flow.title}
-                    </h3>
-                    <p className="mb-2 text-center text-sm text-muted-foreground">{flow.tagline}</p>
-                    <Badge className="mt-2">
-                      <Currency>{flow.monthlyFlowRate}</Currency>
-                      /mo
-                    </Badge>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
+        {flows.length === 0 && (
+          <div className="mt-12 flex items-center justify-center">
+            <Alert variant="destructive">
+              <ExclamationTriangleIcon className="size-4" />
+              <AlertTitle>No categories found</AlertTitle>
+              <AlertDescription>
+                There are no categories available for you to apply to.
+              </AlertDescription>
+            </Alert>
+          </div>
+        )}
+
+        {flows.length > 0 && (
+          <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {flows.map((flow) => (
+              <Link
+                href={`/apply/${flow.id}`}
+                key={flow.id}
+                className="group transition-transform md:hover:-translate-y-2"
+              >
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex flex-col items-center">
+                      <Image
+                        src={getIpfsUrl(flow.image)}
+                        alt={flow.title}
+                        width={64}
+                        height={64}
+                        className="mb-4 size-16 rounded-full object-cover"
+                      />
+                      <h3 className="text-center text-lg font-semibold transition-colors group-hover:text-primary">
+                        {flow.title}
+                      </h3>
+                      <p className="mb-2 text-center text-sm text-muted-foreground">
+                        {flow.tagline}
+                      </p>
+                      <Badge className="mt-2">
+                        <Currency>{flow.monthlyFlowRate}</Currency>
+                        /mo
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </main>
   )

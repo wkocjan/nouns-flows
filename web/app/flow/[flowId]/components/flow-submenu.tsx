@@ -43,7 +43,7 @@ export const FlowSubmenu = (props: Props) => {
               "opacity-50 duration-100 ease-in-out group-hover:opacity-100": !isApplications,
             })}
           >
-            Awaiting
+            Applications
           </span>
         </Link>
         <Link

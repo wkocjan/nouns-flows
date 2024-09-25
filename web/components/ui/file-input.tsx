@@ -15,12 +15,7 @@ interface Props {
   maxFileSizeMB?: number
 }
 
-export function FileInput({
-  name,
-  accept,
-  onSuccess,
-  maxFileSizeMB = 2,
-}: Props) {
+export function FileInput({ name, accept, onSuccess, maxFileSizeMB = 2 }: Props) {
   const { isUploading, uploadFile } = useFileUpload()
   const [hash, setHash] = useState<string>()
 
@@ -46,7 +41,7 @@ export function FileInput({
         }}
         accept={accept}
         disabled={isUploading}
-        className="pr-6"
+        className="pr-10"
       />
       <input type="hidden" name={name} value={hash} />
       <div className="absolute inset-y-0 right-0 flex items-center pl-3">
@@ -59,9 +54,7 @@ export function FileInput({
             className="mr-0.5 aspect-square h-full rounded-lg"
           />
         )}
-        {isUploading && (
-          <UpdateIcon className="mr-3 size-4 animate-spin text-muted-foreground" />
-        )}
+        {isUploading && <UpdateIcon className="mr-3 size-4 animate-spin text-muted-foreground" />}
       </div>
     </div>
   )

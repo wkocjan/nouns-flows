@@ -14,6 +14,7 @@ import database from "@/lib/database"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import { DraftPublishButton } from "./draft-publish-button"
+import { DateTime } from "@/components/ui/date-time"
 
 interface Props {
   params: {
@@ -29,7 +30,7 @@ export default async function DraftPage({ params }: Props) {
     include: { flow: true },
   })
 
-  const { title, description, flow, image, isOnchain, createdAt, users } = draft
+  const { title, description, flow, image, isOnchain, createdAt, users, isFlow } = draft
 
   return (
     <div className="container mt-2.5 pb-24 md:mt-6">
@@ -98,17 +99,26 @@ export default async function DraftPage({ params }: Props) {
                 </div>
                 <div>
                   <h4 className="text-[13px] text-muted-foreground">Created At</h4>
-                  {createdAt.toLocaleDateString("en", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
+                  <DateTime
+                    date={createdAt}
+                    options={{
+                      month: "short",
+                      day: "numeric",
+                      hour: "numeric",
+                      minute: "numeric",
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <h4 className="mb-1 text-[13px] text-muted-foreground">Type</h4>
+                  <p>{isFlow ? "Category" : "Grant"}</p>
                 </div>
 
                 <div>
                   <h4 className="mb-1 text-[13px] text-muted-foreground">Onchain status</h4>
-                  {isOnchain && <p className="text-lg font-medium">Yes</p>}
-                  {!isOnchain && <DraftPublishButton draft={draft} />}
+                  {isOnchain && <p>Yes</p>}
+                  {!isOnchain && <DraftPublishButton draft={draft} flow={flow} />}
                 </div>
               </div>
             </CardContent>

@@ -16,8 +16,9 @@ export const useContractTransaction = (args: {
   chainId: number
   onSuccess?: (hash: string) => void
   loading?: string
+  success?: string
 }) => {
-  const { chainId, loading = "Transaction in progress...", onSuccess } = args
+  const { chainId, loading = "Transaction in progress...", success, onSuccess } = args
   const [toastId, setToastId] = useState<number | string>()
   const [callbackHandled, setCallbackHandled] = useState(false)
   const { data: hash, isPending, error, ...writeContractRest } = useWriteContract()
@@ -53,7 +54,7 @@ export const useContractTransaction = (args: {
     }
 
     if (isSuccess && hash) {
-      toast.success("Transaction confirmed", { id: toastId, duration: 10000 })
+      toast.success(success || "Transaction confirmed", { id: toastId, duration: 10000 })
       onSuccess?.(hash)
       setCallbackHandled(true)
       return

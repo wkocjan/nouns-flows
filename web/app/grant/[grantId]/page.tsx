@@ -30,10 +30,10 @@ export default async function GrantPage({ params }: Props) {
 
   const grant = await database.grant.findUniqueOrThrow({
     where: { id: grantId },
-    include: { parentGrant: true },
+    include: { flow: true },
   })
 
-  const { title, tagline, description, parentGrant, image, recipientId, parent, votesCount } = grant
+  const { title, tagline, description, flow, image, recipientId, parent, votesCount } = grant
 
   return (
     <div className="container mt-2.5 pb-24 md:mt-6">
@@ -43,14 +43,12 @@ export default async function GrantPage({ params }: Props) {
             <BreadcrumbLink href="/">Categories</BreadcrumbLink>
           </BreadcrumbItem>
 
-          {parentGrant && parentGrant.isFlow && (
+          {flow && (
             <>
               <BreadcrumbSeparator />
 
               <BreadcrumbItem>
-                <BreadcrumbLink href={`/flow/${parentGrant.id}`}>
-                  {parentGrant?.title}
-                </BreadcrumbLink>
+                <BreadcrumbLink href={`/flow/${flow.id}`}>{flow.title}</BreadcrumbLink>
               </BreadcrumbItem>
             </>
           )}

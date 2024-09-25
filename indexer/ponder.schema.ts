@@ -23,6 +23,7 @@ export default createSchema((p) => ({
       tcr: p.string(),
       erc20: p.string(),
       arbitrator: p.string(),
+      tokenEmitter: p.string(),
       updatedAt: p.int(),
     },
     {
@@ -69,7 +70,10 @@ export default createSchema((p) => ({
       isFlow: p.boolean(),
       blockNumber: p.string(),
       status: p.int(),
+      evidenceGroupID: p.string(),
       updatedAt: p.int(),
+      isDisputed: p.boolean(),
+      isResolved: p.boolean(),
     },
     {
       statusIndex: p.index("status"),

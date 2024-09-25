@@ -19,6 +19,9 @@ const baseContracts = [
 
   { name: "tcrFactoryImpl", address: base.TCRFactoryImpl },
   { name: "tcrFactory", address: base.TCRFactory },
+
+  { name: "tokenEmitterImpl", address: base.TokenEmitterImpl },
+  { name: "tokenEmitter", address: base.TokenEmitter },
 ]
 
 export default defineConfig(() => {
