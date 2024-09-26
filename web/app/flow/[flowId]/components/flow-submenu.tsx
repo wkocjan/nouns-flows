@@ -8,10 +8,11 @@ import { VotingToggle } from "./voting-toggle"
 
 interface Props {
   flowId: string
+  isTopLevel: boolean
 }
 
 export const FlowSubmenu = (props: Props) => {
-  const { flowId } = props
+  const { flowId, isTopLevel } = props
 
   const segment = useSelectedLayoutSegment()
 
@@ -64,7 +65,9 @@ export const FlowSubmenu = (props: Props) => {
         {isApproved && <VotingToggle />}
         {(isDrafts || isApplications) && (
           <Link href={`/apply/${flowId}`}>
-            <Button variant="secondary">Apply for a grant</Button>
+            <Button variant="secondary">
+              {isTopLevel ? "Suggest category" : "Apply for a grant"}
+            </Button>
           </Link>
         )}
       </div>

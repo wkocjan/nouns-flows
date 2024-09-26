@@ -23,6 +23,7 @@ export function useTcrToken(contract: Address, spender: Address, chainId = base.
   const { prepareWallet, writeContract, isLoading, isConfirmed } = useContractTransaction({
     chainId,
     loading: "Approving...",
+    success: "Token approved",
     onSuccess: () => refetch(),
   })
 

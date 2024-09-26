@@ -1,5 +1,5 @@
 import database from "@/lib/database"
-import { getPool } from "@/lib/database/queries/get-pool"
+import { getPool } from "@/lib/database/queries/pool"
 import { FullDiagram } from "./diagram"
 
 export default async function ExplorePage() {

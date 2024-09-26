@@ -38,6 +38,7 @@ ponder.on("NounsFlow:Initialized", async (params) => {
       erc20: erc20VotesMintableAddress[8453].toLowerCase(),
       arbitrator: erc20VotesArbitratorAddress[8453].toLowerCase(),
       tokenEmitter: tokenEmitterAddress[8453].toLowerCase(),
+      applicationId: "",
       ...metadata,
     },
   })

@@ -1,6 +1,6 @@
 import { ponder, type Context, type Event } from "@/generated"
-import { decodeAbiParameters } from "viem"
-import { RecipientType } from "../enums"
+import { decodeAbiParameters, getAddress } from "viem"
+import { ApplicationStatus, RecipientType } from "../enums"
 
 ponder.on("NounsFlowTcr:ItemSubmitted", handleItemSubmitted)
 ponder.on("NounsFlowTcrChildren:ItemSubmitted", handleItemSubmitted)
@@ -12,9 +12,9 @@ async function handleItemSubmitted(params: {
   const { event, context } = params
   const { _submitter, _data, _itemID, _evidenceGroupID } = event.args
 
-  const { items } = await context.db.Grant.findMany({
-    where: { tcr: event.log.address.toLowerCase() },
-  })
+  const tcr = event.log.address.toLowerCase()
+
+  const { items } = await context.db.Grant.findMany({ where: { tcr } })
 
   const flow = items?.[0]
   if (!flow) throw new Error("Flow not found for TCR item")
@@ -38,16 +38,24 @@ async function handleItemSubmitted(params: {
     _data
   )
 
+  const challengePeriodDuration = await context.client.readContract({
+    address: getAddress(tcr),
+    abi: context.contracts.NounsFlowTcr.abi,
+    functionName: "challengePeriodDuration",
+  })
+
   await context.db.Application.create({
     id: _itemID,
     data: {
       flowId: flow.id,
       submitter: _submitter.toLowerCase(),
       recipient: recipient.toString(),
-      status: 0,
+      status: ApplicationStatus.RegistrationRequested,
       blockNumber: event.block.number.toString(),
       isFlow: recipientType === RecipientType.FlowContract,
+      createdAt: Number(event.block.timestamp),
       updatedAt: Number(event.block.timestamp),
+      challengePeriodEndsAt: Number(event.block.timestamp + challengePeriodDuration),
       evidenceGroupID: _evidenceGroupID.toString(),
       isDisputed: false,
       isResolved: false,

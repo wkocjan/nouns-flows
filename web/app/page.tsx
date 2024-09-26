@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import database from "@/lib/database"
-import { getPool } from "@/lib/database/queries/get-pool"
+import { getPool } from "@/lib/database/queries/pool"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import { VotingProvider } from "@/lib/voting/voting-context"
 import Image from "next/image"
@@ -28,6 +28,7 @@ export default async function Home() {
     where: { isFlow: 1, isRemoved: 0, isTopLevel: 0 },
     include: {
       _count: { select: { subgrants: { where: { isRemoved: 0 } } } },
+      application: true,
     },
   })
 

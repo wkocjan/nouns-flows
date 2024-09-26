@@ -5,7 +5,7 @@ import { RecipientPopover } from "@/components/global/recipient-popover/recipien
 import { ThemeProvider } from "@/components/global/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import { getPool } from "@/lib/database/queries/get-pool"
+import { getPool } from "@/lib/database/queries/pool"
 import Wagmi from "@/lib/wagmi/wagmi-provider"
 import Noggles from "@/public/noggles.svg"
 import type { Metadata } from "next"

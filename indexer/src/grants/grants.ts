@@ -13,10 +13,17 @@ async function handleRecipientCreated(params: {
   context: Context<"NounsFlow:RecipientCreated">
 }) {
   const { event, context } = params
-  const { Grant } = context.db
+  const { Grant, Application } = context.db
   const { recipient, recipientId } = event.args
 
   const contract = event.log.address.toLowerCase() as `0x${string}`
+
+  const { items } = await Application.findMany({
+    where: { recipient: recipient.recipient.toLowerCase() },
+  })
+
+  const application = items?.[0]
+  if (!application) throw new Error("Application not found for this grant")
 
   await Grant.create({
     id: `${recipientId}_${contract}`,
@@ -37,6 +44,7 @@ async function handleRecipientCreated(params: {
       erc20: "",
       tcr: "",
       tokenEmitter: "",
+      applicationId: application.id,
       ...recipient.metadata,
     },
   })

@@ -1,4 +1,4 @@
-import { getPool } from "@/lib/database/queries/get-pool"
+import { getPool } from "@/lib/database/queries/pool"
 import { redirect } from "next/navigation"
 
 export default async function NewCategoryPage() {

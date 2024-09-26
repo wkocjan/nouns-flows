@@ -3,6 +3,8 @@
 import { useModal } from "connectkit"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
+import { Chain } from "viem"
+import { base } from "viem/chains"
 import {
   useAccount,
   useSwitchChain,
@@ -12,13 +14,18 @@ import {
 } from "wagmi"
 import { explorerUrl } from "../utils"
 
-export const useContractTransaction = (args: {
-  chainId: number
+export const useContractTransaction = (args?: {
+  chainId?: Chain["id"]
   onSuccess?: (hash: string) => void
   loading?: string
   success?: string
 }) => {
-  const { chainId, loading = "Transaction in progress...", success, onSuccess } = args
+  const {
+    chainId = base.id,
+    loading = "Transaction in progress...",
+    success,
+    onSuccess,
+  } = args || {}
   const [toastId, setToastId] = useState<number | string>()
   const [callbackHandled, setCallbackHandled] = useState(false)
   const { data: hash, isPending, error, ...writeContractRest } = useWriteContract()

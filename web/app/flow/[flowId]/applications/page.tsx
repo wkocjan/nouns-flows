@@ -2,6 +2,7 @@ import "server-only"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { DateTime } from "@/components/ui/date-time"
 import {
   Table,
   TableBody,
@@ -12,8 +13,12 @@ import {
 } from "@/components/ui/table"
 import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database"
+import { canBeChallenged, canBeExecuted } from "@/lib/database/helpers/application"
+import { getFlow } from "@/lib/database/queries/flow"
+import { ApplicationStatus } from "@/lib/enums"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
+import { ApplicationExecuteButton } from "./components/ApplicationExecuteButton"
 
 interface Props {
   params: {
@@ -24,7 +29,11 @@ interface Props {
 export default async function FlowApplicationsPage(props: Props) {
   const { flowId } = props.params
 
-  const applications = await database.application.findMany({ where: { flowId } })
+  const flow = await getFlow(flowId)
+
+  const applications = await database.application.findMany({
+    where: { flowId, status: ApplicationStatus.RegistrationRequested },
+  })
 
   return (
     <Table>
@@ -32,7 +41,8 @@ export default async function FlowApplicationsPage(props: Props) {
         <TableRow>
           <TableHead colSpan={2}>Name</TableHead>
           <TableHead>Builders</TableHead>
-          <TableHead className="text-center">Remaining time</TableHead>
+          <TableHead>Type</TableHead>
+          <TableHead className="text-center">Challenge Period End</TableHead>
           <TableHead className="text-right">Action</TableHead>
         </TableRow>
       </TableHeader>
@@ -67,19 +77,18 @@ export default async function FlowApplicationsPage(props: Props) {
               </div>
             </TableCell>
 
+            <TableCell>{application.isFlow ? "Category" : "Grant"}</TableCell>
+
             <TableCell className="text-center">
-              Approval in 3 days
-              {/* {!application.isChallenged && `Approval in 3 days`} */}
-              {/* {application.isChallenged && `Voting ends in 2 days`} */}
+              <DateTime date={new Date(application.challengePeriodEndsAt * 1000)} relative />
             </TableCell>
 
             <TableCell className="w-[100px] max-w-[100px]">
               <div className="flex justify-end">
-                <Button variant="outline">Challenge</Button>
-                {/* {application.isChallenged && <Button>Vote</Button>}
-                {!application.isChallenged && (
-                  <Button variant="outline">Challenge</Button>
-                )} */}
+                {canBeExecuted(application) && (
+                  <ApplicationExecuteButton application={application} flow={flow} />
+                )}
+                {canBeChallenged(application) && <Button variant="outline">Challenge</Button>}
               </div>
             </TableCell>
           </TableRow>

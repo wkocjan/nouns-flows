@@ -8,4 +8,10 @@ export const getFlowWithGrants = cache(async (flowId: string) => {
   })
 })
 
+export const getFlow = cache(async (flowId: string) => {
+  return await database.grant.findFirstOrThrow({
+    where: { id: flowId, isFlow: 1, isRemoved: 0 },
+  })
+})
+
 export type FlowWithGrants = Awaited<ReturnType<typeof getFlowWithGrants>>

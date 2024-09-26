@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog"
 import { Markdown } from "@/components/ui/markdown"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { FlowWithGrants } from "@/lib/database/queries/get-flow-with-grants"
+import { FlowWithGrants } from "@/lib/database/queries/flow"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import { FlowHeaderUserVotes } from "./flow-header-user-votes"

@@ -18,7 +18,7 @@ import { Draft, Grant } from "@prisma/client"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
-import { encodeAbiParameters, formatEther } from "viem"
+import { encodeAbiParameters, formatEther, zeroAddress } from "viem"
 import { base } from "viem/chains"
 import { useAccount } from "wagmi"
 import { updateDraft } from "./update-draft"
@@ -39,8 +39,9 @@ export function DraftPublishButton(props: Props) {
   const { addItemCost, challengePeriodFormatted } = useTcrData(getEthAddress(flow.tcr), chainId)
   const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr), chainId)
 
-  const { prepareWallet, writeContract, toastId, isLoading } = useContractTransaction({
+  const { prepareWallet, writeContract, toastId, isLoading, isConfirmed } = useContractTransaction({
     chainId,
+    success: "Draft published!",
     onSuccess: async (hash) => {
       await updateDraft(draft.id, hash)
       ref.current?.click() // close dialog
@@ -146,7 +147,7 @@ export function DraftPublishButton(props: Props) {
                         { name: "recipientType", type: "uint8" },
                       ],
                       [
-                        getEthAddress(draft.users[0]),
+                        draft.isFlow ? zeroAddress : getEthAddress(draft.users[0]),
                         {
                           title: draft.title,
                           description: draft.description,

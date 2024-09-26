@@ -24,6 +24,7 @@ export default createSchema((p) => ({
       erc20: p.string(),
       arbitrator: p.string(),
       tokenEmitter: p.string(),
+      applicationId: p.string(),
       updatedAt: p.int(),
     },
     {
@@ -34,6 +35,7 @@ export default createSchema((p) => ({
       parentIndex: p.index("parent"),
       recipientIndex: p.index("recipient"),
       updatedAtIndex: p.index("updatedAt"),
+      applicationIdIndex: p.index("applicationId"),
     }
   ),
   Vote: p.createTable(
@@ -71,7 +73,9 @@ export default createSchema((p) => ({
       blockNumber: p.string(),
       status: p.int(),
       evidenceGroupID: p.string(),
+      createdAt: p.int(),
       updatedAt: p.int(),
+      challengePeriodEndsAt: p.int(),
       isDisputed: p.boolean(),
       isResolved: p.boolean(),
     },

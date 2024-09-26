@@ -51,14 +51,15 @@ view Grant {
   monthlyFlowRate  String
   totalEarned      String
   claimableBalance String
-  tcr              String
-  arbitrator       String
-  erc20            String
+  tcr              String  @unique
+  arbitrator       String  @unique
+  erc20            String  @unique
+  applicationId    String  @unique
 
-  flow         Grant         @relation("Subgrants", fields: [parent], references: [recipient])
-  subgrants    Grant[]       @relation("Subgrants")
-  drafts       Draft[]
-  applications Application[]
+  flow        Grant       @relation("Subgrants", fields: [parent], references: [recipient])
+  subgrants   Grant[]     @relation("Subgrants")
+  drafts      Draft[]
+  application Application @relation(fields: [applicationId], references: [id])
 
   @@map("Grant")
   @@schema("public")
@@ -87,21 +88,26 @@ view PonderMeta {
 }
 
 view Application {
-  id          String @id
-  flowId      String
-  recipient   String
-  submitter   String
-  title       String
-  description String
-  image       String
-  tagline     String
-  url         String
-  isFlow      Int
-  blockNumber String
-  status      Int
-  updatedAt   Int
+  id                    String  @id
+  flowId                String
+  recipient             String
+  submitter             String
+  title                 String
+  description           String
+  image                 String
+  tagline               String
+  url                   String
+  isFlow                Int
+  blockNumber           String
+  status                Int
+  isDisputed            Boolean
+  isResolved            Boolean
+  challengePeriodEndsAt Int
+  createdAt             Int
+  updatedAt             Int
+  applicationId         String  @unique
 
-  flow Grant? @relation(fields: [flowId], references: [id])
+  Grant Grant?
 
   @@map("Application")
   @@schema("public")
