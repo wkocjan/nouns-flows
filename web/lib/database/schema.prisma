@@ -34,32 +34,39 @@ model Draft {
 }
 
 view Grant {
-  id               String  @id
-  recipient        String  @unique
-  recipientId      String
-  isTopLevel       Int
-  isFlow           Int
-  title            String
-  description      String
-  image            String
-  tagline          String?
-  url              String?
-  isRemoved        Int
-  blockNumber      String
-  parent           String
-  votesCount       String
-  monthlyFlowRate  String
-  totalEarned      String
-  claimableBalance String
-  tcr              String  @unique
-  arbitrator       String  @unique
-  erc20            String  @unique
-  applicationId    String  @unique
+  id                    String  @id
+  recipient             String
+  recipientId           String
+  flowId                String
+  submitter             String
+  parentContract        String
+  isTopLevel            Int
+  isFlow                Int
+  title                 String
+  description           String
+  image                 String
+  tagline               String?
+  url                   String?
+  isRemoved             Int
+  isActive              Int
+  votesCount            String
+  monthlyFlowRate       String
+  totalEarned           String
+  claimableBalance      String
+  tcr                   String  @unique
+  erc20                 String  @unique
+  arbitrator            String  @unique
+  tokenEmitter          String  @unique
+  status                Int
+  challengePeriodEndsAt Int
+  isDisputed            Int
+  evidenceGroupID       String
+  createdAt             Int
+  updatedAt             Int
 
-  flow        Grant       @relation("Subgrants", fields: [parent], references: [recipient])
-  subgrants   Grant[]     @relation("Subgrants")
-  drafts      Draft[]
-  application Application @relation(fields: [applicationId], references: [id])
+  flow      Grant   @relation("Subgrants", fields: [flowId], references: [id])
+  subgrants Grant[] @relation("Subgrants")
+  drafts    Draft[]
 
   @@map("Grant")
   @@schema("public")
@@ -87,28 +94,34 @@ view PonderMeta {
   @@schema("public")
 }
 
-view Application {
-  id                    String  @id
-  flowId                String
-  recipient             String
-  submitter             String
-  title                 String
-  description           String
-  image                 String
-  tagline               String
-  url                   String
-  isFlow                Int
-  blockNumber           String
-  status                Int
-  isDisputed            Boolean
-  isResolved            Boolean
-  challengePeriodEndsAt Int
-  createdAt             Int
-  updatedAt             Int
-  applicationId         String  @unique
+view Dispute {
+  id                  String @id
+  disputeId           String
+  arbitrator          String
+  arbitrable          String
+  itemId              String
+  challenger          String
+  votingStartTime     Int
+  votingEndTime       Int
+  revealPeriodEndTime Int
+  appealPeriodEndTime Int
+  votes               Int
+  ruling              Int
+  totalSupply         String
+  isExecuted          Int
 
-  Grant Grant?
+  @@schema("public")
+}
 
-  @@map("Application")
+view DisputeVote {
+  id         String  @id
+  arbitrator String
+  disputeId  String
+  secretHash String
+  voter      String
+  choice     Int?
+  votes      Int?
+  reason     String?
+
   @@schema("public")
 }

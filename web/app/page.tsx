@@ -25,10 +25,9 @@ export default async function Home() {
   const pool = await getPool()
 
   const flows = await database.grant.findMany({
-    where: { isFlow: 1, isRemoved: 0, isTopLevel: 0 },
+    where: { isFlow: 1, isActive: 1, isTopLevel: 0 },
     include: {
-      _count: { select: { subgrants: { where: { isRemoved: 0 } } } },
-      application: true,
+      _count: { select: { subgrants: { where: { isActive: 1 } } } },
     },
   })
 

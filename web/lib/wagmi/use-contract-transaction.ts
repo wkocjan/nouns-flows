@@ -61,7 +61,7 @@ export const useContractTransaction = (args?: {
     }
 
     if (isSuccess && hash) {
-      toast.success(success || "Transaction confirmed", { id: toastId, duration: 10000 })
+      toast.success(success || "Transaction confirmed", { id: toastId, duration: 3000 })
       onSuccess?.(hash)
       setCallbackHandled(true)
       return

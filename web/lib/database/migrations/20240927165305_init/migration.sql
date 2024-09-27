@@ -1,14 +1,5 @@
-/*
-  Warnings:
-
-  - You are about to drop the `Draft` table. If the table is not empty, all the data it contains will be lost.
-
-*/
 -- CreateSchema
 CREATE SCHEMA IF NOT EXISTS "web";
-
--- DropTable
-DROP TABLE "public"."Draft";
 
 -- CreateTable
 CREATE TABLE "web"."Draft" (
@@ -22,6 +13,8 @@ CREATE TABLE "web"."Draft" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "flowId" TEXT NOT NULL,
+    "isFlow" BOOLEAN NOT NULL DEFAULT false,
+    "transactionHash" TEXT,
 
     CONSTRAINT "Draft_pkey" PRIMARY KEY ("id")
 );

@@ -5,23 +5,23 @@ import { flowTcrImplAbi } from "@/lib/abis"
 import { canBeExecuted } from "@/lib/database/helpers/application"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
-import { Application, Grant } from "@prisma/client"
+import { Grant } from "@prisma/client"
 import { Address } from "viem"
 import { base } from "viem/chains"
 
 interface Props {
-  application: Application
+  grant: Grant
   flow: Grant
 }
 
 export function ApplicationExecuteButton(props: Props) {
-  const { application, flow } = props
+  const { grant, flow } = props
   const { writeContract, prepareWallet } = useContractTransaction()
 
   return (
     <Button
       type="button"
-      disabled={!canBeExecuted(application)}
+      disabled={!canBeExecuted(grant)}
       onClick={async () => {
         await prepareWallet()
 
@@ -29,7 +29,7 @@ export function ApplicationExecuteButton(props: Props) {
           address: getEthAddress(flow.tcr),
           abi: flowTcrImplAbi,
           functionName: "executeRequest",
-          args: [application.id as Address],
+          args: [grant.id as Address],
           chainId: base.id,
         })
       }}

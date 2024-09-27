@@ -39,7 +39,7 @@ export function DraftPublishButton(props: Props) {
   const { addItemCost, challengePeriodFormatted } = useTcrData(getEthAddress(flow.tcr), chainId)
   const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr), chainId)
 
-  const { prepareWallet, writeContract, toastId, isLoading, isConfirmed } = useContractTransaction({
+  const { prepareWallet, writeContract, toastId, isLoading } = useContractTransaction({
     chainId,
     success: "Draft published!",
     onSuccess: async (hash) => {

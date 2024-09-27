@@ -1,6 +1,6 @@
 import { ponder, type Context, type Event } from "@/generated"
 import { decodeAbiParameters, getAddress } from "viem"
-import { ApplicationStatus, RecipientType } from "../enums"
+import { RecipientType, Status } from "../enums"
 
 ponder.on("NounsFlowTcr:ItemSubmitted", handleItemSubmitted)
 ponder.on("NounsFlowTcrChildren:ItemSubmitted", handleItemSubmitted)
@@ -14,8 +14,7 @@ async function handleItemSubmitted(params: {
 
   const tcr = event.log.address.toLowerCase()
 
-  const { items } = await context.db.Grant.findMany({ where: { tcr } })
-
+  const { items } = await context.db.Grant.findMany({ where: { tcr, isFlow: true } })
   const flow = items?.[0]
   if (!flow) throw new Error("Flow not found for TCR item")
 
@@ -44,22 +43,33 @@ async function handleItemSubmitted(params: {
     functionName: "challengePeriodDuration",
   })
 
-  await context.db.Application.create({
+  await context.db.Grant.create({
     id: _itemID,
     data: {
+      ...metadata,
+      isActive: false,
+      recipient: recipient.toString(),
+      recipientId: "",
       flowId: flow.id,
       submitter: _submitter.toLowerCase(),
-      recipient: recipient.toString(),
-      status: ApplicationStatus.RegistrationRequested,
-      blockNumber: event.block.number.toString(),
+      parentContract: flow.recipient,
+      isTopLevel: false,
       isFlow: recipientType === RecipientType.FlowContract,
+      isRemoved: false,
+      votesCount: "0",
+      monthlyFlowRate: "0",
+      totalEarned: "0",
+      claimableBalance: "0",
+      tcr: "",
+      erc20: "",
+      arbitrator: "",
+      tokenEmitter: "",
+      status: Status.RegistrationRequested,
+      challengePeriodEndsAt: Number(event.block.timestamp + challengePeriodDuration),
+      isDisputed: false,
+      evidenceGroupID: _evidenceGroupID.toString(),
       createdAt: Number(event.block.timestamp),
       updatedAt: Number(event.block.timestamp),
-      challengePeriodEndsAt: Number(event.block.timestamp + challengePeriodDuration),
-      evidenceGroupID: _evidenceGroupID.toString(),
-      isDisputed: false,
-      isResolved: false,
-      ...metadata,
     },
   })
 }

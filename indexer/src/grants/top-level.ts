@@ -6,6 +6,7 @@ import {
   flowTcrAddress,
   tokenEmitterAddress,
 } from "../../abis"
+import { Status } from "../enums"
 
 ponder.on("NounsFlow:Initialized", async (params) => {
   const { context } = params
@@ -19,27 +20,35 @@ ponder.on("NounsFlow:Initialized", async (params) => {
     functionName: "flowMetadata",
   })
 
+  const currentTime = Math.floor(Date.now() / 1000)
+
   await Grant.create({
     id: contract,
     data: {
+      ...metadata,
       recipient: contract,
       recipientId: "",
-      blockNumber: context.contracts.NounsFlow.startBlock.toString(),
       isTopLevel: true,
       isFlow: true,
       isRemoved: false,
-      parent: zeroAddress,
+      parentContract: zeroAddress,
+      submitter: zeroAddress,
       votesCount: "0",
       monthlyFlowRate: "0",
-      updatedAt: Math.floor(Date.now() / 1000),
       totalEarned: "0",
       claimableBalance: "0",
       tcr: flowTcrAddress[8453].toLowerCase(),
       erc20: erc20VotesMintableAddress[8453].toLowerCase(),
       arbitrator: erc20VotesArbitratorAddress[8453].toLowerCase(),
       tokenEmitter: tokenEmitterAddress[8453].toLowerCase(),
-      applicationId: "",
-      ...metadata,
+      challengePeriodEndsAt: 0,
+      status: Status.Registered,
+      flowId: "",
+      updatedAt: currentTime,
+      createdAt: currentTime,
+      isDisputed: false,
+      evidenceGroupID: "",
+      isActive: true,
     },
   })
 })

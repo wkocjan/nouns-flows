@@ -2,6 +2,8 @@ import { createConfig } from "@ponder/core"
 import { createPublicClient, http, parseAbiItem } from "viem"
 import { base } from "viem/chains"
 import {
+  erc20VotesArbitratorAddress,
+  erc20VotesArbitratorImplAbi,
   flowTcrAddress,
   flowTcrImplAbi,
   nounsFlowAddress,
@@ -72,6 +74,24 @@ export default createConfig({
     NounsFlowTcrFactory: {
       abi: tcrFactoryImplAbi,
       address: tcrFactoryAddress[8453],
+      network: "base",
+      startBlock: START_BLOCK,
+    },
+    Arbitrator: {
+      abi: erc20VotesArbitratorImplAbi,
+      address: erc20VotesArbitratorAddress[8453],
+      network: "base",
+      startBlock: START_BLOCK,
+    },
+    ArbitratorChildren: {
+      abi: erc20VotesArbitratorImplAbi,
+      factory: {
+        address: tcrFactoryAddress[8453],
+        event: parseAbiItem(
+          "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy)"
+        ),
+        parameter: "arbitratorProxy",
+      },
       network: "base",
       startBlock: START_BLOCK,
     },

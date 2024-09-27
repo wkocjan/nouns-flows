@@ -50,8 +50,8 @@ async function handleVoteCast(params: {
       getGrantBudget(context as Context, contract, affectedRecipientId),
     ])
 
-    await context.db.Grant.update({
-      id: `${affectedRecipientId}_${contract}`,
+    await context.db.Grant.updateMany({
+      where: { recipientId: affectedRecipientId, parentContract: contract },
       data: { votesCount, monthlyFlowRate },
     })
   }
@@ -70,9 +70,11 @@ async function getGrantVotesCount(
 }
 
 async function getGrantBudget(context: Context, contract: `0x${string}`, recipientId: string) {
-  const grant = await context.db.Grant.findUnique({
-    id: `${recipientId}_${contract}`,
+  const { items } = await context.db.Grant.findMany({
+    where: { recipientId, parentContract: contract },
   })
+
+  const grant = items?.[0]
 
   if (!grant) {
     throw new Error(`Could not find recipient ${recipientId} on ${contract}`)

@@ -1,8 +1,8 @@
-import { ApplicationStatus } from "@/lib/enums"
-import { Application } from "@prisma/client"
+import { Status } from "@/lib/enums"
+import { Grant } from "@prisma/client"
 
-export function canBeExecuted(application: Application) {
-  const { challengePeriodEndsAt, isDisputed, status } = application
+export function canBeExecuted(grant: Grant) {
+  const { challengePeriodEndsAt, isDisputed, status } = grant
 
   if (!isPendingRequest(status)) return false
   if (isDisputed) return false
@@ -10,8 +10,8 @@ export function canBeExecuted(application: Application) {
   return challengePeriodEndsAt <= Date.now() / 1000
 }
 
-export function canBeChallenged(application: Application) {
-  const { challengePeriodEndsAt, isDisputed, status } = application
+export function canBeChallenged(grant: Grant) {
+  const { challengePeriodEndsAt, isDisputed, status } = grant
 
   if (!isPendingRequest(status)) return false
   if (isDisputed) return false
@@ -20,8 +20,5 @@ export function canBeChallenged(application: Application) {
 }
 
 function isPendingRequest(status: number) {
-  return (
-    status === ApplicationStatus.ClearingRequested ||
-    status === ApplicationStatus.RegistrationRequested
-  )
+  return status === Status.ClearingRequested || status === Status.RegistrationRequested
 }

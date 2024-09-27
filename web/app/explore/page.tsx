@@ -4,8 +4,8 @@ import { FullDiagram } from "./diagram"
 
 export default async function ExplorePage() {
   const flows = await database.grant.findMany({
-    where: { isRemoved: 0, isFlow: 1, isTopLevel: 0 },
-    include: { subgrants: { where: { isRemoved: 0 } } },
+    where: { isActive: 1, isFlow: 1, isTopLevel: 0 },
+    include: { subgrants: { where: { isActive: 1 } } },
   })
 
   const pool = await getPool()

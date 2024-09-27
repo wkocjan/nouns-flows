@@ -15,7 +15,7 @@ export default async function ApplyFlowPage(props: Props) {
   const { flowId } = props.params
 
   const flow = await database.grant.findFirstOrThrow({
-    where: { id: flowId, isFlow: 1, isRemoved: 0 },
+    where: { id: flowId, isFlow: 1, isActive: 1 },
   })
 
   const { isTopLevel } = flow

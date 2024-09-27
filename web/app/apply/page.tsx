@@ -10,7 +10,7 @@ import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 
 export default async function ApplyPage() {
   const flows = await database.grant.findMany({
-    where: { isFlow: 1, isRemoved: 0, isTopLevel: 0 },
+    where: { isFlow: 1, isActive: 1, isTopLevel: 0 },
   })
 
   return (

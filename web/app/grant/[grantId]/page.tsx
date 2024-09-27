@@ -29,11 +29,12 @@ export default async function GrantPage({ params }: Props) {
   const { grantId } = params
 
   const grant = await database.grant.findUniqueOrThrow({
-    where: { id: grantId },
+    where: { id: grantId, isActive: 1 },
     include: { flow: true },
   })
 
-  const { title, tagline, description, flow, image, recipientId, parent, votesCount } = grant
+  const { title, tagline, description, flow, image, recipientId, votesCount, parentContract } =
+    grant
 
   return (
     <div className="container mt-2.5 pb-24 md:mt-6">
@@ -123,7 +124,7 @@ export default async function GrantPage({ params }: Props) {
                   <p className="mt-1 text-lg font-medium">
                     <UserVotes
                       recipientId={grant.recipientId}
-                      contract={getEthAddress(grant.parent)}
+                      contract={getEthAddress(parentContract)}
                     />
                   </p>
                 </div>
@@ -135,7 +136,7 @@ export default async function GrantPage({ params }: Props) {
             </CardContent>
           </Card>
           {Number(votesCount) > 0 && (
-            <Voters contract={getEthAddress(parent)} recipientId={recipientId} />
+            <Voters contract={getEthAddress(parentContract)} recipientId={recipientId} />
           )}
         </div>
       </div>
