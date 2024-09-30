@@ -45,10 +45,9 @@ export function ApplicationDispute(props: Props) {
   })
   const ref = useRef<HTMLButtonElement>(null)
 
+  const isVotingClosed = dispute && new Date() > new Date(dispute.votingEndTime * 1000)
   const isVotingOpen =
-    dispute &&
-    new Date() > new Date(dispute.votingStartTime * 1000) &&
-    new Date() < new Date(dispute.votingEndTime * 1000)
+    dispute && new Date() > new Date(dispute.votingStartTime * 1000) && !isVotingClosed
   const canVote = isVotingOpen
 
   // ToDo: Check whether voting is active
@@ -68,10 +67,10 @@ export function ApplicationDispute(props: Props) {
         </DialogHeader>
         <p className="mb-6">Some description about the dispute process</p>
         {dispute && <DisputeDetails dispute={dispute} />}
-        {isVotingOpen && <div className="text-center text-sm">Cast your vote:</div>}
+        {isVotingOpen && <div className="text-center text-sm">Cast your vote</div>}
         {!isVotingOpen && dispute && (
           <div className="text-center text-sm">
-            Voting starts{" "}
+            {isVotingClosed ? "Voting closed " : "Voting starts "}
             <DateTime
               date={new Date(dispute.votingStartTime * 1000)}
               relative
