@@ -18,7 +18,7 @@ async function handleVoteCommitted(params: {
   const voter = event.transaction.from.toLowerCase()
 
   await context.db.DisputeVote.create({
-    id: `${disputeId}_${arbitrator}`,
+    id: `${disputeId}_${arbitrator}_${voter}`,
     data: {
       disputeId: disputeId.toString(),
       secretHash,

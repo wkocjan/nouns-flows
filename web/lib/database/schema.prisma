@@ -124,4 +124,5 @@ view DisputeVote {
   reason     String?
 
   @@schema("public")
+  @@unique([disputeId, arbitrator, voter])
 }

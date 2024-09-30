@@ -21,6 +21,8 @@ import { DisputeDetails } from "./DisputeDetails"
 import { useSecretVoteHash } from "../hooks/useSecretVoteHash"
 import { DateTime } from "@/components/ui/date-time"
 import { useAccount } from "wagmi"
+import { useDisputeVote } from "@/lib/tcr/dispute/use-dispute-votes"
+
 interface Props {
   grant: Grant
   flow: Grant
@@ -33,6 +35,12 @@ export function ApplicationDispute(props: Props) {
   const { address } = useAccount()
 
   const { dispute } = useDisputes(grant.id, !open)
+  const { disputeVote } = useDisputeVote(
+    dispute?.disputeId || "",
+    address || "",
+    flow.arbitrator,
+    !dispute,
+  )
 
   const { forSecretHash, againstSecretHash } = useSecretVoteHash(
     dispute && address ? `${dispute.arbitrator}-${dispute.disputeId}-${address}` : "",
@@ -48,11 +56,12 @@ export function ApplicationDispute(props: Props) {
   const isVotingClosed = dispute && new Date() > new Date(dispute.votingEndTime * 1000)
   const isVotingOpen =
     dispute && new Date() > new Date(dispute.votingStartTime * 1000) && !isVotingClosed
-  const canVote = isVotingOpen
+  const canVote = isVotingOpen && !disputeVote
 
-  // ToDo: Check whether voting is active
   // ToDo: Check whether user has already voted
   // ToDo: Reveal votes
+
+  console.log("disputeVote", disputeVote)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -68,11 +77,18 @@ export function ApplicationDispute(props: Props) {
         <p className="mb-6">Some description about the dispute process</p>
         {dispute && <DisputeDetails dispute={dispute} />}
         {isVotingOpen && <div className="text-center text-sm">Cast your vote</div>}
-        {!isVotingOpen && dispute && (
+        {disputeVote && (
+          <div className="text-center text-sm">You have successfully committed your vote</div>
+        )}
+        {!isVotingOpen && dispute && !disputeVote && (
           <div className="text-center text-sm">
             {isVotingClosed ? "Voting closed " : "Voting starts "}
             <DateTime
-              date={new Date(dispute.votingStartTime * 1000)}
+              date={
+                isVotingClosed
+                  ? new Date(dispute.votingEndTime * 1000)
+                  : new Date(dispute.votingStartTime * 1000)
+              }
               relative
               className="text-sm"
             />

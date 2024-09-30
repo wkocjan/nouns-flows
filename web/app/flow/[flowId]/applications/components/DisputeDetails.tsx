@@ -19,7 +19,7 @@ export function DisputeDetails(props: Props) {
         <DateTime date={new Date(dispute.votingEndTime * 1000)} relative className="text-base" />
       </div>
       <div>
-        <h3 className="mb-1 text-sm text-muted-foreground">Reveal Period</h3>
+        <h3 className="mb-1 text-sm text-muted-foreground">Reveal Period Ends</h3>
         <DateTime
           date={new Date(dispute.revealPeriodEndTime * 1000)}
           relative
