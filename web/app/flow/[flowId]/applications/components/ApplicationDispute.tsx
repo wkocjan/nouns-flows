@@ -75,15 +75,16 @@ export function ApplicationDispute(props: Props) {
         </DialogHeader>
         <p className="mb-6">Some description about the dispute process</p>
         {dispute && <DisputeDetails dispute={dispute} />}
-        {isVotingOpen && <div className="text-center text-sm">Cast your vote</div>}
+        {isVotingOpen && !hasVoted && <div className="text-center text-sm">Cast your vote</div>}
         {disputeVote && (
           <Tooltip>
             <TooltipTrigger asChild>
               <div className="text-center text-sm">You have successfully committed your vote</div>
             </TooltipTrigger>
             <TooltipContent>
-              For your convenience, we store unhashed votes encrypted in a database. Your vote will
-              be revealed automatically at the end of the voting period.
+              For your convenience, we store unhashed votes encrypted in a database.
+              <br />
+              Your vote will be revealed automatically at the end of the voting period.
               <br />
               You can opt out of custodial voting soon.
             </TooltipContent>
