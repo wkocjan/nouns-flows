@@ -18,7 +18,9 @@ import { useRef, useState } from "react"
 import { toast } from "sonner"
 import { base } from "viem/chains"
 import { DisputeDetails } from "./DisputeDetails"
-
+import { useSecretVoteHash } from "../hooks/useSecretVoteHash"
+import { DateTime } from "@/components/ui/date-time"
+import { useAccount } from "wagmi"
 interface Props {
   grant: Grant
   flow: Grant
@@ -28,9 +30,13 @@ export function ApplicationDispute(props: Props) {
   const { grant, flow } = props
   const router = useRouter()
   const [open, setOpen] = useState(false)
+  const { address } = useAccount()
 
   const { dispute } = useDisputes(grant.id, !open)
 
+  const { forSecretHash, againstSecretHash } = useSecretVoteHash(
+    dispute && address ? `${dispute.arbitrator}-${dispute.disputeId}-${address}` : "",
+  )
   const { writeContract, prepareWallet, isLoading, toastId } = useContractTransaction({
     onSuccess: async () => {
       ref.current?.click() // close dialog
@@ -39,7 +45,11 @@ export function ApplicationDispute(props: Props) {
   })
   const ref = useRef<HTMLButtonElement>(null)
 
-  const canVote = true
+  const isVotingOpen =
+    dispute &&
+    new Date() > new Date(dispute.votingStartTime * 1000) &&
+    new Date() < new Date(dispute.votingEndTime * 1000)
+  const canVote = isVotingOpen
 
   // ToDo: Check whether voting is active
   // ToDo: Check whether user has already voted
@@ -58,7 +68,17 @@ export function ApplicationDispute(props: Props) {
         </DialogHeader>
         <p className="mb-6">Some description about the dispute process</p>
         {dispute && <DisputeDetails dispute={dispute} />}
-        <div className="text-center text-sm">Cast your vote:</div>
+        {isVotingOpen && <div className="text-center text-sm">Cast your vote:</div>}
+        {!isVotingOpen && dispute && (
+          <div className="text-center text-sm">
+            Voting starts{" "}
+            <DateTime
+              date={new Date(dispute.votingStartTime * 1000)}
+              relative
+              className="text-sm"
+            />
+          </div>
+        )}
         <div className="flex justify-center space-x-2">
           <Button
             disabled={!canVote || isLoading}
@@ -67,13 +87,14 @@ export function ApplicationDispute(props: Props) {
             onClick={async () => {
               try {
                 if (!dispute) return
+                if (!forSecretHash) throw new Error("No secret hash")
                 await prepareWallet()
 
                 writeContract({
                   address: getEthAddress(flow.arbitrator),
                   abi: erc20VotesArbitratorImplAbi,
                   functionName: "commitVote",
-                  args: [BigInt(dispute.id), "0xSECRET_HASH"], // ToDo
+                  args: [BigInt(dispute.disputeId), forSecretHash],
                   chainId: base.id,
                 })
               } catch (e: any) {
@@ -90,13 +111,14 @@ export function ApplicationDispute(props: Props) {
             onClick={async () => {
               try {
                 if (!dispute) return
+                if (!againstSecretHash) throw new Error("No secret hash")
                 await prepareWallet()
 
                 writeContract({
                   address: getEthAddress(flow.arbitrator),
                   abi: erc20VotesArbitratorImplAbi,
                   functionName: "commitVote",
-                  args: [BigInt(dispute.id), "0xSECRET_HASH"], // ToDo
+                  args: [BigInt(dispute.id), againstSecretHash],
                   chainId: base.id,
                 })
               } catch (e: any) {

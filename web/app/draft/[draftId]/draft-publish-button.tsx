@@ -50,10 +50,10 @@ export function DraftPublishButton(props: Props) {
   })
 
   const isOwner = draft.users.some((user) => user.toLowerCase() === address?.toLowerCase())
-  const [action, setAction] = useState("Sponsor")
+  const [action, setAction] = useState("Publish")
 
   useEffect(() => {
-    setAction(isOwner ? "Apply" : "Sponsor")
+    setAction(isOwner ? "Publish" : "Sponsor")
   }, [isOwner])
 
   const hasEnoughBalance = token.balance >= addItemCost
@@ -77,15 +77,19 @@ export function DraftPublishButton(props: Props) {
             <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
               1
             </span>
-            <p>Applying will kick off the challenge period.</p>
+            <p>
+              Applying costs {formatEther(addItemCost)} {token.symbol} and will kick off a challenge
+              period.
+            </p>
           </li>
           <li className="flex items-start space-x-4">
             <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
               2
             </span>
             <p>
-              For {challengePeriodFormatted}, anyone can pay an equivalent bond and challenge this
-              submission. If not challenged, your item will be accepted.
+              For {challengePeriodFormatted}, anyone can pay to challenge this application and send
+              it to a community vote. You may lose your application fee if the application is voted
+              down by the community.
             </p>
           </li>
           <li className="flex items-start space-x-4">
@@ -94,8 +98,8 @@ export function DraftPublishButton(props: Props) {
             </span>
             <div>
               <p>
-                Applying costs {formatEther(addItemCost)} {token.symbol}. You may lose this amount
-                if your submission is challenged and rejected.
+                If not challenged, your application will be accepted and your application fee will
+                be returned.
               </p>
               <p className="mt-2.5 text-sm text-muted-foreground">
                 Your {token.symbol} balance: {formatEther(token.balance)}
