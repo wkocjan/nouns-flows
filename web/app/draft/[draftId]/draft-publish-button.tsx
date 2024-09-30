@@ -53,7 +53,7 @@ export function DraftPublishButton(props: Props) {
   const [action, setAction] = useState("Sponsor")
 
   useEffect(() => {
-    setAction(isOwner ? "Publish" : "Sponsor")
+    setAction(isOwner ? "Apply" : "Sponsor")
   }, [isOwner])
 
   const hasEnoughBalance = token.balance >= addItemCost
@@ -77,15 +77,15 @@ export function DraftPublishButton(props: Props) {
             <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
               1
             </span>
-            <p>Publishing will kick off the challenge period.</p>
+            <p>Applying will kick off the challenge period.</p>
           </li>
           <li className="flex items-start space-x-4">
             <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
               2
             </span>
             <p>
-              For {challengePeriodFormatted}, anyone can challenge this submission. After that,
-              voting begins. If not challenged, your item will be accepted.
+              For {challengePeriodFormatted}, anyone can pay an equivalent bond and challenge this
+              submission. If not challenged, your item will be accepted.
             </p>
           </li>
           <li className="flex items-start space-x-4">
@@ -94,7 +94,7 @@ export function DraftPublishButton(props: Props) {
             </span>
             <div>
               <p>
-                Publishing costs {formatEther(addItemCost)} {token.symbol}. You may lose this amount
+                Applying costs {formatEther(addItemCost)} {token.symbol}. You may lose this amount
                 if your submission is challenged and rejected.
               </p>
               <p className="mt-2.5 text-sm text-muted-foreground">
@@ -104,13 +104,11 @@ export function DraftPublishButton(props: Props) {
           </li>
         </ul>
         <div className="flex justify-end space-x-2">
-          <Button
-            variant={hasEnoughBalance ? "outline" : "default"}
-            type="button"
-            onClick={() => window.alert("Coming soon!")}
-          >
-            Buy {token.symbol}
-          </Button>
+          {!hasEnoughBalance && (
+            <Button variant="default" type="button" onClick={() => window.alert("Coming soon!")}>
+              Buy {token.symbol}
+            </Button>
+          )}
           <Button
             disabled={!hasEnoughBalance || token.isApproving || isLoading}
             loading={token.isApproving || isLoading}

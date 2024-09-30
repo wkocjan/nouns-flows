@@ -18,7 +18,7 @@ import { Grant } from "@prisma/client"
 import { useRouter } from "next/navigation"
 import { useRef } from "react"
 import { toast } from "sonner"
-import { Address } from "viem"
+import { Address, formatEther } from "viem"
 import { base } from "viem/chains"
 
 interface Props {
@@ -38,7 +38,7 @@ export function ApplicationChallengeButton(props: Props) {
   })
   const ref = useRef<HTMLButtonElement>(null)
 
-  const { challengeSubmissionCost } = useTcrData(getEthAddress(flow.tcr))
+  const { challengeSubmissionCost, addItemCost } = useTcrData(getEthAddress(flow.tcr))
   const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr))
 
   const hasEnoughBalance = token.balance >= challengeSubmissionCost
@@ -57,15 +57,47 @@ export function ApplicationChallengeButton(props: Props) {
             Challenge Application
           </DialogTitle>
         </DialogHeader>
-        <p>Description</p>
+        <ul className="my-4 space-y-6">
+          <li className="flex items-start space-x-4">
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
+              1
+            </span>
+            <p>
+              Challenging this application costs {formatEther(challengeSubmissionCost)}{" "}
+              {token.symbol} and will kick off a voting period.
+            </p>
+          </li>
+          <li className="flex items-start space-x-4">
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
+              2
+            </span>
+            <p>
+              {token.name} holders anonymously vote on whether the application should be accepted or
+              not.
+            </p>
+          </li>
+          <li className="flex items-start space-x-4">
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
+              3
+            </span>
+            <div>
+              <p>
+                You may lose your payment if your challenge is rejected by {token.name} voters. If
+                your challenge is successful, you are paid the applicant&apos;s bond of{" "}
+                {formatEther(addItemCost)} {token.symbol}.
+              </p>
+              <p className="mt-2.5 text-sm text-muted-foreground">
+                Your {token.symbol} balance: {formatEther(token.balance)}
+              </p>
+            </div>
+          </li>
+        </ul>
         <div className="flex justify-end space-x-2">
-          <Button
-            variant={hasEnoughBalance ? "outline" : "default"}
-            type="button"
-            onClick={() => window.alert("Coming soon!")}
-          >
-            Buy {token.symbol}
-          </Button>
+          {!hasEnoughBalance && (
+            <Button variant="default" type="button" onClick={() => window.alert("Coming soon!")}>
+              Buy {token.symbol}
+            </Button>
+          )}
           <Button
             disabled={!hasEnoughBalance || token.isApproving || isLoading}
             loading={token.isApproving || isLoading}
