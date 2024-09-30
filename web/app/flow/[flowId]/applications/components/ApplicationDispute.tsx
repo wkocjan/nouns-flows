@@ -22,6 +22,7 @@ import { useSecretVoteHash } from "../hooks/useSecretVoteHash"
 import { DateTime } from "@/components/ui/date-time"
 import { useAccount } from "wagmi"
 import { useDisputeVote } from "@/lib/tcr/dispute/use-dispute-votes"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 
 interface Props {
   grant: Grant
@@ -53,15 +54,13 @@ export function ApplicationDispute(props: Props) {
   })
   const ref = useRef<HTMLButtonElement>(null)
 
+  const hasVoted = !!disputeVote
   const isVotingClosed = dispute && new Date() > new Date(dispute.votingEndTime * 1000)
   const isVotingOpen =
     dispute && new Date() > new Date(dispute.votingStartTime * 1000) && !isVotingClosed
-  const canVote = isVotingOpen && !disputeVote
+  const canVote = isVotingOpen && !hasVoted
 
-  // ToDo: Check whether user has already voted
-  // ToDo: Reveal votes
-
-  console.log("disputeVote", disputeVote)
+  // ToDo: Reveal votes via worker
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -78,7 +77,17 @@ export function ApplicationDispute(props: Props) {
         {dispute && <DisputeDetails dispute={dispute} />}
         {isVotingOpen && <div className="text-center text-sm">Cast your vote</div>}
         {disputeVote && (
-          <div className="text-center text-sm">You have successfully committed your vote</div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="text-center text-sm">You have successfully committed your vote</div>
+            </TooltipTrigger>
+            <TooltipContent>
+              For your convenience, we store unhashed votes encrypted in a database. Your vote will
+              be revealed automatically at the end of the voting period.
+              <br />
+              You can opt out of custodial voting soon.
+            </TooltipContent>
+          </Tooltip>
         )}
         {!isVotingOpen && dispute && !disputeVote && (
           <div className="text-center text-sm">
@@ -94,56 +103,58 @@ export function ApplicationDispute(props: Props) {
             />
           </div>
         )}
-        <div className="flex justify-center space-x-2">
-          <Button
-            disabled={!canVote || isLoading}
-            loading={isLoading}
-            type="button"
-            onClick={async () => {
-              try {
-                if (!dispute) return
-                if (!forSecretHash) throw new Error("No secret hash")
-                await prepareWallet()
+        {!hasVoted && (
+          <div className="flex justify-center space-x-2">
+            <Button
+              disabled={!canVote || isLoading}
+              loading={isLoading}
+              type="button"
+              onClick={async () => {
+                try {
+                  if (!dispute) return
+                  if (!forSecretHash) throw new Error("No secret hash")
+                  await prepareWallet()
 
-                writeContract({
-                  address: getEthAddress(flow.arbitrator),
-                  abi: erc20VotesArbitratorImplAbi,
-                  functionName: "commitVote",
-                  args: [BigInt(dispute.disputeId), forSecretHash],
-                  chainId: base.id,
-                })
-              } catch (e: any) {
-                toast.error(e.message, { id: toastId })
-              }
-            }}
-          >
-            Approve {grant.isFlow ? "category" : "grant"}
-          </Button>
-          <Button
-            disabled={!canVote || isLoading}
-            loading={isLoading}
-            type="button"
-            onClick={async () => {
-              try {
-                if (!dispute) return
-                if (!againstSecretHash) throw new Error("No secret hash")
-                await prepareWallet()
+                  writeContract({
+                    address: getEthAddress(flow.arbitrator),
+                    abi: erc20VotesArbitratorImplAbi,
+                    functionName: "commitVote",
+                    args: [BigInt(dispute.disputeId), forSecretHash],
+                    chainId: base.id,
+                  })
+                } catch (e: any) {
+                  toast.error(e.message, { id: toastId })
+                }
+              }}
+            >
+              Approve {grant.isFlow ? "category" : "grant"}
+            </Button>
+            <Button
+              disabled={!canVote || isLoading}
+              loading={isLoading}
+              type="button"
+              onClick={async () => {
+                try {
+                  if (!dispute) return
+                  if (!againstSecretHash) throw new Error("No secret hash")
+                  await prepareWallet()
 
-                writeContract({
-                  address: getEthAddress(flow.arbitrator),
-                  abi: erc20VotesArbitratorImplAbi,
-                  functionName: "commitVote",
-                  args: [BigInt(dispute.id), againstSecretHash],
-                  chainId: base.id,
-                })
-              } catch (e: any) {
-                toast.error(e.message, { id: toastId })
-              }
-            }}
-          >
-            Reject {grant.isFlow ? "category" : "grant"}
-          </Button>
-        </div>
+                  writeContract({
+                    address: getEthAddress(flow.arbitrator),
+                    abi: erc20VotesArbitratorImplAbi,
+                    functionName: "commitVote",
+                    args: [BigInt(dispute.id), againstSecretHash],
+                    chainId: base.id,
+                  })
+                } catch (e: any) {
+                  toast.error(e.message, { id: toastId })
+                }
+              }}
+            >
+              Reject {grant.isFlow ? "category" : "grant"}
+            </Button>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   )
