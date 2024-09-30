@@ -1,11 +1,14 @@
-import { createSchema } from "@ponder/core";
+import { createSchema } from "@ponder/core"
 
 export default createSchema((p) => ({
   Grant: p.createTable(
     {
       id: p.string(),
       recipient: p.string(),
-      recipientId: p.string(),
+      flowId: p.string(),
+      submitter: p.string(),
+      parentContract: p.string(),
+      isTopLevel: p.boolean(),
       isFlow: p.boolean(),
       title: p.string(),
       description: p.string(),
@@ -13,21 +16,31 @@ export default createSchema((p) => ({
       tagline: p.string().optional(),
       url: p.string().optional(),
       isRemoved: p.boolean(),
-      blockNumber: p.string(),
-      parent: p.string(),
+      isActive: p.boolean(),
       votesCount: p.string(),
       monthlyFlowRate: p.string(),
       totalEarned: p.string(),
       claimableBalance: p.string(),
+      tcr: p.string(),
+      erc20: p.string(),
+      arbitrator: p.string(),
+      tokenEmitter: p.string(),
+      status: p.int(),
+      challengePeriodEndsAt: p.int(),
+      isDisputed: p.boolean(),
+      isResolved: p.boolean(),
+      evidenceGroupID: p.string(),
+      createdAt: p.int(),
       updatedAt: p.int(),
     },
     {
-      recipientIdIndex: p.index("recipientId"),
+      isTopLevelIndex: p.index("isTopLevel"),
       isFlowIndex: p.index("isFlow"),
       isRemovedIndex: p.index("isRemoved"),
-      parentIndex: p.index("parent"),
-      recipientIndex: p.index("recipient"),
       updatedAtIndex: p.index("updatedAt"),
+      flowIdIndex: p.index("flowId"),
+      isDisputedIndex: p.index("isDisputed"),
+      isActiveIndex: p.index("isActive"),
     }
   ),
   Vote: p.createTable(
@@ -49,4 +62,42 @@ export default createSchema((p) => ({
       isStaleIndex: p.index("isStale"),
     }
   ),
-}));
+  Dispute: p.createTable(
+    {
+      id: p.string(),
+      disputeId: p.string(),
+      arbitrator: p.string(),
+      arbitrable: p.string(),
+      grantId: p.string(),
+      challenger: p.string(),
+      votingStartTime: p.int(),
+      votingEndTime: p.int(),
+      revealPeriodEndTime: p.int(),
+      appealPeriodEndTime: p.int(),
+      votes: p.int(),
+      ruling: p.int(),
+      totalSupply: p.string(),
+      isExecuted: p.boolean(),
+    },
+    {
+      arbitratorIndex: p.index("arbitrator"),
+    }
+  ),
+  DisputeVote: p.createTable(
+    {
+      id: p.string(),
+      arbitrator: p.string(),
+      disputeId: p.string(),
+      secretHash: p.string(),
+      voter: p.string(),
+
+      choice: p.int().optional(),
+      votes: p.int().optional(),
+      reason: p.string().optional(),
+    },
+    {
+      disputeIdIndex: p.index("disputeId"),
+      arbitratorIndex: p.index("arbitrator"),
+    }
+  ),
+}))

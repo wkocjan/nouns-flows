@@ -10,16 +10,20 @@ datasource db {
 }
 
 model Draft {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  image       String
-  users       String[]
-  isPrivate   Boolean  @default(true)
-  isOnchain   Boolean  @default(false)
-  updatedAt   DateTime @updatedAt
-  createdAt   DateTime @default(now())
-  flowId      String
+  id              Int      @id @default(autoincrement())
+  title           String
+  description     String
+  image           String
+  users           String[]
+  isPrivate       Boolean  @default(true)
+  isOnchain       Boolean  @default(false)
+  updatedAt       DateTime @updatedAt
+  createdAt       DateTime @default(now())
+  flowId          String
+  isFlow          Boolean  @default(false)
+  transactionHash String?
+
+  flow Grant @relation(fields: [flowId], references: [id])
 
   @@index([isPrivate], map: "isPrivate_1")
   @@index([isOnchain], map: "isOnchain_1")
@@ -30,25 +34,39 @@ model Draft {
 }
 
 view Grant {
-  id               String  @id
-  recipient        String  @unique
-  recipientId      String
-  isFlow           Int
-  title            String
-  description      String
-  image            String
-  tagline          String?
-  url              String?
-  isRemoved        Int
-  blockNumber      String
-  parent           String
-  votesCount       String
-  monthlyFlowRate  String
-  totalEarned      String
-  claimableBalance String
+  id                    String  @id
+  recipient             String
+  flowId                String
+  submitter             String
+  parentContract        String
+  isTopLevel            Int
+  isFlow                Int
+  title                 String
+  description           String
+  image                 String
+  tagline               String?
+  url                   String?
+  isRemoved             Int
+  isActive              Int
+  votesCount            String
+  monthlyFlowRate       String
+  totalEarned           String
+  claimableBalance      String
+  tcr                   String  @unique
+  erc20                 String  @unique
+  arbitrator            String  @unique
+  tokenEmitter          String  @unique
+  status                Int
+  challengePeriodEndsAt Int
+  isDisputed            Int
+  isResolved            Int
+  evidenceGroupID       String
+  createdAt             Int
+  updatedAt             Int
 
-  subgrants   Grant[] @relation("Subgrants")
-  parentGrant Grant   @relation("Subgrants", fields: [parent], references: [recipient])
+  flow      Grant   @relation("Subgrants", fields: [flowId], references: [id])
+  subgrants Grant[] @relation("Subgrants")
+  drafts    Draft[]
 
   @@map("Grant")
   @@schema("public")
@@ -73,5 +91,37 @@ view PonderMeta {
   value String
 
   @@map("_ponder_meta")
+  @@schema("public")
+}
+
+view Dispute {
+  id                  String @id
+  disputeId           String
+  arbitrator          String
+  arbitrable          String
+  grantId             String
+  challenger          String
+  votingStartTime     Int
+  votingEndTime       Int
+  revealPeriodEndTime Int
+  appealPeriodEndTime Int
+  votes               Int
+  ruling              Int
+  totalSupply         String
+  isExecuted          Int
+
+  @@schema("public")
+}
+
+view DisputeVote {
+  id         String  @id
+  arbitrator String
+  disputeId  String
+  secretHash String
+  voter      String
+  choice     Int?
+  votes      Int?
+  reason     String?
+
   @@schema("public")
 }

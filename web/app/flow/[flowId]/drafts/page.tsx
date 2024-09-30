@@ -1,7 +1,7 @@
 import "server-only"
 
+import { DraftPublishButton } from "@/app/draft/[draftId]/draft-publish-button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
 import {
   Table,
   TableBody,
@@ -14,6 +14,8 @@ import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database"
 import { getPinataUrl } from "@/lib/pinata/get-file-url"
 import Image from "next/image"
+import Link from "next/link"
+import { DateTime } from "@/components/ui/date-time"
 
 interface Props {
   params: {
@@ -27,6 +29,10 @@ export const revalidate = 0
 export default async function FlowDraftsPage(props: Props) {
   const { flowId } = props.params
 
+  const flow = await database.grant.findFirstOrThrow({
+    where: { id: flowId, isFlow: 1, isRemoved: 0 },
+  })
+
   const drafts = await database.draft.findMany({
     where: { flowId, isPrivate: false, isOnchain: false },
     orderBy: { createdAt: "desc" },
@@ -38,7 +44,8 @@ export default async function FlowDraftsPage(props: Props) {
         <TableRow>
           <TableHead colSpan={2}>Name</TableHead>
           <TableHead>User(s)</TableHead>
-          <TableHead className="text-center">Submitted</TableHead>
+          <TableHead className="text-center">Type</TableHead>
+          <TableHead className="text-center">Created At</TableHead>
           <TableHead className="text-right">Action</TableHead>
         </TableRow>
       </TableHeader>
@@ -55,7 +62,13 @@ export default async function FlowDraftsPage(props: Props) {
               />
             </TableCell>
             <TableCell>
-              <h4 className="text-sm font-medium md:text-base">{draft.title}</h4>
+              <Link
+                href={`/draft/${draft.id}`}
+                className="text-sm font-medium duration-100 ease-out hover:text-primary md:text-base"
+                tabIndex={-1}
+              >
+                {draft.title}
+              </Link>
             </TableCell>
             <TableCell>
               <div className="flex space-x-0.5">
@@ -73,18 +86,24 @@ export default async function FlowDraftsPage(props: Props) {
             </TableCell>
 
             <TableCell className="text-center">
-              {draft.createdAt.toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-              })}
+              <p>{draft.isFlow ? "Category" : "Grant"}</p>
+            </TableCell>
+
+            <TableCell className="text-center">
+              <DateTime
+                date={draft.createdAt}
+                options={{
+                  month: "short",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                }}
+              />
             </TableCell>
 
             <TableCell className="w-[100px] max-w-[100px]">
               <div className="flex justify-end">
-                <Button variant="outline">Sponsor</Button>
+                <DraftPublishButton draft={draft} flow={flow} />
               </div>
             </TableCell>
           </TableRow>

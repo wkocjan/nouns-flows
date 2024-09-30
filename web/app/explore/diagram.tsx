@@ -2,17 +2,18 @@ import { autoLayoutDiagram } from "@/components/diagram/auto-layout"
 import FlowNode from "@/components/diagram/flow-node"
 import grantNode from "@/components/diagram/grant-node"
 import PoolNode, { IPoolNode } from "@/components/diagram/pool-node"
+import { FlowWithGrants } from "@/lib/database/queries/flow"
+import { Grant } from "@prisma/client"
 import { Background, Edge, Node, Position, ReactFlow } from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
-import { FlowWithGrants } from "../flow/[flowId]/components/get-flow-with-grants"
 
 type Props = {
   flows: FlowWithGrants[]
-  budget: number
+  pool: Grant
 }
 
 export const FullDiagram = (props: Props) => {
-  const { flows, budget } = props
+  const { flows, pool } = props
 
   const mainNodes: Node[] = []
   const edges: Edge[] = []
@@ -21,11 +22,7 @@ export const FullDiagram = (props: Props) => {
     type: "pool",
     id: "pool-1",
     position: { x: 0, y: 0 },
-    data: {
-      name: `Nouns Flows`,
-      logoUrl: "/noggles.svg",
-      budget,
-    },
+    data: { pool },
     connectable: false,
     width: 240,
     height: 160,

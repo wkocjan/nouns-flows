@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xdb30fb8c9cd47e06276892e1ab02e892f7b16226)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x923283eeeb36036903a417fd6af594c2734b01ae)
  */
 export const erc20VotesArbitratorAbi = [
   {
@@ -64,14 +64,14 @@ export const erc20VotesArbitratorAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xdb30fb8c9cd47e06276892e1ab02e892f7b16226)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x923283eeeb36036903a417fd6af594c2734b01ae)
  */
 export const erc20VotesArbitratorAddress = {
-  8453: '0xdB30FB8C9cd47E06276892e1AB02E892F7b16226',
+  8453: '0x923283EeEB36036903A417Fd6AF594c2734b01AE',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xdb30fb8c9cd47e06276892e1ab02e892f7b16226)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x923283eeeb36036903a417fd6af594c2734b01ae)
  */
 export const erc20VotesArbitratorConfig = {
   address: erc20VotesArbitratorAddress,
@@ -83,7 +83,7 @@ export const erc20VotesArbitratorConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xcbff73a291cd63f2f8bb3a01297b2c502d271d06)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xf67297c416a0947f0b0a10d3468765b8e1639f63)
  */
 export const erc20VotesArbitratorImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'payable' },
@@ -1104,14 +1104,14 @@ export const erc20VotesArbitratorImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xcbff73a291cd63f2f8bb3a01297b2c502d271d06)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xf67297c416a0947f0b0a10d3468765b8e1639f63)
  */
 export const erc20VotesArbitratorImplAddress = {
-  8453: '0xCBff73A291CD63F2f8Bb3a01297b2c502D271D06',
+  8453: '0xF67297C416A0947F0B0A10D3468765B8e1639f63',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xcbff73a291cd63f2f8bb3a01297b2c502d271d06)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xf67297c416a0947f0b0a10d3468765b8e1639f63)
  */
 export const erc20VotesArbitratorImplConfig = {
   address: erc20VotesArbitratorImplAddress,
@@ -1123,7 +1123,7 @@ export const erc20VotesArbitratorImplConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xcb4887a150e8c07e67a76e19016c9f56324304f1)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x0e2e70462abf4add59bfaeb7bcbe92fb94eb19ae)
  */
 export const erc20VotesMintableAbi = [
   {
@@ -1184,14 +1184,14 @@ export const erc20VotesMintableAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xcb4887a150e8c07e67a76e19016c9f56324304f1)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x0e2e70462abf4add59bfaeb7bcbe92fb94eb19ae)
  */
 export const erc20VotesMintableAddress = {
-  8453: '0xCB4887a150E8C07E67a76E19016c9F56324304f1',
+  8453: '0x0e2E70462ABF4aDD59BFAeB7BcBe92Fb94eB19AE',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xcb4887a150e8c07e67a76e19016c9f56324304f1)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x0e2e70462abf4add59bfaeb7bcbe92fb94eb19ae)
  */
 export const erc20VotesMintableConfig = {
   address: erc20VotesMintableAddress,
@@ -1203,7 +1203,7 @@ export const erc20VotesMintableConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xe3b23f1525cc16420b1f5d7db4b06646f983742f)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x2139aacee85383f1d3007ff8ddf4a81301621a3d)
  */
 export const erc20VotesMintableImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
@@ -1456,6 +1456,16 @@ export const erc20VotesMintableImplAbi = [
     name: 'balanceOf',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'burn',
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -1764,14 +1774,14 @@ export const erc20VotesMintableImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xe3b23f1525cc16420b1f5d7db4b06646f983742f)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x2139aacee85383f1d3007ff8ddf4a81301621a3d)
  */
 export const erc20VotesMintableImplAddress = {
-  8453: '0xE3b23f1525CC16420B1F5d7db4b06646F983742F',
+  8453: '0x2139aACEe85383f1D3007Ff8Ddf4a81301621a3D',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xe3b23f1525cc16420b1f5d7db4b06646f983742f)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x2139aacee85383f1d3007ff8ddf4a81301621a3d)
  */
 export const erc20VotesMintableImplConfig = {
   address: erc20VotesMintableImplAddress,
@@ -1783,7 +1793,7 @@ export const erc20VotesMintableImplConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x34ebe4c7926d79a494f7c4e27c0fdae08bbc04cf)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x5536cde53268b8ccaf7a29adbac07605abf651bd)
  */
 export const flowTcrAbi = [
   {
@@ -1844,14 +1854,14 @@ export const flowTcrAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x34ebe4c7926d79a494f7c4e27c0fdae08bbc04cf)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x5536cde53268b8ccaf7a29adbac07605abf651bd)
  */
 export const flowTcrAddress = {
-  8453: '0x34Ebe4C7926D79A494F7c4E27C0FDae08bbC04cf',
+  8453: '0x5536CDe53268B8CCaF7A29AdBaC07605Abf651bD',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x34ebe4c7926d79a494f7c4e27c0fdae08bbc04cf)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x5536cde53268b8ccaf7a29adbac07605abf651bd)
  */
 export const flowTcrConfig = {
   address: flowTcrAddress,
@@ -1863,7 +1873,7 @@ export const flowTcrConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x91ea409d6edf1046416a6ff82f351e64caf39890)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x4386d8d5b54ca8d72d18960a68232b7478e49d4a)
  */
 export const flowTcrImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'payable' },
@@ -1881,6 +1891,7 @@ export const flowTcrImplAbi = [
     name: 'CONTRIBUTIONS_MUST_BE_MADE_WITHIN_THE_APPEAL_PERIOD',
   },
   { type: 'error', inputs: [], name: 'DISPUTE_MUST_NOT_BE_RESOLVED' },
+  { type: 'error', inputs: [], name: 'INVALID_CURVE_STEEPNESS' },
   { type: 'error', inputs: [], name: 'INVALID_ITEM_DATA' },
   { type: 'error', inputs: [], name: 'INVALID_RULING_OPTION' },
   { type: 'error', inputs: [], name: 'INVALID_SIDE' },
@@ -2003,6 +2014,12 @@ export const flowTcrImplAbi = [
         type: 'uint256',
         indexed: false,
       },
+      {
+        name: '_itemID',
+        internalType: 'bytes32',
+        type: 'bytes32',
+        indexed: false,
+      },
     ],
     name: 'Dispute',
   },
@@ -2100,6 +2117,12 @@ export const flowTcrImplAbi = [
       },
       { name: '_disputed', internalType: 'bool', type: 'bool', indexed: false },
       { name: '_resolved', internalType: 'bool', type: 'bool', indexed: false },
+      {
+        name: '_itemStatus',
+        internalType: 'enum IGeneralizedTCR.Status',
+        type: 'uint8',
+        indexed: false,
+      },
     ],
     name: 'ItemStatusChange',
   },
@@ -2241,6 +2264,19 @@ export const flowTcrImplAbi = [
     anonymous: false,
     inputs: [
       {
+        name: 'requiredRecipientType',
+        internalType: 'enum FlowTypes.RecipientType',
+        type: 'uint8',
+        indexed: false,
+      },
+    ],
+    name: 'RequiredRecipientTypeSet',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
         name: '_arbitrator',
         internalType: 'contract IArbitrator',
         type: 'address',
@@ -2260,6 +2296,37 @@ export const flowTcrImplAbi = [
       },
     ],
     name: 'Ruling',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'curveSteepness',
+        internalType: 'int256',
+        type: 'int256',
+        indexed: false,
+      },
+      {
+        name: 'basePrice',
+        internalType: 'int256',
+        type: 'int256',
+        indexed: false,
+      },
+      {
+        name: 'maxPriceIncrease',
+        internalType: 'int256',
+        type: 'int256',
+        indexed: false,
+      },
+      {
+        name: 'supplyOffset',
+        internalType: 'int256',
+        type: 'int256',
+        indexed: false,
+      },
+    ],
+    name: 'TokenEmitterParamsSet',
   },
   {
     type: 'event',
@@ -2348,7 +2415,7 @@ export const flowTcrImplAbi = [
     type: 'function',
     inputs: [{ name: '_item', internalType: 'bytes', type: 'bytes' }],
     name: 'addItem',
-    outputs: [],
+    outputs: [{ name: 'itemID', internalType: 'bytes32', type: 'bytes32' }],
     stateMutability: 'nonpayable',
   },
   {
@@ -2375,6 +2442,13 @@ export const flowTcrImplAbi = [
     inputs: [],
     name: 'arbitratorExtraData',
     outputs: [{ name: '', internalType: 'bytes', type: 'bytes' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'basePrice',
+    outputs: [{ name: '', internalType: 'int256', type: 'int256' }],
     stateMutability: 'view',
   },
   {
@@ -2539,6 +2613,13 @@ export const flowTcrImplAbi = [
   {
     type: 'function',
     inputs: [],
+    name: 'curveSteepness',
+    outputs: [{ name: '', internalType: 'int256', type: 'int256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
     name: 'erc20',
     outputs: [{ name: '', internalType: 'contract IERC20', type: 'address' }],
     stateMutability: 'view',
@@ -2643,6 +2724,26 @@ export const flowTcrImplAbi = [
   {
     type: 'function',
     inputs: [],
+    name: 'getTotalCosts',
+    outputs: [
+      { name: 'addItemCost', internalType: 'uint256', type: 'uint256' },
+      { name: 'removeItemCost', internalType: 'uint256', type: 'uint256' },
+      {
+        name: 'challengeSubmissionCost',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+      {
+        name: 'challengeRemovalCost',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
     name: 'governor',
     outputs: [{ name: '', internalType: 'address', type: 'address' }],
     stateMutability: 'view',
@@ -2721,6 +2822,22 @@ export const flowTcrImplAbi = [
             internalType: 'string',
             type: 'string',
           },
+          {
+            name: 'requiredRecipientType',
+            internalType: 'enum FlowTypes.RecipientType',
+            type: 'uint8',
+          },
+        ],
+      },
+      {
+        name: '_tokenEmitterParams',
+        internalType: 'struct IFlowTCR.TokenEmitterParams',
+        type: 'tuple',
+        components: [
+          { name: 'curveSteepness', internalType: 'int256', type: 'int256' },
+          { name: 'basePrice', internalType: 'int256', type: 'int256' },
+          { name: 'maxPriceIncrease', internalType: 'int256', type: 'int256' },
+          { name: 'supplyOffset', internalType: 'int256', type: 'int256' },
         ],
       },
     ],
@@ -2768,6 +2885,13 @@ export const flowTcrImplAbi = [
     inputs: [],
     name: 'loserStakeMultiplier',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'maxPriceIncrease',
+    outputs: [{ name: '', internalType: 'int256', type: 'int256' }],
     stateMutability: 'view',
   },
   {
@@ -2838,11 +2962,45 @@ export const flowTcrImplAbi = [
   },
   {
     type: 'function',
+    inputs: [],
+    name: 'requiredRecipientType',
+    outputs: [
+      { name: '', internalType: 'enum FlowTypes.RecipientType', type: 'uint8' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     inputs: [
       { name: '_disputeID', internalType: 'uint256', type: 'uint256' },
       { name: '_ruling', internalType: 'uint256', type: 'uint256' },
     ],
     name: 'rule',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: '_requiredRecipientType',
+        internalType: 'enum FlowTypes.RecipientType',
+        type: 'uint8',
+      },
+    ],
+    name: 'setRequiredRecipientType',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_curveSteepness', internalType: 'int256', type: 'int256' },
+      { name: '_basePrice', internalType: 'int256', type: 'int256' },
+      { name: '_maxPriceIncrease', internalType: 'int256', type: 'int256' },
+      { name: '_supplyOffset', internalType: 'int256', type: 'int256' },
+    ],
+    name: 'setTokenEmitterParams',
     outputs: [],
     stateMutability: 'nonpayable',
   },
@@ -2876,6 +3034,13 @@ export const flowTcrImplAbi = [
     name: 'submitEvidence',
     outputs: [],
     stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'supplyOffset',
+    outputs: [{ name: '', internalType: 'int256', type: 'int256' }],
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -2934,14 +3099,14 @@ export const flowTcrImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x91ea409d6edf1046416a6ff82f351e64caf39890)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x4386d8d5b54ca8d72d18960a68232b7478e49d4a)
  */
 export const flowTcrImplAddress = {
-  8453: '0x91eA409D6EDf1046416a6FF82F351e64caF39890',
+  8453: '0x4386d8d5b54Ca8d72D18960A68232b7478E49d4a',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x91ea409d6edf1046416a6ff82f351e64caf39890)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x4386d8d5b54ca8d72d18960a68232b7478e49d4a)
  */
 export const flowTcrImplConfig = {
   address: flowTcrImplAddress,
@@ -2953,7 +3118,7 @@ export const flowTcrImplConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x190957fd5b38f7199669d0e9ebe4e59160933816)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xeb076a2f219ff7171b9412da55fa30665e2dd668)
  */
 export const nounsFlowAbi = [
   {
@@ -3014,14 +3179,14 @@ export const nounsFlowAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x190957fd5b38f7199669d0e9ebe4e59160933816)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xeb076a2f219ff7171b9412da55fa30665e2dd668)
  */
 export const nounsFlowAddress = {
-  8453: '0x190957fd5B38f7199669D0e9EbE4e59160933816',
+  8453: '0xEB076a2f219fF7171b9412da55fa30665e2DD668',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x190957fd5b38f7199669d0e9ebe4e59160933816)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xeb076a2f219ff7171b9412da55fa30665e2dd668)
  */
 export const nounsFlowConfig = {
   address: nounsFlowAddress,
@@ -3033,7 +3198,7 @@ export const nounsFlowConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x0e42f96b06ff8361cdf212ae6b760c78335945cb)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xe890ec37ce69bd8a4529e8a0b3f294d2a154df91)
  */
 export const nounsFlowImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'payable' },
@@ -3527,6 +3692,7 @@ export const nounsFlowImplAbi = [
   {
     type: 'function',
     inputs: [
+      { name: '_recipientId', internalType: 'bytes32', type: 'bytes32' },
       {
         name: '_metadata',
         internalType: 'struct FlowTypes.RecipientMetadata',
@@ -3552,9 +3718,10 @@ export const nounsFlowImplAbi = [
   {
     type: 'function',
     inputs: [
-      { name: 'recipient', internalType: 'address', type: 'address' },
+      { name: '_recipientId', internalType: 'bytes32', type: 'bytes32' },
+      { name: '_recipient', internalType: 'address', type: 'address' },
       {
-        name: 'metadata',
+        name: '_metadata',
         internalType: 'struct FlowTypes.RecipientMetadata',
         type: 'tuple',
         components: [
@@ -4104,14 +4271,14 @@ export const nounsFlowImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x0e42f96b06ff8361cdf212ae6b760c78335945cb)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xe890ec37ce69bd8a4529e8a0b3f294d2a154df91)
  */
 export const nounsFlowImplAddress = {
-  8453: '0x0e42f96B06Ff8361cdF212Ae6B760c78335945Cb',
+  8453: '0xE890ec37cE69bD8a4529e8A0b3F294d2A154df91',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x0e42f96b06ff8361cdf212ae6b760c78335945cb)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xe890ec37ce69bd8a4529e8a0b3f294d2a154df91)
  */
 export const nounsFlowImplConfig = {
   address: nounsFlowImplAddress,
@@ -4827,7 +4994,7 @@ export const nounsTokenConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xf5e8858f14ab3f2d498eb809fa100e4652d48696)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x77f1c6d1654cf369a048fe24f1bdcfb762d727df)
  */
 export const tcrFactoryAbi = [
   {
@@ -4888,14 +5055,14 @@ export const tcrFactoryAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xf5e8858f14ab3f2d498eb809fa100e4652d48696)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x77f1c6d1654cf369a048fe24f1bdcfb762d727df)
  */
 export const tcrFactoryAddress = {
-  8453: '0xf5e8858F14aB3f2D498eB809FA100E4652D48696',
+  8453: '0x77F1c6d1654cf369A048Fe24F1bDcFb762D727df',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xf5e8858f14ab3f2d498eb809fa100e4652d48696)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x77f1c6d1654cf369a048fe24f1bdcfb762d727df)
  */
 export const tcrFactoryConfig = {
   address: tcrFactoryAddress,
@@ -4907,7 +5074,7 @@ export const tcrFactoryConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x503ed7d45ab41815a95fabd0c1bc57fa18b313b5)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x943416da279c8b8ec6a69bfd5f0833fcb151298f)
  */
 export const tcrFactoryImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
@@ -5009,6 +5176,24 @@ export const tcrFactoryImplAbi = [
         type: 'address',
         indexed: false,
       },
+      {
+        name: 'rewardPoolProxy',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+      {
+        name: 'tokenEmitterProxy',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+      {
+        name: 'flowProxy',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
     ],
     name: 'FlowTCRDeployed',
   },
@@ -5101,6 +5286,25 @@ export const tcrFactoryImplAbi = [
     anonymous: false,
     inputs: [
       {
+        name: 'oldImplementation',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+      {
+        name: 'newImplementation',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+    ],
+    name: 'TokenEmitterImplementationUpdated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
         name: 'implementation',
         internalType: 'address',
         type: 'address',
@@ -5108,6 +5312,13 @@ export const tcrFactoryImplAbi = [
       },
     ],
     name: 'Upgraded',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'WETH',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -5178,6 +5389,11 @@ export const tcrFactoryImplAbi = [
             internalType: 'uint256[3]',
             type: 'uint256[3]',
           },
+          {
+            name: 'requiredRecipientType',
+            internalType: 'enum FlowTypes.RecipientType',
+            type: 'uint8',
+          },
         ],
       },
       {
@@ -5199,7 +5415,6 @@ export const tcrFactoryImplAbi = [
         type: 'tuple',
         components: [
           { name: 'initialOwner', internalType: 'address', type: 'address' },
-          { name: 'minter', internalType: 'address', type: 'address' },
           { name: 'name', internalType: 'string', type: 'string' },
           { name: 'symbol', internalType: 'string', type: 'string' },
         ],
@@ -5214,6 +5429,18 @@ export const tcrFactoryImplAbi = [
             internalType: 'contract ISuperToken',
             type: 'address',
           },
+        ],
+      },
+      {
+        name: 'tokenEmitterParams',
+        internalType: 'struct ITCRFactory.TokenEmitterParams',
+        type: 'tuple',
+        components: [
+          { name: 'initialOwner', internalType: 'address', type: 'address' },
+          { name: 'curveSteepness', internalType: 'int256', type: 'int256' },
+          { name: 'basePrice', internalType: 'int256', type: 'int256' },
+          { name: 'maxPriceIncrease', internalType: 'int256', type: 'int256' },
+          { name: 'supplyOffset', internalType: 'int256', type: 'int256' },
         ],
       },
     ],
@@ -5233,6 +5460,11 @@ export const tcrFactoryImplAbi = [
           { name: 'erc20Address', internalType: 'address', type: 'address' },
           {
             name: 'rewardPoolAddress',
+            internalType: 'address',
+            type: 'address',
+          },
+          {
+            name: 'tokenEmitterAddress',
             internalType: 'address',
             type: 'address',
           },
@@ -5279,6 +5511,12 @@ export const tcrFactoryImplAbi = [
         internalType: 'address',
         type: 'address',
       },
+      {
+        name: 'tokenEmitterImplementation_',
+        internalType: 'address',
+        type: 'address',
+      },
+      { name: 'weth_', internalType: 'address', type: 'address' },
     ],
     name: 'initialize',
     outputs: [],
@@ -5316,6 +5554,13 @@ export const tcrFactoryImplAbi = [
     type: 'function',
     inputs: [],
     name: 'rewardPoolImplementation',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'tokenEmitterImplementation',
     outputs: [{ name: '', internalType: 'address', type: 'address' }],
     stateMutability: 'view',
   },
@@ -5367,6 +5612,15 @@ export const tcrFactoryImplAbi = [
     inputs: [
       { name: 'newImplementation', internalType: 'address', type: 'address' },
     ],
+    name: 'updateTokenEmitterImplementation',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'newImplementation', internalType: 'address', type: 'address' },
+    ],
     name: 'upgradeTo',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -5384,16 +5638,493 @@ export const tcrFactoryImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x503ed7d45ab41815a95fabd0c1bc57fa18b313b5)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x943416da279c8b8ec6a69bfd5f0833fcb151298f)
  */
 export const tcrFactoryImplAddress = {
-  8453: '0x503ed7d45aB41815A95FaBD0C1Bc57fA18b313b5',
+  8453: '0x943416da279C8B8ec6a69bfD5f0833fcb151298f',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x503ed7d45ab41815a95fabd0c1bc57fa18b313b5)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x943416da279c8b8ec6a69bfd5f0833fcb151298f)
  */
 export const tcrFactoryImplConfig = {
   address: tcrFactoryImplAddress,
   abi: tcrFactoryImplAbi,
+} as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// tokenEmitter
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x823ce249aa8c72feb599ec2e45319ca4f77c7ae3)
+ */
+export const tokenEmitterAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      { name: '_logic', internalType: 'address', type: 'address' },
+      { name: '_data', internalType: 'bytes', type: 'bytes' },
+    ],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'previousAdmin',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+      {
+        name: 'newAdmin',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+    ],
+    name: 'AdminChanged',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'beacon',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'BeaconUpgraded',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'implementation',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'Upgraded',
+  },
+  { type: 'fallback', stateMutability: 'payable' },
+  { type: 'receive', stateMutability: 'payable' },
+] as const
+
+/**
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x823ce249aa8c72feb599ec2e45319ca4f77c7ae3)
+ */
+export const tokenEmitterAddress = {
+  8453: '0x823cE249AA8c72FEB599EC2e45319ca4f77c7Ae3',
+} as const
+
+/**
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x823ce249aa8c72feb599ec2e45319ca4f77c7ae3)
+ */
+export const tokenEmitterConfig = {
+  address: tokenEmitterAddress,
+  abi: tokenEmitterAbi,
+} as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// tokenEmitterImpl
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x42040855936df853b8c434a61219e80e8980efbe)
+ */
+export const tokenEmitterImplAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      { name: '_protocolRewards', internalType: 'address', type: 'address' },
+      {
+        name: '_protocolFeeRecipient',
+        internalType: 'address',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'payable',
+  },
+  { type: 'error', inputs: [], name: 'ADDRESS_ZERO' },
+  { type: 'error', inputs: [], name: 'INSUFFICIENT_CONTRACT_BALANCE' },
+  { type: 'error', inputs: [], name: 'INSUFFICIENT_FUNDS' },
+  { type: 'error', inputs: [], name: 'INSUFFICIENT_TOKEN_BALANCE' },
+  { type: 'error', inputs: [], name: 'INVALID_ADDRESS_ZERO' },
+  { type: 'error', inputs: [], name: 'INVALID_AMOUNT' },
+  { type: 'error', inputs: [], name: 'INVALID_COST' },
+  { type: 'error', inputs: [], name: 'INVALID_CURVE_STEEPNESS' },
+  { type: 'error', inputs: [], name: 'INVALID_PAYMENT' },
+  { type: 'error', inputs: [], name: 'INVALID_SOLD_AMOUNT' },
+  { type: 'error', inputs: [], name: 'SLIPPAGE_EXCEEDED' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'previousAdmin',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+      {
+        name: 'newAdmin',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+    ],
+    name: 'AdminChanged',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'beacon',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'BeaconUpgraded',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'version', internalType: 'uint8', type: 'uint8', indexed: false },
+    ],
+    name: 'Initialized',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'previousOwner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'newOwner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'OwnershipTransferred',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'buyer',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      { name: 'user', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'cost',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'protocolRewards',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'TokensBought',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'seller',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'payment',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'TokensSold',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'implementation',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'Upgraded',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'WETH',
+    outputs: [{ name: '', internalType: 'contract IWETH', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_initialOwner', internalType: 'address', type: 'address' },
+      { name: '_curveSteepness', internalType: 'int256', type: 'int256' },
+      { name: '_basePrice', internalType: 'int256', type: 'int256' },
+      { name: '_maxPriceIncrease', internalType: 'int256', type: 'int256' },
+      { name: '_supplyOffset', internalType: 'int256', type: 'int256' },
+    ],
+    name: '__BondingSCurve_init',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'basePrice',
+    outputs: [{ name: '', internalType: 'int256', type: 'int256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'user', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'maxCost', internalType: 'uint256', type: 'uint256' },
+      {
+        name: 'protocolRewardsRecipients',
+        internalType: 'struct ITokenEmitter.ProtocolRewardAddresses',
+        type: 'tuple',
+        components: [
+          { name: 'builder', internalType: 'address', type: 'address' },
+          {
+            name: 'purchaseReferral',
+            internalType: 'address',
+            type: 'address',
+          },
+        ],
+      },
+    ],
+    name: 'buyToken',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'amount', internalType: 'uint256', type: 'uint256' }],
+    name: 'buyTokenQuote',
+    outputs: [{ name: 'cost', internalType: 'int256', type: 'int256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'amount', internalType: 'uint256', type: 'uint256' }],
+    name: 'buyTokenQuoteWithRewards',
+    outputs: [{ name: 'cost', internalType: 'int256', type: 'int256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'paymentAmountWei', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'computePurchaseRewards',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct IRewardSplits.RewardsSettings',
+        type: 'tuple',
+        components: [
+          {
+            name: 'builderReferralReward',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'purchaseReferralReward',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'revolutionReward',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+        ],
+      },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+    ],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'paymentAmountWei', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'computeTotalReward',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'curveSteepness',
+    outputs: [{ name: '', internalType: 'int256', type: 'int256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'erc20',
+    outputs: [
+      {
+        name: '',
+        internalType: 'contract ERC20VotesMintable',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_initialOwner', internalType: 'address', type: 'address' },
+      { name: '_erc20', internalType: 'address', type: 'address' },
+      { name: '_weth', internalType: 'address', type: 'address' },
+      { name: '_curveSteepness', internalType: 'int256', type: 'int256' },
+      { name: '_basePrice', internalType: 'int256', type: 'int256' },
+      { name: '_maxPriceIncrease', internalType: 'int256', type: 'int256' },
+      { name: '_supplyOffset', internalType: 'int256', type: 'int256' },
+    ],
+    name: 'initialize',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'maxPriceIncrease',
+    outputs: [{ name: '', internalType: 'int256', type: 'int256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'owner',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'proxiableUUID',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'minPayment', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'sellToken',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'amount', internalType: 'uint256', type: 'uint256' }],
+    name: 'sellTokenQuote',
+    outputs: [{ name: 'payment', internalType: 'int256', type: 'int256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'supplyOffset',
+    outputs: [{ name: '', internalType: 'int256', type: 'int256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
+    name: 'transferOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'newImplementation', internalType: 'address', type: 'address' },
+    ],
+    name: 'upgradeTo',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'newImplementation', internalType: 'address', type: 'address' },
+      { name: 'data', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'upgradeToAndCall',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+] as const
+
+/**
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x42040855936df853b8c434a61219e80e8980efbe)
+ */
+export const tokenEmitterImplAddress = {
+  8453: '0x42040855936Df853B8C434a61219E80E8980EfbE',
+} as const
+
+/**
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x42040855936df853b8c434a61219e80e8980efbe)
+ */
+export const tokenEmitterImplConfig = {
+  address: tokenEmitterImplAddress,
+  abi: tokenEmitterImplAbi,
 } as const

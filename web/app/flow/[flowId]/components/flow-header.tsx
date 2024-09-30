@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card"
+import { Currency } from "@/components/ui/currency"
 import {
   Dialog,
   DialogContent,
@@ -11,11 +12,10 @@ import {
 } from "@/components/ui/dialog"
 import { Markdown } from "@/components/ui/markdown"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { FlowWithGrants } from "@/lib/database/queries/flow"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import { FlowHeaderUserVotes } from "./flow-header-user-votes"
-import { FlowWithGrants } from "./get-flow-with-grants"
-import { Currency } from "@/components/ui/currency"
 
 interface Props {
   flow: FlowWithGrants
@@ -96,7 +96,7 @@ export const FlowHeader = (props: Props) => {
             <p className="font-medium">{flow.votesCount} </p>
           </div>
 
-          <FlowHeaderUserVotes parent={getEthAddress(flow.parent)} recipientId={flow.recipientId} />
+          <FlowHeaderUserVotes parent={getEthAddress(flow.parentContract)} recipientId={flow.id} />
         </div>
       </CardContent>
     </Card>

@@ -15,19 +15,25 @@ export default async function ApplyFlowPage(props: Props) {
   const { flowId } = props.params
 
   const flow = await database.grant.findFirstOrThrow({
-    where: { id: flowId, isFlow: 1, isRemoved: 0 },
+    where: { id: flowId, isFlow: 1, isActive: 1 },
   })
+
+  const { isTopLevel } = flow
 
   return (
     <main className="container mt-8 pb-12">
-      <h3 className="font-semibold leading-none tracking-tight">Apply for a Grant</h3>
+      <h3 className="font-semibold leading-none tracking-tight">
+        {isTopLevel ? "Suggest new Category" : "Apply for a Grant"}
+      </h3>
       <p className="mt-1.5 text-balance text-sm text-muted-foreground">
-        Outline your project and its potential impact.
+        {isTopLevel
+          ? "Suggest a new category for the grants."
+          : "Outline your project and its potential impact."}
       </p>
       <div className="mt-6 grid grid-cols-1 gap-12 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardContent>
-            <ApplyForm flowId={flowId} />
+            <ApplyForm flowId={flowId} isFlow={isTopLevel === 1} />
           </CardContent>
         </Card>
         <div className="lg:pr-8">

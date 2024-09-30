@@ -10,9 +10,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { NOUNS_FLOW } from "@/lib/config"
 import database from "@/lib/database"
-import { getIpfsUrl } from "@/lib/utils"
+import { getPool } from "@/lib/database/queries/pool"
+import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import { VotingProvider } from "@/lib/voting/voting-context"
 import Image from "next/image"
 import Link from "next/link"
@@ -22,22 +22,22 @@ import { VotingInput } from "./flow/[flowId]/components/voting-input"
 import { VotingToggle } from "./flow/[flowId]/components/voting-toggle"
 
 export default async function Home() {
+  const pool = await getPool()
+
   const flows = await database.grant.findMany({
-    where: { isFlow: 1, isRemoved: 0, parent: NOUNS_FLOW },
+    where: { isFlow: 1, isActive: 1, isTopLevel: 0 },
     include: {
-      _count: { select: { subgrants: { where: { isFlow: 0, isRemoved: 0 } } } },
+      _count: { select: { subgrants: { where: { isActive: 1 } } } },
     },
   })
 
   return (
-    <VotingProvider chainId={base.id} contract={NOUNS_FLOW}>
+    <VotingProvider chainId={base.id} contract={getEthAddress(pool.recipient)}>
       <main className="container mt-2.5 pb-24 md:mt-8">
         <div className="flex flex-col max-sm:space-y-2.5 md:flex-row md:items-center md:justify-between">
           <div>
-            <h3 className="font-semibold leading-none tracking-tight">Welcome to Nouns Flows</h3>
-            <p className="mt-1.5 text-sm text-muted-foreground">
-              Here are some flows to explore. Better copy coming soon.
-            </p>
+            <h3 className="font-semibold leading-none tracking-tight">{pool.title}</h3>
+            <p className="mt-1.5 text-sm text-muted-foreground">{pool.tagline}</p>
           </div>
           <VotingToggle />
         </div>
@@ -110,7 +110,7 @@ export default async function Home() {
                     </TableCell>
                     <TableCell className="text-center">{flow.votesCount}</TableCell>
                     <TableCell className="w-[100px] max-w-[100px] text-center">
-                      <VotingInput recipientId={flow.recipientId} />
+                      <VotingInput recipientId={flow.id} />
                     </TableCell>
                   </TableRow>
                 ))}

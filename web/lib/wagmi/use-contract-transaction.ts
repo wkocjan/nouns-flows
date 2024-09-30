@@ -3,6 +3,8 @@
 import { useModal } from "connectkit"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
+import { Chain } from "viem"
+import { base } from "viem/chains"
 import {
   useAccount,
   useSwitchChain,
@@ -12,11 +14,18 @@ import {
 } from "wagmi"
 import { explorerUrl } from "../utils"
 
-export const useContractTransaction = (args: {
-  chainId: number
+export const useContractTransaction = (args?: {
+  chainId?: Chain["id"]
   onSuccess?: (hash: string) => void
+  loading?: string
+  success?: string
 }) => {
-  const { chainId, onSuccess } = args
+  const {
+    chainId = base.id,
+    loading = "Transaction in progress...",
+    success,
+    onSuccess,
+  } = args || {}
   const [toastId, setToastId] = useState<number | string>()
   const [callbackHandled, setCallbackHandled] = useState(false)
   const { data: hash, isPending, error, ...writeContractRest } = useWriteContract()
@@ -30,7 +39,7 @@ export const useContractTransaction = (args: {
     if (callbackHandled || !toastId) return
 
     if (isLoading && hash) {
-      toast.loading("Transaction in progress...", {
+      toast.loading(loading, {
         action: {
           label: "View",
           onClick: () => window.open(explorerUrl(hash, chainId)),
@@ -52,7 +61,7 @@ export const useContractTransaction = (args: {
     }
 
     if (isSuccess && hash) {
-      toast.success("Transaction confirmed", { id: toastId, duration: 10000 })
+      toast.success(success || "Transaction confirmed", { id: toastId, duration: 3000 })
       onSuccess?.(hash)
       setCallbackHandled(true)
       return
@@ -81,9 +90,10 @@ export const useContractTransaction = (args: {
         }
       }
 
-      const newToastId = toast.loading("Confirm in your wallet...", { id: toastId })
+      const newToastId = toast.loading(loading, { id: toastId })
       setToastId(newToastId)
     },
+    toastId,
     ...writeContractRest,
   }
 }
