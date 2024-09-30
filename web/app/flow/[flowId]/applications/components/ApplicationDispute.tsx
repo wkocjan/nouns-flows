@@ -82,11 +82,14 @@ export function ApplicationDispute(props: Props) {
               <div className="text-center text-sm">You have successfully committed your vote</div>
             </TooltipTrigger>
             <TooltipContent>
-              For your convenience, we store unhashed votes encrypted in a database.
-              <br />
-              Your vote will be revealed automatically at the end of the voting period.
-              <br />
-              You can opt out of custodial voting soon.
+              <div className="max-w-sm">
+                <p>TCRs use commit-reveal voting. You have committed your vote onchain.</p>
+                <p>
+                  For your convenience, we store your vote encrypted in a database. Your vote will
+                  be revealed automatically at the end of the voting period.
+                </p>
+                <p>You can opt out of custodial voting soon.</p>
+              </div>
             </TooltipContent>
           </Tooltip>
         )}

@@ -22,6 +22,7 @@ export function useTcrData(contract: Address, chainId = base.id) {
     removeItemCost: totalCosts?.result?.[1] || BigInt(0),
     challengeSubmissionCost: totalCosts?.result?.[2] || BigInt(0),
     challengeRemovalCost: totalCosts?.result?.[3] || BigInt(0),
+    arbitrationCost: totalCosts?.result?.[4] || BigInt(0),
     challengePeriod: Number(challengePeriod?.result),
     challengePeriodFormatted: challengePeriod?.result
       ? challengePeriod.result >= 86400

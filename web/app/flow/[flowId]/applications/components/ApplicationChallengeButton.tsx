@@ -38,7 +38,9 @@ export function ApplicationChallengeButton(props: Props) {
   })
   const ref = useRef<HTMLButtonElement>(null)
 
-  const { challengeSubmissionCost, addItemCost } = useTcrData(getEthAddress(flow.tcr))
+  const { challengeSubmissionCost, addItemCost, arbitrationCost } = useTcrData(
+    getEthAddress(flow.tcr),
+  )
   const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr))
 
   const hasEnoughBalance = token.balance >= challengeSubmissionCost
@@ -82,9 +84,10 @@ export function ApplicationChallengeButton(props: Props) {
             </span>
             <div>
               <p>
-                You may lose your payment if your challenge is rejected by {token.name} voters. If
-                your challenge is successful, you are paid the applicant&apos;s bond of{" "}
-                {formatEther(addItemCost)} {token.symbol}.
+                You lose your payment if your challenge is rejected by {token.name} voters. If the
+                challenge is successful, you are paid the applicant&apos;s bond of{" "}
+                {formatEther(addItemCost - arbitrationCost)} {token.symbol} and are repaid your
+                challenge fee.
               </p>
               <p className="mt-2.5 text-sm text-muted-foreground">
                 Your {token.symbol} balance: {formatEther(token.balance)}

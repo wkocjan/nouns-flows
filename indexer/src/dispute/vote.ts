@@ -1,5 +1,4 @@
 import { ponder, type Context, type Event } from "@/generated"
-import { decodeAbiParameters } from "viem"
 
 ponder.on("Arbitrator:VoteCommitted", handleVoteCommitted)
 ponder.on("ArbitratorChildren:VoteCommitted", handleVoteCommitted)
@@ -42,8 +41,8 @@ async function handleVoteRevealed(params: {
     where: { disputeId: disputeId.toString(), arbitrator, voter, secretHash },
     data: {
       choice: Number(choice),
-      votes: Number(votes),
-      reason: reason ? decodeAbiParameters([{ type: "bytes" }], reason)[0] : undefined,
+      votes: votes.toString(),
+      reason: reason,
     },
   })
 }

@@ -92,7 +92,7 @@ export default createSchema((p) => ({
       voter: p.string(),
 
       choice: p.int().optional(),
-      votes: p.int().optional(),
+      votes: p.string().optional(),
       reason: p.string().optional(),
     },
     {
