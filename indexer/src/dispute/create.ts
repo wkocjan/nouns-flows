@@ -40,6 +40,8 @@ async function handleDisputeCreated(params: {
       appealPeriodEndTime: Number(appealPeriodEndTime),
       totalSupply: totalSupply.toString(),
       votes: "0",
+      requesterPartyVotes: "0",
+      challengerPartyVotes: "0",
       creationBlock: Number(creationBlock),
       ruling: Party.None,
       isExecuted: false,

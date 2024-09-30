@@ -1,4 +1,5 @@
 import { ponder, type Context, type Event } from "@/generated"
+import { Party } from "../enums"
 
 ponder.on("Arbitrator:VoteCommitted", handleVoteCommitted)
 ponder.on("ArbitratorChildren:VoteCommitted", handleVoteCommitted)
@@ -50,10 +51,13 @@ async function handleVoteRevealed(params: {
     },
   })
 
+  const partyVotes = choice === BigInt(Party.Requester) ? "requesterPartyVotes" : "challengerPartyVotes"
+
   await context.db.Dispute.updateMany({
     where: { disputeId: disputeId.toString(), arbitrator },
     data: {
       votes: (BigInt(dispute.votes) + votes).toString(),
+      [partyVotes]: (BigInt(dispute[partyVotes]) + votes).toString(),
     },
   })
 }
