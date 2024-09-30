@@ -105,8 +105,9 @@ view Dispute {
   votingEndTime       Int
   revealPeriodEndTime Int
   appealPeriodEndTime Int
-  votes               Int
+  votes               String
   ruling              Int
+  creationBlock       Int
   totalSupply         String
   isExecuted          Int
 
@@ -120,7 +121,7 @@ view DisputeVote {
   secretHash String
   voter      String
   choice     Int?
-  votes      Int?
+  votes      String?
   reason     String?
 
   @@schema("public")

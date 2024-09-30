@@ -37,12 +37,23 @@ async function handleVoteRevealed(params: {
   const arbitrator = event.log.address.toLowerCase()
   const voter = event.transaction.from.toLowerCase()
 
+  const { items } = await context.db.Dispute.findMany({ where: { disputeId: disputeId.toString(), arbitrator } })
+  const dispute = items?.[0]
+  if (!dispute) throw new Error("Dispute not found")
+
   await context.db.DisputeVote.updateMany({
     where: { disputeId: disputeId.toString(), arbitrator, voter, secretHash },
     data: {
       choice: Number(choice),
       votes: votes.toString(),
       reason: reason,
+    },
+  })
+
+  await context.db.Dispute.updateMany({
+    where: { disputeId: disputeId.toString(), arbitrator },
+    data: {
+      votes: (BigInt(dispute.votes) + votes).toString(),
     },
   })
 }

@@ -31,8 +31,8 @@ export function DisputeDetails(props: Props) {
         <p className="text-base">{dispute.ruling}</p>
       </div>
       <div>
-        <h3 className="mb-1 text-sm text-muted-foreground">Total Votes</h3>
-        <p className="text-base">{dispute.votes}</p>
+        <h3 className="mb-1 text-sm text-muted-foreground">Total Revealed Votes</h3>
+        <p className="text-base">{Number(dispute.votes) / 1e18}</p>
       </div>
     </div>
   )
