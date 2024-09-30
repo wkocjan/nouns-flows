@@ -1,5 +1,4 @@
 import { ponder } from "@/generated"
-import { Status } from "../enums"
 import { getClaimableBalance } from "./lib/claimable-balance"
 import { getMonthlyFlowRate } from "./lib/monthly-flow"
 import { getTotalEarned } from "./lib/total-earned"
@@ -10,7 +9,7 @@ ponder.on("Balance:block", async (params) => {
   const { items } = await context.db.Grant.findMany({
     limit: 15,
     orderBy: { updatedAt: "asc" },
-    where: { isRemoved: false, status: Status.Registered },
+    where: { isActive: true },
   })
 
   for (const grant of items) {

@@ -33,8 +33,7 @@ export default async function GrantPage({ params }: Props) {
     include: { flow: true },
   })
 
-  const { title, tagline, description, flow, image, recipientId, votesCount, parentContract } =
-    grant
+  const { title, tagline, description, flow, image, votesCount, parentContract } = grant
 
   return (
     <div className="container mt-2.5 pb-24 md:mt-6">
@@ -122,10 +121,7 @@ export default async function GrantPage({ params }: Props) {
                 <div>
                   <h4 className="text-[13px] text-muted-foreground">Your Vote</h4>
                   <p className="mt-1 text-lg font-medium">
-                    <UserVotes
-                      recipientId={grant.recipientId}
-                      contract={getEthAddress(parentContract)}
-                    />
+                    <UserVotes recipientId={grant.id} contract={getEthAddress(parentContract)} />
                   </p>
                 </div>
                 <ClaimableBalance
@@ -136,7 +132,7 @@ export default async function GrantPage({ params }: Props) {
             </CardContent>
           </Card>
           {Number(votesCount) > 0 && (
-            <Voters contract={getEthAddress(parentContract)} recipientId={recipientId} />
+            <Voters contract={getEthAddress(parentContract)} recipientId={grant.id} />
           )}
         </div>
       </div>

@@ -29,7 +29,7 @@ async function handleDisputeCreated(params: {
     id: `${id}_${arbitrator}`,
     data: {
       disputeId: id.toString(),
-      itemId: "", // unknown now, to be updated later in the Dispute event
+      grantId: "", // unknown now, to be updated later in the Dispute event (code below)
       arbitrator,
       challenger,
       arbitrable: arbitrable.toString().toLowerCase(),
@@ -50,15 +50,18 @@ async function handleDispute(params: {
   context: Context<"NounsFlowTcr:Dispute">
 }) {
   const { event, context } = params
-  const { _arbitrator, _disputeID } = event.args
+  const { _arbitrator, _disputeID, _itemID } = event.args
 
   const disputeId = _disputeID.toString()
   const arbitrator = _arbitrator.toString().toLowerCase()
 
+  await context.db.Grant.update({
+    id: _itemID.toString(),
+    data: { isDisputed: true },
+  })
+
   await context.db.Dispute.updateMany({
     where: { disputeId, arbitrator },
-    data: {
-      itemId: "TODO", // ToDo: It should come from event.args once contract is updated
-    },
+    data: { grantId: _itemID.toString() },
   })
 }

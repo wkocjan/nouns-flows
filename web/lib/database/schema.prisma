@@ -36,7 +36,6 @@ model Draft {
 view Grant {
   id                    String  @id
   recipient             String
-  recipientId           String
   flowId                String
   submitter             String
   parentContract        String
@@ -60,6 +59,7 @@ view Grant {
   status                Int
   challengePeriodEndsAt Int
   isDisputed            Int
+  isResolved            Int
   evidenceGroupID       String
   createdAt             Int
   updatedAt             Int
@@ -99,7 +99,7 @@ view Dispute {
   disputeId           String
   arbitrator          String
   arbitrable          String
-  itemId              String
+  grantId             String
   challenger          String
   votingStartTime     Int
   votingEndTime       Int

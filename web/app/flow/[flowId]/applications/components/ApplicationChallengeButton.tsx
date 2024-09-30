@@ -15,6 +15,7 @@ import { useTcrToken } from "@/lib/tcr/use-tcr-token"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { Grant } from "@prisma/client"
+import { useRouter } from "next/navigation"
 import { useRef } from "react"
 import { toast } from "sonner"
 import { Address } from "viem"
@@ -27,9 +28,12 @@ interface Props {
 
 export function ApplicationChallengeButton(props: Props) {
   const { grant, flow } = props
+  const router = useRouter()
+
   const { writeContract, prepareWallet, isLoading, toastId } = useContractTransaction({
     onSuccess: async () => {
       ref.current?.click() // close dialog
+      router.refresh()
     },
   })
   const ref = useRef<HTMLButtonElement>(null)

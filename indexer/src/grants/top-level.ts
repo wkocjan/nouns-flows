@@ -27,7 +27,6 @@ ponder.on("NounsFlow:Initialized", async (params) => {
     data: {
       ...metadata,
       recipient: contract,
-      recipientId: "",
       isTopLevel: true,
       isFlow: true,
       isRemoved: false,
@@ -47,6 +46,7 @@ ponder.on("NounsFlow:Initialized", async (params) => {
       updatedAt: currentTime,
       createdAt: currentTime,
       isDisputed: false,
+      isResolved: false,
       evidenceGroupID: "",
       isActive: true,
     },

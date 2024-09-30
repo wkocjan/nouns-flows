@@ -12,10 +12,10 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { UserProfile } from "@/components/user-profile/user-profile"
+import { getFlowWithGrants } from "@/lib/database/queries/flow"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
-import { getFlowWithGrants } from "@/lib/database/queries/flow"
 import { VotingBar } from "./components/voting-bar"
 import { VotingInput } from "./components/voting-input"
 
@@ -107,7 +107,7 @@ export default async function FlowPage(props: Props) {
               <TableCell className="text-center">{grant.votesCount}</TableCell>
 
               <TableCell className="w-[100px] max-w-[100px] text-center">
-                <VotingInput recipientId={grant.recipientId} />
+                <VotingInput recipientId={grant.id} />
               </TableCell>
             </TableRow>
           ))}

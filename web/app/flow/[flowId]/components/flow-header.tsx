@@ -96,10 +96,7 @@ export const FlowHeader = (props: Props) => {
             <p className="font-medium">{flow.votesCount} </p>
           </div>
 
-          <FlowHeaderUserVotes
-            parent={getEthAddress(flow.parentContract)}
-            recipientId={flow.recipientId}
-          />
+          <FlowHeaderUserVotes parent={getEthAddress(flow.parentContract)} recipientId={flow.id} />
         </div>
       </CardContent>
     </Card>

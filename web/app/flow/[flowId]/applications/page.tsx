@@ -2,6 +2,7 @@ import "server-only"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DateTime } from "@/components/ui/date-time"
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import {
   Table,
   TableBody,
@@ -18,6 +19,7 @@ import { Status } from "@/lib/enums"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import { ApplicationChallengeButton } from "./components/ApplicationChallengeButton"
+import { ApplicationDispute } from "./components/ApplicationDispute"
 import { ApplicationExecuteButton } from "./components/ApplicationExecuteButton"
 
 interface Props {
@@ -42,7 +44,7 @@ export default async function FlowApplicationsPage(props: Props) {
           <TableHead colSpan={2}>Name</TableHead>
           <TableHead>Builders</TableHead>
           <TableHead>Type</TableHead>
-          <TableHead className="text-center">Challenge Period End</TableHead>
+          <TableHead>Status</TableHead>
           <TableHead className="text-right">Action</TableHead>
         </TableRow>
       </TableHeader>
@@ -78,14 +80,47 @@ export default async function FlowApplicationsPage(props: Props) {
 
             <TableCell>{grant.isFlow ? "Category" : "Grant"}</TableCell>
 
-            <TableCell className="text-center">
-              <DateTime date={new Date(grant.challengePeriodEndsAt * 1000)} relative />
+            <TableCell>
+              {!grant.isDisputed && canBeExecuted(grant) && (
+                <div className="flex flex-col">
+                  <strong className="font-medium text-green-600">Approved</strong>
+                  <span className="text-xs text-muted-foreground">Can be executed</span>
+                </div>
+              )}
+              {!grant.isDisputed && canBeChallenged(grant) && (
+                <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <div className="flex flex-col">
+                      <strong className="font-medium">Awaiting</strong>
+
+                      <span className="text-xs text-muted-foreground">
+                        Ends{" "}
+                        <DateTime date={new Date(grant.challengePeriodEndsAt * 1000)} relative />
+                      </span>
+                    </div>
+                  </HoverCardTrigger>
+                  <HoverCardContent className="w-80">
+                    <p>
+                      During this time, anyone can challenge the application. If no one challenges
+                      it by the end, the application is approved.
+                    </p>
+                  </HoverCardContent>
+                </HoverCard>
+              )}
+
+              {grant.isDisputed === 1 && (
+                <div className="flex flex-col">
+                  <strong className="font-medium text-yellow-600">Challenged</strong>
+                  <span className="text-xs text-muted-foreground">Vote in progress</span>
+                </div>
+              )}
             </TableCell>
 
             <TableCell className="w-[100px] max-w-[100px]">
               <div className="flex justify-end">
                 {canBeExecuted(grant) && <ApplicationExecuteButton grant={grant} flow={flow} />}
                 {canBeChallenged(grant) && <ApplicationChallengeButton grant={grant} flow={flow} />}
+                {grant.isDisputed === 1 && <ApplicationDispute grant={grant} flow={flow} />}
               </div>
             </TableCell>
           </TableRow>

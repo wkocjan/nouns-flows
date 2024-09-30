@@ -8,10 +8,10 @@ async function handleItemStatusChange(params: {
   context: Context<"NounsFlowTcr:ItemStatusChange">
 }) {
   const { event, context } = params
-  const { _itemID, _itemStatus, _disputed } = event.args
+  const { _itemID, _itemStatus, _disputed, _resolved } = event.args
 
   await context.db.Grant.update({
     id: _itemID,
-    data: { status: _itemStatus, isDisputed: _disputed },
+    data: { status: _itemStatus, isDisputed: _disputed, isResolved: _resolved },
   })
 }

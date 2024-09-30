@@ -16,8 +16,9 @@ async function handleVoteCast(params: {
   const contract = event.log.address.toLowerCase() as `0x${string}`
   const votesCount = bps / (totalWeight / BigInt(1e18))
 
-  const affectedRecipientIds = new Set([recipientId.toString()])
+  const affectedGrantsIds = new Set([recipientId.toString()])
 
+  // Mark old votes for this token as stale
   ;(
     await context.db.Vote.updateMany({
       where: {
@@ -28,8 +29,9 @@ async function handleVoteCast(params: {
       },
       data: { isStale: true },
     })
-  ).forEach((r) => affectedRecipientIds.add(r.recipientId))
+  ).forEach((r) => affectedGrantsIds.add(r.id))
 
+  // Create the new vote
   await context.db.Vote.create({
     id: `${contract}_${recipientId}_${voter}_${blockNumber}_${tokenId}`,
     data: {
@@ -44,41 +46,24 @@ async function handleVoteCast(params: {
     },
   })
 
-  for (const affectedRecipientId of affectedRecipientIds) {
+  for (const affectedGrantId of affectedGrantsIds) {
     const [votesCount, monthlyFlowRate] = await Promise.all([
-      getGrantVotesCount(context, contract, affectedRecipientId),
-      getGrantBudget(context as Context, contract, affectedRecipientId),
+      getGrantVotesCount(context, affectedGrantId),
+      getGrantBudget(context as Context, contract, affectedGrantId),
     ])
 
-    await context.db.Grant.updateMany({
-      where: { recipientId: affectedRecipientId, parentContract: contract },
-      data: { votesCount, monthlyFlowRate },
-    })
+    await context.db.Grant.update({ id: affectedGrantId, data: { votesCount, monthlyFlowRate } })
   }
 }
 
-async function getGrantVotesCount(
-  context: Context<"NounsFlow:VoteCast">,
-  contract: `0x${string}`,
-  recipientId: string
-) {
-  const votes = await context.db.Vote.findMany({
-    where: { contract, recipientId, isStale: false },
-  })
-
+async function getGrantVotesCount(context: Context<"NounsFlow:VoteCast">, recipientId: string) {
+  const votes = await context.db.Vote.findMany({ where: { recipientId, isStale: false } })
   return votes.items.reduce((acc, v) => acc + BigInt(v.votesCount), BigInt(0)).toString()
 }
 
-async function getGrantBudget(context: Context, contract: `0x${string}`, recipientId: string) {
-  const { items } = await context.db.Grant.findMany({
-    where: { recipientId, parentContract: contract },
-  })
-
-  const grant = items?.[0]
-
-  if (!grant) {
-    throw new Error(`Could not find recipient ${recipientId} on ${contract}`)
-  }
+async function getGrantBudget(context: Context, contract: `0x${string}`, id: string) {
+  const grant = await context.db.Grant.findUnique({ id })
+  if (!grant) throw new Error(`Could not find grant ${id}`)
 
   return getMonthlyFlowRate(context, contract, grant.recipient, grant.isTopLevel)
 }

@@ -110,7 +110,7 @@ export default async function Home() {
                     </TableCell>
                     <TableCell className="text-center">{flow.votesCount}</TableCell>
                     <TableCell className="w-[100px] max-w-[100px] text-center">
-                      <VotingInput recipientId={flow.recipientId} />
+                      <VotingInput recipientId={flow.id} />
                     </TableCell>
                   </TableRow>
                 ))}
