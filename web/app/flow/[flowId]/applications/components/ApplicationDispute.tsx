@@ -45,7 +45,9 @@ export function ApplicationDispute(props: Props) {
   )
 
   const { forSecretHash, againstSecretHash } = useSecretVoteHash(
-    address ? `${dispute.arbitrator}-${dispute.disputeId}-${address}` : "",
+    flow.arbitrator,
+    dispute.disputeId,
+    address,
   )
   const { writeContract, prepareWallet, isLoading, toastId } = useContractTransaction({
     onSuccess: async () => {

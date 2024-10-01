@@ -1,4 +1,4 @@
-import { saveItem } from "@/lib/kv/kvStore"
+import { saveItem, saveOrGet } from "@/lib/kv/kvStore"
 import { useEffect, useState } from "react"
 import { encodeAbiParameters, keccak256 } from "viem"
 
@@ -16,27 +16,33 @@ interface SavedVote {
   commitmentHash: `0x${string}`
 }
 
-export function useSecretVoteHash(arbitrator: string, disputeId: string, address: string) {
+export function useSecretVoteHash(arbitrator: string, disputeId: string, address?: string) {
   const [forSecretHash, setForSecretHash] = useState<`0x${string}` | null>(null)
   const [againstSecretHash, setAgainstSecretHash] = useState<`0x${string}` | null>(null)
 
   useEffect(() => {
-    const generateVoteHash = async (party: Party) => {
-      const { commitmentHash, salt } = await generateCommitment(party)
+    if (!address) return
 
-      await saveItem(generateKVKey(arbitrator, disputeId, address), {
+    const generateVoteHash = async (party: Party) => {
+      const { commitmentHash, salt } = generateCommitment(party)
+
+      const key = generateKVKey(arbitrator, disputeId, address)
+      const data: SavedVote = {
         choice: party,
         reason: "",
-        disputeId,
-        voter: address,
+        disputeId: parseInt(disputeId),
+        voter: address as `0x${string}`,
         salt,
         commitmentHash,
-      })
+      }
+
+      // pull if already saved, otherwise save
+      const vote = await saveOrGet(key, data)
 
       if (party === Party.Requester) {
-        setForSecretHash(commitmentHash)
+        setForSecretHash(vote.commitmentHash)
       } else {
-        setAgainstSecretHash(commitmentHash)
+        setAgainstSecretHash(vote.commitmentHash)
       }
     }
 
@@ -49,9 +55,9 @@ export function useSecretVoteHash(arbitrator: string, disputeId: string, address
   return { forSecretHash, againstSecretHash }
 }
 
-const generateCommitment = async (
+const generateCommitment = (
   party: Party,
-): Promise<{ commitmentHash: `0x${string}`; salt: `0x${string}` }> => {
+): { commitmentHash: `0x${string}`; salt: `0x${string}` } => {
   const salt = generateSalt()
   const hash = keccak256(
     encodeAbiParameters(
