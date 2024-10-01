@@ -62,14 +62,14 @@ export const FlowHeader = (props: Props) => {
             <div className="space-x-1">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Badge variant="success">{flow.subgrants.length}</Badge>
+                  <Badge variant="success">{flow.subgrants.filter((g) => g.isActive).length}</Badge>
                 </TooltipTrigger>
                 <TooltipContent>Approved</TooltipContent>
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Badge variant="warning">
-                    ?{/* {grants.filter((g) => g.isChallenged).length} */}
+                    {flow.subgrants.filter((g) => g.isDisputed && !g.isActive).length}
                   </Badge>
                 </TooltipTrigger>
                 <TooltipContent>Challenged</TooltipContent>
@@ -77,7 +77,7 @@ export const FlowHeader = (props: Props) => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Badge variant="outline">
-                    ?{/* {grants.filter((g) => !g.isApproved).length} */}
+                    {flow.subgrants.filter((g) => !g.isActive && !g.isDisputed).length}
                   </Badge>
                 </TooltipTrigger>
                 <TooltipContent>Awaiting</TooltipContent>

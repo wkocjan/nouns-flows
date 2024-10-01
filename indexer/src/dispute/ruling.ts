@@ -12,7 +12,7 @@ async function handleRuling(params: {
 
   await context.db.Dispute.updateMany({
     where: {
-      id: _disputeID.toString(),
+      disputeId: _disputeID.toString(),
       arbitrator: _arbitrator.toString().toLowerCase(),
     },
     data: { ruling: Number(_ruling) },
