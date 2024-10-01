@@ -4,8 +4,8 @@ import { useEffect, useState } from "react"
 import { encodeAbiParameters, keccak256 } from "viem"
 
 export function useSecretVoteHash(arbitrator: string, disputeId: string, address?: string) {
-  const [forSecretHash, setForSecretHash] = useState<`0x${string}` | null>(null)
-  const [againstSecretHash, setAgainstSecretHash] = useState<`0x${string}` | null>(null)
+  const [forCommitHash, setForCommitHash] = useState<`0x${string}` | null>(null)
+  const [againstCommitHash, setAgainstCommitHash] = useState<`0x${string}` | null>(null)
 
   useEffect(() => {
     if (!address) return
@@ -27,9 +27,9 @@ export function useSecretVoteHash(arbitrator: string, disputeId: string, address
       const vote = await saveOrGet(key, data)
 
       if (party === Party.Requester) {
-        setForSecretHash(vote.commitmentHash)
+        setForCommitHash(vote.commitmentHash)
       } else {
-        setAgainstSecretHash(vote.commitmentHash)
+        setAgainstCommitHash(vote.commitmentHash)
       }
     }
 
@@ -37,9 +37,9 @@ export function useSecretVoteHash(arbitrator: string, disputeId: string, address
     generateVoteHash(Party.Challenger)
   }, [arbitrator, disputeId, address])
 
-  if (!arbitrator || !disputeId || !address) return { forSecretHash: null, againstSecretHash: null }
+  if (!arbitrator || !disputeId || !address) return { forCommitHash: null, againstCommitHash: null }
 
-  return { forSecretHash, againstSecretHash }
+  return { forCommitHash, againstCommitHash }
 }
 
 const generateCommitment = (

@@ -13,6 +13,8 @@ import { toast } from "sonner"
 import { base } from "viem/chains"
 import { useAccount } from "wagmi"
 import { useSecretVoteHash } from "../hooks/useSecretVoteHash"
+import { useArbitratorData } from "@/lib/tcr/use-arbitrator-data"
+import { formatEther } from "viem"
 
 interface Props {
   grant: Grant
@@ -33,8 +35,15 @@ export function DisputeUserVote(props: Props) {
     !address,
   )
 
-  const { forSecretHash, againstSecretHash } = useSecretVoteHash(
-    address ? `${dispute.arbitrator}-${dispute.disputeId}-${address}` : "",
+  const { canVote: canVoteOnchain, votingPower } = useArbitratorData(
+    flow.arbitrator as `0x${string}`,
+    dispute.disputeId,
+  )
+
+  const { forCommitHash, againstCommitHash } = useSecretVoteHash(
+    flow.arbitrator,
+    dispute.disputeId,
+    address,
   )
 
   const { writeContract, prepareWallet, isLoading, toastId } = useContractTransaction({
@@ -51,11 +60,16 @@ export function DisputeUserVote(props: Props) {
   const isVotingOpen = new Date() > new Date(dispute.votingStartTime * 1000) && !isVotingClosed
 
   useEffect(() => {
-    setCanVote(isVotingOpen && !hasVoted && !!address)
-  }, [isVotingOpen, hasVoted, address])
+    setCanVote(isVotingOpen && !hasVoted && !!address && canVoteOnchain)
+  }, [isVotingOpen, hasVoted, address, canVoteOnchain])
 
   if (hasVoted) {
-    return (
+    return !disputeVote.choice && new Date() > new Date(dispute.appealPeriodEndTime * 1000) ? (
+      <div className="space-y-4 text-sm">
+        <h3 className="font-medium">Your vote was not revealed in time</h3>
+        <p>This is a bug on our side. Please contact rocketman ASAP.</p>
+      </div>
+    ) : (
       <div className="space-y-4 text-sm">
         <h3 className="font-medium">You have successfully committed your vote</h3>
         <p>TCRs use commit-reveal voting. You have committed your vote onchain.</p>
@@ -69,11 +83,7 @@ export function DisputeUserVote(props: Props) {
   }
 
   if (isVotingClosed) {
-    return (
-      <div className="text-sm">
-        Voting is already over. You hadn&apos;t voted in this challenge.
-      </div>
-    )
+    return <div className="text-sm">Voting is over. You didn&apos;t vote in this dispute.</div>
   }
 
   return (
@@ -86,14 +96,14 @@ export function DisputeUserVote(props: Props) {
           type="button"
           onClick={async () => {
             try {
-              if (!forSecretHash) throw new Error("No secret hash")
+              if (!forCommitHash) throw new Error("No secret hash")
               await prepareWallet()
 
               writeContract({
                 address: getEthAddress(flow.arbitrator),
                 abi: erc20VotesArbitratorImplAbi,
                 functionName: "commitVote",
-                args: [BigInt(dispute.disputeId), forSecretHash],
+                args: [BigInt(dispute.disputeId), forCommitHash],
                 chainId: base.id,
               })
             } catch (e: any) {
@@ -112,14 +122,14 @@ export function DisputeUserVote(props: Props) {
           className="grow"
           onClick={async () => {
             try {
-              if (!againstSecretHash) throw new Error("No secret hash")
+              if (!againstCommitHash) throw new Error("No secret hash")
               await prepareWallet()
 
               writeContract({
                 address: getEthAddress(flow.arbitrator),
                 abi: erc20VotesArbitratorImplAbi,
                 functionName: "commitVote",
-                args: [BigInt(dispute.disputeId), againstSecretHash],
+                args: [BigInt(dispute.disputeId), againstCommitHash],
                 chainId: base.id,
               })
             } catch (e: any) {
@@ -134,6 +144,11 @@ export function DisputeUserVote(props: Props) {
       {!isVotingOpen && (
         <div className="mt-3 text-center text-xs text-muted-foreground">
           Voting is not open yet.
+        </div>
+      )}
+      {canVoteOnchain && canVote && (
+        <div className="mt-3 text-center text-xs text-muted-foreground">
+          Vote with {formatEther(votingPower)} votes.
         </div>
       )}
     </div>

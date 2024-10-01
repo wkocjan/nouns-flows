@@ -26,7 +26,7 @@ export function StatusDisputed(props: Props) {
       <div className="space-y-4 text-sm">
         <Challenger />
         <VotingStartDate />
-        <li>Every token holder can then anonymously vote whether to approve or reject it.</li>
+        <li>Token holders vote whether to approve or reject it.</li>
       </div>
     )
   }
@@ -68,7 +68,7 @@ export function StatusDisputed(props: Props) {
   function Challenger() {
     return (
       <li>
-        <span>The application has been challenged by </span>
+        <span>Application challenged by </span>
         <UserProfile address={getEthAddress(dispute.challenger)}>
           {(profile) => <span className="font-medium">{profile.display_name}</span>}
         </UserProfile>
@@ -79,7 +79,7 @@ export function StatusDisputed(props: Props) {
   function VotingStartDate() {
     return (
       <li>
-        Voting {currentTime < dispute.votingStartTime ? "will start" : "started"}{" "}
+        Voting {currentTime < dispute.votingStartTime ? "starts" : "started"}{" "}
         <DateTime
           date={new Date(dispute.votingStartTime * 1000)}
           relative
@@ -112,6 +112,9 @@ export function StatusDisputed(props: Props) {
   }
 
   function Results() {
+    const isPending = dispute.ruling === 0
+    const isApproved = dispute.ruling === 1
+    const requesterWon = dispute.challengerPartyVotes < dispute.requesterPartyVotes
     return (
       <>
         <li>
@@ -121,12 +124,22 @@ export function StatusDisputed(props: Props) {
             {dispute.totalSupply} total supply)
           </span>
         </li>
-        <li>
-          Application has been{" "}
-          <span className={dispute.ruling === 1 ? "text-green-500" : "text-red-500"}>
-            {dispute.ruling === 1 ? "approved" : "rejected"}
-          </span>
-        </li>
+        {!isPending ? (
+          <li>
+            Request has been{" "}
+            <span className={isApproved ? "text-green-500" : "text-red-500"}>
+              {isApproved ? "approved" : "rejected"}
+            </span>
+          </li>
+        ) : (
+          <li>
+            Pending{" "}
+            <span className={requesterWon ? "text-green-500" : "text-red-500"}>
+              {requesterWon ? "approval" : "rejection"}
+            </span>{" "}
+            to be executed
+          </li>
+        )}
         {Number(dispute.votes) > 0 && <VotesTicker dispute={dispute} className="!mt-6" />}
       </>
     )

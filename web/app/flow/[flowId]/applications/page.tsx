@@ -1,7 +1,6 @@
 import "server-only"
 
 import { ApplicationExecuteDisputeButton } from "@/app/application/[applicationId]/components/dispute-execute"
-import { ApplicationChallengeButton } from "@/app/application/[applicationId]/components/dispute-start"
 import { ApplicationExecuteRequestButton } from "@/app/application/[applicationId]/components/request-execute"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -162,14 +161,16 @@ export default async function FlowApplicationsPage(props: Props) {
                     <ApplicationExecuteRequestButton grant={grant} flow={flow} />
                   )}
                   {canBeChallenged(grant) && (
-                    <ApplicationChallengeButton grant={grant} flow={flow} />
+                    <Link href={`/application/${grant.id}`}>
+                      <Button>Review</Button>
+                    </Link>
                   )}
                   {dispute && canDisputeBeExecuted(dispute) && (
                     <ApplicationExecuteDisputeButton flow={flow} dispute={dispute} />
                   )}
                   {dispute && !canDisputeBeExecuted(dispute) && (
                     <Link href={`/application/${grant.id}`}>
-                      <Button>Check details</Button>
+                      <Button>Vote</Button>
                     </Link>
                   )}
                 </div>

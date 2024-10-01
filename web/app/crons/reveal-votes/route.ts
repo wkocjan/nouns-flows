@@ -7,6 +7,7 @@ import { generateKVKey, Party, SavedVote } from "@/lib/kv/disputeVote"
 import { getRevealVotesWalletClient } from "./walletClient"
 import { base } from "viem/chains"
 import { erc20VotesArbitratorImplAbi } from "@/lib/abis"
+import { l2Client } from "@/lib/viem/client"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 3600
@@ -25,6 +26,8 @@ export async function GET() {
     })
 
     console.log("disputes", disputes)
+
+    let nUpdated = 0
 
     for (const dispute of disputes) {
       const { arbitrator, disputeId } = dispute
@@ -49,18 +52,26 @@ export async function GET() {
           throw new Error("Vote not found")
         }
 
+        // Get the latest nonce for the account
+        const nonce = await l2Client.getTransactionCount({
+          address: client.account.address,
+        })
+
         const tx = await client.writeContract({
           address: arbitrator as `0x${string}`,
           abi: erc20VotesArbitratorImplAbi,
           functionName: "revealVote",
           args: [BigInt(disputeId), vote.voter, BigInt(vote.choice), vote.reason ?? "", vote.salt],
+          nonce: nonce, // Use the latest nonce
         })
 
         console.log("tx", tx)
+
+        nUpdated++
       }
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true, nUpdated })
   } catch (error: any) {
     console.error({ error })
     return new Response(error.message, { status: 500 })

@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x645a145c518db48c29741d6ad7e2210b8595c714)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x705d1141eecbb9ddac5f917715df31f7959720fe)
  */
 export const erc20VotesArbitratorAbi = [
   {
@@ -64,14 +64,14 @@ export const erc20VotesArbitratorAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x645a145c518db48c29741d6ad7e2210b8595c714)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x705d1141eecbb9ddac5f917715df31f7959720fe)
  */
 export const erc20VotesArbitratorAddress = {
-  8453: '0x645a145C518DB48c29741D6AD7E2210B8595C714',
+  8453: '0x705d1141eecBB9DdaC5F917715DF31F7959720fe',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x645a145c518db48c29741d6ad7e2210b8595c714)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x705d1141eecbb9ddac5f917715df31f7959720fe)
  */
 export const erc20VotesArbitratorConfig = {
   address: erc20VotesArbitratorAddress,
@@ -83,7 +83,7 @@ export const erc20VotesArbitratorConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x6b720aa38825bd7ab106eb9d768422f20c86669a)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x1950b9a1c74c3aecf1165202dc438e73ec499237)
  */
 export const erc20VotesArbitratorImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'payable' },
@@ -476,6 +476,25 @@ export const erc20VotesArbitratorImplAbi = [
       },
     ],
     name: 'OwnershipTransferred',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'oldRevealPeriod',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'newRevealPeriod',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'RevealPeriodSet',
   },
   {
     type: 'event',
@@ -1048,6 +1067,42 @@ export const erc20VotesArbitratorImplAbi = [
   {
     type: 'function',
     inputs: [
+      { name: 'newAppealCost', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'setAppealCost',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'newAppealPeriod', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'setAppealPeriod',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'newArbitrationCost', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'setArbitrationCost',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'newRevealPeriod', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'setRevealPeriod',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
       { name: 'newVotingDelay', internalType: 'uint256', type: 'uint256' },
     ],
     name: 'setVotingDelay',
@@ -1143,14 +1198,14 @@ export const erc20VotesArbitratorImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x6b720aa38825bd7ab106eb9d768422f20c86669a)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x1950b9a1c74c3aecf1165202dc438e73ec499237)
  */
 export const erc20VotesArbitratorImplAddress = {
-  8453: '0x6B720AA38825Bd7AB106eB9D768422F20c86669A',
+  8453: '0x1950b9a1C74C3aECf1165202Dc438E73eC499237',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x6b720aa38825bd7ab106eb9d768422f20c86669a)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x1950b9a1c74c3aecf1165202dc438e73ec499237)
  */
 export const erc20VotesArbitratorImplConfig = {
   address: erc20VotesArbitratorImplAddress,
@@ -1162,7 +1217,7 @@ export const erc20VotesArbitratorImplConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x1d0a3a34fe1d50e5c884398e1c53d5e772a0bc9e)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x46a09cd4927989a475b5035d3a5c44ed080baa64)
  */
 export const erc20VotesMintableAbi = [
   {
@@ -1223,14 +1278,14 @@ export const erc20VotesMintableAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x1d0a3a34fe1d50e5c884398e1c53d5e772a0bc9e)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x46a09cd4927989a475b5035d3a5c44ed080baa64)
  */
 export const erc20VotesMintableAddress = {
-  8453: '0x1D0a3a34FE1D50E5c884398E1c53D5E772a0bC9E',
+  8453: '0x46a09cD4927989A475b5035d3A5C44Ed080Baa64',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x1d0a3a34fe1d50e5c884398e1c53d5e772a0bc9e)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x46a09cd4927989a475b5035d3a5c44ed080baa64)
  */
 export const erc20VotesMintableConfig = {
   address: erc20VotesMintableAddress,
@@ -1242,12 +1297,11 @@ export const erc20VotesMintableConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x053ed0e1cb5b150bb7ef4914d0e9fd2a673c311f)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xe7357da106cbe13b39030cce80f51ccaa51fd31b)
  */
 export const erc20VotesMintableImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
   { type: 'error', inputs: [], name: 'INVALID_ADDRESS_ZERO' },
-  { type: 'error', inputs: [], name: 'INVALID_AMOUNT_FOR_MEMBER_UNITS' },
   { type: 'error', inputs: [], name: 'MINTER_LOCKED' },
   { type: 'error', inputs: [], name: 'NOT_MINTER' },
   { type: 'error', inputs: [], name: 'ONLY_MANAGER' },
@@ -1813,14 +1867,14 @@ export const erc20VotesMintableImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x053ed0e1cb5b150bb7ef4914d0e9fd2a673c311f)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xe7357da106cbe13b39030cce80f51ccaa51fd31b)
  */
 export const erc20VotesMintableImplAddress = {
-  8453: '0x053ed0E1cb5b150bb7EF4914D0E9fD2a673C311F',
+  8453: '0xE7357Da106cBE13B39030Cce80F51cCAa51FD31b',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x053ed0e1cb5b150bb7ef4914d0e9fd2a673c311f)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xe7357da106cbe13b39030cce80f51ccaa51fd31b)
  */
 export const erc20VotesMintableImplConfig = {
   address: erc20VotesMintableImplAddress,
@@ -1832,7 +1886,7 @@ export const erc20VotesMintableImplConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x2f6257d928eec09a90f7b2dcb2b5d5443ce2c8cb)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x15fb2fedfcac7b9615f3bb453433bb887df7d0ca)
  */
 export const flowTcrAbi = [
   {
@@ -1893,14 +1947,14 @@ export const flowTcrAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x2f6257d928eec09a90f7b2dcb2b5d5443ce2c8cb)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x15fb2fedfcac7b9615f3bb453433bb887df7d0ca)
  */
 export const flowTcrAddress = {
-  8453: '0x2f6257D928eeC09a90f7b2dCB2b5d5443Ce2C8cB',
+  8453: '0x15fB2fEdFCaC7B9615F3bB453433bB887df7d0Ca',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x2f6257d928eec09a90f7b2dcb2b5d5443ce2c8cb)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x15fb2fedfcac7b9615f3bb453433bb887df7d0ca)
  */
 export const flowTcrConfig = {
   address: flowTcrAddress,
@@ -1912,7 +1966,7 @@ export const flowTcrConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x8b77188beffa1dea6b49f8e64cc5ee255425808e)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xd4fdf4699f5d2e05319141d2fdc61b1cc224f6e9)
  */
 export const flowTcrImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'payable' },
@@ -3170,14 +3224,14 @@ export const flowTcrImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x8b77188beffa1dea6b49f8e64cc5ee255425808e)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xd4fdf4699f5d2e05319141d2fdc61b1cc224f6e9)
  */
 export const flowTcrImplAddress = {
-  8453: '0x8B77188Beffa1DeA6b49f8E64CC5eE255425808e',
+  8453: '0xd4FDf4699F5D2e05319141d2fDc61b1Cc224F6e9',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x8b77188beffa1dea6b49f8e64cc5ee255425808e)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xd4fdf4699f5d2e05319141d2fdc61b1cc224f6e9)
  */
 export const flowTcrImplConfig = {
   address: flowTcrImplAddress,
@@ -3189,7 +3243,7 @@ export const flowTcrImplConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xcedf921ea3d74b661f2dd58a5b2a7b89be6f3491)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x1a2c6c20652a796d355d11a0dd31ce3d310260dd)
  */
 export const nounsFlowAbi = [
   {
@@ -3250,14 +3304,14 @@ export const nounsFlowAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xcedf921ea3d74b661f2dd58a5b2a7b89be6f3491)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x1a2c6c20652a796d355d11a0dd31ce3d310260dd)
  */
 export const nounsFlowAddress = {
-  8453: '0xCeDf921ea3d74B661F2Dd58a5b2a7b89BE6f3491',
+  8453: '0x1a2C6C20652a796d355d11a0dd31ce3d310260DD',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xcedf921ea3d74b661f2dd58a5b2a7b89be6f3491)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x1a2c6c20652a796d355d11a0dd31ce3d310260dd)
  */
 export const nounsFlowConfig = {
   address: nounsFlowAddress,
@@ -3269,7 +3323,7 @@ export const nounsFlowConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x3235adb5aff2263ed1196f335af5d056e0e05443)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x6ca7ce58ba85fe7a8dfae51664e7f0a7a55cc789)
  */
 export const nounsFlowImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'payable' },
@@ -4342,14 +4396,14 @@ export const nounsFlowImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x3235adb5aff2263ed1196f335af5d056e0e05443)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x6ca7ce58ba85fe7a8dfae51664e7f0a7a55cc789)
  */
 export const nounsFlowImplAddress = {
-  8453: '0x3235ADb5AfF2263eD1196f335AF5D056e0E05443',
+  8453: '0x6CA7Ce58BA85fE7a8DfAe51664e7f0A7a55cC789',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x3235adb5aff2263ed1196f335af5d056e0e05443)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x6ca7ce58ba85fe7a8dfae51664e7f0a7a55cc789)
  */
 export const nounsFlowImplConfig = {
   address: nounsFlowImplAddress,
@@ -5065,7 +5119,7 @@ export const nounsTokenConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x9e9845d8b07a4a66fae7896b58dab0e1573d1b10)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xec7e4b427a9fd89d26b75ddfeb0967d03810f119)
  */
 export const tcrFactoryAbi = [
   {
@@ -5126,14 +5180,14 @@ export const tcrFactoryAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x9e9845d8b07a4a66fae7896b58dab0e1573d1b10)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xec7e4b427a9fd89d26b75ddfeb0967d03810f119)
  */
 export const tcrFactoryAddress = {
-  8453: '0x9E9845D8b07a4a66Fae7896B58DaB0e1573d1b10',
+  8453: '0xeC7E4B427a9Fd89D26B75ddfEb0967d03810F119',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x9e9845d8b07a4a66fae7896b58dab0e1573d1b10)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xec7e4b427a9fd89d26b75ddfeb0967d03810f119)
  */
 export const tcrFactoryConfig = {
   address: tcrFactoryAddress,
@@ -5145,7 +5199,7 @@ export const tcrFactoryConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x6f222007422c5e78f410e65b0db81eacc572551d)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x41d83ded8688bab2dc78c76f915ec681ca8cbb59)
  */
 export const tcrFactoryImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
@@ -5710,14 +5764,14 @@ export const tcrFactoryImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x6f222007422c5e78f410e65b0db81eacc572551d)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x41d83ded8688bab2dc78c76f915ec681ca8cbb59)
  */
 export const tcrFactoryImplAddress = {
-  8453: '0x6F222007422C5e78f410e65B0db81EacC572551D',
+  8453: '0x41d83DEd8688bAb2dc78c76F915EC681ca8CBB59',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x6f222007422c5e78f410e65b0db81eacc572551d)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x41d83ded8688bab2dc78c76f915ec681ca8cbb59)
  */
 export const tcrFactoryImplConfig = {
   address: tcrFactoryImplAddress,
@@ -5729,7 +5783,7 @@ export const tcrFactoryImplConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xb4643751aa157e03e22de8a5f1fc398ece83dddb)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xb0a1abf908b32695b0d7b36f00f8aee201c4fc6a)
  */
 export const tokenEmitterAbi = [
   {
@@ -5790,14 +5844,14 @@ export const tokenEmitterAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xb4643751aa157e03e22de8a5f1fc398ece83dddb)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xb0a1abf908b32695b0d7b36f00f8aee201c4fc6a)
  */
 export const tokenEmitterAddress = {
-  8453: '0xb4643751Aa157E03e22De8a5F1fc398eCe83ddDB',
+  8453: '0xB0a1abf908B32695b0D7b36f00F8aEe201c4fc6a',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xb4643751aa157e03e22de8a5f1fc398ece83dddb)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xb0a1abf908b32695b0d7b36f00f8aee201c4fc6a)
  */
 export const tokenEmitterConfig = {
   address: tokenEmitterAddress,
@@ -5809,7 +5863,7 @@ export const tokenEmitterConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x9fd434b13880dd93aba43bbba3f9dda00f2eed21)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x48deabf773a50e6b58cc4beba7e357f80d25b62b)
  */
 export const tokenEmitterImplAbi = [
   {
@@ -6251,14 +6305,14 @@ export const tokenEmitterImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x9fd434b13880dd93aba43bbba3f9dda00f2eed21)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x48deabf773a50e6b58cc4beba7e357f80d25b62b)
  */
 export const tokenEmitterImplAddress = {
-  8453: '0x9fd434b13880DD93AbA43bbBA3F9DdA00f2eeD21',
+  8453: '0x48DeaBf773a50E6B58CC4beBa7e357f80D25B62B',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x9fd434b13880dd93aba43bbba3f9dda00f2eed21)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x48deabf773a50e6b58cc4beba7e357f80d25b62b)
  */
 export const tokenEmitterImplConfig = {
   address: tokenEmitterImplAddress,
