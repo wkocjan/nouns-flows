@@ -33,28 +33,35 @@ async function handleVoteRevealed(params: {
   context: Context<"Arbitrator:VoteRevealed">
 }) {
   const { event, context } = params
-  const { disputeId, choice, votes, secretHash, reason } = event.args
+  const { disputeId, secretHash, reason } = event.args
+
+  const votes = event.args.votes / BigInt(1e18)
+  const choice = Number(event.args.choice)
 
   const arbitrator = event.log.address.toLowerCase()
   const voter = event.transaction.from.toLowerCase()
 
-  const { items } = await context.db.Dispute.findMany({ where: { disputeId: disputeId.toString(), arbitrator } })
+  const { items } = await context.db.Dispute.findMany({
+    where: { disputeId: disputeId.toString(), arbitrator },
+  })
   const dispute = items?.[0]
   if (!dispute) throw new Error("Dispute not found")
 
+  // Update vote
   await context.db.DisputeVote.updateMany({
     where: { disputeId: disputeId.toString(), arbitrator, voter, secretHash },
     data: {
-      choice: Number(choice),
+      choice,
       votes: votes.toString(),
       reason: reason,
     },
   })
 
-  const partyVotes = choice === BigInt(Party.Requester) ? "requesterPartyVotes" : "challengerPartyVotes"
+  // Update dispute
+  const partyVotes = choice === Party.Requester ? "requesterPartyVotes" : "challengerPartyVotes"
 
-  await context.db.Dispute.updateMany({
-    where: { disputeId: disputeId.toString(), arbitrator },
+  await context.db.Dispute.update({
+    id: dispute.id,
     data: {
       votes: (BigInt(dispute.votes) + votes).toString(),
       [partyVotes]: (BigInt(dispute[partyVotes]) + votes).toString(),

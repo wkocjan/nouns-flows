@@ -64,9 +64,10 @@ view Grant {
   createdAt             Int
   updatedAt             Int
 
-  flow      Grant   @relation("Subgrants", fields: [flowId], references: [id])
-  subgrants Grant[] @relation("Subgrants")
+  flow      Grant     @relation("Subgrants", fields: [flowId], references: [id])
+  subgrants Grant[]   @relation("Subgrants")
   drafts    Draft[]
+  disputes  Dispute[]
 
   @@map("Grant")
   @@schema("public")
@@ -95,21 +96,24 @@ view PonderMeta {
 }
 
 view Dispute {
-  id                  String @id
-  disputeId           String
-  arbitrator          String
-  arbitrable          String
-  grantId             String
-  challenger          String
-  votingStartTime     Int
-  votingEndTime       Int
-  revealPeriodEndTime Int
-  appealPeriodEndTime Int
-  votes               String
-  ruling              Int
-  creationBlock       Int
-  totalSupply         String
-  isExecuted          Int
+  id                   String @id
+  disputeId            String
+  arbitrator           String
+  arbitrable           String
+  grantId              String
+  challenger           String
+  votingStartTime      Int
+  votingEndTime        Int
+  revealPeriodEndTime  Int
+  appealPeriodEndTime  Int
+  votes                String
+  requesterPartyVotes  String
+  challengerPartyVotes String
+  ruling               Int
+  creationBlock        Int
+  totalSupply          String
+  isExecuted           Int
+  grant                Grant  @relation(fields: [grantId], references: [id])
 
   @@schema("public")
 }
@@ -124,6 +128,6 @@ view DisputeVote {
   votes      String?
   reason     String?
 
-  @@schema("public")
   @@unique([disputeId, arbitrator, voter])
+  @@schema("public")
 }

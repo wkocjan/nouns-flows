@@ -24,16 +24,21 @@ import { base } from "viem/chains"
 interface Props {
   grant: Grant
   flow: Grant
+  className?: string
 }
 
 export function ApplicationChallengeButton(props: Props) {
-  const { grant, flow } = props
+  const { grant, flow, className } = props
   const router = useRouter()
 
   const { writeContract, prepareWallet, isLoading, toastId } = useContractTransaction({
+    loading: "Challenging...",
+    success: "Challenged!",
     onSuccess: async () => {
       ref.current?.click() // close dialog
-      router.refresh()
+      setTimeout(() => {
+        router.refresh()
+      }, 1000)
     },
   })
   const ref = useRef<HTMLButtonElement>(null)
@@ -49,12 +54,12 @@ export function ApplicationChallengeButton(props: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button type="button" ref={ref} disabled={!canBeChallenged(grant)}>
+        <Button type="button" ref={ref} disabled={!canBeChallenged(grant)} className={className}>
           Challenge
         </Button>
       </DialogTrigger>
-      <DialogContent>
-        <DialogHeader className="sm:max-w-screen-sm">
+      <DialogContent className="sm:max-w-screen-sm">
+        <DialogHeader>
           <DialogTitle className="text-center text-lg font-medium">
             Challenge Application
           </DialogTitle>
