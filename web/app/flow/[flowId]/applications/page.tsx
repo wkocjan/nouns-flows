@@ -21,6 +21,7 @@ import {
   canDisputeBeExecuted,
   canDisputeBeVotedOn,
   canRequestBeExecuted,
+  isDisputeResolvedForNoneParty,
   isDisputeWaitingForVoting,
 } from "@/lib/database/helpers/application"
 import { getFlow } from "@/lib/database/queries/flow"
@@ -41,7 +42,7 @@ export default async function FlowApplicationsPage(props: Props) {
   const [flow, grants] = await Promise.all([
     getFlow(flowId),
     database.grant.findMany({
-      where: { flowId, status: Status.RegistrationRequested },
+      where: { flowId, status: { in: [Status.RegistrationRequested, Status.Absent] } },
       include: { disputes: true },
     }),
   ])
@@ -143,6 +144,16 @@ export default async function FlowApplicationsPage(props: Props) {
                         </span>
                       </div>
                     )}
+                    {isDisputeResolvedForNoneParty(dispute) && (
+                      <div className="flex flex-col">
+                        <strong className="font-medium text-red-600 dark:text-red-500">
+                          Unsolved
+                        </strong>
+                        <span className="text-xs text-muted-foreground">
+                          Failed to reach decision.
+                        </span>
+                      </div>
+                    )}
                     {canDisputeBeExecuted(dispute) && (
                       <div className="flex flex-col">
                         <strong className="font-medium text-green-600 dark:text-green-500">
@@ -168,11 +179,13 @@ export default async function FlowApplicationsPage(props: Props) {
                   {dispute && canDisputeBeExecuted(dispute) && (
                     <ApplicationExecuteDisputeButton flow={flow} dispute={dispute} />
                   )}
-                  {dispute && !canDisputeBeExecuted(dispute) && (
-                    <Link href={`/application/${grant.id}`}>
-                      <Button>Vote</Button>
-                    </Link>
-                  )}
+                  {dispute &&
+                    !canDisputeBeExecuted(dispute) &&
+                    !isDisputeResolvedForNoneParty(dispute) && (
+                      <Link href={`/application/${grant.id}`}>
+                        <Button>Vote</Button>
+                      </Link>
+                    )}
                 </div>
               </TableCell>
             </TableRow>

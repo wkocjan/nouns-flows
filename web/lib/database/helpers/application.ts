@@ -26,6 +26,14 @@ export function canDisputeBeVotedOn(dispute: Dispute) {
   return votingStartTime <= Date.now() / 1000 && appealPeriodEndTime >= Date.now() / 1000
 }
 
+export function isDisputeResolvedForNoneParty(dispute: Dispute) {
+  const { isExecuted, ruling } = dispute
+
+  if (!isExecuted) return false
+
+  return ruling === 0
+}
+
 export function isDisputeWaitingForVoting(dispute: Dispute) {
   const { isExecuted, votingStartTime } = dispute
 

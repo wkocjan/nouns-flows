@@ -30,6 +30,8 @@ export default async function FlowPage(props: Props) {
 
   const flow = await getFlowWithGrants(flowId)
 
+  const activeSubgrants = flow.subgrants.filter((grant) => grant.isActive === 1)
+
   return (
     <>
       <Table>
@@ -44,7 +46,7 @@ export default async function FlowPage(props: Props) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {flow.subgrants.map((grant) => (
+          {activeSubgrants.map((grant) => (
             <TableRow key={grant.id}>
               <TableCell className="w-[64px] min-w-[64px]">
                 <Image

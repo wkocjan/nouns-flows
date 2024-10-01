@@ -137,7 +137,7 @@ export function StatusDisputed(props: Props) {
             <span className={requesterWon ? "text-green-500" : "text-red-500"}>
               {requesterWon ? "approval" : "rejection"}
             </span>{" "}
-            to be executed
+            execution
           </li>
         )}
         {Number(dispute.votes) > 0 && <VotesTicker dispute={dispute} className="!mt-6" />}
