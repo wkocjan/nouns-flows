@@ -20,5 +20,5 @@ export function generateSalt(): `0x${string}` {
 
 export function generateKVKey(arbitrator: string, disputeId: string, address: string): string {
   // guaranteed to be unique across disputes since you can only vote once per dispute per arbitrator per address
-  return `vote:${arbitrator}:${disputeId}:${address}`
+  return `vote:${arbitrator.toLowerCase()}:${disputeId}:${address.toLowerCase()}`
 }

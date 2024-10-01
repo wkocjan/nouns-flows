@@ -33,25 +33,34 @@ async function handleVoteRevealed(params: {
   context: Context<"Arbitrator:VoteRevealed">
 }) {
   const { event, context } = params
-  const { disputeId, choice, votes, secretHash, reason } = event.args
+  const { disputeId, choice, votes, secretHash, reason, voter } = event.args
 
   const arbitrator = event.log.address.toLowerCase()
-  const voter = event.transaction.from.toLowerCase()
+  const revealedBy = event.transaction.from.toLowerCase()
 
-  const { items } = await context.db.Dispute.findMany({ where: { disputeId: disputeId.toString(), arbitrator } })
+  const { items } = await context.db.Dispute.findMany({
+    where: { disputeId: disputeId.toString(), arbitrator },
+  })
   const dispute = items?.[0]
   if (!dispute) throw new Error("Dispute not found")
 
   await context.db.DisputeVote.updateMany({
-    where: { disputeId: disputeId.toString(), arbitrator, voter, secretHash },
+    where: {
+      disputeId: disputeId.toString(),
+      arbitrator: arbitrator.toLowerCase(),
+      voter: voter.toLowerCase(),
+      secretHash,
+    },
     data: {
       choice: Number(choice),
       votes: votes.toString(),
       reason: reason,
+      revealedBy: revealedBy.toLowerCase(),
     },
   })
 
-  const partyVotes = choice === BigInt(Party.Requester) ? "requesterPartyVotes" : "challengerPartyVotes"
+  const partyVotes =
+    choice === BigInt(Party.Requester) ? "requesterPartyVotes" : "challengerPartyVotes"
 
   await context.db.Dispute.updateMany({
     where: { disputeId: disputeId.toString(), arbitrator },

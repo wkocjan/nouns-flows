@@ -94,7 +94,7 @@ export default createSchema((p) => ({
       disputeId: p.string(),
       secretHash: p.string(),
       voter: p.string(),
-
+      revealedBy: p.string().optional(),
       choice: p.int().optional(),
       votes: p.string().optional(),
       reason: p.string().optional(),
