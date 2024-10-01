@@ -82,7 +82,7 @@ function SubmitButton() {
 
   return (
     <Button type="submit" size="lg" disabled={pending}>
-      Save offchain
+      Save draft
     </Button>
   )
 }
