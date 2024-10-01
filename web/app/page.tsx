@@ -27,7 +27,7 @@ export default async function Home() {
   const flows = await database.grant.findMany({
     where: { isFlow: 1, isActive: 1, isTopLevel: 0 },
     include: {
-      _count: { select: { subgrants: { where: { isActive: 1 } } } },
+      subgrants: true,
     },
   })
 
@@ -82,19 +82,25 @@ export default async function Home() {
                     <TableCell className="space-x-1 text-center">
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Badge variant="success">{flow._count.subgrants}</Badge>
+                          <Badge variant="success">
+                            {flow.subgrants.filter((g) => g.isActive).length}
+                          </Badge>
                         </TooltipTrigger>
                         <TooltipContent>Approved</TooltipContent>
                       </Tooltip>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Badge variant="warning">?</Badge>
+                          <Badge variant="warning">
+                            {flow.subgrants.filter((g) => g.isDisputed && !g.isActive).length}
+                          </Badge>
                         </TooltipTrigger>
                         <TooltipContent>Challenged</TooltipContent>
                       </Tooltip>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Badge variant="outline">?</Badge>
+                          <Badge variant="outline">
+                            {flow.subgrants.filter((g) => !g.isActive && !g.isDisputed).length}
+                          </Badge>
                         </TooltipTrigger>
                         <TooltipContent>Awaiting</TooltipContent>
                       </Tooltip>
