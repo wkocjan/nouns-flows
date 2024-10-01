@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { flowTcrImplAbi } from "@/lib/abis"
-import { canBeExecuted } from "@/lib/database/helpers/application"
+import { canRequestBeExecuted } from "@/lib/database/helpers/application"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { Grant } from "@prisma/client"
@@ -14,14 +14,14 @@ interface Props {
   flow: Grant
 }
 
-export function ApplicationExecuteButton(props: Props) {
+export function ApplicationExecuteRequestButton(props: Props) {
   const { grant, flow } = props
   const { writeContract, prepareWallet } = useContractTransaction()
 
   return (
     <Button
       type="button"
-      disabled={!canBeExecuted(grant)}
+      disabled={!canRequestBeExecuted(grant)}
       variant="secondary"
       onClick={async () => {
         await prepareWallet()
