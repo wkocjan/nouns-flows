@@ -18,6 +18,7 @@ import {
   canDisputeBeExecuted,
   canDisputeBeVotedOn,
   canRequestBeExecuted,
+  isDisputeWaitingForVoting,
 } from "@/lib/database/helpers/application"
 import { getFlow } from "@/lib/database/queries/flow"
 import { Status } from "@/lib/enums"
@@ -64,8 +65,6 @@ export default async function FlowApplicationsPage(props: Props) {
       <TableBody>
         {grants.map((grant) => {
           const dispute = disputes.find((dispute) => dispute.grantId === grant.id)
-
-          console.log(dispute)
 
           return (
             <TableRow key={grant.id}>
@@ -126,17 +125,25 @@ export default async function FlowApplicationsPage(props: Props) {
                   </HoverCard>
                 )}
 
-                {dispute && canDisputeBeVotedOn(dispute) && (
-                  <div className="flex flex-col">
-                    <strong className="font-medium text-yellow-600">Challenged</strong>
-                    <span className="text-xs text-muted-foreground">Vote in progress</span>
-                  </div>
-                )}
-                {dispute && canDisputeBeExecuted(dispute) && (
-                  <div className="flex flex-col">
-                    <strong className="font-medium text-green-600">Ruled</strong>
-                    <span className="text-xs text-muted-foreground">Can be executed</span>
-                  </div>
+                {dispute && (
+                  <>
+                    {(canDisputeBeVotedOn(dispute) || isDisputeWaitingForVoting(dispute)) && (
+                      <div className="flex flex-col">
+                        <strong className="font-medium text-yellow-600">Challenged</strong>
+                        <span className="text-xs text-muted-foreground">
+                          {isDisputeWaitingForVoting(dispute)
+                            ? "Vote starts soon"
+                            : "Vote in progress"}
+                        </span>
+                      </div>
+                    )}
+                    {canDisputeBeExecuted(dispute) && (
+                      <div className="flex flex-col">
+                        <strong className="font-medium text-green-600">Solved</strong>
+                        <span className="text-xs text-muted-foreground">Can be executed</span>
+                      </div>
+                    )}
+                  </>
                 )}
               </TableCell>
 
@@ -148,11 +155,15 @@ export default async function FlowApplicationsPage(props: Props) {
                   {canBeChallenged(grant) && (
                     <ApplicationChallengeButton grant={grant} flow={flow} />
                   )}
-                  {dispute && canDisputeBeExecuted(dispute) && (
-                    <ApplicationExecuteDisputeButton flow={flow} dispute={dispute} />
-                  )}
-                  {dispute && canDisputeBeVotedOn(dispute) && (
-                    <ApplicationDispute grant={grant} flow={flow} />
+                  {dispute && (
+                    <>
+                      {canDisputeBeExecuted(dispute) && (
+                        <ApplicationExecuteDisputeButton flow={flow} dispute={dispute} />
+                      )}
+                      {(canDisputeBeVotedOn(dispute) || isDisputeWaitingForVoting(dispute)) && (
+                        <ApplicationDispute dispute={dispute} grant={grant} flow={flow} />
+                      )}
+                    </>
                   )}
                 </div>
               </TableCell>

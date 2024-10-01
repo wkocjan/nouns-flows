@@ -12,7 +12,7 @@ import { erc20VotesArbitratorImplAbi } from "@/lib/abis"
 import { useDisputes } from "@/lib/tcr/dispute/use-disputes"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
-import { Grant } from "@prisma/client"
+import { Grant, Dispute } from "@prisma/client"
 import { useRouter } from "next/navigation"
 import { useRef, useState } from "react"
 import { toast } from "sonner"
@@ -23,28 +23,29 @@ import { DateTime } from "@/components/ui/date-time"
 import { useAccount } from "wagmi"
 import { useDisputeVote } from "@/lib/tcr/dispute/use-dispute-votes"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { isDisputeWaitingForVoting } from "@/lib/database/helpers/application"
 
 interface Props {
   grant: Grant
   flow: Grant
+  dispute: Dispute
 }
 
 export function ApplicationDispute(props: Props) {
-  const { grant, flow } = props
+  const { grant, flow, dispute } = props
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const { address } = useAccount()
 
-  const { dispute } = useDisputes(grant.id, !open)
   const { disputeVote } = useDisputeVote(
-    dispute?.disputeId || "",
+    dispute.disputeId || "",
     address || "",
     flow.arbitrator,
     !dispute,
   )
 
   const { forSecretHash, againstSecretHash } = useSecretVoteHash(
-    dispute && address ? `${dispute.arbitrator}-${dispute.disputeId}-${address}` : "",
+    address ? `${dispute.arbitrator}-${dispute.disputeId}-${address}` : "",
   )
   const { writeContract, prepareWallet, isLoading, toastId } = useContractTransaction({
     onSuccess: async () => {
@@ -55,9 +56,8 @@ export function ApplicationDispute(props: Props) {
   const ref = useRef<HTMLButtonElement>(null)
 
   const hasVoted = !!disputeVote
-  const isVotingClosed = dispute && new Date() > new Date(dispute.votingEndTime * 1000)
-  const isVotingOpen =
-    dispute && new Date() > new Date(dispute.votingStartTime * 1000) && !isVotingClosed
+  const isVotingClosed = new Date() > new Date(dispute.votingEndTime * 1000)
+  const isVotingOpen = new Date() > new Date(dispute.votingStartTime * 1000) && !isVotingClosed
   const canVote = isVotingOpen && !hasVoted
 
   // ToDo: Reveal votes via worker
@@ -65,8 +65,12 @@ export function ApplicationDispute(props: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button type="button" ref={ref}>
-          Vote
+        <Button
+          variant={isDisputeWaitingForVoting(dispute) ? "secondary" : "default"}
+          type="button"
+          ref={ref}
+        >
+          {isDisputeWaitingForVoting(dispute) ? "Review" : "Vote"}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-screen-sm">
@@ -74,8 +78,7 @@ export function ApplicationDispute(props: Props) {
           <DialogTitle className="text-center text-lg font-medium">{grant.title}</DialogTitle>
         </DialogHeader>
         <p className="mb-6">Some description about the dispute process</p>
-        {dispute && <DisputeDetails dispute={dispute} />}
-        {isVotingOpen && !hasVoted && <div className="text-center text-sm">Cast your vote</div>}
+        <DisputeDetails dispute={dispute} />
         {disputeVote && (
           <Tooltip>
             <TooltipTrigger asChild>
@@ -93,7 +96,7 @@ export function ApplicationDispute(props: Props) {
             </TooltipContent>
           </Tooltip>
         )}
-        {!isVotingOpen && dispute && !disputeVote && (
+        {!isVotingOpen && !disputeVote && (
           <div className="text-center text-sm">
             {isVotingClosed ? "Voting closed " : "Voting starts "}
             <DateTime

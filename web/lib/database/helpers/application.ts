@@ -19,11 +19,19 @@ export function canDisputeBeExecuted(dispute: Dispute) {
 }
 
 export function canDisputeBeVotedOn(dispute: Dispute) {
-  const { appealPeriodEndTime, isExecuted } = dispute
+  const { appealPeriodEndTime, isExecuted, votingStartTime } = dispute
 
   if (isExecuted) return false
 
-  return appealPeriodEndTime >= Date.now() / 1000
+  return votingStartTime <= Date.now() / 1000 && appealPeriodEndTime >= Date.now() / 1000
+}
+
+export function isDisputeWaitingForVoting(dispute: Dispute) {
+  const { isExecuted, votingStartTime } = dispute
+
+  if (isExecuted) return false
+
+  return votingStartTime > Date.now() / 1000
 }
 
 export function canBeChallenged(grant: Grant) {
