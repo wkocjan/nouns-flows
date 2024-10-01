@@ -5,7 +5,7 @@ import { erc20VotesArbitratorImplAbi } from "@/lib/abis"
 import { useDisputeVote } from "@/lib/tcr/dispute/use-dispute-votes"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
-import { Dispute, Grant } from "@prisma/client"
+import { Dispute, DisputeVote, Grant } from "@prisma/client"
 import { ThickArrowDownIcon, ThickArrowUpIcon } from "@radix-ui/react-icons"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -64,22 +64,13 @@ export function DisputeUserVote(props: Props) {
   }, [isVotingOpen, hasVoted, address, canVoteOnchain])
 
   if (hasVoted) {
-    return !disputeVote.choice && new Date() > new Date(dispute.appealPeriodEndTime * 1000) ? (
-      <div className="space-y-4 text-sm">
-        <h3 className="font-medium">Your vote was not revealed in time</h3>
-        <p>This is a bug on our side. Please contact rocketman ASAP.</p>
-      </div>
-    ) : (
-      <div className="space-y-4 text-sm">
-        <h3 className="font-medium">You have successfully committed your vote</h3>
-        <p>TCRs use commit-reveal voting. You have committed your vote onchain.</p>
-        <p>
-          For your convenience, we store your vote encrypted in a database. Your vote will be
-          revealed automatically at the end of the voting period.
-        </p>
-        <p>You can opt out of custodial voting soon.</p>
-      </div>
-    )
+    if (!disputeVote.choice && new Date() > new Date(dispute.appealPeriodEndTime * 1000)) {
+      return <UnrevealedVote />
+    } else if (disputeVote.choice) {
+      return <RevealedVote disputeVote={disputeVote} grant={grant} />
+    } else {
+      return <CommittedVote />
+    }
   }
 
   if (isVotingClosed) {
@@ -154,3 +145,35 @@ export function DisputeUserVote(props: Props) {
     </div>
   )
 }
+
+const UnrevealedVote = () => (
+  <div className="space-y-4 text-sm">
+    <h3 className="font-medium">Your vote was not revealed in time</h3>
+    <p>This is a bug on our side. Please contact rocketman ASAP.</p>
+  </div>
+)
+
+const RevealedVote = ({ disputeVote, grant }: { disputeVote: DisputeVote; grant: Grant }) => (
+  <div className="space-y-4 text-sm">
+    <p>Your vote has been revealed and counted.</p>
+    <p>
+      You voted{" "}
+      <b className={`capitalize ${disputeVote.choice === 1 ? "text-green-500" : "text-red-500"}`}>
+        {disputeVote.choice === 1 ? "for" : "against"}
+      </b>{" "}
+      this {grant.isFlow ? "category" : "grant"} with {disputeVote.votes} votes.
+    </p>
+  </div>
+)
+
+const CommittedVote = () => (
+  <div className="space-y-4 text-sm">
+    <h3 className="font-medium">You have successfully committed your vote</h3>
+    <p>TCRs use commit-reveal voting. You have committed your vote onchain.</p>
+    <p>
+      For your convenience, we store your vote encrypted in a database. Your vote will be revealed
+      automatically at the end of the voting period.
+    </p>
+    <p>You can opt out of custodial voting soon.</p>
+  </div>
+)
