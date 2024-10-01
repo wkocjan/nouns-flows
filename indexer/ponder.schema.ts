@@ -85,6 +85,8 @@ export default createSchema((p) => ({
     },
     {
       arbitratorIndex: p.index("arbitrator"),
+      disputeIdIndex: p.index("disputeId"),
+      grantIdIndex: p.index("grantId"),
     }
   ),
   DisputeVote: p.createTable(

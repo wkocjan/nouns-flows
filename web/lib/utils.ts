@@ -41,3 +41,7 @@ export function getEthAddress(address: string) {
 
   return address.toLowerCase() as `0x${string}`
 }
+
+export function isProduction() {
+  return process.env.NODE_ENV === "production"
+}

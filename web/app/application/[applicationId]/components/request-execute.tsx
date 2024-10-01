@@ -12,10 +12,11 @@ import { base } from "viem/chains"
 interface Props {
   grant: Grant
   flow: Grant
+  className?: string
 }
 
 export function ApplicationExecuteRequestButton(props: Props) {
-  const { grant, flow } = props
+  const { grant, flow, className } = props
   const { writeContract, prepareWallet } = useContractTransaction()
 
   return (
@@ -23,6 +24,7 @@ export function ApplicationExecuteRequestButton(props: Props) {
       type="button"
       disabled={!canRequestBeExecuted(grant)}
       variant="secondary"
+      className={className}
       onClick={async () => {
         await prepareWallet()
 
