@@ -38,9 +38,9 @@ export async function GET() {
 
       console.log("votes", votes)
 
-      const voters = votes.map((vote) => vote.voter)
-
-      const keys = voters.map((voter) => generateKVKey(arbitrator, disputeId, voter))
+      const keys = votes.map((vote) =>
+        generateKVKey(arbitrator, disputeId, vote.voter, vote.commitHash),
+      )
 
       console.log("keys", keys)
 

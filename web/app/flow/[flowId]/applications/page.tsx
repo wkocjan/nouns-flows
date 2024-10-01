@@ -147,7 +147,7 @@ export default async function FlowApplicationsPage(props: Props) {
                     {isDisputeResolvedForNoneParty(dispute) && (
                       <div className="flex flex-col">
                         <strong className="font-medium text-red-600 dark:text-red-500">
-                          Unsolved
+                          Unresolved
                         </strong>
                         <span className="text-xs text-muted-foreground">
                           Failed to reach decision.

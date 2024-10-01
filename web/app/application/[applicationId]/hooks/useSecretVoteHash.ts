@@ -11,25 +11,25 @@ export function useSecretVoteHash(arbitrator: string, disputeId: string, address
     if (!address) return
 
     const generateVoteHash = async (party: Party) => {
-      const { commitmentHash, salt } = generateCommitment(party)
+      const { commitHash, salt } = generateCommitment(party)
 
-      const key = generateKVKey(arbitrator, disputeId, address)
+      const key = generateKVKey(arbitrator, disputeId, address, commitHash)
       const data: SavedVote = {
         choice: party,
         reason: "",
         disputeId: parseInt(disputeId),
         voter: address as `0x${string}`,
         salt,
-        commitmentHash,
+        commitHash,
       }
 
       // pull if already saved, otherwise save
       const vote = await saveOrGet(key, data)
 
       if (party === Party.Requester) {
-        setForCommitHash(vote.commitmentHash)
+        setForCommitHash(vote.commitHash)
       } else {
-        setAgainstCommitHash(vote.commitmentHash)
+        setAgainstCommitHash(vote.commitHash)
       }
     }
 
@@ -42,16 +42,14 @@ export function useSecretVoteHash(arbitrator: string, disputeId: string, address
   return { forCommitHash, againstCommitHash }
 }
 
-const generateCommitment = (
-  party: Party,
-): { commitmentHash: `0x${string}`; salt: `0x${string}` } => {
+const generateCommitment = (party: Party): { commitHash: `0x${string}`; salt: `0x${string}` } => {
   const salt = generateSalt()
-  const hash = keccak256(
+  const commitHash = keccak256(
     encodeAbiParameters(
       [{ type: "uint256" }, { type: "string" }, { type: "bytes32" }],
       [BigInt(party), "", salt],
     ),
   )
 
-  return { commitmentHash: hash, salt }
+  return { commitHash, salt }
 }

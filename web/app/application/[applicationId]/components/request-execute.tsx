@@ -1,11 +1,12 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import {  erc20VotesMintableImplAbi, flowTcrImplAbi, nounsFlowImplAbi } from "@/lib/abis"
+import { erc20VotesMintableImplAbi, flowTcrImplAbi, nounsFlowImplAbi } from "@/lib/abis"
 import { canRequestBeExecuted } from "@/lib/database/helpers/application"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { Grant } from "@prisma/client"
+import { useRouter } from "next/navigation"
 import { Address } from "viem"
 import { base } from "viem/chains"
 
@@ -17,7 +18,15 @@ interface Props {
 
 export function ApplicationExecuteRequestButton(props: Props) {
   const { grant, flow, className } = props
-  const { writeContract, prepareWallet } = useContractTransaction()
+  const router = useRouter()
+
+  const { writeContract, prepareWallet } = useContractTransaction({
+    onSuccess: async () => {
+      // wait 1 second
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      router.push(`/flow/${flow.id}`)
+    },
+  })
 
   return (
     <Button

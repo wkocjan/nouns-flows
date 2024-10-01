@@ -9,7 +9,7 @@ export interface SavedVote {
   disputeId: number
   voter: `0x${string}`
   salt: `0x${string}`
-  commitmentHash: `0x${string}`
+  commitHash: `0x${string}`
 }
 
 export function generateSalt(): `0x${string}` {
@@ -18,7 +18,12 @@ export function generateSalt(): `0x${string}` {
   return `0x${Buffer.from(randomBytes).toString("hex")}` as `0x${string}`
 }
 
-export function generateKVKey(arbitrator: string, disputeId: string, address: string): string {
+export function generateKVKey(
+  arbitrator: string,
+  disputeId: string,
+  address: string,
+  commitHash: string,
+): string {
   // guaranteed to be unique across disputes since you can only vote once per dispute per arbitrator per address
-  return `vote:${arbitrator.toLowerCase()}:${disputeId}:${address.toLowerCase()}`
+  return `vote:${arbitrator.toLowerCase()}:${disputeId}:${address.toLowerCase()}:${commitHash}`
 }

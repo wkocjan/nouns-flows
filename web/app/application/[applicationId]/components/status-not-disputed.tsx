@@ -28,20 +28,19 @@ export const StatusNotDisputed = (props: Props) => {
 
   return (
     <div className="space-y-4 text-sm">
+      <li>Anyone can pay a fee to challenge this application.</li>
+
+      <li>If successful, the challenger will win the application fee.</li>
+
       <li>
-        Challenge period ends{" "}
+        If no challenges are submitted <b>with</b>
         <DateTime
           date={new Date(grant.challengePeriodEndsAt * 1000)}
           className="font-medium"
           relative
         />
-      </li>
-
-      <li>During this period, anyone can challenge the application.</li>
-
-      <li>
-        If no challenges are submitted by the end of this period, the application is automatically
-        approved.
+        {", "}
+        the application is automatically approved.
       </li>
 
       <ApplicationChallengeButton grant={grant} flow={flow} className="!mt-6 w-full" />

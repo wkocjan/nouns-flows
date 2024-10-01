@@ -50,8 +50,8 @@ export default async function FlowPage(props: Props) {
             <TableRow key={grant.id}>
               <TableCell className="w-[64px] min-w-[64px]">
                 <Image
-                  src={getIpfsUrl(flow.image)}
-                  alt={flow.title}
+                  src={getIpfsUrl(grant.image)}
+                  alt={grant.title}
                   width={64}
                   height={64}
                   className="aspect-square size-12 rounded-md object-cover"
@@ -60,7 +60,9 @@ export default async function FlowPage(props: Props) {
               <TableCell>
                 <h4 className="mb-1 text-sm md:text-base">
                   <Link
-                    href={`/grant/${grant.id}`}
+                    href={
+                      flow.isTopLevel && grant.isFlow ? `/flow/${grant.id}` : `/grant/${grant.id}`
+                    }
                     className="font-medium duration-100 ease-out hover:text-primary"
                     tabIndex={-1}
                   >
