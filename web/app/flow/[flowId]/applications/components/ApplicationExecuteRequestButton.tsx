@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { flowTcrImplAbi } from "@/lib/abis"
+import {  erc20VotesMintableImplAbi, flowTcrImplAbi, nounsFlowImplAbi } from "@/lib/abis"
 import { canRequestBeExecuted } from "@/lib/database/helpers/application"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
@@ -28,7 +28,7 @@ export function ApplicationExecuteRequestButton(props: Props) {
 
         writeContract({
           address: getEthAddress(flow.tcr),
-          abi: flowTcrImplAbi,
+          abi: [...flowTcrImplAbi, ...nounsFlowImplAbi, ...erc20VotesMintableImplAbi],
           functionName: "executeRequest",
           args: [grant.id as Address],
           chainId: base.id,

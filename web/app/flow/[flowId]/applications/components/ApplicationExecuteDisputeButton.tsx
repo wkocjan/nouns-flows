@@ -1,13 +1,12 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { erc20VotesArbitratorImplAbi } from "@/lib/abis"
+import { erc20VotesArbitratorImplAbi, erc20VotesMintableImplAbi, flowTcrImplAbi, nounsFlowImplAbi } from "@/lib/abis"
 import { canDisputeBeExecuted } from "@/lib/database/helpers/application"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { Grant, Dispute } from "@prisma/client"
 import { useRouter } from "next/navigation"
-import { Address } from "viem"
 import { base } from "viem/chains"
 
 interface Props {
@@ -35,7 +34,7 @@ export function ApplicationExecuteDisputeButton(props: Props) {
 
         writeContract({
           address: getEthAddress(flow.arbitrator),
-          abi: erc20VotesArbitratorImplAbi,
+          abi: [...erc20VotesArbitratorImplAbi, ...erc20VotesMintableImplAbi, ...flowTcrImplAbi, ...nounsFlowImplAbi],
           functionName: "executeRuling",
           args: [BigInt(dispute.disputeId)],
           chainId: base.id,
