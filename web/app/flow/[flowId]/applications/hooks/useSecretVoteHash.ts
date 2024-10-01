@@ -1,20 +1,7 @@
-import { saveItem, saveOrGet } from "@/lib/kv/kvStore"
+import { generateKVKey, generateSalt, Party, SavedVote } from "@/lib/kv/disputeVote"
+import { saveOrGet } from "@/lib/kv/kvStore"
 import { useEffect, useState } from "react"
 import { encodeAbiParameters, keccak256 } from "viem"
-
-export enum Party {
-  None, // Party per default when there is no challenger or requester. Also used for inconclusive ruling.
-  Requester, // Party that made the request to change a status.
-  Challenger, // Party that challenges the request to change a status.
-}
-interface SavedVote {
-  choice: Party
-  reason: string
-  disputeId: number
-  voter: `0x${string}`
-  salt: `0x${string}`
-  commitmentHash: `0x${string}`
-}
 
 export function useSecretVoteHash(arbitrator: string, disputeId: string, address?: string) {
   const [forSecretHash, setForSecretHash] = useState<`0x${string}` | null>(null)
@@ -67,15 +54,4 @@ const generateCommitment = (
   )
 
   return { commitmentHash: hash, salt }
-}
-
-function generateSalt(): `0x${string}` {
-  const randomBytes = new Uint8Array(32)
-  crypto.getRandomValues(randomBytes)
-  return `0x${Buffer.from(randomBytes).toString("hex")}` as `0x${string}`
-}
-
-function generateKVKey(arbitrator: string, disputeId: string, address: string): string {
-  // guaranteed to be unique across disputes since you can only vote once per dispute per arbitrator per address
-  return `vote:${arbitrator}:${disputeId}:${address}`
 }

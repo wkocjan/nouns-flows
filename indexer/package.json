@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@ponder/core": "^0.6.0",
+    "@vercel/kv": "^3.0.0",
     "hono": "^4.6.2",
     "viem": "^2.21.9"
   },
