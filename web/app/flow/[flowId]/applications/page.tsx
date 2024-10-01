@@ -1,6 +1,10 @@
 import "server-only"
 
+import { ApplicationExecuteDisputeButton } from "@/app/application/[applicationId]/components/dispute-execute"
+import { ApplicationChallengeButton } from "@/app/application/[applicationId]/components/dispute-start"
+import { ApplicationExecuteRequestButton } from "@/app/application/[applicationId]/components/request-execute"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import { DateTime } from "@/components/ui/date-time"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import {
@@ -24,10 +28,7 @@ import { getFlow } from "@/lib/database/queries/flow"
 import { Status } from "@/lib/enums"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
-import { ApplicationChallengeButton } from "./components/ApplicationChallengeButton"
-import { ApplicationDispute } from "./components/ApplicationDispute"
-import { ApplicationExecuteRequestButton } from "./components/ApplicationExecuteRequestButton"
-import { ApplicationExecuteDisputeButton } from "./components/ApplicationExecuteDisputeButton"
+import Link from "next/link"
 
 interface Props {
   params: {
@@ -42,14 +43,9 @@ export default async function FlowApplicationsPage(props: Props) {
     getFlow(flowId),
     database.grant.findMany({
       where: { flowId, status: Status.RegistrationRequested },
+      include: { disputes: true },
     }),
   ])
-
-  const grantIds = grants.map((grant) => grant.id)
-
-  const disputes = await database.dispute.findMany({
-    where: { grantId: { in: grantIds } },
-  })
 
   return (
     <Table>
@@ -64,7 +60,7 @@ export default async function FlowApplicationsPage(props: Props) {
       </TableHeader>
       <TableBody>
         {grants.map((grant) => {
-          const dispute = disputes.find((dispute) => dispute.grantId === grant.id)
+          const dispute = grant.disputes[0]
 
           return (
             <TableRow key={grant.id}>
@@ -78,7 +74,13 @@ export default async function FlowApplicationsPage(props: Props) {
                 />
               </TableCell>
               <TableCell>
-                <h4 className="text-sm font-medium md:text-base">{grant.title}</h4>
+                <Link
+                  href={`/application/${grant.id}`}
+                  className="text-sm font-medium duration-100 ease-out hover:text-primary md:text-base"
+                  tabIndex={-1}
+                >
+                  {grant.title}
+                </Link>
               </TableCell>
               <TableCell>
                 <div className="flex space-x-0.5">
@@ -100,10 +102,13 @@ export default async function FlowApplicationsPage(props: Props) {
               <TableCell>
                 {!grant.isDisputed && canRequestBeExecuted(grant) && (
                   <div className="flex flex-col">
-                    <strong className="font-medium text-green-600">Approved</strong>
+                    <strong className="font-medium text-green-600 dark:text-green-500">
+                      Approved
+                    </strong>
                     <span className="text-xs text-muted-foreground">Can be executed</span>
                   </div>
                 )}
+
                 {!grant.isDisputed && canBeChallenged(grant) && (
                   <HoverCard>
                     <HoverCardTrigger asChild>
@@ -129,7 +134,9 @@ export default async function FlowApplicationsPage(props: Props) {
                   <>
                     {(canDisputeBeVotedOn(dispute) || isDisputeWaitingForVoting(dispute)) && (
                       <div className="flex flex-col">
-                        <strong className="font-medium text-yellow-600">Challenged</strong>
+                        <strong className="font-medium text-yellow-600 dark:text-yellow-500">
+                          Challenged
+                        </strong>
                         <span className="text-xs text-muted-foreground">
                           {isDisputeWaitingForVoting(dispute)
                             ? "Vote starts soon"
@@ -139,7 +146,9 @@ export default async function FlowApplicationsPage(props: Props) {
                     )}
                     {canDisputeBeExecuted(dispute) && (
                       <div className="flex flex-col">
-                        <strong className="font-medium text-green-600">Solved</strong>
+                        <strong className="font-medium text-green-600 dark:text-green-500">
+                          Solved
+                        </strong>
                         <span className="text-xs text-muted-foreground">Can be executed</span>
                       </div>
                     )}
@@ -155,15 +164,13 @@ export default async function FlowApplicationsPage(props: Props) {
                   {canBeChallenged(grant) && (
                     <ApplicationChallengeButton grant={grant} flow={flow} />
                   )}
-                  {dispute && (
-                    <>
-                      {canDisputeBeExecuted(dispute) && (
-                        <ApplicationExecuteDisputeButton flow={flow} dispute={dispute} />
-                      )}
-                      {(canDisputeBeVotedOn(dispute) || isDisputeWaitingForVoting(dispute)) && (
-                        <ApplicationDispute dispute={dispute} grant={grant} flow={flow} />
-                      )}
-                    </>
+                  {dispute && canDisputeBeExecuted(dispute) && (
+                    <ApplicationExecuteDisputeButton flow={flow} dispute={dispute} />
+                  )}
+                  {dispute && !canDisputeBeExecuted(dispute) && (
+                    <Link href={`/application/${grant.id}`}>
+                      <Button>Check details</Button>
+                    </Link>
                   )}
                 </div>
               </TableCell>
