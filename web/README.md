@@ -17,23 +17,13 @@ First, ensure you have a local PostgreSQL database running. The easiest way to l
 ### Environment Setup
 
 1. Copy the `.env.example` file to a new file named `.env` in the root directory.
-2. Fill in the necessary environment variables in the `.env` file:
-
-   ```
-   NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=
-   NEXT_PUBLIC_ALCHEMY_ID=
-   NEYNAR_API_KEY=
-   DATABASE_URL="postgresql://postgres:@localhost:5432/nouns-flows?schema=public"
-   ```
-
-   Authentication is handled using ConnectKit (https://docs.family.co/connectkit), which is why the WalletConnect project ID is needed.
+2. Fill in the necessary environment variables in the `.env` file
 
 ### Database Management
 
 You can find helpful scripts in the `package.json` for managing the database:
 
-- `pnpm db:push`: Apply changes to your local database schema without creating migrations.
-- `pnpm db:migrate`: Generate a new migration after making changes to the database schema.
+- `pnpm db:push`: Apply changes to your local database schema
 - `pnpm db:generate`: Generate Prisma client based on your schema.
 
 The Prisma schema is located at `lib/database/schema.prisma`.

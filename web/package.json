@@ -7,11 +7,9 @@
     "build": "pnpm db:generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "prebuild": "prisma generate && prisma migrate deploy",
+    "prebuild": "prisma generate",
     "db:push": "prisma db push",
-    "db:migrate": "prisma migrate dev --name",
-    "db:generate": "prisma generate",
-    "db:studio": "prisma studio"
+    "db:generate": "prisma generate"
   },
   "dependencies": {
     "@blocknote/core": "^0.15.9",
