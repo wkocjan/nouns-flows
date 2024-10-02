@@ -64,6 +64,8 @@ export function BuyTokenBox(props: Props) {
 
   const { ethPrice } = useETHPrice()
 
+  console.log("isLoadingRewardsQuote", isLoadingRewardsQuote)
+
   return (
     <div className="space-y-2 rounded-3xl bg-white p-1.5 dark:bg-black">
       <ConversionBox label="Buy">
@@ -99,7 +101,7 @@ export function BuyTokenBox(props: Props) {
               disabled
               className={cn("disabled:text-black", {
                 "opacity-50": isLoadingRewardsQuote,
-                "disabled:opacity-100": !isLoadingRewardsQuote,
+                "opacity-100": !isLoadingRewardsQuote,
               })}
             />
             <CurrencyDisplay>
@@ -211,7 +213,7 @@ const CurrencyInput = ({
     onChange={onChange}
     autoFocus={false}
     disabled={disabled}
-    className={`flex h-10 w-full appearance-none rounded-md border-none bg-transparent px-0 py-1 text-3xl font-medium shadow-none transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:ring-0 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+    className={`flex h-10 w-full appearance-none rounded-md border-none bg-transparent px-0 py-1 text-3xl font-medium shadow-none transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:ring-0 focus-visible:outline-none disabled:cursor-not-allowed ${className}`}
   />
 )
 
