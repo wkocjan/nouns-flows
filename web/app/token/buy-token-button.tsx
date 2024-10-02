@@ -70,7 +70,7 @@ export function BuyTokenButton(props: Props) {
       <DialogContent className="sm:max-w-screen-xs">
         <DialogHeader>
           <DialogTitle className="text-center text-lg font-medium">
-            Buy {token.name} TCR token
+            Buy and sell TCR tokens
           </DialogTitle>
         </DialogHeader>
         <ul className="my-4 space-y-6">
@@ -79,8 +79,7 @@ export function BuyTokenButton(props: Props) {
               1
             </span>
             <p>
-              The price of ${tokenSymbol} fluctuates based on supply and demand according to an S
-              shaped{" "}
+              Prices fluctuate based on supply and demand according to an S shaped{" "}
               <a
                 href="https://github.com/rocketman-21/flow-contracts/blob/main/src/token-issuance/BondingSCurve.sol"
                 target="_blank"
