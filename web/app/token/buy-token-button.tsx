@@ -23,8 +23,7 @@ import { useBuyTokenQuote, useBuyTokenQuoteWithRewards } from "./hooks/useBuyTok
 import { Label } from "@/components/ui/label"
 import Image from "next/image"
 import { formatUSDValue, useETHPrice } from "./hooks/useETHPrice"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-
+import { CostDifferenceTooltip } from "./cost-difference-tooltip"
 interface Props {
   flow: Grant
   defaultTokenAmount: bigint
@@ -70,11 +69,6 @@ export function BuyTokenButton(props: Props) {
   }
 
   const { ethPrice } = useETHPrice()
-
-  // calculate % difference between costWithRewardsFee and rawCost
-  const costDifference = ((Number(costWithRewardsFee) - Number(rawCost)) / Number(rawCost)) * 100
-  const surgeCostDifference = (Number(addedSurgeCost) / Number(rawCost)) * 100
-  const isSurging = costDifference < surgeCostDifference
 
   return (
     <Dialog>
@@ -165,9 +159,9 @@ export function BuyTokenButton(props: Props) {
                     {formatUSDValue(ethPrice || 0, costWithRewardsFee)}
                   </span>
                   <CostDifferenceTooltip
-                    isSurging={isSurging}
-                    surgeCostDifference={surgeCostDifference}
-                    costDifference={costDifference}
+                    rawCost={rawCost}
+                    addedSurgeCost={addedSurgeCost}
+                    costWithRewardsFee={costWithRewardsFee}
                   />
                 </div>
                 <Balance balance={balance?.value || BigInt(0)} />
@@ -282,38 +276,4 @@ const ConversionBox = ({ label, children }: { label: string; children: React.Rea
     </Label>
     <div className="mt-1">{children}</div>
   </div>
-)
-
-const CostDifferenceTooltip = ({
-  isSurging,
-  surgeCostDifference,
-  costDifference,
-}: {
-  isSurging: boolean
-  surgeCostDifference: number
-  costDifference: number
-}) => (
-  <Tooltip>
-    <TooltipTrigger asChild>
-      <span
-        className={cn("text-xs text-gray-500", {
-          "text-yellow-500": isSurging && surgeCostDifference > 10,
-          "text-red-500": isSurging && surgeCostDifference > 50,
-          "opacity-50": !isSurging,
-        })}
-      >
-        ({isSurging ? `-${surgeCostDifference.toFixed(2)}%` : `${costDifference.toFixed(2)}%`})
-      </span>
-    </TooltipTrigger>
-    {isSurging ? (
-      <TooltipContent side="top" className="max-w-[220px]">
-        Your purchase will occur ahead of the expected token issuance schedule. You can wait for
-        prices to drop or pay {surgeCostDifference.toFixed(2)}% more to buy now.
-      </TooltipContent>
-    ) : (
-      <TooltipContent side="right" className="max-w-[200px]">
-        You pay a {costDifference.toFixed(2)}% protocol rewards fee on top of the purchase price.
-      </TooltipContent>
-    )}
-  </Tooltip>
 )
