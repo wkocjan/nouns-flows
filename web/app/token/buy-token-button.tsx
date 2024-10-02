@@ -23,6 +23,7 @@ import { useBuyTokenQuote, useBuyTokenQuoteWithRewards } from "./hooks/useBuyTok
 import { Label } from "@/components/ui/label"
 import Image from "next/image"
 import { formatUSDValue, useETHPrice } from "./hooks/useETHPrice"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 
 interface Props {
   flow: Grant
@@ -41,8 +42,11 @@ export function BuyTokenButton(props: Props) {
 
   const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr), chainId)
 
-  const { totalCost: costWithRewardsFee, isLoading: isLoadingRewardsQuote } =
-    useBuyTokenQuoteWithRewards(getEthAddress(flow.tokenEmitter), tokenAmountBigInt, chainId)
+  const {
+    totalCost: costWithRewardsFee,
+    isLoading: isLoadingRewardsQuote,
+    addedSurgeCost,
+  } = useBuyTokenQuoteWithRewards(getEthAddress(flow.tokenEmitter), tokenAmountBigInt, chainId)
 
   const { totalCost: rawCost } = useBuyTokenQuote(
     getEthAddress(flow.tokenEmitter),
@@ -69,6 +73,11 @@ export function BuyTokenButton(props: Props) {
 
   // calculate % difference between costWithRewardsFee and rawCost
   const costDifference = ((Number(costWithRewardsFee) - Number(rawCost)) / Number(rawCost)) * 100
+  const surgeCostDifference = (Number(addedSurgeCost) / Number(rawCost)) * 100
+  const isSurging = costDifference < surgeCostDifference
+
+  console.log("surgeCost", addedSurgeCost)
+  console.log("rawCost", rawCost)
 
   return (
     <Dialog>
@@ -158,9 +167,34 @@ export function BuyTokenButton(props: Props) {
                   <span className="text-xs text-gray-500">
                     {formatUSDValue(ethPrice || 0, costWithRewardsFee)}
                   </span>
-                  <span className="text-xs text-gray-500 opacity-50">
-                    (-{costDifference.toFixed(2)}%)
-                  </span>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span
+                        className={cn("text-xs text-gray-500", {
+                          "text-yellow-500": isSurging && surgeCostDifference > 10,
+                          "text-red-500": isSurging && surgeCostDifference > 50,
+                          "opacity-50": !isSurging,
+                        })}
+                      >
+                        (
+                        {isSurging
+                          ? `-${surgeCostDifference.toFixed(2)}%`
+                          : `${costDifference.toFixed(2)}%`}
+                        )
+                      </span>
+                    </TooltipTrigger>
+                    {isSurging ? (
+                      <TooltipContent side="right" className="max-w-[320px]">
+                        Your purchase is ahead of expected token supply schedule. You can wait for
+                        prices to drop or pay {surgeCostDifference.toFixed(2)}% more to buy now.
+                      </TooltipContent>
+                    ) : (
+                      <TooltipContent side="right" className="max-w-[200px]">
+                        You pay a {costDifference.toFixed(2)}% protocol rewards fee on top of the
+                        purchase price.
+                      </TooltipContent>
+                    )}
+                  </Tooltip>
                 </div>
                 <Balance balance={balance?.value || BigInt(0)} />
               </div>
@@ -181,16 +215,7 @@ export function BuyTokenButton(props: Props) {
                 try {
                   await prepareWallet()
 
-                  console.log(
-                    "buyToken",
-                    address,
-                    tokenAmountBigInt,
-                    BigInt(Math.trunc(Number(costWithRewardsFee) * 1.05)),
-                    {
-                      builder: zeroAddress,
-                      purchaseReferral: zeroAddress,
-                    },
-                  )
+                  const costWithSlippage = BigInt(Math.trunc(Number(costWithRewardsFee) * 1.02))
 
                   writeContract({
                     account: address,
@@ -201,13 +226,13 @@ export function BuyTokenButton(props: Props) {
                     args: [
                       address as `0x${string}`,
                       tokenAmountBigInt,
-                      BigInt(Math.trunc(Number(costWithRewardsFee) * 1.05)),
+                      costWithSlippage,
                       {
                         builder: zeroAddress,
                         purchaseReferral: zeroAddress,
                       },
                     ],
-                    value: BigInt(Math.trunc(Number(costWithRewardsFee) * 1.05)),
+                    value: costWithSlippage,
                   })
                 } catch (e: any) {
                   toast.error(e.message, { id: toastId })
