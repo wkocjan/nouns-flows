@@ -1,5 +1,6 @@
 "use client"
 
+import { BuyTokenButton } from "@/app/token/buy-token-button"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -102,9 +103,7 @@ export function ApplicationChallengeButton(props: Props) {
         </ul>
         <div className="flex justify-end space-x-2">
           {!hasEnoughBalance && (
-            <Button variant="default" type="button" onClick={() => window.alert("Coming soon!")}>
-              Buy {token.symbol}
-            </Button>
+            <BuyTokenButton flow={flow} defaultTokenAmount={challengeSubmissionCost} />
           )}
           <Button
             disabled={!hasEnoughBalance || token.isApproving || isLoading}

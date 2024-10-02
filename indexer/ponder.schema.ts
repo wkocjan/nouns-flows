@@ -75,6 +75,7 @@ export default createSchema((p) => ({
       revealPeriodEndTime: p.int(),
       appealPeriodEndTime: p.int(),
       creationBlock: p.int(),
+      arbitrationCost: p.string(),
       votes: p.string(),
       // assumes 2 potential choices / parties to vote on
       requesterPartyVotes: p.string(),

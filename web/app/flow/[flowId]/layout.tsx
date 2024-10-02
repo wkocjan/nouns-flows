@@ -46,7 +46,7 @@ export default async function FlowLayout(props: PropsWithChildren<Props>) {
 
         <FlowHeader flow={flow} />
 
-        <FlowSubmenu flowId={flowId} isTopLevel={flow.isTopLevel === 1} />
+        <FlowSubmenu flowId={flowId} flow={flow} isTopLevel={flow.isTopLevel === 1} />
 
         {children}
       </div>
