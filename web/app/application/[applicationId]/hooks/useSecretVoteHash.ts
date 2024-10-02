@@ -1,33 +1,57 @@
+"use client"
+
+import { generateKVKey, generateSalt, Party, SavedVote } from "@/lib/kv/disputeVote"
+import { saveOrGetEncrypted } from "@/lib/kv/kvStore"
 import { useEffect, useState } from "react"
 import { encodeAbiParameters, keccak256 } from "viem"
 
-// ToDo: Generate salt on the fly and store it in Vercel along with vote + empty reason for now
-export const saltHex = "0x8e59e7faab9e1dfcd71677d70677c639beb5d009f8fcae7ec73c7ba6fc7a2bea"
-
-export function useSecretVoteHash(keyPrefix: string) {
-  const [forSecretHash, setForSecretHash] = useState<`0x${string}` | null>(null)
-  const [againstSecretHash, setAgainstSecretHash] = useState<`0x${string}` | null>(null)
+export function useSecretVoteHash(arbitrator: string, disputeId: string, address?: string) {
+  const [forCommitHash, setForCommitHash] = useState<`0x${string}` | null>(null)
+  const [againstCommitHash, setAgainstCommitHash] = useState<`0x${string}` | null>(null)
 
   useEffect(() => {
-    const generateVoteHash = (isFor: boolean) => {
-      //   const salt = crypto.getRandomValues(new Uint8Array(32))
-      //   const saltHex = `0x${Buffer.from(salt).toString("hex")}` as `0x${string}`
+    if (!address) return
 
-      const hash = keccak256(
-        encodeAbiParameters(
-          [{ type: "uint256" }, { type: "string" }, { type: "bytes32" }],
-          [BigInt(isFor ? 1 : 2), "", keccak256(saltHex)],
-        ),
-      )
+    const generateVoteHash = async (party: Party) => {
+      const { commitHash, salt } = generateCommitment(party)
 
-      return hash
+      const key = generateKVKey(arbitrator, disputeId, address, commitHash)
+      const data: SavedVote = {
+        choice: party,
+        reason: "",
+        disputeId: parseInt(disputeId),
+        voter: address.toLowerCase() as `0x${string}`,
+        salt,
+        commitHash,
+      }
+
+      // pull if already saved, otherwise save
+      const vote = await saveOrGetEncrypted(key, data)
+
+      if (party === Party.Requester) {
+        setForCommitHash(vote.commitHash)
+      } else {
+        setAgainstCommitHash(vote.commitHash)
+      }
     }
 
-    setForSecretHash(generateVoteHash(true))
-    setAgainstSecretHash(generateVoteHash(false))
-  }, [])
+    generateVoteHash(Party.Requester)
+    generateVoteHash(Party.Challenger)
+  }, [arbitrator, disputeId, address])
 
-  if (!keyPrefix) return { forSecretHash: null, againstSecretHash: null }
+  if (!arbitrator || !disputeId || !address) return { forCommitHash: null, againstCommitHash: null }
 
-  return { forSecretHash, againstSecretHash }
+  return { forCommitHash, againstCommitHash }
+}
+
+const generateCommitment = (party: Party): { commitHash: `0x${string}`; salt: `0x${string}` } => {
+  const salt = generateSalt()
+  const commitHash = keccak256(
+    encodeAbiParameters(
+      [{ type: "uint256" }, { type: "string" }, { type: "bytes32" }],
+      [BigInt(party), "", salt],
+    ),
+  )
+
+  return { commitHash, salt }
 }

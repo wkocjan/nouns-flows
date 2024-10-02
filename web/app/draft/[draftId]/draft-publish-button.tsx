@@ -45,6 +45,8 @@ export function DraftPublishButton(props: Props) {
     onSuccess: async (hash) => {
       await updateDraft(draft.id, hash)
       ref.current?.click() // close dialog
+      // wait 1 second
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       router.push(`/flow/${flow.id}/applications`)
     },
   })

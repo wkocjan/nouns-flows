@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/crons/reveal-votes",
+      "schedule": "*/2 * * * *"
+    }
+  ]
+}

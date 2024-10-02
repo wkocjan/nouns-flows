@@ -1,7 +1,12 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { erc20VotesArbitratorImplAbi } from "@/lib/abis"
+import {
+  erc20VotesArbitratorImplAbi,
+  erc20VotesMintableImplAbi,
+  flowTcrImplAbi,
+  nounsFlowImplAbi,
+} from "@/lib/abis"
 import { canDisputeBeExecuted } from "@/lib/database/helpers/application"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
@@ -21,6 +26,8 @@ export function ApplicationExecuteDisputeButton(props: Props) {
 
   const { writeContract, prepareWallet } = useContractTransaction({
     onSuccess: async () => {
+      // wait 1 second
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       router.push(`/flow/${flow.id}`)
     },
   })
@@ -36,7 +43,12 @@ export function ApplicationExecuteDisputeButton(props: Props) {
 
         writeContract({
           address: getEthAddress(flow.arbitrator),
-          abi: erc20VotesArbitratorImplAbi,
+          abi: [
+            ...erc20VotesArbitratorImplAbi,
+            ...erc20VotesMintableImplAbi,
+            ...flowTcrImplAbi,
+            ...nounsFlowImplAbi,
+          ],
           functionName: "executeRuling",
           args: [BigInt(dispute.disputeId)],
           chainId: base.id,

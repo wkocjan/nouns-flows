@@ -122,7 +122,7 @@ view DisputeVote {
   id         String  @id
   arbitrator String
   disputeId  String
-  secretHash String
+  commitHash String
   voter      String
   choice     Int?
   votes      String?

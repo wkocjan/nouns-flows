@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { flowTcrImplAbi } from "@/lib/abis"
+import { erc20VotesArbitratorImplAbi, flowTcrImplAbi } from "@/lib/abis"
 import { canBeChallenged } from "@/lib/database/helpers/application"
 import { useTcrData } from "@/lib/tcr/use-tcr-data"
 import { useTcrToken } from "@/lib/tcr/use-tcr-token"
@@ -122,7 +122,7 @@ export function ApplicationChallengeButton(props: Props) {
 
                 writeContract({
                   address: getEthAddress(flow.tcr),
-                  abi: flowTcrImplAbi,
+                  abi: [...flowTcrImplAbi, ...erc20VotesArbitratorImplAbi],
                   functionName: "challengeRequest",
                   args: [grant.id as Address, evidence],
                   chainId: base.id,

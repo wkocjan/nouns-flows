@@ -35,8 +35,9 @@ export function FileInput({ name, accept, onSuccess, maxFileSizeMB = 2 }: Props)
           const hash = await uploadFile(file)
 
           if (hash) {
-            setHash(hash)
-            if (onSuccess) onSuccess(hash)
+            const ipfsHash = `ipfs://${hash}`
+            setHash(ipfsHash)
+            if (onSuccess) onSuccess(ipfsHash)
           }
         }}
         accept={accept}

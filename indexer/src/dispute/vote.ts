@@ -12,7 +12,7 @@ async function handleVoteCommitted(params: {
   context: Context<"Arbitrator:VoteCommitted">
 }) {
   const { event, context } = params
-  const { disputeId, secretHash } = event.args
+  const { disputeId, secretHash: commitHash } = event.args
 
   const arbitrator = event.log.address.toLowerCase()
   const voter = event.transaction.from.toLowerCase()
@@ -21,7 +21,7 @@ async function handleVoteCommitted(params: {
     id: `${disputeId}_${arbitrator}_${voter}`,
     data: {
       disputeId: disputeId.toString(),
-      secretHash,
+      commitHash,
       arbitrator,
       voter,
     },
@@ -33,13 +33,13 @@ async function handleVoteRevealed(params: {
   context: Context<"Arbitrator:VoteRevealed">
 }) {
   const { event, context } = params
-  const { disputeId, secretHash, reason } = event.args
+  const { disputeId, secretHash: commitHash, reason, voter } = event.args
 
   const votes = event.args.votes / BigInt(1e18)
   const choice = Number(event.args.choice)
 
   const arbitrator = event.log.address.toLowerCase()
-  const voter = event.transaction.from.toLowerCase()
+  const revealedBy = event.transaction.from.toLowerCase()
 
   const { items } = await context.db.Dispute.findMany({
     where: { disputeId: disputeId.toString(), arbitrator },
@@ -49,11 +49,17 @@ async function handleVoteRevealed(params: {
 
   // Update vote
   await context.db.DisputeVote.updateMany({
-    where: { disputeId: disputeId.toString(), arbitrator, voter, secretHash },
+    where: {
+      disputeId: disputeId.toString(),
+      arbitrator: arbitrator.toLowerCase(),
+      voter: voter.toLowerCase(),
+      commitHash,
+    },
     data: {
       choice,
       votes: votes.toString(),
       reason: reason,
+      revealedBy: revealedBy.toLowerCase(),
     },
   })
 

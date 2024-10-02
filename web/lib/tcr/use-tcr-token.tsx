@@ -2,6 +2,7 @@ import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { Address, erc20Abi } from "viem"
 import { base } from "viem/chains"
 import { useAccount, useReadContracts } from "wagmi"
+import { erc20VotesMintableImplAbi } from "../abis"
 
 export function useTcrToken(contract: Address, spender: Address, chainId = base.id) {
   const { address: owner } = useAccount()
@@ -33,7 +34,7 @@ export function useTcrToken(contract: Address, spender: Address, chainId = base.
     approve: async (amount: bigint) => {
       await prepareWallet()
       writeContract({
-        abi: erc20Abi,
+        abi: erc20VotesMintableImplAbi,
         address: contract,
         functionName: "approve",
         args: [spender, amount],
