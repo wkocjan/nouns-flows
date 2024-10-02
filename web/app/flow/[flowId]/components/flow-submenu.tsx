@@ -5,14 +5,17 @@ import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { useSelectedLayoutSegment } from "next/navigation"
 import { VotingToggle } from "./voting-toggle"
+import { BuyTokenButton } from "@/app/token/buy-token-button"
+import { Grant } from "@prisma/client"
 
 interface Props {
   flowId: string
+  flow: Grant
   isTopLevel: boolean
 }
 
 export const FlowSubmenu = (props: Props) => {
-  const { flowId, isTopLevel } = props
+  const { flowId, isTopLevel, flow } = props
 
   const segment = useSelectedLayoutSegment()
 
@@ -64,11 +67,14 @@ export const FlowSubmenu = (props: Props) => {
       <div className="max-sm:hidden">
         {isApproved && <VotingToggle />}
         {(isDrafts || isApplications) && (
-          <Link href={`/apply/${flowId}`}>
-            <Button variant="secondary">
-              {isTopLevel ? "Suggest category" : "Apply for a grant"}
-            </Button>
-          </Link>
+          <div className="flex items-center space-x-2">
+            <Link href={`/apply/${flowId}`}>
+              <Button variant="secondary">
+                {isTopLevel ? "Suggest category" : "Apply for a grant"}
+              </Button>
+            </Link>
+            <BuyTokenButton flow={flow} defaultTokenAmount={BigInt(1e18)} />
+          </div>
         )}
       </div>
     </div>
