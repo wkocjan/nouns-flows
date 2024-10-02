@@ -1,5 +1,7 @@
+"use client"
+
 import { generateKVKey, generateSalt, Party, SavedVote } from "@/lib/kv/disputeVote"
-import { saveOrGet } from "@/lib/kv/kvStore"
+import { saveOrGetEncrypted } from "@/lib/kv/kvStore"
 import { useEffect, useState } from "react"
 import { encodeAbiParameters, keccak256 } from "viem"
 
@@ -18,13 +20,13 @@ export function useSecretVoteHash(arbitrator: string, disputeId: string, address
         choice: party,
         reason: "",
         disputeId: parseInt(disputeId),
-        voter: address as `0x${string}`,
+        voter: address.toLowerCase() as `0x${string}`,
         salt,
         commitHash,
       }
 
       // pull if already saved, otherwise save
-      const vote = await saveOrGet(key, data)
+      const vote = await saveOrGetEncrypted(key, data)
 
       if (party === Party.Requester) {
         setForCommitHash(vote.commitHash)

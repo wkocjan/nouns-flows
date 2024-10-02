@@ -2,8 +2,8 @@ import "server-only"
 
 import { NextResponse } from "next/server"
 import database from "@/lib/database"
-import { getItem } from "@/lib/kv/kvStore"
-import { generateKVKey, Party, SavedVote } from "@/lib/kv/disputeVote"
+import { getDecryptedItem } from "@/lib/kv/kvStore"
+import { generateKVKey, SavedVote } from "@/lib/kv/disputeVote"
 import { getRevealVotesWalletClient } from "./walletClient"
 import { base } from "viem/chains"
 import { erc20VotesArbitratorImplAbi } from "@/lib/abis"
@@ -25,8 +25,6 @@ export async function GET() {
       },
     })
 
-    console.log("disputes", disputes)
-
     let nUpdated = 0
 
     for (const dispute of disputes) {
@@ -36,17 +34,12 @@ export async function GET() {
         where: { disputeId: dispute.disputeId, arbitrator, choice: null }, // only pull unrevealed votes
       })
 
-      console.log("votes", votes)
-
       const keys = votes.map((vote) =>
         generateKVKey(arbitrator, disputeId, vote.voter, vote.commitHash),
       )
 
-      console.log("keys", keys)
-
       for (const key of keys) {
-        const vote = await getItem<SavedVote>(key)
-        console.log("vote", vote)
+        const vote = await getDecryptedItem<SavedVote>(key)
 
         if (!vote) {
           throw new Error("Vote not found")
@@ -64,8 +57,6 @@ export async function GET() {
           args: [BigInt(disputeId), vote.voter, BigInt(vote.choice), vote.reason ?? "", vote.salt],
           nonce: nonce, // Use the latest nonce
         })
-
-        console.log("tx", tx)
 
         nUpdated++
       }
