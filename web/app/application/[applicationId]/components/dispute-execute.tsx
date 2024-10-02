@@ -37,7 +37,6 @@ export function ApplicationExecuteDisputeButton(props: Props) {
       className={className}
       type="button"
       disabled={!canDisputeBeExecuted(dispute)}
-      variant="secondary"
       onClick={async () => {
         await prepareWallet()
 

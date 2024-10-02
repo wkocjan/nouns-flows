@@ -32,7 +32,6 @@ export function ApplicationExecuteRequestButton(props: Props) {
     <Button
       type="button"
       disabled={!canRequestBeExecuted(grant)}
-      variant="secondary"
       className={className}
       onClick={async () => {
         await prepareWallet()

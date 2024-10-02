@@ -27,7 +27,8 @@ export function canDisputeBeVotedOn(dispute: Dispute) {
   return votingStartTime <= Date.now() / 1000 && appealPeriodEndTime >= Date.now() / 1000
 }
 
-export function isDisputeResolvedForNoneParty(dispute: Dispute) {
+export function isDisputeResolvedForNoneParty(dispute?: Dispute) {
+  if (!dispute) return false
   const { isExecuted, ruling } = dispute
 
   if (!isExecuted) return false
@@ -35,7 +36,8 @@ export function isDisputeResolvedForNoneParty(dispute: Dispute) {
   return ruling === 0
 }
 
-export function isRequestRejected(grant: Grant, dispute: Dispute) {
+export function isRequestRejected(grant: Grant, dispute?: Dispute) {
+  if (!dispute) return false
   const { isDisputed, isResolved } = grant
   const { isExecuted, ruling } = dispute
 

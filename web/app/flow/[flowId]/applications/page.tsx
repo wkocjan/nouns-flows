@@ -30,6 +30,7 @@ import { Status } from "@/lib/enums"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
+import { ApplicationDisputeVoteCta } from "@/app/application/[applicationId]/components/dispute-vote-cta"
 
 interface Props {
   params: {
@@ -64,7 +65,6 @@ export default async function FlowApplicationsPage(props: Props) {
           const dispute = grant.disputes[0]
           const isDisputeUnresolved = isDisputeResolvedForNoneParty(dispute)
           const isGrantRejected = isRequestRejected(grant, dispute)
-          const isGrantRejectedOrUnresolved = isDisputeUnresolved || isGrantRejected
 
           return (
             <TableRow key={grant.id}>
@@ -194,11 +194,7 @@ export default async function FlowApplicationsPage(props: Props) {
                     <ApplicationExecuteDisputeButton flow={flow} dispute={dispute} />
                   )}
                   {dispute && !canDisputeBeExecuted(dispute) && (
-                    <Link href={`/application/${grant.id}`}>
-                      <Button variant={isGrantRejectedOrUnresolved ? "secondary" : "default"}>
-                        {isGrantRejectedOrUnresolved ? "View" : "Vote"}
-                      </Button>
-                    </Link>
+                    <ApplicationDisputeVoteCta dispute={dispute} grant={grant} />
                   )}
                 </div>
               </TableCell>
