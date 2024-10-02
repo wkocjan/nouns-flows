@@ -8,6 +8,7 @@ import { getRevealVotesWalletClient } from "./walletClient"
 import { base } from "viem/chains"
 import { erc20VotesArbitratorImplAbi } from "@/lib/abis"
 import { l2Client } from "@/lib/viem/client"
+import { waitForTransactionReceipt } from "viem/actions"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 3600
@@ -56,6 +57,10 @@ export async function GET() {
           functionName: "revealVote",
           args: [BigInt(disputeId), vote.voter, BigInt(vote.choice), vote.reason ?? "", vote.salt],
           nonce: nonce, // Use the latest nonce
+        })
+
+        await waitForTransactionReceipt(client, {
+          hash: tx,
         })
 
         nUpdated++
