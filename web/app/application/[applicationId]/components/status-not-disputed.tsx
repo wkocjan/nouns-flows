@@ -3,7 +3,6 @@ import { canRequestBeExecuted } from "@/lib/database/helpers/application"
 import { Grant } from "@prisma/client"
 import { ApplicationChallengeButton } from "./dispute-start"
 import { ApplicationExecuteRequestButton } from "./request-execute"
-import { Status } from "@/lib/enums"
 
 interface Props {
   grant: Grant

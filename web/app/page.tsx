@@ -99,7 +99,11 @@ export default async function Home() {
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Badge variant="outline">
-                            {flow.subgrants.filter((g) => !g.isActive && !g.isDisputed).length}
+                            {
+                              flow.subgrants.filter(
+                                (g) => !g.isActive && !g.isDisputed && !g.isResolved,
+                              ).length
+                            }
                           </Badge>
                         </TooltipTrigger>
                         <TooltipContent>Awaiting</TooltipContent>

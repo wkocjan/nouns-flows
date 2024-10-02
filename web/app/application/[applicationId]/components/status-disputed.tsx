@@ -114,6 +114,7 @@ export function StatusDisputed(props: Props) {
   function Results() {
     const isPending = dispute.ruling === 0
     const isApproved = dispute.ruling === 1
+    const didArbitrate = dispute.challengerPartyVotes != dispute.requesterPartyVotes
     const requesterWon = dispute.challengerPartyVotes < dispute.requesterPartyVotes
     return (
       <>
@@ -134,9 +135,13 @@ export function StatusDisputed(props: Props) {
         ) : (
           <li>
             Pending{" "}
-            <span className={requesterWon ? "text-green-500" : "text-red-500"}>
-              {requesterWon ? "approval" : "rejection"}
-            </span>{" "}
+            {didArbitrate ? (
+              <span className={requesterWon ? "text-green-500" : "text-red-500"}>
+                {requesterWon ? "approval" : "rejection"}
+              </span>
+            ) : (
+              <span className="text-yellow-500">unresolved</span>
+            )}{" "}
             execution
           </li>
         )}

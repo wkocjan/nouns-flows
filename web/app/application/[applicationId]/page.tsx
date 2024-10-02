@@ -136,8 +136,10 @@ export default async function ApplicationPage({ params }: Props) {
               <CardTitle>Application status</CardTitle>
             </CardHeader>
             <CardContent>
-              {grant.isDisputed === 0 && <StatusNotDisputed grant={grant} flow={flow} />}
-              {grant.isDisputed === 1 && (
+              {grant.isDisputed === 0 && grant.isResolved == 0 && (
+                <StatusNotDisputed grant={grant} flow={flow} />
+              )}
+              {(grant.isDisputed === 1 || grant.isResolved === 1) && (
                 <StatusDisputed grant={grant} dispute={dispute} flow={flow} />
               )}
             </CardContent>
