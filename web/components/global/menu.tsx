@@ -17,6 +17,7 @@ const options = [
   { name: "Explore", href: "/explore" },
   { name: "Apply", href: "/apply" },
   { name: "About", href: "/about" },
+  { name: "Become Curator", href: "/curate" },
 ] as const
 
 export function MenuMobile() {

@@ -169,11 +169,13 @@ const RevealedVote = ({ disputeVote, grant }: { disputeVote: DisputeVote; grant:
 const CommittedVote = () => (
   <div className="space-y-4 text-sm">
     <h3 className="font-medium">You have successfully committed your vote</h3>
-    <p>TCRs use commit-reveal voting. You have committed your vote onchain.</p>
-    <p>
+    <p className="text-muted-foreground">
+      TCRs use commit-reveal voting. You have committed your vote onchain.
+    </p>
+    <p className="text-muted-foreground">
       For your convenience, we store your vote encrypted in a database. Your vote will be revealed
       automatically at the end of the voting period.
     </p>
-    <p>You can opt out of custodial voting soon.</p>
+    <p className="text-muted-foreground">You can opt out of custodial voting soon.</p>
   </div>
 )

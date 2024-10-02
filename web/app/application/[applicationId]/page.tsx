@@ -109,6 +109,7 @@ export default async function ApplicationPage({ params }: Props) {
                 <div>
                   <h4 className="text-[13px] text-muted-foreground">Created At</h4>
                   <DateTime
+                    className="text-sm"
                     date={new Date(createdAt)}
                     options={{
                       month: "short",
@@ -121,12 +122,12 @@ export default async function ApplicationPage({ params }: Props) {
 
                 <div>
                   <h4 className="mb-1 text-[13px] text-muted-foreground">Type</h4>
-                  <p>{isFlow ? "Category" : "Grant"}</p>
+                  <p className="text-sm">{isFlow ? "Category" : "Grant"}</p>
                 </div>
 
                 <div>
                   <h4 className="mb-1 text-[13px] text-muted-foreground">Challenged</h4>
-                  {grant.isDisputed === 1 ? "Yes" : "No"}
+                  <span className="text-sm">{grant.isDisputed === 1 ? "Yes" : "No"}</span>
                 </div>
               </div>
             </CardContent>

@@ -66,35 +66,35 @@ export function ApplicationChallengeButton(props: Props) {
         </DialogHeader>
         <ul className="my-4 space-y-6">
           <li className="flex items-start space-x-4">
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
+            <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
               1
             </span>
-            <p>
+            <p className="text-sm">
               Challenging this application costs {formatEther(challengeSubmissionCost)}{" "}
               {token.symbol} and will kick off a voting period.
             </p>
           </li>
           <li className="flex items-start space-x-4">
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
+            <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
               2
             </span>
-            <p>
+            <p className="text-sm">
               {token.name} holders anonymously vote on whether the application should be accepted or
               not.
             </p>
           </li>
           <li className="flex items-start space-x-4">
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
+            <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
               3
             </span>
             <div>
-              <p>
+              <p className="text-sm">
                 You lose your payment if your challenge is rejected by {token.name} voters. If the
                 challenge is successful, you are paid the applicant&apos;s bond of{" "}
                 {formatEther(addItemCost - arbitrationCost)} {token.symbol} and are repaid your
                 challenge fee.
               </p>
-              <p className="mt-2.5 text-sm text-muted-foreground">
+              <p className="mt-4 text-sm font-medium">
                 Your {token.symbol} balance: {formatEther(token.balance)}
               </p>
             </div>
