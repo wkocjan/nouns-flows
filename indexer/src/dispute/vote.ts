@@ -12,7 +12,7 @@ async function handleVoteCommitted(params: {
   context: Context<"Arbitrator:VoteCommitted">
 }) {
   const { event, context } = params
-  const { disputeId, secretHash: commitHash } = event.args
+  const { disputeId, commitHash } = event.args
 
   const arbitrator = event.log.address.toLowerCase()
   const voter = event.transaction.from.toLowerCase()
@@ -33,7 +33,7 @@ async function handleVoteRevealed(params: {
   context: Context<"Arbitrator:VoteRevealed">
 }) {
   const { event, context } = params
-  const { disputeId, secretHash: commitHash, reason, voter } = event.args
+  const { disputeId, commitHash, reason, voter } = event.args
 
   const votes = event.args.votes / BigInt(1e18)
   const choice = Number(event.args.choice)

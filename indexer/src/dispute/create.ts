@@ -21,6 +21,7 @@ async function handleDisputeCreated(params: {
     votingEndTime,
     votingStartTime,
     creationBlock,
+    arbitrationCost,
   } = event.args
 
   const arbitrator = event.log.address.toLowerCase()
@@ -39,6 +40,7 @@ async function handleDisputeCreated(params: {
       revealPeriodEndTime: Number(revealPeriodEndTime),
       appealPeriodEndTime: Number(appealPeriodEndTime),
       totalSupply: (totalSupply / BigInt(1e18)).toString(),
+      arbitrationCost: (arbitrationCost / BigInt(1e18)).toString(),
       votes: "0",
       requesterPartyVotes: "0",
       challengerPartyVotes: "0",
