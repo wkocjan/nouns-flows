@@ -23,6 +23,7 @@ import {
   canRequestBeExecuted,
   isDisputeResolvedForNoneParty,
   isDisputeWaitingForVoting,
+  isRequestRejected,
 } from "@/lib/database/helpers/application"
 import { getFlow } from "@/lib/database/queries/flow"
 import { Status } from "@/lib/enums"
@@ -61,6 +62,9 @@ export default async function FlowApplicationsPage(props: Props) {
       <TableBody>
         {grants.map((grant) => {
           const dispute = grant.disputes[0]
+          const isDisputeUnresolved = isDisputeResolvedForNoneParty(dispute)
+          const isGrantRejected = isRequestRejected(grant, dispute)
+          const isGrantRejectedOrUnresolved = isDisputeUnresolved || isGrantRejected
 
           return (
             <TableRow key={grant.id}>
@@ -144,13 +148,23 @@ export default async function FlowApplicationsPage(props: Props) {
                         </span>
                       </div>
                     )}
-                    {isDisputeResolvedForNoneParty(dispute) && (
+                    {isDisputeUnresolved && (
                       <div className="flex flex-col">
-                        <strong className="font-medium text-red-600 dark:text-red-500">
+                        <strong className="font-medium text-gray-600 dark:text-gray-400">
                           Unresolved
                         </strong>
                         <span className="text-xs text-muted-foreground">
                           Failed to reach decision.
+                        </span>
+                      </div>
+                    )}
+                    {isGrantRejected && (
+                      <div className="flex flex-col">
+                        <strong className="font-medium text-gray-600 dark:text-gray-400">
+                          Not approved
+                        </strong>
+                        <span className="text-xs text-muted-foreground">
+                          Application not approved
                         </span>
                       </div>
                     )}
@@ -179,13 +193,13 @@ export default async function FlowApplicationsPage(props: Props) {
                   {dispute && canDisputeBeExecuted(dispute) && (
                     <ApplicationExecuteDisputeButton flow={flow} dispute={dispute} />
                   )}
-                  {dispute &&
-                    !canDisputeBeExecuted(dispute) &&
-                    !isDisputeResolvedForNoneParty(dispute) && (
-                      <Link href={`/application/${grant.id}`}>
-                        <Button>Vote</Button>
-                      </Link>
-                    )}
+                  {dispute && !canDisputeBeExecuted(dispute) && (
+                    <Link href={`/application/${grant.id}`}>
+                      <Button variant={isGrantRejectedOrUnresolved ? "secondary" : "default"}>
+                        {isGrantRejectedOrUnresolved ? "View" : "Vote"}
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               </TableCell>
             </TableRow>

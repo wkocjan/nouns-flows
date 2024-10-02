@@ -1,4 +1,5 @@
 import { Status } from "@/lib/enums"
+import { Party } from "@/lib/kv/disputeVote"
 import { Dispute, Grant } from "@prisma/client"
 
 export function canRequestBeExecuted(grant: Grant) {
@@ -32,6 +33,16 @@ export function isDisputeResolvedForNoneParty(dispute: Dispute) {
   if (!isExecuted) return false
 
   return ruling === 0
+}
+
+export function isRequestRejected(grant: Grant, dispute: Dispute) {
+  const { isDisputed, isResolved } = grant
+  const { isExecuted, ruling } = dispute
+
+  if (!isExecuted) return false
+  if (ruling !== Party.Challenger) return false
+
+  return isDisputed === 0 && isResolved === 1
 }
 
 export function isDisputeWaitingForVoting(dispute: Dispute) {
