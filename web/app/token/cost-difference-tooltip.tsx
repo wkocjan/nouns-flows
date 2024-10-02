@@ -10,9 +10,10 @@ export const CostDifferenceTooltip = ({
   addedSurgeCost: bigint
   costWithRewardsFee: bigint
 }) => {
+  const rawCostMinusSurge = Number(rawCost) - Number(addedSurgeCost)
   // calculate % difference between costWithRewardsFee and rawCost
   const costDifference = ((Number(costWithRewardsFee) - Number(rawCost)) / Number(rawCost)) * 100
-  const surgeCostDifference = (Number(addedSurgeCost) / Number(rawCost)) * 100
+  const surgeCostDifference = (Number(addedSurgeCost) / Number(rawCostMinusSurge)) * 100
   const isSurging = costDifference < surgeCostDifference
 
   return (

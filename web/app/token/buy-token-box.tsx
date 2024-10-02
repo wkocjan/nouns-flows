@@ -64,8 +64,6 @@ export function BuyTokenBox(props: Props) {
 
   const { ethPrice } = useETHPrice()
 
-  console.log("isLoadingRewardsQuote", isLoadingRewardsQuote)
-
   return (
     <div className="space-y-2 rounded-3xl bg-white p-1.5 dark:bg-black">
       <ConversionBox label="Buy">
