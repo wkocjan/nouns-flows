@@ -19,9 +19,10 @@ import { toast } from "sonner"
 import { formatEther, zeroAddress } from "viem"
 import { base } from "viem/chains"
 import { useAccount, useBalance } from "wagmi"
-import { useBuyTokenQuoteWithRewards } from "./hooks/useBuyTokenQuote"
+import { useBuyTokenQuote, useBuyTokenQuoteWithRewards } from "./hooks/useBuyTokenQuote"
 import { Label } from "@/components/ui/label"
 import Image from "next/image"
+import { formatUSDValue, useETHPrice } from "./hooks/useETHPrice"
 
 interface Props {
   flow: Grant
@@ -40,8 +41,14 @@ export function BuyTokenButton(props: Props) {
 
   const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr), chainId)
 
-  const { totalCost: oneTokenCostWithRewards, isLoading: isLoadingRewardsQuote } =
+  const { totalCost: costWithRewardsFee, isLoading: isLoadingRewardsQuote } =
     useBuyTokenQuoteWithRewards(getEthAddress(flow.tokenEmitter), tokenAmountBigInt, chainId)
+
+  const { totalCost: rawCost } = useBuyTokenQuote(
+    getEthAddress(flow.tokenEmitter),
+    tokenAmountBigInt,
+    chainId,
+  )
 
   const { prepareWallet, writeContract, toastId, isLoading } = useContractTransaction({
     chainId,
@@ -58,7 +65,10 @@ export function BuyTokenButton(props: Props) {
     _setTokenAmountBigInt(BigInt(Math.trunc(Number(value) * 1e18) || "0"))
   }
 
-  const tokenSymbol = token.symbol?.toLowerCase()
+  const { ethPrice } = useETHPrice()
+
+  // calculate % difference between costWithRewardsFee and rawCost
+  const costDifference = ((Number(costWithRewardsFee) - Number(rawCost)) / Number(rawCost)) * 100
 
   return (
     <Dialog>
@@ -116,7 +126,12 @@ export function BuyTokenButton(props: Props) {
                   <span className="px-1">{token.symbol}</span>
                 </CurrencyDisplay>
               </div>
-              <Balance balance={token.balance} />
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-gray-500">
+                  {formatUSDValue(ethPrice || 0, rawCost)}
+                </span>
+                <Balance balance={token.balance} />
+              </div>
             </div>
           </ConversionBox>
 
@@ -126,7 +141,7 @@ export function BuyTokenButton(props: Props) {
                 <CurrencyInput
                   id="cost"
                   name="cost"
-                  value={Number(formatEther(oneTokenCostWithRewards)).toFixed(12)}
+                  value={Number(formatEther(costWithRewardsFee)).toFixed(12)}
                   disabled
                   className={cn("disabled:text-black", {
                     "opacity-50": isLoadingRewardsQuote,
@@ -138,13 +153,28 @@ export function BuyTokenButton(props: Props) {
                   <span className="px-1">ETH</span>
                 </CurrencyDisplay>
               </div>
-              <Balance balance={balance?.value || BigInt(0)} />
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-1">
+                  <span className="text-xs text-gray-500">
+                    {formatUSDValue(ethPrice || 0, costWithRewardsFee)}
+                  </span>
+                  <span className="text-xs text-gray-500 opacity-50">
+                    (-{costDifference.toFixed(2)}%)
+                  </span>
+                </div>
+                <Balance balance={balance?.value || BigInt(0)} />
+              </div>
             </div>
           </ConversionBox>
           <div className="mt-4 w-full">
             <Button
               className="w-full rounded-2xl py-7 text-xl font-normal tracking-wide"
-              disabled={isLoading}
+              disabled={
+                isLoading ||
+                isLoadingRewardsQuote ||
+                !balance ||
+                balance.value < BigInt(Math.trunc(Number(costWithRewardsFee) * 1.05))
+              }
               loading={isLoading}
               type="button"
               onClick={async () => {
@@ -155,7 +185,7 @@ export function BuyTokenButton(props: Props) {
                     "buyToken",
                     address,
                     tokenAmountBigInt,
-                    BigInt(Math.trunc(Number(oneTokenCostWithRewards) * 1.1)),
+                    BigInt(Math.trunc(Number(costWithRewardsFee) * 1.05)),
                     {
                       builder: zeroAddress,
                       purchaseReferral: zeroAddress,
@@ -171,13 +201,13 @@ export function BuyTokenButton(props: Props) {
                     args: [
                       address as `0x${string}`,
                       tokenAmountBigInt,
-                      BigInt(Math.trunc(Number(oneTokenCostWithRewards) * 1.1)),
+                      BigInt(Math.trunc(Number(costWithRewardsFee) * 1.05)),
                       {
                         builder: zeroAddress,
                         purchaseReferral: zeroAddress,
                       },
                     ],
-                    value: BigInt(Math.trunc(Number(oneTokenCostWithRewards) * 1.1)),
+                    value: BigInt(Math.trunc(Number(costWithRewardsFee) * 1.05)),
                   })
                 } catch (e: any) {
                   toast.error(e.message, { id: toastId })

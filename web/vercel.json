@@ -3,6 +3,10 @@
     {
       "path": "/crons/reveal-votes",
       "schedule": "*/2 * * * *"
+    },
+    {
+      "path": "/crons/conversion-rates",
+      "schedule": "*/10 * * * *"
     }
   ]
 }
