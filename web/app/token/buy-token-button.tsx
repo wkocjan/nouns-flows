@@ -76,9 +76,6 @@ export function BuyTokenButton(props: Props) {
   const surgeCostDifference = (Number(addedSurgeCost) / Number(rawCost)) * 100
   const isSurging = costDifference < surgeCostDifference
 
-  console.log("surgeCost", addedSurgeCost)
-  console.log("rawCost", rawCost)
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -137,14 +134,14 @@ export function BuyTokenButton(props: Props) {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-gray-500">
-                  {formatUSDValue(ethPrice || 0, rawCost)}
+                  {formatUSDValue(ethPrice || 0, rawCost - addedSurgeCost)}
                 </span>
                 <Balance balance={token.balance} />
               </div>
             </div>
           </ConversionBox>
 
-          <ConversionBox label="Sell">
+          <ConversionBox label="Pay">
             <div className="flex flex-col space-y-3">
               <div className="flex items-center justify-between">
                 <CurrencyInput
@@ -167,34 +164,11 @@ export function BuyTokenButton(props: Props) {
                   <span className="text-xs text-gray-500">
                     {formatUSDValue(ethPrice || 0, costWithRewardsFee)}
                   </span>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span
-                        className={cn("text-xs text-gray-500", {
-                          "text-yellow-500": isSurging && surgeCostDifference > 10,
-                          "text-red-500": isSurging && surgeCostDifference > 50,
-                          "opacity-50": !isSurging,
-                        })}
-                      >
-                        (
-                        {isSurging
-                          ? `-${surgeCostDifference.toFixed(2)}%`
-                          : `${costDifference.toFixed(2)}%`}
-                        )
-                      </span>
-                    </TooltipTrigger>
-                    {isSurging ? (
-                      <TooltipContent side="right" className="max-w-[320px]">
-                        Your purchase is ahead of expected token supply schedule. You can wait for
-                        prices to drop or pay {surgeCostDifference.toFixed(2)}% more to buy now.
-                      </TooltipContent>
-                    ) : (
-                      <TooltipContent side="right" className="max-w-[200px]">
-                        You pay a {costDifference.toFixed(2)}% protocol rewards fee on top of the
-                        purchase price.
-                      </TooltipContent>
-                    )}
-                  </Tooltip>
+                  <CostDifferenceTooltip
+                    isSurging={isSurging}
+                    surgeCostDifference={surgeCostDifference}
+                    costDifference={costDifference}
+                  />
                 </div>
                 <Balance balance={balance?.value || BigInt(0)} />
               </div>
@@ -308,4 +282,38 @@ const ConversionBox = ({ label, children }: { label: string; children: React.Rea
     </Label>
     <div className="mt-1">{children}</div>
   </div>
+)
+
+const CostDifferenceTooltip = ({
+  isSurging,
+  surgeCostDifference,
+  costDifference,
+}: {
+  isSurging: boolean
+  surgeCostDifference: number
+  costDifference: number
+}) => (
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <span
+        className={cn("text-xs text-gray-500", {
+          "text-yellow-500": isSurging && surgeCostDifference > 10,
+          "text-red-500": isSurging && surgeCostDifference > 50,
+          "opacity-50": !isSurging,
+        })}
+      >
+        ({isSurging ? `-${surgeCostDifference.toFixed(2)}%` : `${costDifference.toFixed(2)}%`})
+      </span>
+    </TooltipTrigger>
+    {isSurging ? (
+      <TooltipContent side="top" className="max-w-[220px]">
+        Your purchase will occur ahead of the expected token issuance schedule. You can wait for
+        prices to drop or pay {surgeCostDifference.toFixed(2)}% more to buy now.
+      </TooltipContent>
+    ) : (
+      <TooltipContent side="right" className="max-w-[200px]">
+        You pay a {costDifference.toFixed(2)}% protocol rewards fee on top of the purchase price.
+      </TooltipContent>
+    )}
+  </Tooltip>
 )
