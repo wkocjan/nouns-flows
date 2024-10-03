@@ -4,8 +4,20 @@ export const TokenLogo = ({
   src,
   alt,
   className = "",
+  height = 21,
+  width = 21,
 }: {
   src: string
   alt: string
   className?: string
-}) => <Image src={src} alt={alt} className={`rounded-full ${className}`} width={21} height={21} />
+  height?: number
+  width?: number
+}) => (
+  <Image
+    src={src}
+    alt={alt}
+    className={`rounded-full h-[${height}px] w-[${width}px] object-cover ${className}`}
+    width={width}
+    height={height}
+  />
+)

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { tokenEmitterImplAbi } from "@/lib/abis"
 import { useTcrToken } from "@/lib/tcr/use-tcr-token"
-import { getEthAddress, getIpfsUrl } from "@/lib/utils"
+import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
@@ -20,7 +20,6 @@ import { CurrencyDisplay } from "./currency-display"
 import { TokenBalance } from "./token-balance"
 import { TokenLogo } from "./token-logo"
 import { SwitchSwapBoxButton } from "./switch-box-button"
-import Image from "next/image"
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -31,6 +30,7 @@ import { RelayChain } from "@reservoir0x/relay-sdk"
 import { createRelayClient } from "@/lib/relay/client"
 import { Grant } from "@prisma/client"
 import { BaseEthLogo } from "./base-eth-logo"
+import { TokenSwitcherDialog } from "./token-switcher-dialog"
 
 interface Props {
   flow: Grant
@@ -97,10 +97,7 @@ export function BuyTokenBox(props: Props) {
                 value={tokenAmount}
                 onChange={(e) => setTokenAmount(e.target.value)}
               />
-              <CurrencyDisplay>
-                <TokenLogo src={getIpfsUrl(flow.image)} alt="TCR token" />
-                <span className="px-1">{token.symbol}</span>
-              </CurrencyDisplay>
+              <TokenSwitcherDialog flow={flow} />
             </div>
             <div className="flex items-center justify-between">
               <span className="text-xs text-gray-500 dark:text-white">
