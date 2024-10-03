@@ -57,7 +57,7 @@ export function TokenSwitcherDialog({
           </CurrencyDisplay>
         </button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-screen-xs">
+      <DialogContent className="sm:max-w-screen-sm">
         <DialogHeader>
           <DialogTitle className="text-center text-lg font-medium">Select a token</DialogTitle>
         </DialogHeader>

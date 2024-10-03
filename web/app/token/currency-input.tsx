@@ -17,6 +17,7 @@ export const CurrencyInput = ({
     id={id}
     name={name}
     value={value}
+    type="number"
     autoComplete="off"
     onChange={onChange}
     autoFocus={false}
