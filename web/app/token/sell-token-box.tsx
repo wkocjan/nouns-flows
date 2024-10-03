@@ -9,12 +9,11 @@ import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { Grant } from "@prisma/client"
 import { useState } from "react"
 import { toast } from "sonner"
-import { formatEther, zeroAddress } from "viem"
+import { formatEther } from "viem"
 import { base } from "viem/chains"
 import { useAccount, useBalance } from "wagmi"
-import { useBuyTokenQuote, useBuyTokenQuoteWithRewards } from "./hooks/useBuyTokenQuote"
+import { useSellTokenQuote } from "./hooks/useSellTokenQuote"
 import { formatUSDValue, useETHPrice } from "./hooks/useETHPrice"
-import { CostDifferenceTooltip } from "./cost-difference-tooltip"
 import { ConversionBox } from "./conversion-box"
 import { CurrencyInput } from "./currency-input"
 import { CurrencyDisplay } from "./currency-display"
@@ -30,7 +29,7 @@ interface Props {
 
 const chainId = base.id
 
-export function BuyTokenBox(props: Props) {
+export function SellTokenBox(props: Props) {
   const { flow, defaultTokenAmount, switchSwapBox } = props
   const { address } = useAccount()
   const { data: balance } = useBalance({ address })
@@ -40,20 +39,14 @@ export function BuyTokenBox(props: Props) {
   const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr), chainId)
 
   const {
-    totalCost: costWithRewardsFee,
-    isLoading: isLoadingRewardsQuote,
-    addedSurgeCost,
-  } = useBuyTokenQuoteWithRewards(getEthAddress(flow.tokenEmitter), tokenAmountBigInt, chainId)
-
-  const { totalCost: rawCost } = useBuyTokenQuote(
-    getEthAddress(flow.tokenEmitter),
-    tokenAmountBigInt,
-    chainId,
-  )
+    payment,
+    isLoading: isLoadingQuote,
+    isError,
+  } = useSellTokenQuote(getEthAddress(flow.tokenEmitter), tokenAmountBigInt, chainId)
 
   const { prepareWallet, writeContract, toastId, isLoading } = useContractTransaction({
     chainId,
-    success: "Tokens purchased successfully!",
+    success: "Tokens sold successfully!",
     onSuccess: async (hash) => {
       await token.refetch()
     },
@@ -66,13 +59,10 @@ export function BuyTokenBox(props: Props) {
 
   const { ethPrice } = useETHPrice()
 
-  const insufficientBalance =
-    balance && balance.value < BigInt(Math.trunc(Number(costWithRewardsFee) * 1.05))
-
   return (
     <div className="space-y-1 rounded-3xl bg-white p-1.5 dark:bg-black/90">
       <div className="relative flex flex-col">
-        <ConversionBox label="Buy">
+        <ConversionBox label="Sell">
           <div className="flex flex-col space-y-3">
             <div className="flex items-center justify-between">
               <CurrencyInput
@@ -88,7 +78,7 @@ export function BuyTokenBox(props: Props) {
             </div>
             <div className="flex items-center justify-between">
               <span className="text-xs text-gray-500 dark:text-white">
-                {formatUSDValue(ethPrice || 0, rawCost - addedSurgeCost)}
+                {formatUSDValue(ethPrice || 0, payment)}
               </span>
               <TokenBalance balance={token.balance} />
             </div>
@@ -100,17 +90,17 @@ export function BuyTokenBox(props: Props) {
         </div>
         <div className="mb-1" />
 
-        <ConversionBox label="Pay">
+        <ConversionBox label="Receive">
           <div className="flex flex-col space-y-3">
             <div className="flex items-center justify-between">
               <CurrencyInput
-                id="cost"
-                name="cost"
-                value={Number(formatEther(costWithRewardsFee)).toFixed(12)}
+                id="payment"
+                name="payment"
+                value={Number(formatEther(payment)).toFixed(12)}
                 disabled
                 className={cn("disabled:text-black dark:disabled:text-white", {
-                  "opacity-50": isLoadingRewardsQuote,
-                  "opacity-100": !isLoadingRewardsQuote,
+                  "opacity-50": isLoadingQuote,
+                  "opacity-100": !isLoadingQuote,
                 })}
               />
               <CurrencyDisplay>
@@ -119,56 +109,46 @@ export function BuyTokenBox(props: Props) {
               </CurrencyDisplay>
             </div>
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-1">
-                <span className="text-xs text-gray-500 dark:text-white">
-                  {formatUSDValue(ethPrice || 0, costWithRewardsFee)}
-                </span>
-                <CostDifferenceTooltip
-                  rawCost={rawCost}
-                  addedSurgeCost={addedSurgeCost}
-                  costWithRewardsFee={costWithRewardsFee}
-                />
-              </div>
+              <span className="text-xs text-gray-500 dark:text-white">
+                {formatUSDValue(ethPrice || 0, payment)}
+              </span>
               <TokenBalance balance={balance?.value || BigInt(0)} />
             </div>
           </div>
         </ConversionBox>
       </div>
-      <div className="mt-4 w-full">
+      <div className="mt-7 w-full">
         <Button
           className="w-full rounded-2xl py-7 text-lg font-medium tracking-wide"
-          disabled={isLoading || isLoadingRewardsQuote || !balance || insufficientBalance}
+          disabled={
+            isLoading ||
+            isLoadingQuote ||
+            isError ||
+            !token.balance ||
+            token.balance < tokenAmountBigInt
+          }
           loading={isLoading}
           type="button"
           onClick={async () => {
             try {
               await prepareWallet()
 
-              const costWithSlippage = BigInt(Math.trunc(Number(costWithRewardsFee) * 1.02))
+              const minPaymentWithSlippage = BigInt(Math.trunc(Number(payment) * 0.98))
 
               writeContract({
                 account: address,
                 abi: tokenEmitterImplAbi,
-                functionName: "buyToken",
+                functionName: "sellToken",
                 address: getEthAddress(flow.tokenEmitter),
                 chainId,
-                args: [
-                  address as `0x${string}`,
-                  tokenAmountBigInt,
-                  costWithSlippage,
-                  {
-                    builder: zeroAddress,
-                    purchaseReferral: zeroAddress,
-                  },
-                ],
-                value: costWithSlippage,
+                args: [tokenAmountBigInt, minPaymentWithSlippage],
               })
             } catch (e: any) {
               toast.error(e.message, { id: toastId })
             }
           }}
         >
-          {insufficientBalance ? "Insufficient ETH balance" : "Buy"}
+          {token.balance < tokenAmountBigInt ? `Insufficient ${token.symbol} balance` : "Sell"}
         </Button>
       </div>
     </div>

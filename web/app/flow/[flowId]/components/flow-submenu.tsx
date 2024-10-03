@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { useSelectedLayoutSegment } from "next/navigation"
 import { VotingToggle } from "./voting-toggle"
-import { BuyTokenButton } from "@/app/token/buy-token-button"
+import { SwapTokenButton } from "@/app/token/swap-token-button"
 import { Grant } from "@prisma/client"
 
 interface Props {
@@ -73,7 +73,7 @@ export const FlowSubmenu = (props: Props) => {
                 {isTopLevel ? "Suggest category" : "Apply for a grant"}
               </Button>
             </Link>
-            <BuyTokenButton flow={flow} defaultTokenAmount={BigInt(1e18)} />
+            <SwapTokenButton flow={flow} defaultTokenAmount={BigInt(1e18)} />
           </div>
         )}
       </div>

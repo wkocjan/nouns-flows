@@ -22,7 +22,7 @@ import { encodeAbiParameters, formatEther, zeroAddress } from "viem"
 import { base } from "viem/chains"
 import { useAccount } from "wagmi"
 import { updateDraft } from "./update-draft"
-import { BuyTokenButton } from "@/app/token/buy-token-button"
+import { SwapTokenButton } from "@/app/token/swap-token-button"
 
 interface Props {
   draft: Draft
@@ -111,7 +111,7 @@ export function DraftPublishButton(props: Props) {
           </li>
         </ul>
         <div className="flex justify-end space-x-2">
-          {!hasEnoughBalance && <BuyTokenButton flow={flow} defaultTokenAmount={addItemCost} />}
+          {!hasEnoughBalance && <SwapTokenButton flow={flow} defaultTokenAmount={addItemCost} />}
           <Button
             disabled={!hasEnoughBalance || token.isApproving || isLoading}
             loading={token.isApproving || isLoading}
