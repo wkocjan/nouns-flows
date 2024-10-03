@@ -1,7 +1,7 @@
 import { Address, erc20Abi } from "viem"
 import { useReadContracts } from "wagmi"
 
-export function useTcrTokenBalance(contracts: Address[], owner: Address | undefined) {
+export function useERC20Balances(contracts: Address[], owner: Address | undefined) {
   const { data, refetch } = useReadContracts({
     contracts: contracts.map((contract) => ({
       abi: erc20Abi,

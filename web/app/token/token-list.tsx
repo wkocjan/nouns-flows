@@ -2,7 +2,7 @@ import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import { TokenLogo } from "./token-logo"
 import { useAccount } from "wagmi"
 import { Address, formatEther } from "viem"
-import { useTcrTokenBalance } from "@/lib/tcr/use-tcr-token-balance"
+import { useERC20Balances } from "@/lib/tcr/use-erc20-balances"
 import { formatUSDValue, useETHPrice } from "./hooks/useETHPrice"
 import { useSellTokenQuote } from "./hooks/useSellTokenQuote"
 import { base } from "viem/chains"
@@ -32,7 +32,7 @@ export const TokenList = ({
   switchToken,
 }: TokenListProps) => {
   const { address: owner } = useAccount()
-  const { balances } = useTcrTokenBalance(
+  const { balances } = useERC20Balances(
     tokens?.map((token) => getEthAddress(token.address as Address)) || [],
     owner,
   )

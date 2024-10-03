@@ -31,7 +31,8 @@ import { BaseEthLogo } from "./base-eth-logo"
 import { TokenSwitcherDialog } from "./token-switcher-dialog"
 import Caret from "@/public/caret-down.svg"
 import Image from "next/image"
-import { useTcrTokenBalance } from "@/lib/tcr/use-tcr-token-balance"
+import { useERC20Balances } from "@/lib/tcr/use-erc20-balances"
+import { TokenBalanceAndUSDValue } from "./token-balance-usd-value"
 
 interface Props {
   defaultTokenAmount: bigint
@@ -57,7 +58,8 @@ export function BuyTokenBox({
   const [token, setToken] = useState(defaultToken)
   const [tokenEmitter, setTokenEmitter] = useState(defaultTokenEmitter)
 
-  const { balances, refetch } = useTcrTokenBalance([getEthAddress(token)], address)
+  const { balances, refetch } = useERC20Balances([getEthAddress(token)], address)
+  const tokenBalance = balances?.[0]
 
   const { chains } = useMemo(() => createRelayClient(chainId), [])
 
@@ -118,9 +120,9 @@ export function BuyTokenBox({
               />
             </div>
             <TokenBalanceAndUSDValue
-              balance={balances[0]}
+              balance={tokenBalance}
               ethPrice={ethPrice || 0}
-              ethCost={rawCost - addedSurgeCost}
+              ethAmount={rawCost - addedSurgeCost}
             />
           </div>
         </ConversionBox>
@@ -218,20 +220,3 @@ export function BuyTokenBox({
     </div>
   )
 }
-
-const TokenBalanceAndUSDValue = ({
-  balance,
-  ethPrice,
-  ethCost,
-}: {
-  balance: bigint
-  ethPrice: number
-  ethCost: bigint
-}) => (
-  <div className="flex items-center justify-between">
-    <span className="text-xs text-gray-500 dark:text-white">
-      {formatUSDValue(ethPrice || 0, ethCost)}
-    </span>
-    <TokenBalance balance={balance} />
-  </div>
-)

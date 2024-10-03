@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { useTcrToken } from "@/lib/tcr/use-tcr-token"
 import { getEthAddress } from "@/lib/utils"
 import { Grant } from "@prisma/client"
-import { useRef, useState } from "react"
+import { useState } from "react"
 import { base } from "viem/chains"
 import { BuyTokenBox } from "./buy-token-box"
 import { SellTokenBox } from "./sell-token-box"
@@ -22,7 +22,6 @@ const chainId = base.id
 
 export function SwapTokenBox(props: Props) {
   const { flow, defaultTokenAmount, defaultSwapState = "buy" } = props
-  const ref = useRef<HTMLButtonElement>(null)
   const [swapState, setSwapState] = useState<SwapState>(defaultSwapState)
 
   const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr), chainId)
@@ -61,6 +60,8 @@ export function SwapTokenBox(props: Props) {
             flow={flow}
             defaultTokenAmount={defaultTokenAmount}
             switchSwapBox={() => setSwapState("buy")}
+            defaultToken={flow.erc20 as Address}
+            defaultTokenEmitter={flow.tokenEmitter as Address}
           />
         )}
       </div>

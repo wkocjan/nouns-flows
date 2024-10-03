@@ -3,13 +3,11 @@
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { tokenEmitterImplAbi } from "@/lib/abis"
-import { useTcrToken } from "@/lib/tcr/use-tcr-token"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
-import { Grant } from "@prisma/client"
 import { useState } from "react"
 import { toast } from "sonner"
-import { formatEther } from "viem"
+import { Address, formatEther } from "viem"
 import { base } from "viem/chains"
 import { useAccount, useBalance } from "wagmi"
 import { useSellTokenQuote } from "./hooks/useSellTokenQuote"
@@ -21,35 +19,52 @@ import { TokenBalance } from "./token-balance"
 import { TokenLogo } from "./token-logo"
 import { SwitchSwapBoxButton } from "./switch-box-button"
 import { BaseEthLogo } from "./base-eth-logo"
+import { useERC20Balances } from "@/lib/tcr/use-erc20-balances"
+import { TokenBalanceAndUSDValue } from "./token-balance-usd-value"
+import { useFlowForToken } from "@/lib/tcr/use-flow-for-token"
+import { useERC20Tokens } from "@/lib/tcr/use-erc20s"
 
 interface Props {
-  flow: Grant
   defaultTokenAmount: bigint
   switchSwapBox: () => void
+  defaultToken: Address
+  defaultTokenEmitter: Address
 }
 
 const chainId = base.id
 
 export function SellTokenBox(props: Props) {
-  const { flow, defaultTokenAmount, switchSwapBox } = props
+  const { defaultTokenAmount, switchSwapBox, defaultToken, defaultTokenEmitter } = props
   const { address } = useAccount()
   const { data: balance } = useBalance({ address })
   const [tokenAmount, _setTokenAmount] = useState((Number(defaultTokenAmount) / 1e18).toString())
   const [tokenAmountBigInt, _setTokenAmountBigInt] = useState(defaultTokenAmount)
+  const [token, setToken] = useState(defaultToken)
+  const [tokenEmitter, setTokenEmitter] = useState(defaultTokenEmitter)
 
-  const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr), chainId)
+  const { flow: flowForToken } = useFlowForToken(token)
+
+  const { balances, refetch } = useERC20Balances([getEthAddress(token)], address)
+  const tokenBalance = balances?.[0]
+
+  const {
+    tokens,
+    refetch: refetchTokens,
+    isLoading: isLoadingTokens,
+  } = useERC20Tokens([token], chainId)
+  const tokenSymbol = tokens?.[0]?.symbol
 
   const {
     payment,
     isLoading: isLoadingQuote,
     isError,
-  } = useSellTokenQuote(getEthAddress(flow.tokenEmitter), tokenAmountBigInt, chainId)
+  } = useSellTokenQuote(getEthAddress(tokenEmitter), tokenAmountBigInt, chainId)
 
   const { prepareWallet, writeContract, toastId, isLoading } = useContractTransaction({
     chainId,
     success: "Tokens sold successfully!",
     onSuccess: async (hash) => {
-      await token.refetch()
+      await refetch()
     },
   })
 
@@ -73,8 +88,8 @@ export function SellTokenBox(props: Props) {
                 onChange={(e) => setTokenAmount(e.target.value)}
               />
               <CurrencyDisplay>
-                <TokenLogo src={getIpfsUrl(flow.image)} alt="TCR token" />
-                <span className="px-1">{token.symbol}</span>
+                <TokenLogo src={getIpfsUrl(flowForToken?.image || "")} alt="TCR token" />
+                <span className="px-1">{tokenSymbol}</span>
               </CurrencyDisplay>
             </div>
             <div className="flex items-center justify-between">
@@ -83,11 +98,11 @@ export function SellTokenBox(props: Props) {
               </span>
               <div
                 onClick={() =>
-                  setTokenAmount((Number(token.balance) / 1e18).toString(), token.balance)
+                  setTokenAmount((Number(tokenBalance) / 1e18).toString(), tokenBalance)
                 }
                 className="cursor-pointer"
               >
-                <TokenBalance balance={token.balance} />
+                <TokenBalance balance={tokenBalance} />
               </div>
             </div>
           </div>
@@ -116,12 +131,11 @@ export function SellTokenBox(props: Props) {
                 <span className="pr-1">ETH</span>
               </CurrencyDisplay>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500 dark:text-white">
-                {formatUSDValue(ethPrice || 0, payment)}
-              </span>
-              <TokenBalance balance={balance?.value || BigInt(0)} />
-            </div>
+            <TokenBalanceAndUSDValue
+              balance={balance?.value || BigInt(0)}
+              ethPrice={ethPrice || 0}
+              ethAmount={payment}
+            />
           </div>
         </ConversionBox>
       </div>
@@ -132,8 +146,8 @@ export function SellTokenBox(props: Props) {
             isLoading ||
             isLoadingQuote ||
             isError ||
-            !token.balance ||
-            token.balance < tokenAmountBigInt
+            !tokenBalance ||
+            tokenBalance < tokenAmountBigInt
           }
           loading={isLoading}
           type="button"
@@ -147,7 +161,7 @@ export function SellTokenBox(props: Props) {
                 account: address,
                 abi: tokenEmitterImplAbi,
                 functionName: "sellToken",
-                address: getEthAddress(flow.tokenEmitter),
+                address: tokenEmitter,
                 chainId,
                 args: [tokenAmountBigInt, minPaymentWithSlippage],
               })
@@ -156,7 +170,7 @@ export function SellTokenBox(props: Props) {
             }
           }}
         >
-          {token.balance < tokenAmountBigInt ? `Insufficient ${token.symbol} balance` : "Sell"}
+          {tokenBalance < tokenAmountBigInt ? `Insufficient ${tokenSymbol} balance` : "Sell"}
         </Button>
       </div>
     </div>

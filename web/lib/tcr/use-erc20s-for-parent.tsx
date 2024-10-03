@@ -1,33 +1,23 @@
-import { Address, erc20Abi } from "viem"
+import { Address } from "viem"
 import { base } from "viem/chains"
-import { useReadContracts } from "wagmi"
 import { useFlowsForParent } from "./use-flows-for-parent"
+import { useERC20Tokens } from "./use-erc20s"
 
 export function useERC20TokensForParent(parentGrantContract: Address, chainId = base.id) {
-  const { grants } = useFlowsForParent(parentGrantContract)
+  const { grants, isLoading: isLoadingFlows } = useFlowsForParent(parentGrantContract)
+  const erc20s = grants.map((grant) => grant.erc20 as Address)
 
-  const erc20s = grants.map((grant) => ({
-    abi: erc20Abi,
-    address: grant.erc20 as Address,
-    chainId,
-  }))
+  const { tokens, refetch, isLoading } = useERC20Tokens(erc20s, chainId)
 
-  const { data, refetch, isLoading } = useReadContracts({
-    contracts: erc20s.flatMap((erc20) => [
-      { ...erc20, functionName: "symbol" },
-      { ...erc20, functionName: "name" },
-    ]),
-  })
-
-  const tokenData = data?.reduce(
+  const tokenData = tokens?.reduce(
     (acc, token, index) => {
       if (index % 2 === 0) {
-        const address = erc20s[index / 2]?.address
+        const address = token.address
         acc.push({
           address,
-          symbol: token.result as string,
+          symbol: token.symbol,
           image: grants.find((grant) => grant.erc20 === address)?.image,
-          name: data[index + 1]?.result as string,
+          name: token.name,
           tagline: grants.find((grant) => grant.erc20 === address)?.tagline ?? undefined,
           tokenEmitter: grants.find((grant) => grant.erc20 === address)?.tokenEmitter ?? undefined,
         })
@@ -47,6 +37,6 @@ export function useERC20TokensForParent(parentGrantContract: Address, chainId = 
   return {
     tokens: tokenData,
     refetch,
-    isLoading,
+    isLoading: isLoadingFlows || isLoading,
   }
 }
