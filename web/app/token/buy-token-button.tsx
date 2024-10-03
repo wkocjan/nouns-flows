@@ -2,12 +2,10 @@ import { Button } from "@/components/ui/button"
 import { tokenEmitterImplAbi } from "@/lib/abis"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
+import { RelayChain } from "@reservoir0x/relay-sdk"
 import { toast } from "sonner"
 import { Address, zeroAddress } from "viem"
-import { base } from "viem/chains"
 import { useAccount, useBalance } from "wagmi"
-
-const chainId = base.id
 
 export const BuyTokenButton = ({
   onSuccess,
@@ -15,15 +13,18 @@ export const BuyTokenButton = ({
   costWithRewardsFee,
   tokenAmountBigInt,
   isLoadingRewardsQuote,
+  selectedChain,
 }: {
   onSuccess: (hash: string) => void
   tokenEmitter: Address
   costWithRewardsFee: bigint
   tokenAmountBigInt: bigint
   isLoadingRewardsQuote: boolean
+  selectedChain: RelayChain
 }) => {
+  const chainId = selectedChain.id
   const { address } = useAccount()
-  const { data: balance } = useBalance({ address })
+  const { data: balance } = useBalance({ address, chainId })
 
   const { prepareWallet, writeContract, toastId, isLoading } = useContractTransaction({
     chainId,

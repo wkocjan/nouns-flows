@@ -133,6 +133,7 @@ export function BuyTokenBox({
       </div>
 
       <BuyTokenButton
+        selectedChain={selectedChain}
         tokenEmitter={tokenEmitter}
         costWithRewardsFee={costWithRewardsFee}
         tokenAmountBigInt={tokenAmountBigInt}
