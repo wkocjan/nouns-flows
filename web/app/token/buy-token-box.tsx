@@ -133,7 +133,7 @@ export function BuyTokenBox(props: Props) {
                 <DropdownMenuTrigger asChild>
                   <CurrencyDisplay className="cursor-pointer py-0.5">
                     <BaseEthLogo />
-                    <span className="pl-0.5 pr-1">ETH</span>
+                    <span className="pr-1">ETH</span>
                     <div className="mt-0.5 pr-1 text-black dark:text-white">
                       <svg
                         width="12"

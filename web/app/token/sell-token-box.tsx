@@ -113,7 +113,7 @@ export function SellTokenBox(props: Props) {
               />
               <CurrencyDisplay className="py-0.5">
                 <BaseEthLogo />
-                <span className="px-1">ETH</span>
+                <span className="pr-1">ETH</span>
               </CurrencyDisplay>
             </div>
             <div className="flex items-center justify-between">
