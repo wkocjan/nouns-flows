@@ -13,7 +13,11 @@ import { TokenBalance } from "./token-balance"
 import { useAccount, useBalance } from "wagmi"
 import { base, mainnet } from "viem/chains"
 
-export const SwitchEthChainButton = () => {
+export const SwitchEthChainButton = ({
+  switchChain,
+}: {
+  switchChain: (chainId: number) => void
+}) => {
   const { address } = useAccount()
 
   const { data: baseEthBalance } = useBalance({
@@ -42,11 +46,13 @@ export const SwitchEthChainButton = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent side="top">
         <ChainMenuItem
+          onClick={() => switchChain(mainnet.id)}
           logoChild={<TokenLogo className="mr-4" width={30} height={30} src="/eth.png" alt="ETH" />}
           chainName="Ethereum"
           balance={ethBalance?.value || BigInt(0)}
         />
         <ChainMenuItem
+          onClick={() => switchChain(base.id)}
           logoChild={<BaseEthLogo className="mr-2" width={30} height={30} />}
           chainName="Base"
           balance={baseEthBalance?.value || BigInt(0)}
@@ -60,10 +66,16 @@ interface ChainMenuItemProps {
   logoChild: React.ReactNode
   chainName: string
   balance: bigint
+  onClick: () => void
 }
 
-const ChainMenuItem: React.FC<ChainMenuItemProps> = ({ logoChild, chainName, balance }) => (
-  <DropdownMenuItem asChild>
+const ChainMenuItem: React.FC<ChainMenuItemProps> = ({
+  logoChild,
+  chainName,
+  balance,
+  onClick,
+}) => (
+  <DropdownMenuItem asChild onClick={onClick}>
     <div className="flex cursor-pointer items-center px-4 py-3">
       {logoChild}
       <div className="flex flex-col">

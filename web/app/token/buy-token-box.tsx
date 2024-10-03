@@ -111,7 +111,13 @@ export function BuyTokenBox({
         <div className="mb-1" />
 
         <EthConversionBox
-          currencyDisplay={<SwitchEthChainButton />}
+          currencyDisplay={
+            <SwitchEthChainButton
+              switchChain={(chainId) =>
+                setSelectedChain(chains.find(({ id }) => id === chainId) || chains[0])
+              }
+            />
+          }
           label="Pay"
           amount={costWithRewardsFee}
           isLoadingQuote={isLoadingRewardsQuote}
