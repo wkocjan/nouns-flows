@@ -1,14 +1,14 @@
 import { Button } from "@/components/ui/button"
 import { tokenEmitterImplAbi } from "@/lib/abis"
-import { createRelayClient } from "@/lib/relay/client"
 import { getEthAddress } from "@/lib/utils"
-import { getChain, l1Client, l2Client } from "@/lib/viem/client"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
+import { useWaitForTransactions } from "@/lib/wagmi/use-wait-for-transactions"
 import { RelayChain } from "@reservoir0x/relay-sdk"
 import { toast } from "sonner"
-import { Address, createWalletClient, custom, http, zeroAddress } from "viem"
-import { base, mainnet } from "viem/chains"
+import { Address, zeroAddress } from "viem"
+import { base } from "viem/chains"
 import { useAccount, useBalance } from "wagmi"
+import { useBuyTokenRelay } from "./hooks/use-buy-token-relay"
 
 const toChainId = base.id
 
@@ -28,16 +28,20 @@ export const BuyTokenButton = ({
   selectedChain: RelayChain
 }) => {
   const chainId = selectedChain.id
+  const successMessage = "Tokens bought successfully!"
   const { address } = useAccount()
   const { data: balance } = useBalance({ address, chainId })
 
-  const { prepareWallet, writeContract, toastId, isLoading } = useContractTransaction({
+  const { executeBuyTokenRelay, txHashes } = useBuyTokenRelay()
+
+  const { prepareWallet, writeContract, isLoading, toastId } = useContractTransaction({
     chainId,
-    success: "Tokens bought successfully!",
+    success: successMessage,
     onSuccess: async (hash) => {
       onSuccess(hash)
     },
   })
+  useWaitForTransactions(txHashes, toastId)
 
   const insufficientBalance =
     balance && balance.value < BigInt(Math.trunc(Number(costWithRewardsFee) * 1.05))
@@ -50,9 +54,9 @@ export const BuyTokenButton = ({
       type="button"
       onClick={async () => {
         try {
-          const costWithSlippage = BigInt(Math.trunc(Number(costWithRewardsFee) * 1.02))
+          await prepareWallet(toastId)
 
-          await prepareWallet()
+          const costWithSlippage = BigInt(Math.trunc(Number(costWithRewardsFee) * 1.02))
 
           const args: [Address, bigint, bigint, { builder: Address; purchaseReferral: Address }] = [
             address as `0x${string}`,
@@ -67,42 +71,14 @@ export const BuyTokenButton = ({
           const useRelay = chainId !== toChainId
 
           if (useRelay) {
-            const publicClient = chainId === mainnet.id ? l1Client : l2Client
-
-            const { request } = await publicClient.simulateContract({
-              address: tokenEmitter,
-              abi: tokenEmitterImplAbi,
-              functionName: "buyToken",
-              args,
-              value: costWithSlippage,
-              chain: getChain(chainId),
-              account: address,
-            })
-
-            const wallet = createWalletClient({
-              chain: getChain(chainId),
-              transport: custom(window.ethereum!),
-            })
-
-            const relayClient = createRelayClient(chainId)
-
-            const quote = await relayClient.actions.getQuote({
+            executeBuyTokenRelay({
               chainId,
-              toChainId,
-              currency: "0x0000000000000000000000000000000000000000",
-              toCurrency: "0x0000000000000000000000000000000000000000",
-              amount: costWithSlippage.toString(),
-              tradeType: "EXACT_OUTPUT",
-              wallet,
-              txs: [request],
-            })
-
-            await relayClient.actions.execute({
-              quote,
-              wallet,
-              onProgress: (steps) => {
-                console.log(steps)
-              },
+              tokenEmitter,
+              args,
+              costWithSlippage,
+              toastId,
+              onSuccess,
+              successMessage,
             })
           } else {
             writeContract({
