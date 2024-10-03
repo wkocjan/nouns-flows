@@ -44,18 +44,16 @@ export function BuyTokenBox({
   setTokenAndEmitter,
 }: Props) {
   const { address } = useAccount()
-  const { data: balance } = useBalance({ address })
+  const { chains } = useMemo(() => createRelayClient(chainId), [])
+  const [selectedChain, setSelectedChain] = useState<RelayChain>(
+    () => chains.find(({ id }) => id === chainId) || chains[0],
+  )
+  const { data: balance } = useBalance({ address, chainId: selectedChain.id })
   const [tokenAmount, _setTokenAmount] = useState((Number(defaultTokenAmount) / 1e18).toString())
   const [tokenAmountBigInt, _setTokenAmountBigInt] = useState(defaultTokenAmount)
 
   const { balances, refetch } = useERC20Balances([getEthAddress(token)], address)
   const tokenBalance = balances?.[0]
-
-  const { chains } = useMemo(() => createRelayClient(chainId), [])
-
-  const [selectedChain, setSelectedChain] = useState<RelayChain>(
-    () => chains.find(({ id }) => id === chainId) || chains[0],
-  )
 
   const {
     totalCost: costWithRewardsFee,
@@ -114,9 +112,10 @@ export function BuyTokenBox({
           currencyDisplay={
             <SwitchEthChainButton
               selectedChain={selectedChain}
-              switchChain={(chainId) =>
+              switchChain={(chainId) => {
                 setSelectedChain(chains.find(({ id }) => id === chainId) || chains[0])
-              }
+                refetch()
+              }}
             />
           }
           label="Pay"
