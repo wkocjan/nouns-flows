@@ -6,8 +6,7 @@ import { tokenEmitterImplAbi } from "@/lib/abis"
 import { useTcrToken } from "@/lib/tcr/use-tcr-token"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
-import { Grant } from "@prisma/client"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { toast } from "sonner"
 import { formatEther, zeroAddress } from "viem"
 import { base } from "viem/chains"
@@ -22,6 +21,16 @@ import { TokenBalance } from "./token-balance"
 import { TokenLogo } from "./token-logo"
 import { SwitchSwapBoxButton } from "./switch-box-button"
 import Image from "next/image"
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu"
+import { RelayChain } from "@reservoir0x/relay-sdk"
+import { createRelayClient } from "@/lib/relay/client"
+import { Grant } from "@prisma/client"
+import { BaseEthLogo } from "./base-eth-logo"
 
 interface Props {
   flow: Grant
@@ -39,6 +48,12 @@ export function BuyTokenBox(props: Props) {
   const [tokenAmountBigInt, _setTokenAmountBigInt] = useState(defaultTokenAmount)
 
   const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr), chainId)
+
+  const { chains } = useMemo(() => createRelayClient(chainId), [])
+
+  const [selectedChain, setSelectedChain] = useState<RelayChain>(
+    () => chains.find(({ id }) => id === chainId) || chains[0],
+  )
 
   const {
     totalCost: costWithRewardsFee,
@@ -114,32 +129,30 @@ export function BuyTokenBox(props: Props) {
                   "opacity-100": !isLoadingRewardsQuote,
                 })}
               />
-              <CurrencyDisplay className="cursor-pointer py-0.5">
-                <div className="flex items-center">
-                  <TokenLogo src="/eth.png" alt="ETH" />
-                  <div className="-ml-2 mt-4 rounded-[6px] bg-white p-[3px] dark:bg-black">
-                    <Image
-                      src="/base.png"
-                      alt="Base"
-                      className="rounded-[2px]"
-                      width={12}
-                      height={12}
-                    />
-                  </div>
-                </div>
-                <span className="pl-0.5 pr-1">ETH</span>
-                <div className="mt-0.5 pr-1 text-black dark:text-white">
-                  <svg
-                    width="12"
-                    height="7"
-                    viewBox="0 0 12 7"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M0.97168 1L6.20532 6L11.439 1" stroke="currentColor"></path>
-                  </svg>
-                </div>
-              </CurrencyDisplay>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <CurrencyDisplay className="cursor-pointer py-0.5">
+                    <BaseEthLogo />
+                    <span className="pl-0.5 pr-1">ETH</span>
+                    <div className="mt-0.5 pr-1 text-black dark:text-white">
+                      <svg
+                        width="12"
+                        height="7"
+                        viewBox="0 0 12 7"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M0.97168 1L6.20532 6L11.439 1" stroke="currentColor"></path>
+                      </svg>
+                    </div>
+                  </CurrencyDisplay>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem asChild>
+                    <TokenLogo src="/eth.png" alt="ETH" />
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-1">

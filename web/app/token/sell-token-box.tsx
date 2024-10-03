@@ -20,6 +20,7 @@ import { CurrencyDisplay } from "./currency-display"
 import { TokenBalance } from "./token-balance"
 import { TokenLogo } from "./token-logo"
 import { SwitchSwapBoxButton } from "./switch-box-button"
+import { BaseEthLogo } from "./base-eth-logo"
 
 interface Props {
   flow: Grant
@@ -110,8 +111,8 @@ export function SellTokenBox(props: Props) {
                   "opacity-100": !isLoadingQuote,
                 })}
               />
-              <CurrencyDisplay>
-                <TokenLogo src="/eth.png" alt="ETH" />
+              <CurrencyDisplay className="py-0.5">
+                <BaseEthLogo />
                 <span className="px-1">ETH</span>
               </CurrencyDisplay>
             </div>
