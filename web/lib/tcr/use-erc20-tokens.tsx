@@ -29,6 +29,7 @@ export function useERC20TokensForParent(parentGrantContract: Address, chainId = 
           image: grants.find((grant) => grant.erc20 === address)?.image,
           name: data[index + 1]?.result as string,
           tagline: grants.find((grant) => grant.erc20 === address)?.tagline ?? undefined,
+          tokenEmitter: grants.find((grant) => grant.erc20 === address)?.tokenEmitter ?? undefined,
         })
       }
       return acc
@@ -39,6 +40,7 @@ export function useERC20TokensForParent(parentGrantContract: Address, chainId = 
       name: string | undefined
       image: string | undefined
       tagline: string | undefined
+      tokenEmitter: string | undefined
     }[],
   )
 
