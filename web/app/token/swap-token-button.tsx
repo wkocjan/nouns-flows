@@ -47,7 +47,7 @@ export function SwapTokenButton(props: Props) {
               1
             </span>
             <p>
-              Prices fluctuate based on supply and demand according to an S shaped{" "}
+              Prices change based on supply and demand according to an S shaped{" "}
               <a
                 href="https://github.com/rocketman-21/flow-contracts/blob/main/src/token-issuance/BondingSCurve.sol"
                 target="_blank"
