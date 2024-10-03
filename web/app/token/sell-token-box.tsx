@@ -80,7 +80,12 @@ export function SellTokenBox(props: Props) {
               <span className="text-xs text-gray-500 dark:text-white">
                 {formatUSDValue(ethPrice || 0, payment)}
               </span>
-              <TokenBalance balance={token.balance} />
+              <div
+                onClick={() => setTokenAmount((Number(token.balance) / 1e18).toString())}
+                className="cursor-pointer"
+              >
+                <TokenBalance balance={token.balance} />
+              </div>
             </div>
           </div>
         </ConversionBox>

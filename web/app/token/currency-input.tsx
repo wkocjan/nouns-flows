@@ -17,6 +17,7 @@ export const CurrencyInput = ({
     id={id}
     name={name}
     value={value}
+    autoComplete="off"
     onChange={onChange}
     autoFocus={false}
     disabled={disabled}
