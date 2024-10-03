@@ -10,7 +10,7 @@ export const ConversionBox = ({
   <div className="rounded-2xl bg-gray-100 p-4 dark:bg-gray-900">
     <Label
       htmlFor={label.toLowerCase()}
-      className="text-sm font-medium text-gray-500 dark:text-white"
+      className="text-sm font-normal text-gray-500 dark:text-white"
     >
       {label}
     </Label>

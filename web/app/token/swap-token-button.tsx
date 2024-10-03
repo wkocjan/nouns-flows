@@ -11,25 +11,20 @@ import {
 import { useTcrToken } from "@/lib/tcr/use-tcr-token"
 import { getEthAddress } from "@/lib/utils"
 import { Grant } from "@prisma/client"
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import { base } from "viem/chains"
-import { BuyTokenBox } from "./buy-token-box"
-import { SellTokenBox } from "./sell-token-box"
+import { SwapTokenBox } from "./swap-token-box"
 
 interface Props {
   flow: Grant
   defaultTokenAmount: bigint
-  defaultSwapState?: SwapState
 }
-
-type SwapState = "buy" | "sell"
 
 const chainId = base.id
 
 export function SwapTokenButton(props: Props) {
-  const { flow, defaultTokenAmount, defaultSwapState = "buy" } = props
+  const { flow, defaultTokenAmount } = props
   const ref = useRef<HTMLButtonElement>(null)
-  const [swapState, setSwapState] = useState<SwapState>(defaultSwapState)
 
   const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr), chainId)
 
@@ -37,7 +32,7 @@ export function SwapTokenButton(props: Props) {
     <Dialog>
       <DialogTrigger asChild>
         <Button type="button" ref={ref}>
-          {swapState === "buy" ? "Buy" : "Sell"} {token.symbol}
+          Buy {token.symbol}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-screen-xs">
@@ -52,7 +47,7 @@ export function SwapTokenButton(props: Props) {
               1
             </span>
             <p>
-              Prices fluctuate based on supply and demand according to an S shaped{" "}
+              Prices change based on supply and demand according to an S shaped{" "}
               <a
                 href="https://github.com/rocketman-21/flow-contracts/blob/main/src/token-issuance/BondingSCurve.sol"
                 target="_blank"
@@ -74,39 +69,7 @@ export function SwapTokenButton(props: Props) {
             </p>
           </li>
         </ul>
-        <div className="flex flex-col space-y-3">
-          <div className="flex items-center justify-start space-x-2">
-            <Button
-              className="h-7 rounded-full px-5"
-              onClick={() => setSwapState("buy")}
-              variant={swapState === "buy" ? "default" : "outline"}
-            >
-              Buy
-            </Button>
-            <Button
-              className="h-7 rounded-full px-5"
-              onClick={() => setSwapState("sell")}
-              variant={swapState === "sell" ? "default" : "outline"}
-            >
-              Sell
-            </Button>
-          </div>
-          <div>
-            {swapState === "buy" ? (
-              <BuyTokenBox
-                flow={flow}
-                defaultTokenAmount={defaultTokenAmount}
-                switchSwapBox={() => setSwapState("sell")}
-              />
-            ) : (
-              <SellTokenBox
-                flow={flow}
-                defaultTokenAmount={defaultTokenAmount}
-                switchSwapBox={() => setSwapState("buy")}
-              />
-            )}
-          </div>
-        </div>
+        <SwapTokenBox flow={flow} defaultTokenAmount={defaultTokenAmount} />
       </DialogContent>
     </Dialog>
   )

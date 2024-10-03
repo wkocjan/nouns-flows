@@ -90,7 +90,7 @@ export const useContractTransaction = (args?: {
         }
       }
 
-      const newToastId = toast.loading(loading, { id: toastId })
+      const newToastId = toast.loading(loading, { id: toastId, action: null })
       setToastId(newToastId)
     },
     toastId,

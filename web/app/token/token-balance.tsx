@@ -1,6 +1,8 @@
 import { formatEther } from "viem"
 
 export const TokenBalance = ({ balance }: { balance: bigint }) => {
+  if (!balance && balance !== BigInt(0)) return null
+
   const formattedBalance = Number(formatEther(balance))
   const displayBalance =
     formattedBalance < 0.1 && formattedBalance !== 0
