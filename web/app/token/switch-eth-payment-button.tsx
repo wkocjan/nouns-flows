@@ -12,11 +12,15 @@ import Caret from "@/public/caret-down.svg"
 import { TokenBalance } from "./token-balance"
 import { useAccount, useBalance } from "wagmi"
 import { base, mainnet } from "viem/chains"
+import { RelayChain } from "@reservoir0x/relay-sdk"
+import { cn } from "@/lib/utils"
 
 export const SwitchEthChainButton = ({
   switchChain,
+  selectedChain,
 }: {
   switchChain: (chainId: number) => void
+  selectedChain: RelayChain
 }) => {
   const { address } = useAccount()
 
@@ -29,12 +33,26 @@ export const SwitchEthChainButton = ({
     address,
   })
 
+  const isBase = selectedChain.id === base.id
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button className="flex-shrink-0">
-          <CurrencyDisplay className="cursor-pointer py-0.5">
-            <BaseEthLogo />
+          <CurrencyDisplay
+            className={cn("cursor-pointer py-0.5", {
+              "py-0": isBase,
+              "py-1": !isBase,
+            })}
+          >
+            <div className={cn({ "pr-0": isBase, "pr-1.5": !isBase })}>
+              {selectedChain.id === base.id ? (
+                <BaseEthLogo />
+              ) : (
+                <TokenLogo src="/eth.png" alt="ETH" />
+              )}
+            </div>
+
             <span className="pr-1">ETH</span>
             <Image
               src={Caret}

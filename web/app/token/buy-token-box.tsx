@@ -113,6 +113,7 @@ export function BuyTokenBox({
         <EthConversionBox
           currencyDisplay={
             <SwitchEthChainButton
+              selectedChain={selectedChain}
               switchChain={(chainId) =>
                 setSelectedChain(chains.find(({ id }) => id === chainId) || chains[0])
               }
