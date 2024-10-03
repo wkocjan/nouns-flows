@@ -23,9 +23,10 @@ import { SellTokenButton } from "./sell-token-button"
 interface Props {
   defaultTokenAmount: bigint
   switchSwapBox: () => void
-  defaultToken: Address
-  defaultTokenEmitter: Address
   parentFlowContract: Address
+  token: Address
+  tokenEmitter: Address
+  setTokenAndEmitter: (token: Address, tokenEmitter: Address) => void
 }
 
 const chainId = base.id
@@ -34,16 +35,15 @@ export function SellTokenBox(props: Props) {
   const {
     defaultTokenAmount,
     switchSwapBox,
-    defaultToken,
-    defaultTokenEmitter,
+    token,
+    tokenEmitter,
     parentFlowContract,
+    setTokenAndEmitter,
   } = props
   const { address } = useAccount()
   const { data: balance } = useBalance({ address })
   const [tokenAmount, _setTokenAmount] = useState((Number(defaultTokenAmount) / 1e18).toString())
   const [tokenAmountBigInt, _setTokenAmountBigInt] = useState(defaultTokenAmount)
-  const [token, setToken] = useState(defaultToken)
-  const [tokenEmitter, setTokenEmitter] = useState(defaultTokenEmitter)
 
   const { balances, refetch } = useERC20Balances([getEthAddress(token)], address)
   const tokenBalance = balances?.[0]
@@ -79,8 +79,7 @@ export function SellTokenBox(props: Props) {
               <TokenSwitcherDialog
                 parentFlowContract={parentFlowContract}
                 switchToken={(token, tokenEmitter) => {
-                  setToken(token)
-                  setTokenEmitter(tokenEmitter)
+                  setTokenAndEmitter(token, tokenEmitter)
                 }}
                 currentToken={token}
                 currentTokenEmitter={tokenEmitter}

@@ -23,6 +23,8 @@ const chainId = base.id
 export function SwapTokenBox(props: Props) {
   const { flow, defaultTokenAmount, defaultSwapState = "buy" } = props
   const [swapState, setSwapState] = useState<SwapState>(defaultSwapState)
+  const [token, setToken] = useState(flow.erc20 as Address)
+  const [tokenEmitter, setTokenEmitter] = useState(flow.tokenEmitter as Address)
 
   const parentFlowContract = flow.isTopLevel
     ? getEthAddress(flow.recipient)
@@ -52,16 +54,24 @@ export function SwapTokenBox(props: Props) {
             parentFlowContract={parentFlowContract}
             defaultTokenAmount={defaultTokenAmount}
             switchSwapBox={() => setSwapState("sell")}
-            defaultToken={flow.erc20 as Address}
-            defaultTokenEmitter={flow.tokenEmitter as Address}
+            setTokenAndEmitter={(token, tokenEmitter) => {
+              setToken(token)
+              setTokenEmitter(tokenEmitter)
+            }}
+            token={token}
+            tokenEmitter={tokenEmitter}
           />
         ) : (
           <SellTokenBox
             parentFlowContract={parentFlowContract}
             defaultTokenAmount={defaultTokenAmount}
             switchSwapBox={() => setSwapState("buy")}
-            defaultToken={flow.erc20 as Address}
-            defaultTokenEmitter={flow.tokenEmitter as Address}
+            setTokenAndEmitter={(token, tokenEmitter) => {
+              setToken(token)
+              setTokenEmitter(tokenEmitter)
+            }}
+            token={token}
+            tokenEmitter={tokenEmitter}
           />
         )}
       </div>

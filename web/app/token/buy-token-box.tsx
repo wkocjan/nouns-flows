@@ -25,27 +25,27 @@ import { SwitchEthChainButton } from "./switch-eth-payment-button"
 
 interface Props {
   defaultTokenAmount: bigint
-  defaultToken: Address
-  defaultTokenEmitter: Address
+  token: Address
+  tokenEmitter: Address
   parentFlowContract: Address
   switchSwapBox: () => void
+  setTokenAndEmitter: (token: Address, tokenEmitter: Address) => void
 }
 
 const chainId = base.id
 
 export function BuyTokenBox({
   defaultTokenAmount,
-  defaultToken,
-  defaultTokenEmitter,
+  token,
+  tokenEmitter,
   parentFlowContract,
   switchSwapBox,
+  setTokenAndEmitter,
 }: Props) {
   const { address } = useAccount()
   const { data: balance } = useBalance({ address })
   const [tokenAmount, _setTokenAmount] = useState((Number(defaultTokenAmount) / 1e18).toString())
   const [tokenAmountBigInt, _setTokenAmountBigInt] = useState(defaultTokenAmount)
-  const [token, setToken] = useState(defaultToken)
-  const [tokenEmitter, setTokenEmitter] = useState(defaultTokenEmitter)
 
   const { balances, refetch } = useERC20Balances([getEthAddress(token)], address)
   const tokenBalance = balances?.[0]
@@ -101,8 +101,7 @@ export function BuyTokenBox({
               <TokenSwitcherDialog
                 parentFlowContract={parentFlowContract}
                 switchToken={(token, tokenEmitter) => {
-                  setToken(token)
-                  setTokenEmitter(tokenEmitter)
+                  setTokenAndEmitter(token, tokenEmitter)
                 }}
                 currentToken={token}
                 currentTokenEmitter={tokenEmitter}
@@ -128,7 +127,7 @@ export function BuyTokenBox({
           isLoadingQuote={isLoadingRewardsQuote}
         >
           <TokenBalanceWithWarning
-            balance={tokenBalance}
+            balance={balance?.value || BigInt(0)}
             ethPrice={ethPrice || 0}
             rawCost={rawCost}
             addedSurgeCost={addedSurgeCost}
