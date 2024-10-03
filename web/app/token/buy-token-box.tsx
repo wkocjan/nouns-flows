@@ -22,6 +22,7 @@ import { TokenBalanceAndUSDValue } from "./token-balance-usd-value"
 import { EthConversionBox } from "./eth-conversion-box"
 import { TokenBalanceWithWarning } from "./token-balance-with-warning"
 import { SwitchEthChainButton } from "./switch-eth-payment-button"
+import { BuyTokenButton } from "./buy-token-button"
 
 interface Props {
   defaultTokenAmount: bigint
@@ -68,23 +69,12 @@ export function BuyTokenBox({
     chainId,
   )
 
-  const { prepareWallet, writeContract, toastId, isLoading } = useContractTransaction({
-    chainId,
-    success: "Tokens purchased successfully!",
-    onSuccess: async (hash) => {
-      await refetch()
-    },
-  })
-
   const setTokenAmount = (value: string) => {
     _setTokenAmount(value)
     _setTokenAmountBigInt(BigInt(Math.trunc(Number(value) * 1e18) || "0"))
   }
 
   const { ethPrice } = useETHPrice()
-
-  const insufficientBalance =
-    balance && balance.value < BigInt(Math.trunc(Number(costWithRewardsFee) * 1.05))
 
   return (
     <div className="space-y-1 rounded-3xl bg-white p-1.5 dark:bg-black/90">
@@ -135,43 +125,16 @@ export function BuyTokenBox({
           />
         </EthConversionBox>
       </div>
-      <div className="mt-4 w-full">
-        <Button
-          className="w-full rounded-2xl py-7 text-lg font-medium tracking-wide"
-          disabled={isLoading || isLoadingRewardsQuote || !balance || insufficientBalance}
-          loading={isLoading}
-          type="button"
-          onClick={async () => {
-            try {
-              await prepareWallet()
 
-              const costWithSlippage = BigInt(Math.trunc(Number(costWithRewardsFee) * 1.02))
-
-              writeContract({
-                account: address,
-                abi: tokenEmitterImplAbi,
-                functionName: "buyToken",
-                address: getEthAddress(tokenEmitter),
-                chainId,
-                args: [
-                  address as `0x${string}`,
-                  tokenAmountBigInt,
-                  costWithSlippage,
-                  {
-                    builder: zeroAddress,
-                    purchaseReferral: zeroAddress,
-                  },
-                ],
-                value: costWithSlippage,
-              })
-            } catch (e: any) {
-              toast.error(e.message, { id: toastId })
-            }
-          }}
-        >
-          {insufficientBalance ? "Insufficient ETH balance" : "Buy"}
-        </Button>
-      </div>
+      <BuyTokenButton
+        tokenEmitter={tokenEmitter}
+        costWithRewardsFee={costWithRewardsFee}
+        tokenAmountBigInt={tokenAmountBigInt}
+        isLoadingRewardsQuote={isLoadingRewardsQuote}
+        onSuccess={() => {
+          refetch()
+        }}
+      />
     </div>
   )
 }

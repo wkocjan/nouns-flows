@@ -124,18 +124,16 @@ export function SellTokenBox(props: Props) {
           />
         </EthConversionBox>
       </div>
-      <div className="mt-7 w-full">
-        <SellTokenButton
-          isLoadingQuote={isLoadingQuote}
-          isError={isError}
-          tokenSymbol={tokenSymbol || ""}
-          tokenEmitter={tokenEmitter}
-          tokenBalance={tokenBalance}
-          tokenAmountBigInt={tokenAmountBigInt}
-          payment={payment}
-          onSuccess={() => refetch()}
-        />
-      </div>
+      <SellTokenButton
+        isLoadingQuote={isLoadingQuote}
+        isError={isError}
+        tokenSymbol={tokenSymbol || ""}
+        tokenEmitter={tokenEmitter}
+        tokenBalance={tokenBalance}
+        tokenAmountBigInt={tokenAmountBigInt}
+        payment={payment}
+        onSuccess={() => refetch()}
+      />
     </div>
   )
 }
