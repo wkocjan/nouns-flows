@@ -52,9 +52,9 @@ export function SellTokenBox(props: Props) {
     },
   })
 
-  const setTokenAmount = (value: string) => {
+  const setTokenAmount = (value: string, valueBigInt?: bigint) => {
     _setTokenAmount(value)
-    _setTokenAmountBigInt(BigInt(Math.trunc(Number(value) * 1e18) || "0"))
+    _setTokenAmountBigInt(valueBigInt || BigInt(Math.trunc(Number(value) * 1e18) || "0"))
   }
 
   const { ethPrice } = useETHPrice()
@@ -81,7 +81,9 @@ export function SellTokenBox(props: Props) {
                 {formatUSDValue(ethPrice || 0, payment)}
               </span>
               <div
-                onClick={() => setTokenAmount((Number(token.balance) / 1e18).toString())}
+                onClick={() =>
+                  setTokenAmount((Number(token.balance) / 1e18).toString(), token.balance)
+                }
                 className="cursor-pointer"
               >
                 <TokenBalance balance={token.balance} />
