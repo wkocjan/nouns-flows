@@ -2,7 +2,7 @@ export const SwitchSwapBoxButton = ({ switchSwapBox }: { switchSwapBox: () => vo
   return (
     <button
       onClick={switchSwapBox}
-      className="mx-auto block rounded-xl border-[3px] border-black/90 p-2 dark:bg-gray-900"
+      className="mx-auto block rounded-xl border-[3px] border-white bg-gray-100 p-2 text-black dark:border-black/90 dark:bg-gray-900 dark:text-white"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -10,7 +10,7 @@ export const SwitchSwapBoxButton = ({ switchSwapBox }: { switchSwapBox: () => vo
         height="16"
         viewBox="0 0 24 24"
         fill="none"
-        stroke="#FFFFFF"
+        stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
