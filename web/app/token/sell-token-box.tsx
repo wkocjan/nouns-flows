@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { tokenEmitterImplAbi } from "@/lib/abis"
-import { getEthAddress, getIpfsUrl } from "@/lib/utils"
+import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -16,25 +16,31 @@ import { ConversionBox } from "./conversion-box"
 import { CurrencyInput } from "./currency-input"
 import { CurrencyDisplay } from "./currency-display"
 import { TokenBalance } from "./token-balance"
-import { TokenLogo } from "./token-logo"
 import { SwitchSwapBoxButton } from "./switch-box-button"
 import { BaseEthLogo } from "./base-eth-logo"
 import { useERC20Balances } from "@/lib/tcr/use-erc20-balances"
 import { TokenBalanceAndUSDValue } from "./token-balance-usd-value"
-import { useFlowForToken } from "@/lib/tcr/use-flow-for-token"
 import { useERC20Tokens } from "@/lib/tcr/use-erc20s"
+import { TokenSwitcherDialog } from "./token-switcher-dialog"
 
 interface Props {
   defaultTokenAmount: bigint
   switchSwapBox: () => void
   defaultToken: Address
   defaultTokenEmitter: Address
+  parentFlowContract: Address
 }
 
 const chainId = base.id
 
 export function SellTokenBox(props: Props) {
-  const { defaultTokenAmount, switchSwapBox, defaultToken, defaultTokenEmitter } = props
+  const {
+    defaultTokenAmount,
+    switchSwapBox,
+    defaultToken,
+    defaultTokenEmitter,
+    parentFlowContract,
+  } = props
   const { address } = useAccount()
   const { data: balance } = useBalance({ address })
   const [tokenAmount, _setTokenAmount] = useState((Number(defaultTokenAmount) / 1e18).toString())
@@ -42,16 +48,10 @@ export function SellTokenBox(props: Props) {
   const [token, setToken] = useState(defaultToken)
   const [tokenEmitter, setTokenEmitter] = useState(defaultTokenEmitter)
 
-  const { flow: flowForToken } = useFlowForToken(token)
-
   const { balances, refetch } = useERC20Balances([getEthAddress(token)], address)
   const tokenBalance = balances?.[0]
 
-  const {
-    tokens,
-    refetch: refetchTokens,
-    isLoading: isLoadingTokens,
-  } = useERC20Tokens([token], chainId)
+  const { tokens } = useERC20Tokens([token], chainId)
   const tokenSymbol = tokens?.[0]?.symbol
 
   const {
@@ -87,10 +87,15 @@ export function SellTokenBox(props: Props) {
                 value={tokenAmount}
                 onChange={(e) => setTokenAmount(e.target.value)}
               />
-              <CurrencyDisplay>
-                <TokenLogo src={getIpfsUrl(flowForToken?.image || "")} alt="TCR token" />
-                <span className="px-1">{tokenSymbol}</span>
-              </CurrencyDisplay>
+              <TokenSwitcherDialog
+                parentFlowContract={parentFlowContract}
+                switchToken={(token, tokenEmitter) => {
+                  setToken(token)
+                  setTokenEmitter(tokenEmitter)
+                }}
+                currentToken={token}
+                currentTokenEmitter={tokenEmitter}
+              />
             </div>
             <div className="flex items-center justify-between">
               <span className="text-xs text-gray-500 dark:text-white">

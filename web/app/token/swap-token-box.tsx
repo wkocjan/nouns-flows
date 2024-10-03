@@ -24,7 +24,9 @@ export function SwapTokenBox(props: Props) {
   const { flow, defaultTokenAmount, defaultSwapState = "buy" } = props
   const [swapState, setSwapState] = useState<SwapState>(defaultSwapState)
 
-  const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr), chainId)
+  const parentFlowContract = flow.isTopLevel
+    ? getEthAddress(flow.recipient)
+    : getEthAddress(flow.parentContract)
 
   return (
     <div className="flex flex-col space-y-3">
@@ -47,9 +49,7 @@ export function SwapTokenBox(props: Props) {
       <div>
         {swapState === "buy" ? (
           <BuyTokenBox
-            parentFlowContract={
-              flow.isTopLevel ? getEthAddress(flow.recipient) : getEthAddress(flow.parentContract)
-            }
+            parentFlowContract={parentFlowContract}
             defaultTokenAmount={defaultTokenAmount}
             switchSwapBox={() => setSwapState("sell")}
             defaultToken={flow.erc20 as Address}
@@ -57,7 +57,7 @@ export function SwapTokenBox(props: Props) {
           />
         ) : (
           <SellTokenBox
-            flow={flow}
+            parentFlowContract={parentFlowContract}
             defaultTokenAmount={defaultTokenAmount}
             switchSwapBox={() => setSwapState("buy")}
             defaultToken={flow.erc20 as Address}
