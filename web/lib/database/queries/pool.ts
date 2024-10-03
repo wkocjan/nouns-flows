@@ -1,5 +1,3 @@
-"use server"
-
 import { NOUNS_FLOW } from "@/lib/config"
 import database from "@/lib/database"
 import { unstable_cache } from "next/cache"
