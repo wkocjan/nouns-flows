@@ -1,6 +1,7 @@
+import { getChain } from "@/lib/viem/client"
 import { createWalletClient, http } from "viem"
 import { privateKeyToAccount } from "viem/accounts"
-import { base } from "viem/chains"
+import { base, mainnet } from "viem/chains"
 
 export function getRevealVotesWalletClient(chainId: number) {
   if (!process.env.REVEAL_VOTES_PK) {
@@ -16,13 +17,4 @@ export function getRevealVotesWalletClient(chainId: number) {
   })
 
   return client
-}
-
-function getChain(chainId: number) {
-  switch (chainId) {
-    case 8453:
-      return base
-    default:
-      throw new Error(`Unsupported chainId: ${chainId}`)
-  }
 }

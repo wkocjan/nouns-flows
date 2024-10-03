@@ -12,3 +12,14 @@ export const l2Client = createPublicClient({
   transport: http(`https://base-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`),
   batch: { multicall: true },
 })
+
+export function getChain(chainId: number) {
+  switch (chainId) {
+    case base.id:
+      return base
+    case mainnet.id:
+      return mainnet
+    default:
+      throw new Error(`Unsupported chainId: ${chainId}`)
+  }
+}
