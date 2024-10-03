@@ -1,27 +1,25 @@
 "use client"
 
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { tokenEmitterImplAbi } from "@/lib/abis"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { useState } from "react"
 import { toast } from "sonner"
-import { Address, formatEther } from "viem"
+import { Address } from "viem"
 import { base } from "viem/chains"
 import { useAccount, useBalance } from "wagmi"
 import { useSellTokenQuote } from "./hooks/useSellTokenQuote"
 import { formatUSDValue, useETHPrice } from "./hooks/useETHPrice"
 import { ConversionBox } from "./conversion-box"
 import { CurrencyInput } from "./currency-input"
-import { CurrencyDisplay } from "./currency-display"
 import { TokenBalance } from "./token-balance"
 import { SwitchSwapBoxButton } from "./switch-box-button"
-import { BaseEthLogo } from "./base-eth-logo"
 import { useERC20Balances } from "@/lib/tcr/use-erc20-balances"
 import { TokenBalanceAndUSDValue } from "./token-balance-usd-value"
 import { useERC20Tokens } from "@/lib/tcr/use-erc20s"
 import { TokenSwitcherDialog } from "./token-switcher-dialog"
+import { EthConversionBox } from "./eth-conversion-box"
 
 interface Props {
   defaultTokenAmount: bigint
@@ -117,32 +115,13 @@ export function SellTokenBox(props: Props) {
           <SwitchSwapBoxButton switchSwapBox={switchSwapBox} />
         </div>
         <div className="mb-1" />
-
-        <ConversionBox label="Receive">
-          <div className="flex flex-col space-y-3">
-            <div className="flex items-center justify-between">
-              <CurrencyInput
-                id="payment"
-                name="payment"
-                value={Number(formatEther(payment)).toFixed(12)}
-                disabled
-                className={cn("disabled:text-black dark:disabled:text-white", {
-                  "opacity-50": isLoadingQuote,
-                  "opacity-100": !isLoadingQuote,
-                })}
-              />
-              <CurrencyDisplay className="py-0.5">
-                <BaseEthLogo />
-                <span className="pr-1">ETH</span>
-              </CurrencyDisplay>
-            </div>
-            <TokenBalanceAndUSDValue
-              balance={balance?.value || BigInt(0)}
-              ethPrice={ethPrice || 0}
-              ethAmount={payment}
-            />
-          </div>
-        </ConversionBox>
+        <EthConversionBox label="Receive" amount={payment} isLoadingQuote={isLoadingQuote}>
+          <TokenBalanceAndUSDValue
+            balance={balance?.value || BigInt(0)}
+            ethPrice={ethPrice || 0}
+            ethAmount={payment}
+          />
+        </EthConversionBox>
       </div>
       <div className="mt-7 w-full">
         <Button
