@@ -33,6 +33,7 @@ import Caret from "@/public/caret-down.svg"
 import Image from "next/image"
 import { useERC20Balances } from "@/lib/tcr/use-erc20-balances"
 import { TokenBalanceAndUSDValue } from "./token-balance-usd-value"
+import { EthConversionBox } from "./eth-conversion-box"
 
 interface Props {
   defaultTokenAmount: bigint
@@ -132,53 +133,20 @@ export function BuyTokenBox({
         </div>
         <div className="mb-1" />
 
-        <ConversionBox label="Pay">
-          <div className="flex flex-col space-y-3">
-            <div className="flex items-center justify-between">
-              <CurrencyInput
-                id="cost"
-                name="cost"
-                value={Number(formatEther(costWithRewardsFee)).toFixed(12)}
-                disabled
-                className={cn("disabled:text-black dark:disabled:text-white", {
-                  "opacity-50": isLoadingRewardsQuote,
-                  "opacity-100": !isLoadingRewardsQuote,
-                })}
-              />
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <CurrencyDisplay className="cursor-pointer py-0.5">
-                    <BaseEthLogo />
-                    <span className="pr-1">ETH</span>
-                    <Image
-                      src={Caret}
-                      alt="Caret"
-                      className="mt-0.5 h-2 w-auto pr-1 text-black dark:text-white"
-                    />
-                  </CurrencyDisplay>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem asChild>
-                    <TokenLogo src="/eth.png" alt="ETH" />
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-1">
-                <span className="text-xs text-gray-500 dark:text-white">
-                  {formatUSDValue(ethPrice || 0, costWithRewardsFee)}
-                </span>
-                <CostDifferenceTooltip
-                  rawCost={rawCost}
-                  addedSurgeCost={addedSurgeCost}
-                  costWithRewardsFee={costWithRewardsFee}
-                />
-              </div>
-              <TokenBalance balance={balance?.value || BigInt(0)} />
-            </div>
-          </div>
-        </ConversionBox>
+        <EthConversionBox
+          currencyDisplay={<SwitchEthChainButton />}
+          label="Pay"
+          amount={costWithRewardsFee}
+          isLoadingQuote={isLoadingRewardsQuote}
+        >
+          <TokenBalanceWithWarning
+            balance={tokenBalance}
+            ethPrice={ethPrice || 0}
+            rawCost={rawCost}
+            addedSurgeCost={addedSurgeCost}
+            costWithRewardsFee={costWithRewardsFee}
+          />
+        </EthConversionBox>
       </div>
       <div className="mt-4 w-full">
         <Button
@@ -218,5 +186,58 @@ export function BuyTokenBox({
         </Button>
       </div>
     </div>
+  )
+}
+
+const TokenBalanceWithWarning = ({
+  ethPrice,
+  costWithRewardsFee,
+  rawCost,
+  addedSurgeCost,
+  balance,
+}: {
+  ethPrice: number
+  costWithRewardsFee: bigint
+  rawCost: bigint
+  addedSurgeCost: bigint
+  balance: bigint
+}) => {
+  return (
+    <div className="flex items-center justify-between">
+      <div className="flex items-center space-x-1">
+        <span className="text-xs text-gray-500 dark:text-white">
+          {formatUSDValue(ethPrice || 0, costWithRewardsFee)}
+        </span>
+        <CostDifferenceTooltip
+          rawCost={rawCost}
+          addedSurgeCost={addedSurgeCost}
+          costWithRewardsFee={costWithRewardsFee}
+        />
+      </div>
+      <TokenBalance balance={balance} />
+    </div>
+  )
+}
+
+const SwitchEthChainButton = () => {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <CurrencyDisplay className="cursor-pointer py-0.5">
+          <BaseEthLogo />
+          <span className="pr-1">ETH</span>
+          <Image
+            src={Caret}
+            alt="Caret"
+            className="mt-0.5 h-2 w-auto pr-1 text-black dark:text-white"
+          />
+        </CurrencyDisplay>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem asChild>
+          <TokenLogo src="/eth.png" alt="ETH" />
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

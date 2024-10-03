@@ -20,6 +20,8 @@ import { TokenBalanceAndUSDValue } from "./token-balance-usd-value"
 import { useERC20Tokens } from "@/lib/tcr/use-erc20s"
 import { TokenSwitcherDialog } from "./token-switcher-dialog"
 import { EthConversionBox } from "./eth-conversion-box"
+import { CurrencyDisplay } from "./currency-display"
+import { BaseEthLogo } from "./base-eth-logo"
 
 interface Props {
   defaultTokenAmount: bigint
@@ -115,7 +117,18 @@ export function SellTokenBox(props: Props) {
           <SwitchSwapBoxButton switchSwapBox={switchSwapBox} />
         </div>
         <div className="mb-1" />
-        <EthConversionBox label="Receive" amount={payment} isLoadingQuote={isLoadingQuote}>
+
+        <EthConversionBox
+          currencyDisplay={
+            <CurrencyDisplay className="py-0.5">
+              <BaseEthLogo />
+              <span className="pr-1">ETH</span>
+            </CurrencyDisplay>
+          }
+          label="Receive"
+          amount={payment}
+          isLoadingQuote={isLoadingQuote}
+        >
           <TokenBalanceAndUSDValue
             balance={balance?.value || BigInt(0)}
             ethPrice={ethPrice || 0}

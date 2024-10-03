@@ -11,6 +11,7 @@ interface EthConversionBoxProps {
   isLoadingQuote: boolean
   className?: string
   children?: React.ReactNode
+  currencyDisplay: React.ReactNode
 }
 
 export function EthConversionBox({
@@ -19,6 +20,7 @@ export function EthConversionBox({
   isLoadingQuote,
   className,
   children,
+  currencyDisplay,
 }: EthConversionBoxProps) {
   return (
     <ConversionBox label={label}>
@@ -34,10 +36,7 @@ export function EthConversionBox({
               "opacity-100": !isLoadingQuote,
             })}
           />
-          <CurrencyDisplay className="py-0.5">
-            <BaseEthLogo />
-            <span className="pr-1">ETH</span>
-          </CurrencyDisplay>
+          {currencyDisplay}
         </div>
         {children}
       </div>
