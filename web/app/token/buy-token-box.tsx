@@ -21,6 +21,7 @@ import { CurrencyDisplay } from "./currency-display"
 import { TokenBalance } from "./token-balance"
 import { TokenLogo } from "./token-logo"
 import { SwitchSwapBoxButton } from "./switch-box-button"
+import Image from "next/image"
 
 interface Props {
   flow: Grant
@@ -113,9 +114,31 @@ export function BuyTokenBox(props: Props) {
                   "opacity-100": !isLoadingRewardsQuote,
                 })}
               />
-              <CurrencyDisplay>
-                <TokenLogo src="/eth.png" alt="ETH" />
-                <span className="px-1">ETH</span>
+              <CurrencyDisplay className="cursor-pointer py-0.5">
+                <div className="flex items-center">
+                  <TokenLogo src="/eth.png" alt="ETH" />
+                  <div className="-ml-2 mt-4 rounded-[6px] bg-white p-[3px] dark:bg-black">
+                    <Image
+                      src="/base.png"
+                      alt="Base"
+                      className="rounded-[2px]"
+                      width={12}
+                      height={12}
+                    />
+                  </div>
+                </div>
+                <span className="pl-0.5 pr-1">ETH</span>
+                <div className="mt-0.5 pr-1 text-black dark:text-white">
+                  <svg
+                    width="12"
+                    height="7"
+                    viewBox="0 0 12 7"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M0.97168 1L6.20532 6L11.439 1" stroke="currentColor"></path>
+                  </svg>
+                </div>
               </CurrencyDisplay>
             </div>
             <div className="flex items-center justify-between">
