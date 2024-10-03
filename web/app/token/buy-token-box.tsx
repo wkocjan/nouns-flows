@@ -31,6 +31,8 @@ import { createRelayClient } from "@/lib/relay/client"
 import { Grant } from "@prisma/client"
 import { BaseEthLogo } from "./base-eth-logo"
 import { TokenSwitcherDialog } from "./token-switcher-dialog"
+import Caret from "@/public/caret-down.svg"
+import Image from "next/image"
 
 interface Props {
   flow: Grant
@@ -131,17 +133,11 @@ export function BuyTokenBox(props: Props) {
                   <CurrencyDisplay className="cursor-pointer py-0.5">
                     <BaseEthLogo />
                     <span className="pr-1">ETH</span>
-                    <div className="mt-0.5 pr-1 text-black dark:text-white">
-                      <svg
-                        width="12"
-                        height="7"
-                        viewBox="0 0 12 7"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M0.97168 1L6.20532 6L11.439 1" stroke="currentColor"></path>
-                      </svg>
-                    </div>
+                    <Image
+                      src={Caret}
+                      alt="Caret"
+                      className="mt-0.5 h-2 w-auto pr-1 text-black dark:text-white"
+                    />
                   </CurrencyDisplay>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
