@@ -15,6 +15,7 @@ import { useRef, useState } from "react"
 import { base } from "viem/chains"
 import { BuyTokenBox } from "./buy-token-box"
 import { SellTokenBox } from "./sell-token-box"
+import { Address } from "viem"
 
 interface Props {
   flow: Grant
@@ -94,9 +95,15 @@ export function SwapTokenButton(props: Props) {
           <div>
             {swapState === "buy" ? (
               <BuyTokenBox
-                flow={flow}
+                parentFlowContract={
+                  flow.isTopLevel
+                    ? getEthAddress(flow.recipient)
+                    : getEthAddress(flow.parentContract)
+                }
                 defaultTokenAmount={defaultTokenAmount}
                 switchSwapBox={() => setSwapState("sell")}
+                defaultToken={flow.erc20 as Address}
+                defaultTokenEmitter={flow.tokenEmitter as Address}
               />
             ) : (
               <SellTokenBox

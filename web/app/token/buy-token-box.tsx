@@ -3,12 +3,11 @@
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { tokenEmitterImplAbi } from "@/lib/abis"
-import { useTcrToken } from "@/lib/tcr/use-tcr-token"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
-import { formatEther, zeroAddress } from "viem"
+import { Address, formatEther, zeroAddress } from "viem"
 import { base } from "viem/chains"
 import { useAccount, useBalance } from "wagmi"
 import { useBuyTokenQuote, useBuyTokenQuoteWithRewards } from "./hooks/useBuyTokenQuote"
@@ -28,28 +27,37 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { RelayChain } from "@reservoir0x/relay-sdk"
 import { createRelayClient } from "@/lib/relay/client"
-import { Grant } from "@prisma/client"
 import { BaseEthLogo } from "./base-eth-logo"
 import { TokenSwitcherDialog } from "./token-switcher-dialog"
 import Caret from "@/public/caret-down.svg"
 import Image from "next/image"
+import { useTcrTokenBalance } from "@/lib/tcr/use-tcr-token-balance"
 
 interface Props {
-  flow: Grant
   defaultTokenAmount: bigint
+  defaultToken: Address
+  defaultTokenEmitter: Address
+  parentFlowContract: Address
   switchSwapBox: () => void
 }
 
 const chainId = base.id
 
-export function BuyTokenBox(props: Props) {
-  const { flow, defaultTokenAmount, switchSwapBox } = props
+export function BuyTokenBox({
+  defaultTokenAmount,
+  defaultToken,
+  defaultTokenEmitter,
+  parentFlowContract,
+  switchSwapBox,
+}: Props) {
   const { address } = useAccount()
   const { data: balance } = useBalance({ address })
   const [tokenAmount, _setTokenAmount] = useState((Number(defaultTokenAmount) / 1e18).toString())
   const [tokenAmountBigInt, _setTokenAmountBigInt] = useState(defaultTokenAmount)
+  const [token, setToken] = useState(defaultToken)
+  const [tokenEmitter, setTokenEmitter] = useState(defaultTokenEmitter)
 
-  const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr), chainId)
+  const { balances, refetch } = useTcrTokenBalance([getEthAddress(token)], address)
 
   const { chains } = useMemo(() => createRelayClient(chainId), [])
 
@@ -61,10 +69,10 @@ export function BuyTokenBox(props: Props) {
     totalCost: costWithRewardsFee,
     isLoading: isLoadingRewardsQuote,
     addedSurgeCost,
-  } = useBuyTokenQuoteWithRewards(getEthAddress(flow.tokenEmitter), tokenAmountBigInt, chainId)
+  } = useBuyTokenQuoteWithRewards(getEthAddress(tokenEmitter), tokenAmountBigInt, chainId)
 
   const { totalCost: rawCost } = useBuyTokenQuote(
-    getEthAddress(flow.tokenEmitter),
+    getEthAddress(tokenEmitter),
     tokenAmountBigInt,
     chainId,
   )
@@ -73,7 +81,7 @@ export function BuyTokenBox(props: Props) {
     chainId,
     success: "Tokens purchased successfully!",
     onSuccess: async (hash) => {
-      await token.refetch()
+      await refetch()
     },
   })
 
@@ -99,14 +107,21 @@ export function BuyTokenBox(props: Props) {
                 value={tokenAmount}
                 onChange={(e) => setTokenAmount(e.target.value)}
               />
-              <TokenSwitcherDialog flow={flow} />
+              <TokenSwitcherDialog
+                parentFlowContract={parentFlowContract}
+                switchToken={(token, tokenEmitter) => {
+                  setToken(token)
+                  setTokenEmitter(tokenEmitter)
+                }}
+                currentToken={token}
+                currentTokenEmitter={tokenEmitter}
+              />
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500 dark:text-white">
-                {formatUSDValue(ethPrice || 0, rawCost - addedSurgeCost)}
-              </span>
-              <TokenBalance balance={token.balance} />
-            </div>
+            <TokenBalanceAndUSDValue
+              balance={balances[0]}
+              ethPrice={ethPrice || 0}
+              ethCost={rawCost - addedSurgeCost}
+            />
           </div>
         </ConversionBox>
 
@@ -179,7 +194,7 @@ export function BuyTokenBox(props: Props) {
                 account: address,
                 abi: tokenEmitterImplAbi,
                 functionName: "buyToken",
-                address: getEthAddress(flow.tokenEmitter),
+                address: getEthAddress(tokenEmitter),
                 chainId,
                 args: [
                   address as `0x${string}`,
@@ -203,3 +218,20 @@ export function BuyTokenBox(props: Props) {
     </div>
   )
 }
+
+const TokenBalanceAndUSDValue = ({
+  balance,
+  ethPrice,
+  ethCost,
+}: {
+  balance: bigint
+  ethPrice: number
+  ethCost: bigint
+}) => (
+  <div className="flex items-center justify-between">
+    <span className="text-xs text-gray-500 dark:text-white">
+      {formatUSDValue(ethPrice || 0, ethCost)}
+    </span>
+    <TokenBalance balance={balance} />
+  </div>
+)
