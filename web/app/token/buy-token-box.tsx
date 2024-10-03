@@ -1,39 +1,27 @@
 "use client"
 
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { tokenEmitterImplAbi } from "@/lib/abis"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
-import { Address, formatEther, zeroAddress } from "viem"
+import { Address, zeroAddress } from "viem"
 import { base } from "viem/chains"
 import { useAccount, useBalance } from "wagmi"
 import { useBuyTokenQuote, useBuyTokenQuoteWithRewards } from "./hooks/useBuyTokenQuote"
-import { formatUSDValue, useETHPrice } from "./hooks/useETHPrice"
-import { CostDifferenceTooltip } from "./cost-difference-tooltip"
+import { useETHPrice } from "./hooks/useETHPrice"
 import { ConversionBox } from "./conversion-box"
 import { CurrencyInput } from "./currency-input"
-import { CurrencyDisplay } from "./currency-display"
-import { TokenBalance } from "./token-balance"
-import { TokenLogo } from "./token-logo"
 import { SwitchSwapBoxButton } from "./switch-box-button"
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu"
 import { RelayChain } from "@reservoir0x/relay-sdk"
 import { createRelayClient } from "@/lib/relay/client"
-import { BaseEthLogo } from "./base-eth-logo"
 import { TokenSwitcherDialog } from "./token-switcher-dialog"
-import Caret from "@/public/caret-down.svg"
-import Image from "next/image"
 import { useERC20Balances } from "@/lib/tcr/use-erc20-balances"
 import { TokenBalanceAndUSDValue } from "./token-balance-usd-value"
 import { EthConversionBox } from "./eth-conversion-box"
+import { TokenBalanceWithWarning } from "./token-balance-with-warning"
+import { SwitchEthChainButton } from "./switch-eth-payment-button"
 
 interface Props {
   defaultTokenAmount: bigint
@@ -186,58 +174,5 @@ export function BuyTokenBox({
         </Button>
       </div>
     </div>
-  )
-}
-
-const TokenBalanceWithWarning = ({
-  ethPrice,
-  costWithRewardsFee,
-  rawCost,
-  addedSurgeCost,
-  balance,
-}: {
-  ethPrice: number
-  costWithRewardsFee: bigint
-  rawCost: bigint
-  addedSurgeCost: bigint
-  balance: bigint
-}) => {
-  return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center space-x-1">
-        <span className="text-xs text-gray-500 dark:text-white">
-          {formatUSDValue(ethPrice || 0, costWithRewardsFee)}
-        </span>
-        <CostDifferenceTooltip
-          rawCost={rawCost}
-          addedSurgeCost={addedSurgeCost}
-          costWithRewardsFee={costWithRewardsFee}
-        />
-      </div>
-      <TokenBalance balance={balance} />
-    </div>
-  )
-}
-
-const SwitchEthChainButton = () => {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <CurrencyDisplay className="cursor-pointer py-0.5">
-          <BaseEthLogo />
-          <span className="pr-1">ETH</span>
-          <Image
-            src={Caret}
-            alt="Caret"
-            className="mt-0.5 h-2 w-auto pr-1 text-black dark:text-white"
-          />
-        </CurrencyDisplay>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem asChild>
-          <TokenLogo src="/eth.png" alt="ETH" />
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
   )
 }

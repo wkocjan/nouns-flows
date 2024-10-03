@@ -1,11 +1,7 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { tokenEmitterImplAbi } from "@/lib/abis"
 import { getEthAddress } from "@/lib/utils"
-import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { useState } from "react"
-import { toast } from "sonner"
 import { Address } from "viem"
 import { base } from "viem/chains"
 import { useAccount, useBalance } from "wagmi"
@@ -22,6 +18,7 @@ import { TokenSwitcherDialog } from "./token-switcher-dialog"
 import { EthConversionBox } from "./eth-conversion-box"
 import { CurrencyDisplay } from "./currency-display"
 import { BaseEthLogo } from "./base-eth-logo"
+import { SellTokenButton } from "./sell-token-button"
 
 interface Props {
   defaultTokenAmount: bigint
@@ -59,14 +56,6 @@ export function SellTokenBox(props: Props) {
     isLoading: isLoadingQuote,
     isError,
   } = useSellTokenQuote(getEthAddress(tokenEmitter), tokenAmountBigInt, chainId)
-
-  const { prepareWallet, writeContract, toastId, isLoading } = useContractTransaction({
-    chainId,
-    success: "Tokens sold successfully!",
-    onSuccess: async (hash) => {
-      await refetch()
-    },
-  })
 
   const setTokenAmount = (value: string, valueBigInt?: bigint) => {
     _setTokenAmount(value)
@@ -137,38 +126,16 @@ export function SellTokenBox(props: Props) {
         </EthConversionBox>
       </div>
       <div className="mt-7 w-full">
-        <Button
-          className="w-full rounded-2xl py-7 text-lg font-medium tracking-wide"
-          disabled={
-            isLoading ||
-            isLoadingQuote ||
-            isError ||
-            !tokenBalance ||
-            tokenBalance < tokenAmountBigInt
-          }
-          loading={isLoading}
-          type="button"
-          onClick={async () => {
-            try {
-              await prepareWallet()
-
-              const minPaymentWithSlippage = BigInt(Math.trunc(Number(payment) * 0.98))
-
-              writeContract({
-                account: address,
-                abi: tokenEmitterImplAbi,
-                functionName: "sellToken",
-                address: tokenEmitter,
-                chainId,
-                args: [tokenAmountBigInt, minPaymentWithSlippage],
-              })
-            } catch (e: any) {
-              toast.error(e.message, { id: toastId })
-            }
-          }}
-        >
-          {tokenBalance < tokenAmountBigInt ? `Insufficient ${tokenSymbol} balance` : "Sell"}
-        </Button>
+        <SellTokenButton
+          isLoadingQuote={isLoadingQuote}
+          isError={isError}
+          tokenSymbol={tokenSymbol || ""}
+          tokenEmitter={tokenEmitter}
+          tokenBalance={tokenBalance}
+          tokenAmountBigInt={tokenAmountBigInt}
+          payment={payment}
+          onSuccess={() => refetch()}
+        />
       </div>
     </div>
   )
