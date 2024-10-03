@@ -41,6 +41,7 @@ export function useTcrToken(contract: Address, spender: Address, chainId = base.
         chainId,
       })
     },
+    refetch,
     isApproving: isLoading,
     isApproved: isConfirmed,
     symbol: symbol?.result,

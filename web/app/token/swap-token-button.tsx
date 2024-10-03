@@ -11,20 +11,25 @@ import {
 import { useTcrToken } from "@/lib/tcr/use-tcr-token"
 import { getEthAddress } from "@/lib/utils"
 import { Grant } from "@prisma/client"
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { base } from "viem/chains"
 import { BuyTokenBox } from "./buy-token-box"
+import { SellTokenBox } from "./sell-token-box"
 
 interface Props {
   flow: Grant
   defaultTokenAmount: bigint
+  defaultSwapState?: SwapState
 }
+
+type SwapState = "buy" | "sell"
 
 const chainId = base.id
 
-export function BuyTokenButton(props: Props) {
-  const { flow, defaultTokenAmount } = props
+export function SwapTokenButton(props: Props) {
+  const { flow, defaultTokenAmount, defaultSwapState = "buy" } = props
   const ref = useRef<HTMLButtonElement>(null)
+  const [swapState, setSwapState] = useState<SwapState>(defaultSwapState)
 
   const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr), chainId)
 
@@ -32,7 +37,7 @@ export function BuyTokenButton(props: Props) {
     <Dialog>
       <DialogTrigger asChild>
         <Button type="button" ref={ref}>
-          Buy {token.symbol}
+          {swapState === "buy" ? "Buy" : "Sell"} {token.symbol}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-screen-xs">
@@ -69,7 +74,39 @@ export function BuyTokenButton(props: Props) {
             </p>
           </li>
         </ul>
-        <BuyTokenBox flow={flow} defaultTokenAmount={defaultTokenAmount} />
+        <div className="flex flex-col space-y-3">
+          <div className="flex items-center justify-start space-x-2">
+            <Button
+              className="h-7 rounded-full px-5"
+              onClick={() => setSwapState("buy")}
+              variant={swapState === "buy" ? "default" : "outline"}
+            >
+              Buy
+            </Button>
+            <Button
+              className="h-7 rounded-full px-5"
+              onClick={() => setSwapState("sell")}
+              variant={swapState === "sell" ? "default" : "outline"}
+            >
+              Sell
+            </Button>
+          </div>
+          <div>
+            {swapState === "buy" ? (
+              <BuyTokenBox
+                flow={flow}
+                defaultTokenAmount={defaultTokenAmount}
+                switchSwapBox={() => setSwapState("sell")}
+              />
+            ) : (
+              <SellTokenBox
+                flow={flow}
+                defaultTokenAmount={defaultTokenAmount}
+                switchSwapBox={() => setSwapState("buy")}
+              />
+            )}
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   )

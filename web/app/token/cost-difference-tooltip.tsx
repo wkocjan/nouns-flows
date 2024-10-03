@@ -20,9 +20,9 @@ export const CostDifferenceTooltip = ({
     <Tooltip>
       <TooltipTrigger asChild>
         <span
-          className={cn("text-xs text-gray-500", {
-            "text-yellow-500": isSurging && surgeCostDifference > 10,
-            "text-red-500": isSurging && surgeCostDifference > 50,
+          className={cn("text-xs text-gray-500 dark:text-gray-50", {
+            "text-yellow-500 dark:text-yellow-500": isSurging && surgeCostDifference > 10,
+            "text-red-500 dark:text-red-500": isSurging && surgeCostDifference > 50,
             "opacity-50": !isSurging,
           })}
         >
@@ -35,7 +35,7 @@ export const CostDifferenceTooltip = ({
           prices to drop or pay {surgeCostDifference.toFixed(2)}% more to buy now.
         </TooltipContent>
       ) : (
-        <TooltipContent side="right" className="max-w-[200px]">
+        <TooltipContent side="top" className="max-w-[200px]">
           You pay a {costDifference.toFixed(2)}% protocol rewards fee on top of the purchase price.
         </TooltipContent>
       )}
