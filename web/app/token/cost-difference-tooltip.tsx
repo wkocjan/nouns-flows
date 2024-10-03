@@ -35,7 +35,7 @@ export const CostDifferenceTooltip = ({
           prices to drop or pay {surgeCostDifference.toFixed(2)}% more to buy now.
         </TooltipContent>
       ) : (
-        <TooltipContent side="right" className="max-w-[200px]">
+        <TooltipContent side="top" className="max-w-[200px]">
           You pay a {costDifference.toFixed(2)}% protocol rewards fee on top of the purchase price.
         </TooltipContent>
       )}
