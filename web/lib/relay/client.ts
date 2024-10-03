@@ -4,12 +4,13 @@ import {
   convertViemChainToRelayChain,
   createClient,
 } from "@reservoir0x/relay-sdk"
-import { Chain, arbitrum, base, baseSepolia, mainnet, optimism } from "viem/chains"
+import { Chain, base, baseSepolia, mainnet } from "viem/chains"
 
 export function createRelayClient(chainId: number) {
   const isTestnet = [baseSepolia.id].includes(chainId as any)
 
-  const chains: Chain[] = [mainnet, base, optimism, arbitrum]
+  /// @notice UI components only support mainnet and base
+  const chains: Chain[] = [mainnet, base]
 
   if (isTestnet) {
     chains.push(baseSepolia)
