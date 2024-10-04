@@ -1,7 +1,6 @@
 import { CuratorPopover } from "@/components/global/curator-popover/curator-popover"
 import { MenuDesktop, MenuMobile } from "@/components/global/menu"
 import { MenuAvatar } from "@/components/global/menu-avatar"
-import { ModeToggle } from "@/components/global/mode-toggle"
 import { RecipientPopover } from "@/components/global/recipient-popover/recipient-popover"
 import { RefreshOnFocus } from "@/components/global/refresh-on-focus"
 import { ThemeProvider } from "@/components/global/theme-provider"
@@ -53,9 +52,6 @@ export default async function RootLayout(props: Readonly<{ children: React.React
                 </h2>
                 <MenuDesktop />
                 <div className="flex items-center space-x-2.5">
-                  <span className="max-sm:hidden">
-                    <ModeToggle />
-                  </span>
                   <CuratorPopover />
                   <RecipientPopover />
                   <MenuAvatar />
