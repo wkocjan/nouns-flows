@@ -1,11 +1,9 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { useTcrToken } from "@/lib/tcr/use-tcr-token"
 import { getEthAddress } from "@/lib/utils"
 import { Grant } from "@prisma/client"
 import { useState } from "react"
-import { base } from "viem/chains"
 import { BuyTokenBox } from "./buy-token-box"
 import { SellTokenBox } from "./sell-token-box"
 import { Address } from "viem"
@@ -14,14 +12,13 @@ interface Props {
   flow: Grant
   defaultTokenAmount: bigint
   defaultSwapState?: SwapState
+  onSuccess: (hash: string) => void
 }
 
 type SwapState = "buy" | "sell"
 
-const chainId = base.id
-
 export function SwapTokenBox(props: Props) {
-  const { flow, defaultTokenAmount, defaultSwapState = "buy" } = props
+  const { flow, defaultTokenAmount, defaultSwapState = "buy", onSuccess } = props
   const [swapState, setSwapState] = useState<SwapState>(defaultSwapState)
   const [token, setToken] = useState(flow.erc20 as Address)
   const [tokenEmitter, setTokenEmitter] = useState(flow.tokenEmitter as Address)
@@ -51,6 +48,7 @@ export function SwapTokenBox(props: Props) {
       <div>
         {swapState === "buy" ? (
           <BuyTokenBox
+            onSuccess={onSuccess}
             parentFlowContract={parentFlowContract}
             defaultTokenAmount={defaultTokenAmount}
             switchSwapBox={() => setSwapState("sell")}
@@ -63,6 +61,7 @@ export function SwapTokenBox(props: Props) {
           />
         ) : (
           <SellTokenBox
+            onSuccess={onSuccess}
             parentFlowContract={parentFlowContract}
             defaultTokenAmount={defaultTokenAmount}
             switchSwapBox={() => setSwapState("buy")}

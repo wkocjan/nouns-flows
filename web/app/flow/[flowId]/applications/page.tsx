@@ -120,7 +120,7 @@ export default async function FlowApplicationsPage(props: Props) {
                         <strong className="font-medium">Awaiting</strong>
 
                         <span className="text-xs text-muted-foreground">
-                          Accepting{" "}
+                          Accepted{" "}
                           <DateTime date={new Date(grant.challengePeriodEndsAt * 1000)} relative />
                         </span>
                       </div>

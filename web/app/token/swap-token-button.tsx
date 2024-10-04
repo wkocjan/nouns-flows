@@ -8,16 +8,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { useTcrToken } from "@/lib/tcr/use-tcr-token"
-import { getEthAddress } from "@/lib/utils"
 import { Grant } from "@prisma/client"
 import { useRef } from "react"
 import { base } from "viem/chains"
 import { SwapTokenBox } from "./swap-token-box"
+import { useERC20Tokens } from "@/lib/tcr/use-erc20s"
 
 interface Props {
   flow: Grant
   defaultTokenAmount: bigint
+  onSuccess?: (hash: string) => void
 }
 
 const chainId = base.id
@@ -26,13 +26,14 @@ export function SwapTokenButton(props: Props) {
   const { flow, defaultTokenAmount } = props
   const ref = useRef<HTMLButtonElement>(null)
 
-  const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr), chainId)
+  const { tokens } = useERC20Tokens([flow.erc20 as `0x${string}`], chainId)
+  const token = tokens?.[0]
 
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button type="button" ref={ref}>
-          Buy {token.symbol}
+          Buy {token?.symbol}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-screen-xs">
@@ -69,7 +70,11 @@ export function SwapTokenButton(props: Props) {
             </p>
           </li>
         </ul>
-        <SwapTokenBox flow={flow} defaultTokenAmount={defaultTokenAmount} />
+        <SwapTokenBox
+          onSuccess={props.onSuccess || (() => {})}
+          flow={flow}
+          defaultTokenAmount={defaultTokenAmount}
+        />
       </DialogContent>
     </Dialog>
   )
