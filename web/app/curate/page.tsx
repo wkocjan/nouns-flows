@@ -45,7 +45,7 @@ export default async function CurateAndEarnPage() {
               quality projects are funded.
             </p>
             <p className="mt-4 text-lg leading-8 text-muted-foreground">
-              As a Curator you will have two jobs, that you will be rewarded for:
+              As a Curator you have two jobs that you will be rewarded for:
             </p>
             <dl className="mt-10 space-y-8 text-base leading-7 text-muted-foreground">
               {[
@@ -57,7 +57,7 @@ export default async function CurateAndEarnPage() {
                 {
                   name: "Monitor Projects",
                   description:
-                    "Track progress of funded grants. Initiate removal challenges for inactive or declining projects",
+                    "Track progress of funded grants. Challenge inactive or declining projects",
                   icon: EyeOpenIcon,
                 },
               ].map((job) => (
@@ -92,8 +92,16 @@ export default async function CurateAndEarnPage() {
                 Curation process
               </h2>
               <p className="mt-6 text-center leading-8 text-muted-foreground">
-                Our decentralized & permissionless system is based on Token Curated Registries (TCR)
-                with ERC20 tokens. It&apos;s fully up to community to curate the grants.
+                Our decentralized & permissionless grants system is based on{" "}
+                <a
+                  href="https://medium.com/@ilovebagels/token-curated-registries-1-0-61a232f8dac7"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline"
+                >
+                  Token Curated Registries (TCR)
+                </a>
+                . It&apos;s fully up to the community to curate grants recipients.
               </p>
             </div>
             <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:max-w-none">
@@ -104,7 +112,7 @@ export default async function CurateAndEarnPage() {
                     description: (
                       <>
                         Anyone can become a curator, regardless of background or experience. We
-                        value diverse perspectives in our community.
+                        value diverse perspectives and expertise.
                       </>
                     ),
                     icon: GlobeIcon,
@@ -113,8 +121,7 @@ export default async function CurateAndEarnPage() {
                     name: "Choose Your Category",
                     description: (
                       <>
-                        Select from {flows.length} categories that align with your interests and
-                        expertise:
+                        Curate categories that align with your interests and expertise:
                         <ul className="mt-2 list-inside list-disc">
                           {flows.map((flow) => (
                             <li key={flow.id}>{flow.title}</li>
@@ -128,11 +135,8 @@ export default async function CurateAndEarnPage() {
                     name: "Category Token",
                     description: (
                       <>
-                        Each category has its own unique ERC20 token. Purchasing these tokens makes
-                        you a curator for that specific category.
-                        <br />
-                        <br /> Your voting power increases with the number of tokens you own. The
-                        token price appreciates over time due to a bonding curve mechanism.
+                        Each category has its own ERC20 token. Purchasing these tokens makes you a
+                        curator for that specific category.
                       </>
                     ),
                     icon: TokensIcon,
@@ -168,7 +172,7 @@ export default async function CurateAndEarnPage() {
                 How can you earn?
               </p>
               <p className="mt-6 text-lg leading-8 text-muted-foreground">
-                As a curator, you have multiple opportunities to earn rewards: ETH and Category
+                As a curator, you have multiple opportunities to earn rewards in USDC and Category
                 Tokens (ERC 20)
               </p>
             </div>
@@ -185,16 +189,15 @@ export default async function CurateAndEarnPage() {
                     icon: StarFilledIcon,
                     name: "Voting Rewards",
                     description:
-                      "Participate in voting and earn tokens for voting for correct outcomes. Arbitrator cost tokens are split among voters who chose the winning side.",
+                      "Participate in voting and earn tokens for voting for correct outcomes. Arbitrator cost tokens are split among voters who choose the winning side.",
                   },
                   {
                     icon: LightningBoltIcon,
                     name: "Pool Rewards",
                     description: (
                       <>
-                        10% of the total budget <Currency>{pool.monthlyFlowRate}</Currency> is
-                        distributed to all token holders, rewarding your participation in the
-                        ecosystem.
+                        10% of category budgets is distributed to all token holders, rewarding your
+                        participation in the ecosystem.
                       </>
                     ),
                   },
