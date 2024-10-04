@@ -1,28 +1,25 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { tokenEmitterImplAbi } from "@/lib/abis"
+import { useUserTcrTokens } from "@/components/global/curator-popover/use-user-tcr-tokens"
+import { createRelayClient } from "@/lib/relay/client"
+import { useERC20Balances } from "@/lib/tcr/use-erc20-balances"
 import { getEthAddress } from "@/lib/utils"
-import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
+import { RelayChain } from "@reservoir0x/relay-sdk"
 import { useMemo, useState } from "react"
-import { toast } from "sonner"
-import { Address, zeroAddress } from "viem"
+import { Address } from "viem"
 import { base } from "viem/chains"
 import { useAccount, useBalance } from "wagmi"
-import { useBuyTokenQuote, useBuyTokenQuoteWithRewards } from "./hooks/useBuyTokenQuote"
-import { useETHPrice } from "./hooks/useETHPrice"
+import { BuyTokenButton } from "./buy-token-button"
 import { ConversionBox } from "./conversion-box"
 import { CurrencyInput } from "./currency-input"
-import { SwitchSwapBoxButton } from "./switch-box-button"
-import { RelayChain } from "@reservoir0x/relay-sdk"
-import { createRelayClient } from "@/lib/relay/client"
-import { TokenSwitcherDialog } from "./token-switcher-dialog"
-import { useERC20Balances } from "@/lib/tcr/use-erc20-balances"
-import { TokenBalanceAndUSDValue } from "./token-balance-usd-value"
 import { EthConversionBox } from "./eth-conversion-box"
-import { TokenBalanceWithWarning } from "./token-balance-with-warning"
+import { useBuyTokenQuote, useBuyTokenQuoteWithRewards } from "./hooks/useBuyTokenQuote"
+import { useETHPrice } from "./hooks/useETHPrice"
+import { SwitchSwapBoxButton } from "./switch-box-button"
 import { SwitchEthChainButton } from "./switch-eth-payment-button"
-import { BuyTokenButton } from "./buy-token-button"
+import { TokenBalanceAndUSDValue } from "./token-balance-usd-value"
+import { TokenBalanceWithWarning } from "./token-balance-with-warning"
+import { TokenSwitcherDialog } from "./token-switcher-dialog"
 
 interface Props {
   defaultTokenAmount: bigint
@@ -51,6 +48,7 @@ export function BuyTokenBox({
   const { data: balance } = useBalance({ address, chainId: selectedChain.id })
   const [tokenAmount, _setTokenAmount] = useState((Number(defaultTokenAmount) / 1e18).toString())
   const [tokenAmountBigInt, _setTokenAmountBigInt] = useState(defaultTokenAmount)
+  const { mutate: mutateUserTcrTokens } = useUserTcrTokens(address)
 
   const { balances, refetch } = useERC20Balances([getEthAddress(token)], address)
   const tokenBalance = balances?.[0]
@@ -140,6 +138,7 @@ export function BuyTokenBox({
         isLoadingRewardsQuote={isLoadingRewardsQuote}
         onSuccess={() => {
           refetch()
+          setTimeout(() => mutateUserTcrTokens(), 1000)
         }}
       />
     </div>
