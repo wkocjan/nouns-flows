@@ -39,7 +39,7 @@ export const MenuAvatar = () => {
                     <PopoverClose ref={closeRef} className="hidden" />
                     <div className="mb-4 flex items-center justify-between">
                       <span className="text-sm font-medium">
-                        Logged as {ensName || truncatedAddress}
+                        Connected as {ensName || truncatedAddress}
                       </span>
                       <Button onClick={() => disconnect()} size="sm" variant="outline">
                         Disconnect

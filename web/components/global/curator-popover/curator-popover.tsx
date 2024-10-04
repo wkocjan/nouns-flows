@@ -35,19 +35,19 @@ export const CuratorPopover = () => {
       <PopoverContent className="w-full max-w-[100vw] md:mr-8 md:w-[480px]">
         <PopoverClose ref={closeRef} className="hidden" />
         <p className="text-sm text-muted-foreground">
-          You&apos;re{" "}
+          You{" "}
           <Link
             href="/curate"
             className="text-primary underline transition-colors hover:text-primary/80"
             onClick={closePopover}
           >
-            curator
+            curate
           </Link>{" "}
-          in {tokens.length} categories with {formatEther(totalBalance || BigInt(0))} votes.
+          {tokens.length} categories with {formatEther(totalBalance || BigInt(0))} tokens.
         </p>
         <div className="mt-6">
           <div className="mb-2 grid grid-cols-5 gap-2 text-xs font-medium text-muted-foreground">
-            <div className="col-start-3 text-center">Your votes</div>
+            <div className="col-start-3 text-center">Balance</div>
             <div className="text-center max-sm:break-all">Challenged</div>
             <div className="text-center max-sm:break-all">Awaiting</div>
           </div>
