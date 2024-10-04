@@ -111,7 +111,15 @@ export function DraftPublishButton(props: Props) {
           </li>
         </ul>
         <div className="flex justify-end space-x-2">
-          {!hasEnoughBalance && <SwapTokenButton flow={flow} defaultTokenAmount={addItemCost} />}
+          {!hasEnoughBalance && (
+            <SwapTokenButton
+              onSuccess={() => {
+                token.refetch()
+              }}
+              flow={flow}
+              defaultTokenAmount={addItemCost}
+            />
+          )}
           <Button
             disabled={!hasEnoughBalance || token.isApproving || isLoading}
             loading={token.isApproving || isLoading}

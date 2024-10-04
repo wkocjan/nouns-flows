@@ -26,6 +26,7 @@ interface Props {
   parentFlowContract: Address
   token: Address
   tokenEmitter: Address
+  onSuccess: (hash: string) => void
   setTokenAndEmitter: (token: Address, tokenEmitter: Address) => void
 }
 
@@ -39,6 +40,7 @@ export function SellTokenBox(props: Props) {
     tokenEmitter,
     parentFlowContract,
     setTokenAndEmitter,
+    onSuccess,
   } = props
   const { address } = useAccount()
   const { data: balance } = useBalance({ address })
@@ -132,7 +134,10 @@ export function SellTokenBox(props: Props) {
         tokenBalance={tokenBalance}
         tokenAmountBigInt={tokenAmountBigInt}
         payment={payment}
-        onSuccess={() => refetch()}
+        onSuccess={(hash) => {
+          refetch()
+          onSuccess(hash)
+        }}
       />
     </div>
   )

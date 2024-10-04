@@ -26,6 +26,7 @@ interface Props {
   token: Address
   tokenEmitter: Address
   parentFlowContract: Address
+  onSuccess: (hash: string) => void
   switchSwapBox: () => void
   setTokenAndEmitter: (token: Address, tokenEmitter: Address) => void
 }
@@ -38,6 +39,7 @@ export function BuyTokenBox({
   tokenEmitter,
   parentFlowContract,
   switchSwapBox,
+  onSuccess,
   setTokenAndEmitter,
 }: Props) {
   const { address } = useAccount()
@@ -136,9 +138,10 @@ export function BuyTokenBox({
         costWithRewardsFee={costWithRewardsFee}
         tokenAmountBigInt={tokenAmountBigInt}
         isLoadingRewardsQuote={isLoadingRewardsQuote}
-        onSuccess={() => {
+        onSuccess={(hash) => {
           refetch()
           setTimeout(() => mutateUserTcrTokens(), 1000)
+          onSuccess(hash)
         }}
       />
     </div>

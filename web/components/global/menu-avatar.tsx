@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { MAX_VOTING_POWER } from "@/lib/config"
+import { MAX_VOTING_POWER, NOUNS_TOKEN } from "@/lib/config"
 import { useDelegatedTokens } from "@/lib/voting/delegated-tokens/use-delegated-tokens"
 import { useVotingPower } from "@/lib/voting/use-voting-power"
 import { Avatar, ConnectKitButton } from "connectkit"
@@ -10,6 +10,10 @@ import Image from "next/image"
 import { useRef } from "react"
 import { useAccount, useDisconnect } from "wagmi"
 import { Alert, AlertDescription } from "../ui/alert"
+import { ModeToggle } from "./mode-toggle"
+import Link from "next/link"
+import { openseaNftUrl } from "@/lib/utils"
+import { mainnet } from "viem/chains"
 
 export const MenuAvatar = () => {
   const { address } = useAccount()
@@ -38,12 +42,15 @@ export const MenuAvatar = () => {
                     {" "}
                     <PopoverClose ref={closeRef} className="hidden" />
                     <div className="mb-4 flex items-center justify-between">
-                      <span className="text-sm font-medium">
-                        Logged as {ensName || truncatedAddress}
-                      </span>
-                      <Button onClick={() => disconnect()} size="sm" variant="outline">
-                        Disconnect
-                      </Button>
+                      <span className="text-sm font-medium">{ensName || truncatedAddress}</span>
+                      <div className="flex items-center space-x-2.5">
+                        <span className="max-sm:hidden">
+                          <ModeToggle />
+                        </span>
+                        <Button onClick={() => disconnect()} size="sm" variant="outline">
+                          Logout
+                        </Button>
+                      </div>
                     </div>
                     {tokens.length > 0 ? (
                       <Voter votingPower={votingPower} tokenIds={tokens.map((token) => token.id)} />
@@ -93,9 +100,9 @@ export function Voter(props: { votingPower: bigint; tokenIds: bigint[] }) {
         {new Intl.PluralRules("en-US", { type: "cardinal" }).select(tokensCount) === "one"
           ? `${tokensCount} Noun`
           : `${tokensCount} Nouns`}{" "}
-        delegated to you. You have a&nbsp;total of {votingPower?.toString()} votes.
+        you can vote with.
         <br />
-        <br /> Your votes decide how to split up the money between different categories & projects.
+        <br /> Vote to split the flow of money between different categories & projects.
         {votingPower > MAX_VOTING_POWER && (
           <Alert variant="destructive" className="mt-2.5">
             <AlertDescription className="text-xs">
@@ -108,7 +115,12 @@ export function Voter(props: { votingPower: bigint; tokenIds: bigint[] }) {
       </p>
       <div className="mt-6 grid grid-cols-2 gap-4 border-t border-border pt-6">
         {tokenIds.map((tokenId) => (
-          <div key={tokenId} className="flex items-center">
+          <a
+            target="_blank"
+            key={tokenId}
+            className="flex items-center"
+            href={openseaNftUrl(NOUNS_TOKEN, tokenId.toString(), mainnet.id)}
+          >
             <Image
               src={`https://noun.pics/${tokenId.toString()}.png`}
               alt={`Noun ${tokenId}`}
@@ -117,7 +129,7 @@ export function Voter(props: { votingPower: bigint; tokenIds: bigint[] }) {
               className="size-8 rounded-md object-cover"
             />
             <span className="ml-2.5 text-sm text-muted-foreground">Noun {tokenId.toString()}</span>
-          </div>
+          </a>
         ))}
       </div>
     </>

@@ -45,3 +45,20 @@ export function getEthAddress(address: string) {
 export function isProduction() {
   return process.env.NODE_ENV === "production"
 }
+
+export function openseaNftUrl(contract: string, tokenId: string, chainId: number): string {
+  let url = ""
+
+  switch (chainId) {
+    case baseSepolia.id:
+      url = "https://testnets.opensea.io/assets/base-sepolia"
+      break
+    case base.id:
+      url = "https://opensea.io/assets/base"
+      break
+    default:
+      url = "https://opensea.io/assets"
+  }
+
+  return `${url}/${contract}/${tokenId}`
+}
