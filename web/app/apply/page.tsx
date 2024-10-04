@@ -35,14 +35,14 @@ export default async function ApplyPage() {
         )}
 
         {flows.length > 0 && (
-          <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-6 grid grid-cols-2 gap-2.5 lg:grid-cols-3 lg:gap-5">
             {flows.map((flow) => (
               <Link
                 href={`/apply/${flow.id}`}
                 key={flow.id}
-                className="group transition-transform md:hover:-translate-y-2"
+                className="group h-full transition-transform md:hover:-translate-y-2"
               >
-                <Card>
+                <Card className="h-full">
                   <CardContent className="p-4">
                     <div className="flex flex-col items-center">
                       <Image
@@ -50,9 +50,9 @@ export default async function ApplyPage() {
                         alt={flow.title}
                         width={64}
                         height={64}
-                        className="mb-4 size-16 rounded-full object-cover"
+                        className="mb-4 size-10 rounded-full object-cover lg:size-16"
                       />
-                      <h3 className="text-center text-lg font-semibold transition-colors group-hover:text-primary">
+                      <h3 className="text-center text-base font-medium transition-colors group-hover:text-primary lg:text-lg">
                         {flow.title}
                       </h3>
                       <p className="mb-2 text-center text-sm text-muted-foreground">
