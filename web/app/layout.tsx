@@ -1,7 +1,9 @@
+import { CuratorPopover } from "@/components/global/curator-popover/curator-popover"
 import { MenuDesktop, MenuMobile } from "@/components/global/menu"
 import { MenuAvatar } from "@/components/global/menu-avatar"
 import { ModeToggle } from "@/components/global/mode-toggle"
 import { RecipientPopover } from "@/components/global/recipient-popover/recipient-popover"
+import { RefreshOnFocus } from "@/components/global/refresh-on-focus"
 import { ThemeProvider } from "@/components/global/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
@@ -30,6 +32,7 @@ export default async function RootLayout(props: Readonly<{ children: React.React
   return (
     <html lang="en" suppressHydrationWarning className="h-full">
       <body className={`${mono.variable} flex h-full flex-col`}>
+        <RefreshOnFocus />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -53,6 +56,7 @@ export default async function RootLayout(props: Readonly<{ children: React.React
                   <span className="max-sm:hidden">
                     <ModeToggle />
                   </span>
+                  <CuratorPopover />
                   <RecipientPopover />
                   <MenuAvatar />
                   <MenuMobile />

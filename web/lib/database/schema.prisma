@@ -64,10 +64,11 @@ view Grant {
   createdAt             Int
   updatedAt             Int
 
-  flow      Grant     @relation("Subgrants", fields: [flowId], references: [id])
-  subgrants Grant[]   @relation("Subgrants")
-  drafts    Draft[]
-  disputes  Dispute[]
+  flow         Grant         @relation("Subgrants", fields: [flowId], references: [id])
+  subgrants    Grant[]       @relation("Subgrants")
+  drafts       Draft[]
+  disputes     Dispute[]
+  tokenHolders TokenHolder[]
 
   @@map("Grant")
   @@schema("public")
@@ -129,5 +130,16 @@ view DisputeVote {
   reason     String?
 
   @@unique([disputeId, arbitrator, voter])
+  @@schema("public")
+}
+
+view TokenHolder {
+  id            String @id
+  tokenContract String
+  flow          Grant  @relation(fields: [tokenContract], references: [erc20])
+  holder        String
+  amount        String
+
+  @@unique([tokenContract, holder])
   @@schema("public")
 }

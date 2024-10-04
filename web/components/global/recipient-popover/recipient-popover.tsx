@@ -34,7 +34,7 @@ export const RecipientPopover = () => {
           <Currency>{totalClaimable}</Currency>
         </Badge>
       </PopoverTrigger>
-      <PopoverContent className="md:w-[440px]" collisionPadding={32}>
+      <PopoverContent className="w-full max-w-[100vw] md:mr-8 md:w-[480px]">
         <PopoverClose ref={closeRef} className="hidden" />
         <div>
           <p className="text-sm text-muted-foreground">

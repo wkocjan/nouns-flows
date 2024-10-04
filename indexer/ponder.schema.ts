@@ -107,4 +107,16 @@ export default createSchema((p) => ({
       arbitratorIndex: p.index("arbitrator"),
     }
   ),
+  TokenHolder: p.createTable(
+    {
+      id: p.string(),
+      tokenContract: p.string(),
+      holder: p.string(),
+      amount: p.string(),
+    },
+    {
+      tokenContractIndex: p.index("tokenContract"),
+      holderIndex: p.index("holder"),
+    }
+  ),
 }))

@@ -4,6 +4,8 @@ import { base } from "viem/chains"
 import {
   erc20VotesArbitratorAddress,
   erc20VotesArbitratorImplAbi,
+  erc20VotesMintableAddress,
+  erc20VotesMintableImplAbi,
   flowTcrAddress,
   flowTcrImplAbi,
   nounsFlowAddress,
@@ -23,10 +25,7 @@ const START_BLOCK = 20118986
 const SECONDS_PER_BLOCK = 12
 
 export default createConfig({
-  database: {
-    kind: "postgres",
-    schema: "public",
-  },
+  database: { kind: "postgres", schema: "public" },
   networks: {
     base: {
       chainId: base.id,
@@ -46,7 +45,7 @@ export default createConfig({
       factory: {
         address: nounsFlowAddress[8453],
         event: parseAbiItem(
-          "event FlowRecipientCreated(uint256 indexed recipientId, address indexed recipient)"
+          "event FlowRecipientCreated(bytes32 indexed recipientId, address indexed recipient)"
         ),
         parameter: "recipient",
       },
@@ -64,7 +63,7 @@ export default createConfig({
       factory: {
         address: tcrFactoryAddress[8453],
         event: parseAbiItem(
-          "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy)"
+          "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy, address rewardPoolProxy, address tokenEmitterProxy, address flowProxy)"
         ),
         parameter: "flowTCRProxy",
       },
@@ -88,9 +87,27 @@ export default createConfig({
       factory: {
         address: tcrFactoryAddress[8453],
         event: parseAbiItem(
-          "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy)"
+          "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy, address rewardPoolProxy, address tokenEmitterProxy, address flowProxy)"
         ),
         parameter: "arbitratorProxy",
+      },
+      network: "base",
+      startBlock: START_BLOCK,
+    },
+    Erc20Token: {
+      abi: erc20VotesMintableImplAbi,
+      address: erc20VotesMintableAddress[8453],
+      network: "base",
+      startBlock: START_BLOCK,
+    },
+    Erc20TokenChildren: {
+      abi: erc20VotesMintableImplAbi,
+      factory: {
+        address: tcrFactoryAddress[8453],
+        event: parseAbiItem(
+          "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy, address rewardPoolProxy, address tokenEmitterProxy, address flowProxy)"
+        ),
+        parameter: "erc20Proxy",
       },
       network: "base",
       startBlock: START_BLOCK,

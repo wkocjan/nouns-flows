@@ -1,4 +1,5 @@
 import { Address, erc20Abi } from "viem"
+import { base } from "viem/chains"
 import { useReadContracts } from "wagmi"
 
 export function useERC20Balances(contracts: Address[], owner: Address | undefined) {
@@ -8,6 +9,7 @@ export function useERC20Balances(contracts: Address[], owner: Address | undefine
       address: contract,
       functionName: "balanceOf",
       args: [owner!!],
+      chainId: base.id,
     })),
     query: { enabled: !!owner },
   })

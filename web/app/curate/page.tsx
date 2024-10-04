@@ -84,7 +84,7 @@ export default async function CurateAndEarnPage() {
         </section>
       </div>
 
-      <div className="bg-white/75 py-16">
+      <div className="bg-white/75 py-16 dark:bg-secondary/25">
         <section className="container">
           <div className="mx-auto w-full max-w-6xl">
             <div className="mx-auto max-w-3xl">
@@ -236,10 +236,10 @@ export default async function CurateAndEarnPage() {
               </div>
               <div className="flex flex-col items-start gap-y-4 lg:flex-row lg:items-center lg:gap-x-4">
                 <Select>
-                  <SelectTrigger className="w-full bg-white text-foreground sm:w-[220px]">
+                  <SelectTrigger className="w-full bg-white text-foreground dark:bg-transparent sm:w-[220px]">
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white text-foreground">
+                  <SelectContent className="bg-white text-foreground dark:bg-transparent">
                     {flows.map((flow) => (
                       <SelectItem
                         key={flow.id}
