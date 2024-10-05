@@ -13,12 +13,12 @@ import { getIpfsUrl } from "@/lib/utils"
 import { base } from "viem/chains"
 import { useERC20TokensForParent } from "@/lib/tcr/use-erc20s-for-parent"
 import Image from "next/image"
-import Caret from "@/public/caret-down.svg"
 import { SkeletonLoader } from "@/components/ui/skeleton"
 import { TokenList } from "./token-list"
 import { Address } from "viem"
 import { useRef } from "react"
 import { useFlowForToken } from "@/lib/tcr/use-flow-for-token"
+import SvgCaretDown from "@/icons/caret-down"
 
 interface Props {
   switchToken: (token: Address, tokenEmitter: Address) => void
@@ -49,11 +49,7 @@ export function TokenSwitcherDialog({
             <span className="px-1">
               {tokens?.find((erc20) => erc20.address === currentToken)?.symbol}
             </span>
-            <Image
-              src={Caret}
-              alt="Caret"
-              className="mt-0.5 h-2 w-auto pr-1 text-black dark:text-white"
-            />
+            <SvgCaretDown className="mt-0.5 h-2 w-auto pr-1 text-black dark:text-white" />
           </CurrencyDisplay>
         </button>
       </DialogTrigger>

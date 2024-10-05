@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button"
-import { Currency } from "@/components/ui/currency"
 import {
   Select,
   SelectContent,
@@ -22,6 +21,7 @@ import {
 } from "@radix-ui/react-icons"
 import Image from "next/image"
 import Illustration from "./curate.svg"
+import { SwapTokenButton } from "../token/swap-token-button"
 
 export default async function CurateAndEarnPage() {
   const pool = await getPool()
@@ -238,23 +238,7 @@ export default async function CurateAndEarnPage() {
                 </h3>
               </div>
               <div className="flex flex-col items-start gap-y-4 lg:flex-row lg:items-center lg:gap-x-4">
-                <Select>
-                  <SelectTrigger className="w-full bg-white text-foreground dark:bg-transparent sm:w-[220px]">
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white text-foreground dark:bg-transparent">
-                    {flows.map((flow) => (
-                      <SelectItem
-                        key={flow.id}
-                        value={flow.id.toString()}
-                        className="hover:bg-secondary"
-                      >
-                        {flow.title}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Button className="w-full sm:w-auto">Buy Token</Button>
+                <SwapTokenButton defaultTokenAmount={BigInt(1e18)} flow={pool} />
               </div>
             </div>
           </div>

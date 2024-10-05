@@ -12,7 +12,6 @@ import { Grant } from "@prisma/client"
 import { useRef } from "react"
 import { base } from "viem/chains"
 import { SwapTokenBox } from "./swap-token-box"
-import { useERC20Tokens } from "@/lib/tcr/use-erc20s"
 
 interface Props {
   flow: Grant
@@ -26,14 +25,11 @@ export function SwapTokenButton(props: Props) {
   const { flow, defaultTokenAmount } = props
   const ref = useRef<HTMLButtonElement>(null)
 
-  const { tokens } = useERC20Tokens([flow.erc20 as `0x${string}`], chainId)
-  const token = tokens?.[0]
-
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button type="button" ref={ref}>
-          Buy {token?.symbol}
+          Buy
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-screen-xs">
