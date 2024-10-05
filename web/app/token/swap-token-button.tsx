@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+import { Button, ButtonProps } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -10,26 +10,24 @@ import {
 } from "@/components/ui/dialog"
 import { Grant } from "@prisma/client"
 import { useRef } from "react"
-import { base } from "viem/chains"
 import { SwapTokenBox } from "./swap-token-box"
 
 interface Props {
   flow: Grant
-  defaultTokenAmount: bigint
+  defaultTokenAmount?: bigint
   onSuccess?: (hash: string) => void
+  size?: ButtonProps["size"]
 }
 
-const chainId = base.id
-
 export function SwapTokenButton(props: Props) {
-  const { flow, defaultTokenAmount } = props
+  const { flow, defaultTokenAmount = BigInt(1e18), size = "default" } = props
   const ref = useRef<HTMLButtonElement>(null)
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button type="button" ref={ref}>
-          Buy
+        <Button size={size} type="button" ref={ref}>
+          Swap
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-screen-xs">

@@ -97,12 +97,13 @@ export function Voter(props: { votingPower: bigint; tokenIds: bigint[] }) {
   return (
     <>
       <p className="text-sm text-muted-foreground">
+        You can vote with{" "}
         {new Intl.PluralRules("en-US", { type: "cardinal" }).select(tokensCount) === "one"
           ? `${tokensCount} Noun`
-          : `${tokensCount} Nouns`}{" "}
-        you can vote with.
+          : `${tokensCount} Nouns`}
+        .
         <br />
-        <br /> Vote to split the flow of money between different categories & projects.
+        <br /> Split the flow of money between different categories & projects by voting.
         {votingPower > MAX_VOTING_POWER && (
           <Alert variant="destructive" className="mt-2.5">
             <AlertDescription className="text-xs">
