@@ -13,6 +13,17 @@ export const getUserGrants = unstable_cache(
         isFlow: 0,
         isRemoved: 0,
       },
+      select: {
+        flow: true,
+        id: true,
+        title: true,
+        image: true,
+        claimableBalance: true,
+        monthlyFlowRate: true,
+        totalEarned: true,
+        baselinePool: true,
+        parentContract: true,
+      },
       orderBy: {
         totalEarned: "desc",
       },
