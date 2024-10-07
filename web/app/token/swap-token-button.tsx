@@ -11,6 +11,7 @@ import {
 import { Grant } from "@prisma/client"
 import { useRef } from "react"
 import { SwapTokenBox } from "./swap-token-box"
+import Link from "next/link"
 
 interface Props {
   flow: Grant
@@ -55,8 +56,11 @@ export function SwapTokenButton(props: Props) {
                 </span>
                 {extraInfo === "curator" && (
                   <p>
-                    Buy TCR tokens to become a curator. As a curator, you earn a stream of USDC for
-                    verifying impact of grantees.
+                    Buy TCR tokens to{" "}
+                    <Link href="/curate" className="underline">
+                      become a curator
+                    </Link>{" "}
+                    and earn a stream of USDC for verifying impact of grantees.
                   </p>
                 )}
                 {extraInfo === "apply" && (
