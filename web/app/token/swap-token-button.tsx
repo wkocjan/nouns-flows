@@ -15,6 +15,7 @@ import { SwapTokenBox } from "./swap-token-box"
 interface Props {
   flow: Grant
   defaultTokenAmount?: bigint
+  extraInfo?: "curator" | "apply" | "challenge"
   onSuccess?: (hash: string) => void
   size?: ButtonProps["size"]
   variant?: ButtonProps["variant"]
@@ -28,6 +29,7 @@ export function SwapTokenButton(props: Props) {
     size = "default",
     text = "Swap",
     variant = "default",
+    extraInfo,
   } = props
   const ref = useRef<HTMLButtonElement>(null)
 
@@ -45,9 +47,37 @@ export function SwapTokenButton(props: Props) {
           </DialogTitle>
         </DialogHeader>
         <ul className="my-4 space-y-6">
+          {extraInfo && (
+            <li className="flex items-start space-x-4">
+              <>
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
+                  1
+                </span>
+                {extraInfo === "curator" && (
+                  <p>
+                    Buy TCR tokens to become a curator. As a curator, you earn a stream of USDC for
+                    verifying impact of grantees.
+                  </p>
+                )}
+                {extraInfo === "apply" && (
+                  <p>
+                    Buy {Number(defaultTokenAmount) / 1e18} TCR tokens to pay your application fee.
+                    If your grant is approved, you will get your application fee back.
+                  </p>
+                )}
+                {extraInfo === "challenge" && (
+                  <p>
+                    Buy {Number(defaultTokenAmount) / 1e18} TCR tokens to challenge a grant. If your
+                    challenge is successful, you will win the applicant&apos;s bond and be repaid
+                    your challenge fee.
+                  </p>
+                )}
+              </>
+            </li>
+          )}
           <li className="flex items-start space-x-4">
             <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
-              1
+              {!extraInfo ? "1" : "2"}
             </span>
             <p>
               Prices change based on supply and demand according to an S shaped{" "}

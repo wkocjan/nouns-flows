@@ -11,7 +11,11 @@ import { useAccount } from "wagmi"
 import { useUserTcrTokens } from "./hooks/use-user-tcr-tokens"
 import { SwapTokenButton } from "@/app/token/swap-token-button"
 import { CuratorGrants } from "./curator-grants"
-import { canDisputeBeExecuted, canRequestBeExecuted } from "@/lib/database/helpers/application"
+import {
+  canDisputeBeExecuted,
+  canRequestBeExecuted,
+  isDisputeVotingOver,
+} from "@/lib/database/helpers/application"
 import { TokenRow } from "./token-row"
 
 type ActiveTab = "active" | "upcoming" | "voted"
@@ -20,7 +24,7 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
   const [isVisible, setIsVisible] = useState(false)
   const [activeTab, setActiveTab] = useState<ActiveTab>("active")
   const { address } = useAccount()
-  const { tokens, totalBalance } = useUserTcrTokens(address)
+  const { tokens, totalBalance, totalRewardsBalance } = useUserTcrTokens(address)
   const closeRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -44,7 +48,10 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
 
   const votedSubgrants = tokens.flatMap((token) =>
     token.flow.subgrants.filter(
-      (g) => ((!g.isResolved && g.isDisputed) || g.isResolved) && g.disputes?.length,
+      (g) =>
+        ((!g.isResolved && g.isDisputed) || g.isResolved) &&
+        g.disputes?.length &&
+        isDisputeVotingOver(g.disputes[0]),
     ),
   )
 
@@ -52,7 +59,7 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
     <Popover>
       <PopoverTrigger>
         <Badge className="h-[26px] rounded-full text-xs" variant="success">
-          {/* TODO change to claimable rewards balance */}${formatEther(totalBalance || BigInt(0))}
+          ${formatEther(totalRewardsBalance)}
         </Badge>
       </PopoverTrigger>
       <PopoverContent className="w-full max-w-[100vw] md:mr-8 md:w-[480px]">

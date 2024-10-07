@@ -104,6 +104,7 @@ export function ActiveCuratorGrantRow({
                     onClick={() => {
                       withdrawRewards(BigInt(disputes[0].disputeId), BigInt(0))
                     }}
+                    size="xs"
                     variant="ghost"
                     disabled={Number(rewardsBalance) <= 0}
                   >

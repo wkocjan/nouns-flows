@@ -20,17 +20,11 @@ interface TokenData {
 
 interface TokenListProps {
   tokens: TokenData[] | undefined
-  currentToken: Address | undefined
   currentTokenEmitter: Address | undefined
   switchToken: (token: Address, tokenEmitter: Address) => void
 }
 
-export const TokenList = ({
-  tokens,
-  currentToken,
-  currentTokenEmitter,
-  switchToken,
-}: TokenListProps) => {
+export const TokenList = ({ tokens, currentTokenEmitter, switchToken }: TokenListProps) => {
   const { address: owner } = useAccount()
   const { balances } = useERC20Balances(
     tokens?.map((token) => getEthAddress(token.address as Address)) || [],
@@ -50,7 +44,6 @@ export const TokenList = ({
               getEthAddress(token.tokenEmitter as Address),
             )
           }
-          currentToken={currentToken}
           currentTokenEmitter={currentTokenEmitter}
           balance={balances[index]}
           ethPrice={ethPrice || 0}
@@ -65,21 +58,15 @@ const TokenListItem = ({
   balance,
   ethPrice,
   onClick,
-  currentToken,
   currentTokenEmitter,
 }: {
   token: TokenData
   balance: bigint
   ethPrice: number
   onClick: () => void
-  currentToken: Address | undefined
   currentTokenEmitter: Address | undefined
 }) => {
-  const { payment, isLoading: isLoadingQuote } = useSellTokenQuote(
-    getEthAddress(currentTokenEmitter || ""),
-    balance,
-    chainId,
-  )
+  const { payment } = useSellTokenQuote(getEthAddress(currentTokenEmitter || ""), balance, chainId)
 
   return (
     <li onClick={onClick}>

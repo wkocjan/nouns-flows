@@ -69,20 +69,21 @@ export const FlowSubmenu = (props: Props) => {
       </div>
 
       <div className="max-sm:hidden">
-        {isApproved && <VotingToggle />}
-        {(isDrafts || isApplications) && (
-          <div className="flex items-center space-x-2">
-            <SwapTokenButton
-              text={balances?.[0] ? "Buy $TCR" : "Become curator"}
-              flow={flow}
-              variant="secondary"
-              defaultTokenAmount={BigInt(1e18)}
-            />
+        <div className="flex items-center space-x-2">
+          <SwapTokenButton
+            text={balances?.[0] ? "Buy $TCR" : "Become curator"}
+            flow={flow}
+            extraInfo="curator"
+            variant="secondary"
+            defaultTokenAmount={BigInt(1e18)}
+          />
+          {isApproved && <VotingToggle />}
+          {(isDrafts || isApplications) && (
             <Link href={`/apply/${flowId}`}>
               <Button>{isTopLevel ? "Suggest category" : "Apply for a grant"}</Button>
             </Link>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   )

@@ -75,6 +75,12 @@ export function isDisputeWaitingForVoting(
   return votingStartTime > Date.now() / 1000
 }
 
+export function isDisputeVotingOver(dispute: Pick<Dispute, "votingEndTime">) {
+  const { votingEndTime } = dispute
+
+  return votingEndTime < Date.now() / 1000
+}
+
 export function canBeChallenged(
   grant: Pick<Grant, "challengePeriodEndsAt" | "isDisputed" | "status">,
 ) {

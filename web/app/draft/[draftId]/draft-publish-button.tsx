@@ -117,6 +117,7 @@ export function DraftPublishButton(props: Props) {
               onSuccess={() => {
                 token.refetch()
               }}
+              extraInfo="apply"
               flow={flow}
               defaultTokenAmount={addItemCost - token.balance}
             />
