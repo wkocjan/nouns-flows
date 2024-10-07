@@ -2,7 +2,9 @@ import { Status } from "@/lib/enums"
 import { Party } from "@/lib/kv/disputeVote"
 import { Dispute, Grant } from "@prisma/client"
 
-export function canRequestBeExecuted(grant: Grant) {
+export function canRequestBeExecuted(
+  grant: Pick<Grant, "challengePeriodEndsAt" | "isDisputed" | "status">,
+) {
   const { challengePeriodEndsAt, isDisputed, status } = grant
 
   if (!isPendingRequest(status)) return false
@@ -11,7 +13,10 @@ export function canRequestBeExecuted(grant: Grant) {
   return challengePeriodEndsAt <= Date.now() / 1000
 }
 
-export function canDisputeBeExecuted(dispute: Dispute) {
+export function canDisputeBeExecuted(
+  dispute?: Pick<Dispute, "appealPeriodEndTime" | "isExecuted">,
+) {
+  if (!dispute) return false
   const { appealPeriodEndTime, isExecuted } = dispute
 
   if (isExecuted) return false
