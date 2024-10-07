@@ -65,7 +65,9 @@ export function isRequestRejected(grant: Grant, dispute?: Dispute) {
   return isDisputed === 0 && isResolved === 1
 }
 
-export function isDisputeWaitingForVoting(dispute: Dispute) {
+export function isDisputeWaitingForVoting(
+  dispute: Pick<Dispute, "isExecuted" | "votingStartTime">,
+) {
   const { isExecuted, votingStartTime } = dispute
 
   if (isExecuted) return false

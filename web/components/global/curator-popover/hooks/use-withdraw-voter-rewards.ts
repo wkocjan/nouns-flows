@@ -4,17 +4,18 @@ import { useAccount } from "wagmi"
 import { base } from "viem/chains"
 import { toast } from "sonner"
 import { getEthAddress } from "@/lib/utils"
+import { useRouter } from "next/navigation"
 
 export const useWithdrawVoterRewards = (arbitratorAddress: `0x${string}`) => {
   const { address } = useAccount()
   const chainId = base.id
+  const router = useRouter()
 
   const { prepareWallet, writeContract, isLoading, toastId } = useContractTransaction({
     chainId,
     success: "Rewards withdrawn successfully!",
     onSuccess: (hash) => {
-      // Handle successful withdrawal here if needed
-      console.log("Withdrawal transaction hash:", hash)
+      router.refresh()
     },
   })
 

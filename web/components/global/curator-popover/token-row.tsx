@@ -1,16 +1,10 @@
-import { Button } from "@/components/ui/button"
 import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 
 import { Grant } from "@prisma/client"
-import { DownloadIcon } from "@radix-ui/react-icons"
 import Image from "next/image"
 import Link from "next/link"
 import { formatEther } from "viem"
-import { useWithdrawSuperToken } from "../hooks/use-withdraw-super-token"
-import { useConnectSuperfluidDistributionPool } from "../hooks/use-connect-superfluid-distribution-pool"
-import { Currency } from "@/components/ui/currency"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { WithdrawButton } from "../withdraw-button"
 
 interface TokenRowProps {

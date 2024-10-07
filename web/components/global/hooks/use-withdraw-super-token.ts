@@ -21,7 +21,7 @@ export const useWithdrawSuperToken = (superToken: `0x${string}`, pool: `0x${stri
 
   const { prepareWallet, writeContract, isLoading, toastId } = useContractTransaction({
     chainId,
-    success: "Rewards withdrawn successfully!",
+    success: "Earnings withdrawn successfully!",
     onSuccess: (hash) => {
       // Handle successful withdrawal here if needed
       console.log("Withdrawal transaction hash:", hash)

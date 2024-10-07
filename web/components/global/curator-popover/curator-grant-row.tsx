@@ -8,6 +8,8 @@ import {
   canBeChallenged,
   canDisputeBeExecuted,
   canDisputeBeVotedOn,
+  isDisputeRevealingVotes,
+  isDisputeWaitingForVoting,
 } from "@/lib/database/helpers/application"
 import { Button } from "@/components/ui/button"
 import { DownloadIcon } from "@radix-ui/react-icons"
@@ -58,7 +60,27 @@ export function ActiveCuratorGrantRow({
           <>
             {canDisputeBeVotedOn(grant.disputes[0]) && (
               <Link onClick={closePopover} href={`/application/${id}`}>
-                <Button size="xs">Vote</Button>
+                <Button variant={grant.disputes[0].votes?.length ? "outline" : "default"} size="xs">
+                  {grant.disputes[0].votes?.length ? "Voted" : "Vote"}
+                </Button>
+              </Link>
+            )}
+            {isDisputeRevealingVotes(grant.disputes[0]) && (
+              <Link
+                className="text-xs text-muted-foreground"
+                onClick={closePopover}
+                href={`/application/${id}`}
+              >
+                Revealing
+              </Link>
+            )}
+            {isDisputeWaitingForVoting(grant.disputes[0]) && (
+              <Link
+                className="text-xs text-muted-foreground"
+                onClick={closePopover}
+                href={`/application/${id}`}
+              >
+                Voting opens soon
               </Link>
             )}
             {canDisputeBeExecuted(grant.disputes[0]) && (
