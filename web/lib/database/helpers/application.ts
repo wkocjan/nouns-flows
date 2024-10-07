@@ -24,12 +24,25 @@ export function canDisputeBeExecuted(
   return appealPeriodEndTime <= Date.now() / 1000
 }
 
-export function canDisputeBeVotedOn(dispute: Dispute) {
-  const { appealPeriodEndTime, isExecuted, votingStartTime } = dispute
+export function canDisputeBeVotedOn(
+  dispute: Pick<Dispute, "votingEndTime" | "isExecuted" | "votingStartTime">,
+) {
+  const { votingEndTime, isExecuted, votingStartTime } = dispute
+
+  const isAfterVotingStartTime = votingStartTime <= Date.now() / 1000
+  const isBeforeVotingEndTime = votingEndTime >= Date.now() / 1000
 
   if (isExecuted) return false
 
-  return votingStartTime <= Date.now() / 1000 && appealPeriodEndTime >= Date.now() / 1000
+  return isAfterVotingStartTime && isBeforeVotingEndTime
+}
+
+export function isDisputeRevealingVotes(
+  dispute: Pick<Dispute, "votingEndTime" | "revealPeriodEndTime">,
+) {
+  const { votingEndTime, revealPeriodEndTime } = dispute
+
+  return votingEndTime <= Date.now() / 1000 && revealPeriodEndTime >= Date.now() / 1000
 }
 
 export function isDisputeResolvedForNoneParty(dispute?: Dispute) {
@@ -60,7 +73,9 @@ export function isDisputeWaitingForVoting(dispute: Dispute) {
   return votingStartTime > Date.now() / 1000
 }
 
-export function canBeChallenged(grant: Grant) {
+export function canBeChallenged(
+  grant: Pick<Grant, "challengePeriodEndsAt" | "isDisputed" | "status">,
+) {
   const { challengePeriodEndsAt, isDisputed, status } = grant
 
   if (!isPendingRequest(status)) return false

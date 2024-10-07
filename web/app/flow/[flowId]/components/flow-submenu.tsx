@@ -68,12 +68,15 @@ export const FlowSubmenu = (props: Props) => {
         {isApproved && <VotingToggle />}
         {(isDrafts || isApplications) && (
           <div className="flex items-center space-x-2">
+            <SwapTokenButton
+              text="Become curator"
+              flow={flow}
+              variant="secondary"
+              defaultTokenAmount={BigInt(1e18)}
+            />
             <Link href={`/apply/${flowId}`}>
-              <Button variant="secondary">
-                {isTopLevel ? "Suggest category" : "Apply for a grant"}
-              </Button>
+              <Button>{isTopLevel ? "Suggest category" : "Apply for a grant"}</Button>
             </Link>
-            <SwapTokenButton flow={flow} defaultTokenAmount={BigInt(1e18)} />
           </div>
         )}
       </div>

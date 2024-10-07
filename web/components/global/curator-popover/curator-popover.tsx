@@ -8,9 +8,9 @@ import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { formatEther } from "viem"
 import { useAccount } from "wagmi"
-import { useUserTcrTokens } from "./use-user-tcr-tokens"
+import { useUserTcrTokens } from "./hooks/use-user-tcr-tokens"
 import { SwapTokenButton } from "@/app/token/swap-token-button"
-import { ActiveCuratorGrants } from "./active-curator-grants"
+import { CuratorGrants } from "./curator-grants"
 import { canDisputeBeExecuted, canRequestBeExecuted } from "@/lib/database/helpers/application"
 import { TokenRow } from "./token-row"
 
@@ -42,6 +42,12 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
     ),
   )
 
+  const votedSubgrants = tokens.flatMap((token) =>
+    token.flow.subgrants.filter(
+      (g) => ((!g.isResolved && g.isDisputed) || g.isResolved) && g.disputes?.length,
+    ),
+  )
+
   return (
     <Popover>
       <PopoverTrigger>
@@ -63,7 +69,7 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
             </Link>{" "}
             {tokens.length} categories with {formatEther(totalBalance || BigInt(0))} tokens.
           </p>
-          <SwapTokenButton size="sm" flow={flow} />
+          <SwapTokenButton size="xs" flow={flow} />
         </div>
         <div className="mt-6">
           <div className="mb-2 grid grid-cols-5 gap-2 text-xs font-medium text-muted-foreground">
@@ -104,7 +110,12 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
           </div>
         </div>
         <div className="mt-2">
-          {activeTab === "active" && <ActiveCuratorGrants grants={activeSubgrants} />}
+          {activeTab === "active" && (
+            <CuratorGrants closePopover={closePopover} grants={activeSubgrants} />
+          )}
+          {activeTab === "voted" && (
+            <CuratorGrants closePopover={closePopover} grants={votedSubgrants} />
+          )}
         </div>
       </PopoverContent>
     </Popover>

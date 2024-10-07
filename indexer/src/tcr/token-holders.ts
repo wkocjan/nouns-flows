@@ -27,7 +27,12 @@ async function handleTransfer(params: {
   if (to !== zeroAddress) {
     await context.db.TokenHolder.upsert({
       id: `${tokenContract}-${to}`,
-      create: { tokenContract, holder: to, amount: value.toString() },
+      create: {
+        tokenContract,
+        holder: to,
+        amount: value.toString(),
+        firstPurchase: Number(event.block.timestamp),
+      },
       update: ({ current }) => ({ amount: (BigInt(current.amount) + value).toString() }),
     })
   }

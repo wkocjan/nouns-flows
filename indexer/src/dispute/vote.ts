@@ -21,6 +21,7 @@ async function handleVoteCommitted(params: {
     id: `${disputeId}_${arbitrator}_${voter}`,
     data: {
       disputeId: disputeId.toString(),
+      committedAt: Number(event.block.timestamp),
       commitHash,
       arbitrator,
       voter,
@@ -59,6 +60,7 @@ async function handleVoteRevealed(params: {
       choice,
       votes: votes.toString(),
       reason: reason,
+      revealedAt: Number(event.block.timestamp),
       revealedBy: revealedBy.toLowerCase(),
     },
   })

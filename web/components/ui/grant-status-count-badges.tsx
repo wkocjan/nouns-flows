@@ -5,15 +5,17 @@ export const GrantStatusCountBadges = ({
   challengedCount,
   awaitingCount,
   approvedCount,
+  hideChallenged,
 }: {
   challengedCount: number
   awaitingCount: number
   approvedCount?: number
+  hideChallenged?: boolean
 }) => {
   return (
     <div className="flex items-center justify-center space-x-1">
       {approvedCount && <GrantCountWithTooltip count={approvedCount} type="approved" />}
-      <GrantCountWithTooltip count={challengedCount} type="challenged" />
+      {!hideChallenged && <GrantCountWithTooltip count={challengedCount} type="challenged" />}
       <GrantCountWithTooltip count={awaitingCount} type="awaiting" />
     </div>
   )

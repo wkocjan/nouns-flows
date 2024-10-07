@@ -113,69 +113,72 @@ export function DraftPublishButton(props: Props) {
         <div className="flex justify-end space-x-2">
           {!hasEnoughBalance && (
             <SwapTokenButton
+              text={`Buy ${token.symbol} to apply`}
               onSuccess={() => {
                 token.refetch()
               }}
               flow={flow}
-              defaultTokenAmount={addItemCost}
+              defaultTokenAmount={addItemCost - token.balance}
             />
           )}
-          <Button
-            disabled={!hasEnoughBalance || token.isApproving || isLoading}
-            loading={token.isApproving || isLoading}
-            type="button"
-            onClick={async () => {
-              if (!hasEnoughAllowance) {
-                return token.approve(addItemCost)
-              }
+          {hasEnoughBalance && (
+            <Button
+              disabled={!hasEnoughBalance || token.isApproving || isLoading}
+              loading={token.isApproving || isLoading}
+              type="button"
+              onClick={async () => {
+                if (!hasEnoughAllowance) {
+                  return token.approve(addItemCost)
+                }
 
-              try {
-                await prepareWallet()
+                try {
+                  await prepareWallet()
 
-                writeContract({
-                  account: address,
-                  abi: flowTcrImplAbi,
-                  functionName: "addItem",
-                  address: getEthAddress(flow.tcr),
-                  chainId,
-                  args: [
-                    encodeAbiParameters(
-                      [
-                        { name: "recipient", type: "address" },
-                        {
-                          name: "metadata",
-                          type: "tuple",
-                          components: [
-                            { name: "title", type: "string" },
-                            { name: "description", type: "string" },
-                            { name: "image", type: "string" },
-                            { name: "tagline", type: "string" },
-                            { name: "url", type: "string" },
-                          ],
-                        },
-                        { name: "recipientType", type: "uint8" },
-                      ],
-                      [
-                        draft.isFlow ? zeroAddress : getEthAddress(draft.users[0]),
-                        {
-                          title: draft.title,
-                          description: draft.description,
-                          image: draft.image,
-                          tagline: "",
-                          url: "",
-                        },
-                        draft.isFlow ? RecipientType.FlowContract : RecipientType.ExternalAccount,
-                      ],
-                    ),
-                  ],
-                })
-              } catch (e: any) {
-                toast.error(e.message, { id: toastId })
-              }
-            }}
-          >
-            {!hasEnoughAllowance && "Approve and "} {action}
-          </Button>
+                  writeContract({
+                    account: address,
+                    abi: flowTcrImplAbi,
+                    functionName: "addItem",
+                    address: getEthAddress(flow.tcr),
+                    chainId,
+                    args: [
+                      encodeAbiParameters(
+                        [
+                          { name: "recipient", type: "address" },
+                          {
+                            name: "metadata",
+                            type: "tuple",
+                            components: [
+                              { name: "title", type: "string" },
+                              { name: "description", type: "string" },
+                              { name: "image", type: "string" },
+                              { name: "tagline", type: "string" },
+                              { name: "url", type: "string" },
+                            ],
+                          },
+                          { name: "recipientType", type: "uint8" },
+                        ],
+                        [
+                          draft.isFlow ? zeroAddress : getEthAddress(draft.users[0]),
+                          {
+                            title: draft.title,
+                            description: draft.description,
+                            image: draft.image,
+                            tagline: "",
+                            url: "",
+                          },
+                          draft.isFlow ? RecipientType.FlowContract : RecipientType.ExternalAccount,
+                        ],
+                      ),
+                    ],
+                  })
+                } catch (e: any) {
+                  toast.error(e.message, { id: toastId })
+                }
+              }}
+            >
+              {!hasEnoughAllowance && "Approve and "} {action}
+            </Button>
+          )}
         </div>
       </DialogContent>
     </Dialog>

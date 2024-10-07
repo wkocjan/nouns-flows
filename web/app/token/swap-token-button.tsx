@@ -17,17 +17,25 @@ interface Props {
   defaultTokenAmount?: bigint
   onSuccess?: (hash: string) => void
   size?: ButtonProps["size"]
+  variant?: ButtonProps["variant"]
+  text?: string
 }
 
 export function SwapTokenButton(props: Props) {
-  const { flow, defaultTokenAmount = BigInt(1e18), size = "default" } = props
+  const {
+    flow,
+    defaultTokenAmount = BigInt(1e18),
+    size = "default",
+    text = "Swap",
+    variant = "default",
+  } = props
   const ref = useRef<HTMLButtonElement>(null)
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size={size} type="button" ref={ref}>
-          Swap
+        <Button size={size} variant={variant} type="button" ref={ref}>
+          {text}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-screen-xs">
