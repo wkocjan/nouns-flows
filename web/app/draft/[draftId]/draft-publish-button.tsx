@@ -165,7 +165,7 @@ export function DraftPublishButton(props: Props) {
                             title: draft.title,
                             description: draft.description,
                             image: draft.image,
-                            tagline: "",
+                            tagline: draft.tagline || "",
                             url: "",
                           },
                           draft.isFlow ? RecipientType.FlowContract : RecipientType.ExternalAccount,
