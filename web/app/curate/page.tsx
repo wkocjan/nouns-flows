@@ -121,7 +121,7 @@ export default async function CurateAndEarnPage() {
                     name: "Choose Your Category",
                     description: (
                       <>
-                        Curate categories that align with your interests and expertise:
+                        Curate flows that align with your interests and expertise:
                         <ul className="mt-2 list-inside list-disc">
                           {flows.map((flow) => (
                             <li key={flow.id}>{flow.title}</li>

@@ -103,7 +103,7 @@ export function Voter(props: { votingPower: bigint; tokenIds: bigint[] }) {
           : `${tokensCount} Nouns`}
         .
         <br />
-        <br /> Split the flow of money between different categories & projects by voting.
+        <br /> Split the flow of money between different flows & projects by voting.
         {votingPower > MAX_VOTING_POWER && (
           <Alert variant="destructive" className="mt-2.5">
             <AlertDescription className="text-xs">

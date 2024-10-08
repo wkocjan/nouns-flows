@@ -29,7 +29,6 @@ export const getUserTcrTokens = cache(async (address: `0x${string}`) => {
                     votingStartTime: true,
                     revealPeriodEndTime: true,
                     disputeId: true,
-                    appealPeriodEndTime: true,
                     isExecuted: true,
                   },
                 },

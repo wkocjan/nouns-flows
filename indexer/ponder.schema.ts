@@ -78,7 +78,6 @@ export default createSchema((p) => ({
       votingStartTime: p.int(),
       votingEndTime: p.int(),
       revealPeriodEndTime: p.int(),
-      appealPeriodEndTime: p.int(),
       creationBlock: p.int(),
       arbitrationCost: p.string(),
       votes: p.string(),

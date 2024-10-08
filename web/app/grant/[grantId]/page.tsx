@@ -40,7 +40,7 @@ export default async function GrantPage({ params }: Props) {
       <Breadcrumb className="mb-4">
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">Categories</BreadcrumbLink>
+            <BreadcrumbLink href="/">Flows</BreadcrumbLink>
           </BreadcrumbItem>
 
           {flow && (

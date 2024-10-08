@@ -33,7 +33,7 @@ export default async function FlowLayout(props: PropsWithChildren<Props>) {
         <Breadcrumb className="mb-4">
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/">Categories</BreadcrumbLink>
+              <BreadcrumbLink href="/">Flows</BreadcrumbLink>
             </BreadcrumbItem>
 
             <BreadcrumbSeparator />

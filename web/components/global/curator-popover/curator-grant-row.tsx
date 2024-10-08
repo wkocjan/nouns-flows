@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { DownloadIcon } from "@radix-ui/react-icons"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { formatEther } from "viem"
 
 export function ActiveCuratorGrantRow({
   grant,
@@ -22,12 +23,13 @@ export function ActiveCuratorGrantRow({
   grant: ActiveCuratorGrant
   closePopover: () => void
 }) {
-  const { isActive, isDisputed, isResolved, title, image, id, challengePeriodEndsAt, disputes } =
-    grant
+  const { isResolved, title, image, id, challengePeriodEndsAt, disputes } = grant
 
-  const rewardsBalance = 12 // todo pull from contract
-
-  const { withdrawRewards } = useWithdrawVoterRewards(getEthAddress(grant.parentArbitrator))
+  const { withdrawRewards, voterRewardsBalance } = useWithdrawVoterRewards(
+    getEthAddress(grant.parentArbitrator),
+    BigInt(disputes[0].disputeId),
+    BigInt(0), // only 1 round for now
+  )
 
   return (
     <div className="grid grid-cols-4 items-center border-t border-border py-2">
@@ -106,9 +108,9 @@ export function ActiveCuratorGrantRow({
                     }}
                     size="xs"
                     variant="ghost"
-                    disabled={Number(rewardsBalance) <= 0}
+                    disabled={Number(voterRewardsBalance) <= 0}
                   >
-                    <div className="text-center text-sm">{rewardsBalance}</div>
+                    <div className="text-center text-sm">{formatEther(voterRewardsBalance)}</div>
                     <DownloadIcon className="ml-1 size-3.5" />
                   </Button>
                 </TooltipTrigger>

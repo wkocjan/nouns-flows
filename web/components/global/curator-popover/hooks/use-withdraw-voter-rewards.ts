@@ -1,15 +1,27 @@
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { erc20VotesArbitratorImplAbi } from "@/lib/abis"
-import { useAccount } from "wagmi"
+import { useAccount, useReadContract } from "wagmi"
 import { base } from "viem/chains"
 import { toast } from "sonner"
 import { getEthAddress } from "@/lib/utils"
 import { useRouter } from "next/navigation"
 
-export const useWithdrawVoterRewards = (arbitratorAddress: `0x${string}`) => {
+export const useWithdrawVoterRewards = (
+  arbitratorAddress: `0x${string}`,
+  disputeId: bigint,
+  round: bigint,
+) => {
   const { address } = useAccount()
   const chainId = base.id
   const router = useRouter()
+
+  const { data: voterRewardsBalance, isLoading: isBalanceLoading } = useReadContract({
+    address: getEthAddress(arbitratorAddress),
+    abi: erc20VotesArbitratorImplAbi,
+    functionName: "getRewardsForRound",
+    args: address ? [disputeId, round, address] : undefined,
+    chainId,
+  })
 
   const { prepareWallet, writeContract, isLoading, toastId } = useContractTransaction({
     chainId,
@@ -42,6 +54,7 @@ export const useWithdrawVoterRewards = (arbitratorAddress: `0x${string}`) => {
 
   return {
     withdrawRewards,
-    isLoading,
+    isLoading: isBalanceLoading || isLoading,
+    voterRewardsBalance: voterRewardsBalance || BigInt(0),
   }
 }

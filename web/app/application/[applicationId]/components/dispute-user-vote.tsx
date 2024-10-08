@@ -64,7 +64,7 @@ export function DisputeUserVote(props: Props) {
   }, [isVotingOpen, hasVoted, address, canVoteOnchain])
 
   if (hasVoted) {
-    if (!disputeVote.choice && new Date() > new Date(dispute.appealPeriodEndTime * 1000)) {
+    if (!disputeVote.choice && new Date() > new Date(dispute.revealPeriodEndTime * 1000)) {
       return <UnrevealedVote />
     } else if (disputeVote.choice) {
       return <RevealedVote disputeVote={disputeVote} grant={grant} />

@@ -13,7 +13,7 @@ import Link from "next/link"
 import { useSelectedLayoutSegments } from "next/navigation"
 
 const options = [
-  { name: "Categories", href: "/" },
+  { name: "Flows", href: "/" },
   { name: "Explore", href: "/explore" },
   { name: "Apply", href: "/apply" },
   { name: "About", href: "/about" },

@@ -27,10 +27,12 @@ import {
 } from "@/lib/database/helpers/application"
 import { getFlow } from "@/lib/database/queries/flow"
 import { Status } from "@/lib/enums"
-import { getEthAddress, getIpfsUrl } from "@/lib/utils"
-import Image from "next/image"
+import { getEthAddress } from "@/lib/utils"
 import Link from "next/link"
 import { ApplicationDisputeVoteCta } from "@/app/application/[applicationId]/components/dispute-vote-cta"
+import { getPinataUrl } from "@/lib/pinata/get-file-url"
+import { GrantTitleCell } from "../components/grant-title-cell"
+import { GrantLogoCell } from "../components/grant-logo-cell"
 
 interface Props {
   params: {
@@ -68,24 +70,8 @@ export default async function FlowApplicationsPage(props: Props) {
 
           return (
             <TableRow key={grant.id}>
-              <TableCell className="w-[64px] min-w-[64px]">
-                <Image
-                  src={getIpfsUrl(grant.image)}
-                  alt={grant.title}
-                  width={64}
-                  height={64}
-                  className="size-12 rounded-md object-cover"
-                />
-              </TableCell>
-              <TableCell>
-                <Link
-                  href={`/application/${grant.id}`}
-                  className="text-sm font-medium duration-100 ease-out hover:text-primary md:text-base"
-                  tabIndex={-1}
-                >
-                  {grant.title}
-                </Link>
-              </TableCell>
+              <GrantLogoCell image={getPinataUrl(grant.image)} title={grant.title} />
+              <GrantTitleCell title={grant.title} href={`/application/${grant.id}`} />
               <TableCell>
                 <div className="flex space-x-0.5">
                   <UserProfile
