@@ -13,9 +13,9 @@ import {
 import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database"
 import { getPinataUrl } from "@/lib/pinata/get-file-url"
-import Image from "next/image"
-import Link from "next/link"
 import { DateTime } from "@/components/ui/date-time"
+import { GrantTitleCell } from "../components/grant-title-cell"
+import { GrantLogoCell } from "../components/grant-logo-cell"
 
 interface Props {
   params: {
@@ -43,7 +43,7 @@ export default async function FlowDraftsPage(props: Props) {
       <TableHeader>
         <TableRow>
           <TableHead colSpan={2}>Name</TableHead>
-          <TableHead>User(s)</TableHead>
+          <TableHead>Builder(s)</TableHead>
           <TableHead className="text-center">Type</TableHead>
           <TableHead className="text-center">Created At</TableHead>
           <TableHead className="text-right">Action</TableHead>
@@ -52,24 +52,8 @@ export default async function FlowDraftsPage(props: Props) {
       <TableBody>
         {drafts.map((draft) => (
           <TableRow key={draft.id}>
-            <TableCell className="w-[64px] min-w-[64px]">
-              <Image
-                src={getPinataUrl(draft.image)}
-                alt={draft.title}
-                width={64}
-                height={64}
-                className="size-12 rounded-md object-cover"
-              />
-            </TableCell>
-            <TableCell>
-              <Link
-                href={`/draft/${draft.id}`}
-                className="text-sm font-medium duration-100 ease-out hover:text-primary md:text-base"
-                tabIndex={-1}
-              >
-                {draft.title}
-              </Link>
-            </TableCell>
+            <GrantLogoCell image={getPinataUrl(draft.image)} title={draft.title} />
+            <GrantTitleCell title={draft.title} href={`/draft/${draft.id}`} />
             <TableCell>
               <div className="flex space-x-0.5">
                 {draft.users.map((user) => (
@@ -86,7 +70,7 @@ export default async function FlowDraftsPage(props: Props) {
             </TableCell>
 
             <TableCell className="text-center">
-              <p>{draft.isFlow ? "Category" : "Grant"}</p>
+              <p>{draft.isFlow ? "Flow" : "Grant"}</p>
             </TableCell>
 
             <TableCell className="text-center">

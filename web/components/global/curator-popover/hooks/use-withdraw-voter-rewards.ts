@@ -55,6 +55,6 @@ export const useWithdrawVoterRewards = (
   return {
     withdrawRewards,
     isLoading: isBalanceLoading || isLoading,
-    voterRewardsBalance,
+    voterRewardsBalance: voterRewardsBalance || BigInt(0),
   }
 }

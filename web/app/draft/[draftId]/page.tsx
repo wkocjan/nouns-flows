@@ -37,7 +37,7 @@ export default async function DraftPage({ params }: Props) {
       <Breadcrumb className="mb-4">
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">Categories</BreadcrumbLink>
+            <BreadcrumbLink href="/">Flows</BreadcrumbLink>
           </BreadcrumbItem>
 
           <>

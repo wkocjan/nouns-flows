@@ -65,7 +65,7 @@ export function DraftPublishButton(props: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button type="button" ref={ref}>
+        <Button size="sm" type="button" ref={ref}>
           {action}
         </Button>
       </DialogTrigger>

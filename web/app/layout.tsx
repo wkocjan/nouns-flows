@@ -47,7 +47,6 @@ export default async function RootLayout(props: Readonly<{ children: React.React
                     className="flex items-center font-medium text-card-foreground max-sm:text-sm"
                   >
                     <Image src={Noggles} alt={pool.title} className="mr-2.5 h-5 w-auto md:h-7" />
-                    Flows
                   </Link>
                 </h2>
                 <MenuDesktop />
