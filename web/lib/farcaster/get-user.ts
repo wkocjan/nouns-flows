@@ -8,9 +8,7 @@ export const getFarcasterUserByEthAddress = unstable_cache(
       if (Object.keys(users).length === 0 || !users[address]) return null
 
       // get the farcaster account with the most followers
-      const user = users[address].sort(
-        (a, b) => a.follower_count - b.follower_count,
-      )[0]
+      const user = users[address].sort((a, b) => a.follower_count - b.follower_count)[0]
 
       return user
     } catch (e: any) {
