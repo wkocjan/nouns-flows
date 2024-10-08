@@ -74,7 +74,8 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
             >
               curate
             </Link>{" "}
-            {tokens.length} flows with {formatEther(totalBalance || BigInt(0))} tokens.
+            {tokens.length} {`flow${tokens.length > 1 ? "s" : ""}`} with{" "}
+            {formatEther(totalBalance || BigInt(0))} tokens.
           </p>
           <SwapTokenButton size="xs" flow={flow} />
         </div>

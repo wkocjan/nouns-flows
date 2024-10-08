@@ -127,7 +127,7 @@ export default async function ApplicationPage({ params }: Props) {
 
                 <div>
                   <h4 className="mb-1 text-[13px] text-muted-foreground">Challenged</h4>
-                  <span className="text-sm">{grant.isDisputed === 1 ? "Yes" : "No"}</span>
+                  <p className="text-sm">{grant.isDisputed === 1 ? "Yes" : "No"}</p>
                 </div>
               </div>
             </CardContent>

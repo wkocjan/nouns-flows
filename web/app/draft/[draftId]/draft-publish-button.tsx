@@ -105,7 +105,8 @@ export function DraftPublishButton(props: Props) {
                 be returned.
               </p>
               <p className="mt-2.5 text-sm text-muted-foreground">
-                Your {token.symbol} balance: {formatEther(token.balance)}
+                Your ${token.symbol} balance: {formatEther(token.balance)} (
+                {formatEther(token.allowance)} approved)
               </p>
             </div>
           </li>

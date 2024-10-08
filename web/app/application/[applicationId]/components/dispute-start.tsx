@@ -95,8 +95,9 @@ export function ApplicationChallengeButton(props: Props) {
                 {formatEther(addItemCost - arbitrationCost)} {token.symbol} and are repaid your
                 challenge fee.
               </p>
-              <p className="mt-4 text-sm font-medium">
-                Your {token.symbol} balance: {formatEther(token.balance)}
+              <p className="mt-4 text-sm">
+                Your {token.symbol} balance: {formatEther(token.balance)} (
+                {formatEther(token.allowance)} approved)
               </p>
             </div>
           </li>

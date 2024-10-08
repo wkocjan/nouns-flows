@@ -27,7 +27,7 @@ export function StatusDisputed(props: Props) {
       <div className="space-y-4 text-sm">
         <Challenger />
         <VotingStartDate />
-        <li>Token holders vote whether to approve or reject it.</li>
+        <li>Token holders vote to approve or reject the application.</li>
       </div>
     )
   }
@@ -69,7 +69,7 @@ export function StatusDisputed(props: Props) {
   function Challenger() {
     return (
       <li>
-        <span>Application challenged by </span>
+        <span>Challenged by </span>
         <UserProfile address={getEthAddress(dispute.challenger)}>
           {(profile) => <span className="font-medium">{profile.display_name}</span>}
         </UserProfile>
