@@ -114,7 +114,9 @@ export function ActiveCuratorGrantRow({
                     <DownloadIcon className="ml-1 size-3.5" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>Withdraw voter rewards</TooltipContent>
+                <TooltipContent>
+                  {voterRewardsBalance > 0 ? "Withdraw voter rewards" : "Already withdrawn"}
+                </TooltipContent>
               </Tooltip>
             ) : (
               <Tooltip>
