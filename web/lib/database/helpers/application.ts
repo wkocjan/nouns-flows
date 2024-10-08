@@ -14,14 +14,14 @@ export function canRequestBeExecuted(
 }
 
 export function canDisputeBeExecuted(
-  dispute?: Pick<Dispute, "appealPeriodEndTime" | "isExecuted">,
+  dispute?: Pick<Dispute, "revealPeriodEndTime" | "isExecuted">,
 ) {
   if (!dispute) return false
-  const { appealPeriodEndTime, isExecuted } = dispute
+  const { revealPeriodEndTime, isExecuted } = dispute
 
   if (isExecuted) return false
 
-  return appealPeriodEndTime <= Date.now() / 1000
+  return revealPeriodEndTime <= Date.now() / 1000
 }
 
 export function canDisputeBeVotedOn(

@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x8a850c254f00de3451394d97d08d2ac5ad459b5f)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x88e5332d2a90e01c476efbba44f75d636135e839)
  */
 export const erc20VotesArbitratorAbi = [
   {
@@ -64,14 +64,14 @@ export const erc20VotesArbitratorAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x8a850c254f00de3451394d97d08d2ac5ad459b5f)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x88e5332d2a90e01c476efbba44f75d636135e839)
  */
 export const erc20VotesArbitratorAddress = {
-  8453: '0x8a850C254F00DE3451394D97d08D2Ac5Ad459B5F',
+  8453: '0x88E5332D2a90E01C476eFbba44F75D636135E839',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x8a850c254f00de3451394d97d08d2ac5ad459b5f)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x88e5332d2a90e01c476efbba44f75d636135e839)
  */
 export const erc20VotesArbitratorConfig = {
   address: erc20VotesArbitratorAddress,
@@ -83,19 +83,15 @@ export const erc20VotesArbitratorConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x1804636c83434ac9e4859b087d5e1770dc45902d)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xc944deed9fdf40a571d16c5889f4a0a39122598a)
  */
 export const erc20VotesArbitratorImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'payable' },
   { type: 'error', inputs: [], name: 'ALREADY_REVEALED_VOTE' },
-  { type: 'error', inputs: [], name: 'APPEAL_PERIOD_ENDED' },
   { type: 'error', inputs: [], name: 'DISPUTE_ALREADY_EXECUTED' },
-  { type: 'error', inputs: [], name: 'DISPUTE_NOT_APPEALABLE' },
   { type: 'error', inputs: [], name: 'DISPUTE_NOT_EXECUTED' },
   { type: 'error', inputs: [], name: 'DISPUTE_NOT_SOLVED' },
   { type: 'error', inputs: [], name: 'HASHES_DO_NOT_MATCH' },
-  { type: 'error', inputs: [], name: 'INVALID_APPEAL_COST' },
-  { type: 'error', inputs: [], name: 'INVALID_APPEAL_PERIOD' },
   { type: 'error', inputs: [], name: 'INVALID_ARBITRABLE_ADDRESS' },
   { type: 'error', inputs: [], name: 'INVALID_ARBITRATION_COST' },
   { type: 'error', inputs: [], name: 'INVALID_DISPUTE_CHOICES' },
@@ -107,7 +103,6 @@ export const erc20VotesArbitratorImplAbi = [
   { type: 'error', inputs: [], name: 'INVALID_VOTING_DELAY' },
   { type: 'error', inputs: [], name: 'INVALID_VOTING_PERIOD' },
   { type: 'error', inputs: [], name: 'INVALID_VOTING_TOKEN_ADDRESS' },
-  { type: 'error', inputs: [], name: 'MAX_APPEAL_ROUNDS_REACHED' },
   { type: 'error', inputs: [], name: 'NO_COMMITTED_VOTE' },
   { type: 'error', inputs: [], name: 'NO_VOTES' },
   { type: 'error', inputs: [], name: 'NO_WINNING_VOTES' },
@@ -117,6 +112,7 @@ export const erc20VotesArbitratorImplAbi = [
   { type: 'error', inputs: [], name: 'VOTER_HAS_NOT_VOTED' },
   { type: 'error', inputs: [], name: 'VOTER_HAS_NO_VOTES' },
   { type: 'error', inputs: [], name: 'VOTER_ON_LOSING_SIDE' },
+  { type: 'error', inputs: [], name: 'VOTES_WERE_CAST' },
   { type: 'error', inputs: [], name: 'VOTING_CLOSED' },
   {
     type: 'event',
@@ -136,113 +132,6 @@ export const erc20VotesArbitratorImplAbi = [
       },
     ],
     name: 'AdminChanged',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'oldAppealCost',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'newAppealCost',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'AppealCostSet',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: '_disputeID',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: true,
-      },
-      {
-        name: '_arbitrable',
-        internalType: 'contract IArbitrable',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'AppealDecision',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'oldAppealPeriod',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'newAppealPeriod',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'AppealPeriodSet',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: '_disputeID',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: true,
-      },
-      {
-        name: '_arbitrable',
-        internalType: 'contract IArbitrable',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'AppealPossible',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'disputeId',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'roundNumber',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'appealer',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-      {
-        name: 'appealCost',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'AppealRaised',
   },
   {
     type: 'event',
@@ -301,12 +190,6 @@ export const erc20VotesArbitratorImplAbi = [
       },
       {
         name: 'revealPeriodEndTime',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'appealPeriodEndTime',
         internalType: 'uint256',
         type: 'uint256',
         indexed: false,
@@ -406,12 +289,6 @@ export const erc20VotesArbitratorImplAbi = [
       },
       {
         name: 'revealPeriodEndTime',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'appealPeriodEndTime',
         internalType: 'uint256',
         type: 'uint256',
         indexed: false,
@@ -655,27 +532,6 @@ export const erc20VotesArbitratorImplAbi = [
   {
     type: 'function',
     inputs: [],
-    name: 'MAX_APPEAL_COST',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'MAX_APPEAL_PERIOD',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'MAX_APPEAL_ROUNDS',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
     name: 'MAX_ARBITRATION_COST',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
@@ -704,20 +560,6 @@ export const erc20VotesArbitratorImplAbi = [
   {
     type: 'function',
     inputs: [],
-    name: 'MIN_APPEAL_COST',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'MIN_APPEAL_PERIOD',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
     name: 'MIN_ARBITRATION_COST',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
@@ -740,20 +582,6 @@ export const erc20VotesArbitratorImplAbi = [
     type: 'function',
     inputs: [],
     name: 'MIN_VOTING_PERIOD',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: '_appealCost',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: '_appealPeriod',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
@@ -791,36 +619,6 @@ export const erc20VotesArbitratorImplAbi = [
     name: 'acceptOwnership',
     outputs: [],
     stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: '_disputeID', internalType: 'uint256', type: 'uint256' },
-      { name: '_extraData', internalType: 'bytes', type: 'bytes' },
-    ],
-    name: 'appeal',
-    outputs: [],
-    stateMutability: 'payable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'disputeID', internalType: 'uint256', type: 'uint256' },
-      { name: '', internalType: 'bytes', type: 'bytes' },
-    ],
-    name: 'appealCost',
-    outputs: [{ name: 'cost', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: '_disputeID', internalType: 'uint256', type: 'uint256' }],
-    name: 'appealPeriod',
-    outputs: [
-      { name: 'start', internalType: 'uint256', type: 'uint256' },
-      { name: 'end', internalType: 'uint256', type: 'uint256' },
-    ],
-    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -934,8 +732,6 @@ export const erc20VotesArbitratorImplAbi = [
           { name: 'votingPeriod', internalType: 'uint256', type: 'uint256' },
           { name: 'votingDelay', internalType: 'uint256', type: 'uint256' },
           { name: 'revealPeriod', internalType: 'uint256', type: 'uint256' },
-          { name: 'appealPeriod', internalType: 'uint256', type: 'uint256' },
-          { name: 'appealCost', internalType: 'uint256', type: 'uint256' },
           { name: 'arbitrationCost', internalType: 'uint256', type: 'uint256' },
         ],
       },
@@ -994,6 +790,17 @@ export const erc20VotesArbitratorImplAbi = [
     inputs: [
       { name: 'disputeId', internalType: 'uint256', type: 'uint256' },
       { name: 'round', internalType: 'uint256', type: 'uint256' },
+      { name: 'voter', internalType: 'address', type: 'address' },
+    ],
+    name: 'getRewardsForRound',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'disputeId', internalType: 'uint256', type: 'uint256' },
+      { name: 'round', internalType: 'uint256', type: 'uint256' },
     ],
     name: 'getTotalVotesByRound',
     outputs: [{ name: 'totalVotes', internalType: 'uint256', type: 'uint256' }],
@@ -1021,8 +828,6 @@ export const erc20VotesArbitratorImplAbi = [
       { name: 'votingPeriod_', internalType: 'uint256', type: 'uint256' },
       { name: 'votingDelay_', internalType: 'uint256', type: 'uint256' },
       { name: 'revealPeriod_', internalType: 'uint256', type: 'uint256' },
-      { name: 'appealPeriod_', internalType: 'uint256', type: 'uint256' },
-      { name: 'appealCost_', internalType: 'uint256', type: 'uint256' },
       { name: 'arbitrationCost_', internalType: 'uint256', type: 'uint256' },
     ],
     name: 'initialize',
@@ -1067,24 +872,6 @@ export const erc20VotesArbitratorImplAbi = [
       { name: 'salt', internalType: 'bytes32', type: 'bytes32' },
     ],
     name: 'revealVote',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'newAppealCost', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'setAppealCost',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'newAppealPeriod', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'setAppealPeriod',
     outputs: [],
     stateMutability: 'nonpayable',
   },
@@ -1195,6 +982,16 @@ export const erc20VotesArbitratorImplAbi = [
     inputs: [
       { name: 'disputeId', internalType: 'uint256', type: 'uint256' },
       { name: 'round', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'withdrawRewardsForInvalidRound',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'disputeId', internalType: 'uint256', type: 'uint256' },
+      { name: 'round', internalType: 'uint256', type: 'uint256' },
       { name: 'voter', internalType: 'address', type: 'address' },
     ],
     name: 'withdrawVoterRewards',
@@ -1204,14 +1001,14 @@ export const erc20VotesArbitratorImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x1804636c83434ac9e4859b087d5e1770dc45902d)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xc944deed9fdf40a571d16c5889f4a0a39122598a)
  */
 export const erc20VotesArbitratorImplAddress = {
-  8453: '0x1804636C83434AC9E4859b087d5E1770DC45902d',
+  8453: '0xC944dEED9fDf40A571D16c5889f4a0A39122598a',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x1804636c83434ac9e4859b087d5e1770dc45902d)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xc944deed9fdf40a571d16c5889f4a0a39122598a)
  */
 export const erc20VotesArbitratorImplConfig = {
   address: erc20VotesArbitratorImplAddress,
@@ -1223,7 +1020,7 @@ export const erc20VotesArbitratorImplConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x8ca81d28947438ba558ac534332fc2ba36375dc3)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xa601984ba9306ffe4cd742032f5788f4912fcb9f)
  */
 export const erc20VotesMintableAbi = [
   {
@@ -1284,14 +1081,14 @@ export const erc20VotesMintableAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x8ca81d28947438ba558ac534332fc2ba36375dc3)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xa601984ba9306ffe4cd742032f5788f4912fcb9f)
  */
 export const erc20VotesMintableAddress = {
-  8453: '0x8cA81d28947438Ba558AC534332fC2Ba36375dc3',
+  8453: '0xa601984ba9306Ffe4cd742032F5788f4912fCB9f',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x8ca81d28947438ba558ac534332fc2ba36375dc3)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xa601984ba9306ffe4cd742032f5788f4912fcb9f)
  */
 export const erc20VotesMintableConfig = {
   address: erc20VotesMintableAddress,
@@ -1303,7 +1100,7 @@ export const erc20VotesMintableConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x51c0103143536af60bde894b242d34c6b3333ab5)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xa27276181b404b975d1366b41fd621b1ebd4104a)
  */
 export const erc20VotesMintableImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
@@ -1679,6 +1476,13 @@ export const erc20VotesMintableImplAbi = [
   },
   {
     type: 'function',
+    inputs: [],
+    name: 'ignoreRewardsAddresses',
+    outputs: [{ name: '', internalType: 'address[]', type: 'address[]' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     inputs: [
       { name: 'spender', internalType: 'address', type: 'address' },
       { name: 'addedValue', internalType: 'uint256', type: 'uint256' },
@@ -1693,6 +1497,11 @@ export const erc20VotesMintableImplAbi = [
       { name: '_initialOwner', internalType: 'address', type: 'address' },
       { name: '_minter', internalType: 'address', type: 'address' },
       { name: '_rewardPool', internalType: 'address', type: 'address' },
+      {
+        name: '_ignoreRewardsAddressSet',
+        internalType: 'address[]',
+        type: 'address[]',
+      },
       { name: '_name', internalType: 'string', type: 'string' },
       { name: '_symbol', internalType: 'string', type: 'string' },
     ],
@@ -1873,14 +1682,14 @@ export const erc20VotesMintableImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x51c0103143536af60bde894b242d34c6b3333ab5)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xa27276181b404b975d1366b41fd621b1ebd4104a)
  */
 export const erc20VotesMintableImplAddress = {
-  8453: '0x51C0103143536aF60bDe894b242d34C6B3333aB5',
+  8453: '0xa27276181b404B975D1366b41fD621B1Ebd4104a',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x51c0103143536af60bde894b242d34c6b3333ab5)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xa27276181b404b975d1366b41fd621b1ebd4104a)
  */
 export const erc20VotesMintableImplConfig = {
   address: erc20VotesMintableImplAddress,
@@ -1892,7 +1701,7 @@ export const erc20VotesMintableImplConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x20d8426ef9a458840d8e99c9083f30efa508644b)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xb29b3ddc8c9cc6a353a1878e8c123f33a5822a63)
  */
 export const flowTcrAbi = [
   {
@@ -1953,14 +1762,14 @@ export const flowTcrAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x20d8426ef9a458840d8e99c9083f30efa508644b)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xb29b3ddc8c9cc6a353a1878e8c123f33a5822a63)
  */
 export const flowTcrAddress = {
-  8453: '0x20d8426Ef9a458840d8e99c9083F30efa508644b',
+  8453: '0xb29b3DDC8c9cc6a353a1878e8C123f33A5822a63',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x20d8426ef9a458840d8e99c9083f30efa508644b)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xb29b3ddc8c9cc6a353a1878e8c123f33a5822a63)
  */
 export const flowTcrConfig = {
   address: flowTcrAddress,
@@ -1972,34 +1781,19 @@ export const flowTcrConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xed5bc7a5d34de9d835e4d18ebed807ccd6bb5976)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x41a660200b66f6e7de154fadd1903ceb956381bb)
  */
 export const flowTcrImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'payable' },
   { type: 'error', inputs: [], name: 'ADDRESS_ZERO' },
-  {
-    type: 'error',
-    inputs: [],
-    name: 'A_DISPUTE_MUST_BE_RAISED_TO_FUND_AN_APPEAL',
-  },
   { type: 'error', inputs: [], name: 'CHALLENGE_MUST_BE_WITHIN_TIME_LIMIT' },
   { type: 'error', inputs: [], name: 'CHALLENGE_PERIOD_MUST_PASS' },
-  {
-    type: 'error',
-    inputs: [],
-    name: 'CONTRIBUTIONS_MUST_BE_MADE_WITHIN_THE_APPEAL_PERIOD',
-  },
   { type: 'error', inputs: [], name: 'DISPUTE_MUST_NOT_BE_RESOLVED' },
   { type: 'error', inputs: [], name: 'INVALID_CURVE_STEEPNESS' },
   { type: 'error', inputs: [], name: 'INVALID_ITEM_DATA' },
   { type: 'error', inputs: [], name: 'INVALID_RULING_OPTION' },
   { type: 'error', inputs: [], name: 'INVALID_SIDE' },
   { type: 'error', inputs: [], name: 'ITEM_MUST_HAVE_PENDING_REQUEST' },
-  {
-    type: 'error',
-    inputs: [],
-    name: 'LOSER_MUST_CONTRIBUTE_DURING_FIRST_HALF_OF_APPEAL_PERIOD',
-  },
   { type: 'error', inputs: [], name: 'MUST_BE_ABSENT_TO_BE_ADDED' },
   { type: 'error', inputs: [], name: 'MUST_BE_A_REQUEST' },
   { type: 'error', inputs: [], name: 'MUST_BE_GOVERNOR' },
@@ -2028,49 +1822,6 @@ export const flowTcrImplAbi = [
       },
     ],
     name: 'AdminChanged',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: '_itemID',
-        internalType: 'bytes32',
-        type: 'bytes32',
-        indexed: true,
-      },
-      {
-        name: '_contributor',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: '_request',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: true,
-      },
-      {
-        name: '_round',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: '_amount',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: '_side',
-        internalType: 'enum IArbitrable.Party',
-        type: 'uint8',
-        indexed: false,
-      },
-    ],
-    name: 'AppealContribution',
   },
   {
     type: 'event',
@@ -2152,37 +1903,6 @@ export const flowTcrImplAbi = [
       },
     ],
     name: 'Evidence',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: '_itemID',
-        internalType: 'bytes32',
-        type: 'bytes32',
-        indexed: true,
-      },
-      {
-        name: '_request',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: true,
-      },
-      {
-        name: '_round',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: true,
-      },
-      {
-        name: '_side',
-        internalType: 'enum IArbitrable.Party',
-        type: 'uint8',
-        indexed: false,
-      },
-    ],
-    name: 'HasPaidAppealFee',
   },
   {
     type: 'event',
@@ -2455,13 +2175,6 @@ export const flowTcrImplAbi = [
   {
     type: 'function',
     inputs: [],
-    name: 'MULTIPLIER_DIVISOR',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
     name: 'RULING_OPTIONS',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
@@ -2504,11 +2217,6 @@ export const flowTcrImplAbi = [
         name: '_challengePeriodDuration',
         internalType: 'uint256',
         type: 'uint256',
-      },
-      {
-        name: '_stakeMultipliers',
-        internalType: 'uint256[3]',
-        type: 'uint256[3]',
       },
     ],
     name: '__GeneralizedTCR_init',
@@ -2604,19 +2312,6 @@ export const flowTcrImplAbi = [
     type: 'function',
     inputs: [
       {
-        name: '_loserStakeMultiplier',
-        internalType: 'uint256',
-        type: 'uint256',
-      },
-    ],
-    name: 'changeLoserStakeMultiplier',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      {
         name: '_registrationMetaEvidence',
         internalType: 'string',
         type: 'string',
@@ -2646,19 +2341,6 @@ export const flowTcrImplAbi = [
       },
     ],
     name: 'changeRemovalChallengeBaseDeposit',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      {
-        name: '_sharedStakeMultiplier',
-        internalType: 'uint256',
-        type: 'uint256',
-      },
-    ],
-    name: 'changeSharedStakeMultiplier',
     outputs: [],
     stateMutability: 'nonpayable',
   },
@@ -2703,19 +2385,6 @@ export const flowTcrImplAbi = [
   },
   {
     type: 'function',
-    inputs: [
-      {
-        name: '_winnerStakeMultiplier',
-        internalType: 'uint256',
-        type: 'uint256',
-      },
-    ],
-    name: 'changeWinnerStakeMultiplier',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
     inputs: [],
     name: 'clearingMetaEvidence',
     outputs: [{ name: '', internalType: 'string', type: 'string' }],
@@ -2750,17 +2419,6 @@ export const flowTcrImplAbi = [
       { name: '', internalType: 'contract IManagedFlow', type: 'address' },
     ],
     stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: '_itemID', internalType: 'bytes32', type: 'bytes32' },
-      { name: '_side', internalType: 'enum IArbitrable.Party', type: 'uint8' },
-      { name: '_erc20Amount', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'fundAppeal',
-    outputs: [],
-    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -2825,7 +2483,6 @@ export const flowTcrImplAbi = [
     ],
     name: 'getRoundInfo',
     outputs: [
-      { name: 'appealed', internalType: 'bool', type: 'bool' },
       { name: 'amountPaid', internalType: 'uint256[3]', type: 'uint256[3]' },
       { name: 'hasPaid', internalType: 'bool[3]', type: 'bool[3]' },
       { name: 'feeRewards', internalType: 'uint256', type: 'uint256' },
@@ -2918,11 +2575,6 @@ export const flowTcrImplAbi = [
             internalType: 'uint256',
             type: 'uint256',
           },
-          {
-            name: 'stakeMultipliers',
-            internalType: 'uint256[3]',
-            type: 'uint256[3]',
-          },
           { name: 'arbitratorExtraData', internalType: 'bytes', type: 'bytes' },
           {
             name: 'registrationMetaEvidence',
@@ -2993,13 +2645,6 @@ export const flowTcrImplAbi = [
         type: 'uint8',
       },
     ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'loserStakeMultiplier',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
   {
@@ -3138,13 +2783,6 @@ export const flowTcrImplAbi = [
   {
     type: 'function',
     inputs: [],
-    name: 'sharedStakeMultiplier',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
     name: 'submissionBaseDeposit',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
@@ -3210,13 +2848,6 @@ export const flowTcrImplAbi = [
   },
   {
     type: 'function',
-    inputs: [],
-    name: 'winnerStakeMultiplier',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
     inputs: [
       { name: '_beneficiary', internalType: 'address', type: 'address' },
       { name: '_itemID', internalType: 'bytes32', type: 'bytes32' },
@@ -3230,14 +2861,14 @@ export const flowTcrImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xed5bc7a5d34de9d835e4d18ebed807ccd6bb5976)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x41a660200b66f6e7de154fadd1903ceb956381bb)
  */
 export const flowTcrImplAddress = {
-  8453: '0xED5bC7A5D34De9d835E4D18Ebed807CCD6Bb5976',
+  8453: '0x41a660200B66f6e7De154fADd1903Ceb956381bb',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xed5bc7a5d34de9d835e4d18ebed807ccd6bb5976)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x41a660200b66f6e7de154fadd1903ceb956381bb)
  */
 export const flowTcrImplConfig = {
   address: flowTcrImplAddress,
@@ -3542,7 +3173,7 @@ export const gdav1ForwarderConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x60a0c05bb0b20bc995732c02f6a58b50bdcea7f8)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x525d6807138b0831829fa07d38bfc0bad7cafd41)
  */
 export const nounsFlowAbi = [
   {
@@ -3603,14 +3234,14 @@ export const nounsFlowAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x60a0c05bb0b20bc995732c02f6a58b50bdcea7f8)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x525d6807138b0831829fa07d38bfc0bad7cafd41)
  */
 export const nounsFlowAddress = {
-  8453: '0x60A0c05BB0b20Bc995732C02f6A58B50bDCEa7f8',
+  8453: '0x525d6807138B0831829fa07D38BFC0bAD7CAFD41',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x60a0c05bb0b20bc995732c02f6a58b50bdcea7f8)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x525d6807138b0831829fa07d38bfc0bad7cafd41)
  */
 export const nounsFlowConfig = {
   address: nounsFlowAddress,
@@ -3622,7 +3253,7 @@ export const nounsFlowConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x1bca2812f94456bf7872c5b1fc669744337871e0)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x28648e64ed31b3bb7f8e8fe80cb299d50f51a7a9)
  */
 export const nounsFlowImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'payable' },
@@ -4695,14 +4326,14 @@ export const nounsFlowImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x1bca2812f94456bf7872c5b1fc669744337871e0)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x28648e64ed31b3bb7f8e8fe80cb299d50f51a7a9)
  */
 export const nounsFlowImplAddress = {
-  8453: '0x1BcA2812F94456bf7872C5b1fC669744337871E0',
+  8453: '0x28648e64eD31B3bB7f8E8FE80cB299D50F51a7A9',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x1bca2812f94456bf7872c5b1fc669744337871e0)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x28648e64ed31b3bb7f8e8fe80cb299d50f51a7a9)
  */
 export const nounsFlowImplConfig = {
   address: nounsFlowImplAddress,
@@ -5418,7 +5049,7 @@ export const nounsTokenConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x0ca70041f760ab1d190bd824aa21436fdbb4e152)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x6023cf1d2efc2eaef8a9f7ce019ee7f974cc4f25)
  */
 export const rewardPoolAbi = [
   {
@@ -5479,14 +5110,14 @@ export const rewardPoolAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x0ca70041f760ab1d190bd824aa21436fdbb4e152)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x6023cf1d2efc2eaef8a9f7ce019ee7f974cc4f25)
  */
 export const rewardPoolAddress = {
-  8453: '0x0ca70041f760aB1d190BD824aa21436fdbb4E152',
+  8453: '0x6023CF1D2Efc2eaeF8a9f7Ce019Ee7f974CC4F25',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x0ca70041f760ab1d190bd824aa21436fdbb4e152)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x6023cf1d2efc2eaef8a9f7ce019ee7f974cc4f25)
  */
 export const rewardPoolConfig = {
   address: rewardPoolAddress,
@@ -5498,7 +5129,7 @@ export const rewardPoolConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x51d2b2cd7d3805d0361f1676a0b19d8d3b8cace2)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x7557207f560adac0e60e1828d877892b9fd95d66)
  */
 export const rewardPoolImplAbi = [
   { type: 'error', inputs: [], name: 'ADDRESS_ZERO' },
@@ -5780,14 +5411,14 @@ export const rewardPoolImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x51d2b2cd7d3805d0361f1676a0b19d8d3b8cace2)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x7557207f560adac0e60e1828d877892b9fd95d66)
  */
 export const rewardPoolImplAddress = {
-  8453: '0x51D2b2Cd7d3805d0361F1676A0b19d8D3B8Cace2',
+  8453: '0x7557207F560ADaC0e60e1828d877892b9fd95d66',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x51d2b2cd7d3805d0361f1676a0b19d8d3b8cace2)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x7557207f560adac0e60e1828d877892b9fd95d66)
  */
 export const rewardPoolImplConfig = {
   address: rewardPoolImplAddress,
@@ -7063,7 +6694,7 @@ export const superTokenConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x0b5f3c6c29615a7e4a430c9b8bd8ff194933d120)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x63870929d58dfb858f7bc7272df480cb7734a553)
  */
 export const tcrFactoryAbi = [
   {
@@ -7124,14 +6755,14 @@ export const tcrFactoryAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x0b5f3c6c29615a7e4a430c9b8bd8ff194933d120)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x63870929d58dfb858f7bc7272df480cb7734a553)
  */
 export const tcrFactoryAddress = {
-  8453: '0x0b5F3c6C29615a7E4a430C9B8bd8FF194933D120',
+  8453: '0x63870929d58dFb858f7BC7272Df480cB7734A553',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x0b5f3c6c29615a7e4a430c9b8bd8ff194933d120)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x63870929d58dfb858f7bc7272df480cb7734a553)
  */
 export const tcrFactoryConfig = {
   address: tcrFactoryAddress,
@@ -7143,7 +6774,7 @@ export const tcrFactoryConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x8609b14c954b2c989f3b9f5dac7ea3f482cef307)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xcd04a8c0a1f2d076ad95ec840b3a223e7d28be9a)
  */
 export const tcrFactoryImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
@@ -7454,11 +7085,6 @@ export const tcrFactoryImplAbi = [
             type: 'uint256',
           },
           {
-            name: 'stakeMultipliers',
-            internalType: 'uint256[3]',
-            type: 'uint256[3]',
-          },
-          {
             name: 'requiredRecipientType',
             internalType: 'enum FlowTypes.RecipientType',
             type: 'uint8',
@@ -7473,8 +7099,6 @@ export const tcrFactoryImplAbi = [
           { name: 'votingPeriod', internalType: 'uint256', type: 'uint256' },
           { name: 'votingDelay', internalType: 'uint256', type: 'uint256' },
           { name: 'revealPeriod', internalType: 'uint256', type: 'uint256' },
-          { name: 'appealPeriod', internalType: 'uint256', type: 'uint256' },
-          { name: 'appealCost', internalType: 'uint256', type: 'uint256' },
           { name: 'arbitrationCost', internalType: 'uint256', type: 'uint256' },
         ],
       },
@@ -7708,14 +7332,14 @@ export const tcrFactoryImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x8609b14c954b2c989f3b9f5dac7ea3f482cef307)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xcd04a8c0a1f2d076ad95ec840b3a223e7d28be9a)
  */
 export const tcrFactoryImplAddress = {
-  8453: '0x8609b14c954B2C989f3B9f5Dac7eA3f482cEf307',
+  8453: '0xCD04A8C0A1F2D076aD95EC840B3a223e7D28BE9a',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x8609b14c954b2c989f3b9f5dac7ea3f482cef307)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xcd04a8c0a1f2d076ad95ec840b3a223e7d28be9a)
  */
 export const tcrFactoryImplConfig = {
   address: tcrFactoryImplAddress,
@@ -7727,7 +7351,7 @@ export const tcrFactoryImplConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xb331fad2746d6bd9f0a37366546c77eea44320d6)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xfeb24deeaf4ce4fba62aae7d9d64f8e6b8e0579b)
  */
 export const tokenEmitterAbi = [
   {
@@ -7788,14 +7412,14 @@ export const tokenEmitterAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xb331fad2746d6bd9f0a37366546c77eea44320d6)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xfeb24deeaf4ce4fba62aae7d9d64f8e6b8e0579b)
  */
 export const tokenEmitterAddress = {
-  8453: '0xb331fAD2746D6bd9F0a37366546c77eEa44320D6',
+  8453: '0xfeb24deEaF4ce4fba62AAe7d9D64F8e6b8E0579b',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xb331fad2746d6bd9f0a37366546c77eea44320d6)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xfeb24deeaf4ce4fba62aae7d9d64f8e6b8e0579b)
  */
 export const tokenEmitterConfig = {
   address: tokenEmitterAddress,
@@ -7807,7 +7431,7 @@ export const tokenEmitterConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x64c054f576ef1a99f200242506e112299e91d0e4)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x7a272d10664be836738621965f91bca0d8791c0d)
  */
 export const tokenEmitterImplAbi = [
   {
@@ -8249,14 +7873,14 @@ export const tokenEmitterImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x64c054f576ef1a99f200242506e112299e91d0e4)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x7a272d10664be836738621965f91bca0d8791c0d)
  */
 export const tokenEmitterImplAddress = {
-  8453: '0x64C054f576EF1A99f200242506e112299e91d0E4',
+  8453: '0x7a272d10664Be836738621965F91BcA0D8791C0d',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x64c054f576ef1a99f200242506e112299e91d0e4)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x7a272d10664be836738621965f91bca0d8791c0d)
  */
 export const tokenEmitterImplConfig = {
   address: tokenEmitterImplAddress,

@@ -13,7 +13,6 @@ async function handleDisputeCreated(params: {
 }) {
   const { event, context } = params
   const {
-    appealPeriodEndTime,
     arbitrable,
     id,
     revealPeriodEndTime,
@@ -38,7 +37,6 @@ async function handleDisputeCreated(params: {
       votingStartTime: Number(votingStartTime),
       votingEndTime: Number(votingEndTime),
       revealPeriodEndTime: Number(revealPeriodEndTime),
-      appealPeriodEndTime: Number(appealPeriodEndTime),
       totalSupply: (totalSupply / BigInt(1e18)).toString(),
       arbitrationCost: (arbitrationCost / BigInt(1e18)).toString(),
       votes: "0",

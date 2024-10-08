@@ -145,7 +145,6 @@ view Dispute {
   votingStartTime      Int
   votingEndTime        Int
   revealPeriodEndTime  Int
-  appealPeriodEndTime  Int
   votes                String
   requesterPartyVotes  String
   challengerPartyVotes String
