@@ -48,7 +48,6 @@ export function StatusDisputed(props: Props) {
       <div className="space-y-4 text-sm">
         <Challenger />
         <VotingEndDate />
-        <RevealDate />
         <Results />
         <ApplicationExecuteDisputeButton flow={flow} dispute={dispute} className="!mt-6 w-full" />
       </div>
@@ -60,7 +59,6 @@ export function StatusDisputed(props: Props) {
       <div className="space-y-4 text-sm">
         <Challenger />
         <VotingEndDate />
-        <RevealDate />
         <Results />
       </div>
     )
@@ -93,7 +91,7 @@ export function StatusDisputed(props: Props) {
   function VotingEndDate() {
     return (
       <li>
-        Voting {currentTime < dispute.votingEndTime ? "will end" : "ended"}{" "}
+        Voting {currentTime < dispute.votingEndTime ? "ends" : "ended"}{" "}
         <DateTime date={new Date(dispute.votingEndTime * 1000)} relative className="font-medium" />
       </li>
     )
@@ -102,7 +100,7 @@ export function StatusDisputed(props: Props) {
   function RevealDate() {
     return (
       <li>
-        Votes reveal period {currentTime < dispute.revealPeriodEndTime ? "will end" : "ended"}{" "}
+        Votes reveal period {currentTime < dispute.revealPeriodEndTime ? "ends" : "ended"}{" "}
         <DateTime
           date={new Date(dispute.revealPeriodEndTime * 1000)}
           relative

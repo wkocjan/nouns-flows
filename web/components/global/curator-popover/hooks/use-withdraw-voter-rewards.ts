@@ -8,8 +8,8 @@ import { useRouter } from "next/navigation"
 
 export const useWithdrawVoterRewards = (
   arbitratorAddress: `0x${string}`,
-  disputeId?: bigint,
-  round?: bigint,
+  disputeId: bigint,
+  round: bigint,
 ) => {
   const { address } = useAccount()
   const chainId = base.id
@@ -19,7 +19,7 @@ export const useWithdrawVoterRewards = (
     address: getEthAddress(arbitratorAddress),
     abi: erc20VotesArbitratorImplAbi,
     functionName: "getRewardsForRound",
-    args: address && disputeId && round ? [disputeId, round, address] : undefined,
+    args: address ? [disputeId, round, address] : undefined,
     chainId,
   })
 

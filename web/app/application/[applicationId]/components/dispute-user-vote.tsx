@@ -137,6 +137,11 @@ export function DisputeUserVote(props: Props) {
           Voting is not open yet.
         </div>
       )}
+      {!canVoteOnchain && (
+        <div className="mt-3 text-center text-xs text-muted-foreground">
+          You don&apos;t have enough voting power to vote.
+        </div>
+      )}
       {canVoteOnchain && canVote && (
         <div className="mt-3 text-center text-xs text-muted-foreground">
           Vote with {formatEther(votingPower)} votes.
