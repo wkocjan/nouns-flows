@@ -24,11 +24,11 @@ export function useBuyTokenQuote(contract: Address, amount: bigint, chainId = ba
 
 export function useBuyTokenQuoteWithRewards(contract: Address, amount: bigint, chainId = base.id) {
   const { data, isError, isLoading } = useReadContract({
-    args: [amount],
     abi: tokenEmitterImplAbi,
     address: contract,
     chainId,
     functionName: "buyTokenQuoteWithRewards",
+    args: [amount],
   })
 
   return {
