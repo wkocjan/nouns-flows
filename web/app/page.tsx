@@ -20,6 +20,7 @@ import { base } from "viem/chains"
 import { VotingBar } from "./flow/[flowId]/components/voting-bar"
 import { VotingInput } from "./flow/[flowId]/components/voting-input"
 import { VotingToggle } from "./flow/[flowId]/components/voting-toggle"
+import { MRE } from "./mre"
 
 export default async function Home() {
   const pool = await getPool()
@@ -34,6 +35,7 @@ export default async function Home() {
   return (
     <VotingProvider chainId={base.id} contract={getEthAddress(pool.recipient)}>
       <main className="container mt-2.5 pb-24 md:mt-8">
+        <MRE />
         <div className="flex flex-col max-sm:space-y-2.5 md:flex-row md:items-center md:justify-between">
           <div>
             <h3 className="font-semibold leading-none tracking-tight">{pool.title}</h3>
