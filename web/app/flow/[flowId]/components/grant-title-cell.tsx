@@ -1,5 +1,3 @@
-"use client"
-
 import { TableCell } from "@/components/ui/table"
 import Link from "next/link"
 
