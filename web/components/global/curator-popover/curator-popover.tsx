@@ -79,7 +79,7 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
           </p>
           <SwapTokenButton size="xs" flow={flow} />
         </div>
-        <div className="mt-6">
+        <div className="mt-8">
           <div className="mb-2 grid grid-cols-5 gap-2 text-xs font-medium text-muted-foreground">
             <div className="col-start-3 text-center">Balance</div>
             <div className="text-center max-sm:break-all">Grants</div>
@@ -99,7 +99,7 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
           ))}
         </div>
 
-        <div className="flex flex-col space-y-5 border-t border-border pt-7">
+        <div className="flex flex-col space-y-5 border-t border-border pt-8">
           <p className="text-sm text-muted-foreground">
             Curate incoming grants to continue earning rewards.
           </p>

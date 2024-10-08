@@ -18,11 +18,22 @@ import { redirect } from "next/navigation"
 import { DisputeUserVote } from "./components/dispute-user-vote"
 import { StatusDisputed } from "./components/status-disputed"
 import { StatusNotDisputed } from "./components/status-not-disputed"
+import { Metadata } from "next"
 
 interface Props {
   params: {
     applicationId: string
   }
+}
+
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const { applicationId } = props.params
+
+  const grant = await database.grant.findUniqueOrThrow({
+    where: { id: applicationId },
+  })
+
+  return { title: grant.title, description: grant.tagline }
 }
 
 export default async function ApplicationPage({ params }: Props) {
