@@ -66,9 +66,9 @@ export function ApplyForm(props: Props) {
 Briefly describe the problem your project aims to solve.
 
 ### Impact
-- Grow the Nouns ecosystem,
-- Create value for the community,
-- Do something that matters.
+- Describe the impact of your project.
+- Be specific
+- What does the world look like if your project is successful?
 
 ### Team
 Introduce the key members of your team and their relevant experience.

@@ -19,6 +19,7 @@ export const WithdrawButton = ({
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
+          size="xs"
           onClick={() => {
             if (!isConnected) {
               connect()

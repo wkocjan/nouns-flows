@@ -72,7 +72,7 @@ const TokenListItem = ({
     <li onClick={onClick}>
       <div className="flex cursor-pointer flex-row items-center justify-between rounded-md px-3 py-4 hover:bg-gray-200 dark:hover:bg-gray-800">
         <div className="flex items-center gap-3">
-          <TokenLogo height={45} width={45} src={getIpfsUrl(token.image || "")} alt="TCR token" />
+          <TokenLogo size={45} src={getIpfsUrl(token.image || "")} alt="TCR token" />
           <div className="flex flex-col items-start justify-between">
             <span className="text-xl">{token.name}</span>
             <span className="text-sm opacity-50">{token.symbol}</span>
