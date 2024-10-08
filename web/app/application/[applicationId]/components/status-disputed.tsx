@@ -111,6 +111,7 @@ export function StatusDisputed(props: Props) {
   }
 
   function Results() {
+    const noDecision = dispute.ruling === 0 && dispute.isExecuted
     const isPending = dispute.ruling === 0
     const isApproved = dispute.ruling === 1
     const didArbitrate = dispute.challengerPartyVotes != dispute.requesterPartyVotes
@@ -131,7 +132,7 @@ export function StatusDisputed(props: Props) {
               {isApproved ? "approved" : "rejected"}
             </span>
           </li>
-        ) : (
+        ) : !noDecision ? (
           <li>
             Pending{" "}
             {didArbitrate ? (
@@ -142,6 +143,10 @@ export function StatusDisputed(props: Props) {
               <span className="text-yellow-500">unresolved</span>
             )}{" "}
             execution
+          </li>
+        ) : (
+          <li>
+            <span className="text-yellow-500">Unresolved</span> execution
           </li>
         )}
         {Number(dispute.votes) > 0 && <VotesTicker dispute={dispute} className="!mt-6" />}
