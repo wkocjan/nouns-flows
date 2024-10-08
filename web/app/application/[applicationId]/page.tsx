@@ -122,7 +122,7 @@ export default async function ApplicationPage({ params }: Props) {
 
                 <div>
                   <h4 className="mb-1 text-[13px] text-muted-foreground">Type</h4>
-                  <p className="text-sm">{isFlow ? "Category" : "Grant"}</p>
+                  <p className="text-sm">{isFlow ? "Flow" : "Grant"}</p>
                 </div>
 
                 <div>

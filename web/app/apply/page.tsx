@@ -69,18 +69,15 @@ export default async function ApplyPage() {
               ))}
             </>
           )}
-          <NewCategoryCard />
+          <NewFlowCard />
         </div>
       </div>
     </main>
   )
 }
 
-const NewCategoryCard = () => (
-  <Link
-    href="/new-category"
-    className="group mt-6 h-full transition-transform md:hover:-translate-y-2"
-  >
+const NewFlowCard = () => (
+  <Link href="/new-flow" className="group mt-6 h-full transition-transform md:hover:-translate-y-2">
     <Card className="h-full">
       <CardContent className="p-4">
         <div className="flex flex-col items-center">

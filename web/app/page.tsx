@@ -20,6 +20,7 @@ import { base } from "viem/chains"
 import { VotingBar } from "./flow/[flowId]/components/voting-bar"
 import { VotingInput } from "./flow/[flowId]/components/voting-input"
 import { VotingToggle } from "./flow/[flowId]/components/voting-toggle"
+import { Button } from "@/components/ui/button"
 
 export default async function Home() {
   const pool = await getPool()
@@ -39,7 +40,12 @@ export default async function Home() {
             <h3 className="font-semibold leading-none tracking-tight">{pool.title}</h3>
             <p className="mt-1.5 text-sm text-muted-foreground">{pool.tagline}</p>
           </div>
-          <VotingToggle />
+          <div className="flex items-center space-x-2">
+            <Link href={`/flow/${pool.id}/applications`}>
+              <Button variant="ghost">Suggest flows</Button>
+            </Link>
+            <VotingToggle />
+          </div>
         </div>
 
         <Card className="mt-6">

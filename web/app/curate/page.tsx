@@ -132,11 +132,11 @@ export default async function CurateAndEarnPage() {
                     icon: LayersIcon,
                   },
                   {
-                    name: "Category Token",
+                    name: "Flow Token",
                     description: (
                       <>
-                        Each category has its own ERC20 token. Purchasing these tokens makes you a
-                        curator for that specific category.
+                        Each flow has its own ERC20 token. Purchasing these tokens makes you a
+                        curator for that specific flow.
                       </>
                     ),
                     icon: TokensIcon,
@@ -172,7 +172,7 @@ export default async function CurateAndEarnPage() {
                 How can you earn?
               </p>
               <p className="mt-6 text-lg leading-8 text-muted-foreground">
-                As a curator, you have multiple opportunities to earn rewards in USDC and Category
+                As a curator, you have multiple opportunities to earn rewards in USDC and Flow
                 Tokens (ERC 20)
               </p>
             </div>
@@ -183,7 +183,7 @@ export default async function CurateAndEarnPage() {
                     icon: TargetIcon,
                     name: "Challenge Rewards",
                     description:
-                      "Earn category tokens by successfully challenging grant applications. When an application is rejected after your challenge, you receive the applicant's token fee.",
+                      "Earn flow tokens by successfully challenging grant applications. When an application is rejected after your challenge, you receive the applicant's token fee.",
                   },
                   {
                     icon: StarFilledIcon,
@@ -196,7 +196,7 @@ export default async function CurateAndEarnPage() {
                     name: "Pool Rewards",
                     description: (
                       <>
-                        10% of category budgets is distributed to all token holders, rewarding your
+                        10% of flow budgets is distributed to all token holders, rewarding your
                         participation in the ecosystem.
                       </>
                     ),

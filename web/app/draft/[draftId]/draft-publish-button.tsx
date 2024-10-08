@@ -72,7 +72,7 @@ export function DraftPublishButton(props: Props) {
       <DialogContent className="sm:max-w-screen-sm">
         <DialogHeader>
           <DialogTitle className="text-center text-lg font-medium">
-            {action} &quot;{draft.title}&quot; {draft.isFlow ? "Category" : "Grant"}
+            {action} &quot;{draft.title}&quot; {draft.isFlow ? "Flow" : "Grant"}
           </DialogTitle>
         </DialogHeader>
         <ul className="my-4 space-y-6">

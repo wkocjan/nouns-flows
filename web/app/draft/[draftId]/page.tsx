@@ -112,7 +112,7 @@ export default async function DraftPage({ params }: Props) {
 
                 <div>
                   <h4 className="mb-1 text-[13px] text-muted-foreground">Type</h4>
-                  <p>{isFlow ? "Category" : "Grant"}</p>
+                  <p>{isFlow ? "Flow" : "Grant"}</p>
                 </div>
 
                 <div>

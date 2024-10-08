@@ -8,7 +8,7 @@ export const VotingToggle = () => {
 
   return (
     <Button onClick={activate} disabled={isLoading || isActive} loading={isLoading}>
-      {isActive ? "In progress..." : `Vote for grants`}
+      {isActive ? "In progress..." : `Vote`}
     </Button>
   )
 }
