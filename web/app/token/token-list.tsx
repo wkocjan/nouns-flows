@@ -32,11 +32,21 @@ export const TokenList = ({ tokens, currentTokenEmitter, switchToken }: TokenLis
   )
   const { ethPrice } = useETHPrice()
 
+  // Create an intermediate array with tokens and balances
+  const tokensWithBalances =
+    tokens?.map((token, index) => ({
+      token,
+      balance: balances?.[index] || BigInt(0),
+    })) || []
+
+  // Sort the intermediate array based on balances
+  tokensWithBalances.sort((a, b) => Number(b.balance) - Number(a.balance))
+
   return (
     <ul>
-      {tokens?.map((token, index) => (
+      {tokensWithBalances.map(({ token, balance }, index) => (
         <TokenListItem
-          key={token.address}
+          key={index}
           token={token}
           onClick={() =>
             switchToken(
@@ -45,7 +55,7 @@ export const TokenList = ({ tokens, currentTokenEmitter, switchToken }: TokenLis
             )
           }
           currentTokenEmitter={currentTokenEmitter}
-          balance={balances[index]}
+          balance={balance}
           ethPrice={ethPrice || 0}
         />
       ))}
