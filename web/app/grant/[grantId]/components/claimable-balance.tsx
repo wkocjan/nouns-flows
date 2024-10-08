@@ -1,9 +1,6 @@
 "use client"
 
 import { WithdrawButton } from "@/components/global/withdraw-button"
-import { Currency } from "@/components/ui/currency"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { DownloadIcon } from "@radix-ui/react-icons"
 import { useEffect, useState } from "react"
 import { useAccount } from "wagmi"
 
