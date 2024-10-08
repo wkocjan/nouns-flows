@@ -18,11 +18,22 @@ import Image from "next/image"
 import { ClaimableBalance } from "./components/claimable-balance"
 import { UserVotes } from "./components/user-votes"
 import { Voters } from "./components/voters"
+import { Metadata } from "next"
 
 interface Props {
   params: {
     grantId: string
   }
+}
+
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const { grantId } = props.params
+
+  const grant = await database.grant.findFirstOrThrow({
+    where: { id: grantId },
+  })
+
+  return { title: grant.title, description: grant.tagline }
 }
 
 export default async function GrantPage({ params }: Props) {
@@ -126,7 +137,8 @@ export default async function GrantPage({ params }: Props) {
                 </div>
                 <ClaimableBalance
                   recipient={grant.recipient}
-                  claimableBalance={grant.claimableBalance}
+                  superToken={getEthAddress(flow.superToken)}
+                  pool={getEthAddress(flow.baselinePool)}
                 />
               </div>
             </CardContent>

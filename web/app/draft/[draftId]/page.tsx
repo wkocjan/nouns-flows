@@ -26,7 +26,7 @@ interface Props {
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const { draftId } = props.params
 
-  const draft = await database.draft.findUniqueOrThrow({
+  const draft = await database.draft.findFirstOrThrow({
     where: { id: Number(draftId) },
   })
 

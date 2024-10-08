@@ -28,7 +28,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const { flowId } = props.params
 
   const flow = await database.grant.findFirstOrThrow({
-    where: { id: flowId, isFlow: 1, isActive: 1 },
+    where: { id: flowId, isFlow: 1 },
   })
 
   return { title: flow.title, description: flow.tagline }

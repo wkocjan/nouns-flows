@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button, ButtonProps } from "@/components/ui/button"
 import { DownloadIcon } from "@radix-ui/react-icons"
 import { useWithdrawSuperToken } from "./hooks/use-withdraw-super-token"
 import { useConnectSuperfluidDistributionPool } from "./hooks/use-connect-superfluid-distribution-pool"
@@ -8,9 +8,11 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 export const WithdrawButton = ({
   superToken,
   pool,
+  size = "xs",
 }: {
   superToken: `0x${string}`
   pool: `0x${string}`
+  size?: ButtonProps["size"]
 }) => {
   const { withdraw, poolBalance } = useWithdrawSuperToken(superToken, pool)
   const { connect, isConnected } = useConnectSuperfluidDistributionPool(pool)
@@ -19,7 +21,7 @@ export const WithdrawButton = ({
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          size="xs"
+          size={size}
           onClick={() => {
             if (!isConnected) {
               connect()

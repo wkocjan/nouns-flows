@@ -29,7 +29,7 @@ interface Props {
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const { applicationId } = props.params
 
-  const grant = await database.grant.findUniqueOrThrow({
+  const grant = await database.grant.findFirstOrThrow({
     where: { id: applicationId },
   })
 

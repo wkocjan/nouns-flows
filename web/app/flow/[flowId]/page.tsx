@@ -18,6 +18,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { VotingBar } from "./components/voting-bar"
 import { VotingInput } from "./components/voting-input"
+import { GrantLogoCell } from "./components/grant-logo-cell"
 
 interface Props {
   params: {
@@ -48,27 +49,20 @@ export default async function FlowPage(props: Props) {
         <TableBody>
           {activeSubgrants.map((grant) => (
             <TableRow key={grant.id}>
-              <TableCell className="w-[64px] min-w-[64px]">
-                <Image
-                  src={getIpfsUrl(grant.image)}
-                  alt={grant.title}
-                  width={64}
-                  height={64}
-                  className="aspect-square size-12 rounded-md object-cover"
-                />
-              </TableCell>
+              <GrantLogoCell image={getIpfsUrl(grant.image)} title={grant.title} />
+
               <TableCell>
-                <h4 className="mb-1 text-sm md:text-base">
+                <div className="max-w-[250px] overflow-hidden truncate text-ellipsis">
                   <Link
                     href={
                       flow.isTopLevel && grant.isFlow ? `/flow/${grant.id}` : `/grant/${grant.id}`
                     }
-                    className="font-medium duration-100 ease-out hover:text-primary"
+                    className="text-sm font-medium duration-100 ease-out hover:text-primary md:text-lg"
                     tabIndex={-1}
                   >
                     {grant.title}
                   </Link>
-                </h4>
+                </div>
                 {/* {grant.isChallenged && (
                       <HoverCard openDelay={250}>
                         <HoverCardTrigger>
