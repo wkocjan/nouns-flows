@@ -4,13 +4,14 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Currency } from "@/components/ui/currency"
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { getIpfsUrl } from "@/lib/utils"
+import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import { DownloadIcon } from "@radix-ui/react-icons"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { useAccount } from "wagmi"
 import { useUserGrants } from "./use-user-grants"
+import { WithdrawButton } from "../withdraw-button"
 
 export const RecipientPopover = () => {
   const [isVisible, setIsVisible] = useState(false)
@@ -70,13 +71,10 @@ export const RecipientPopover = () => {
                   {grant.totalEarned}
                 </Currency>
                 <div className="flex items-center justify-center">
-                  <Button variant="ghost" disabled={Number(grant.claimableBalance) <= 0}>
-                    <Currency as="div" className="text-center text-sm">
-                      {grant.claimableBalance}
-                    </Currency>
-                    <DownloadIcon className="ml-1 size-3.5" />
-                    <span className="sr-only">Claim</span>
-                  </Button>
+                  <WithdrawButton
+                    superToken={getEthAddress(grant.flow.superToken)}
+                    pool={getEthAddress(grant.flow.baselinePool)}
+                  />
                 </div>
               </div>
             ))}

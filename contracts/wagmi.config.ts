@@ -22,6 +22,16 @@ const baseContracts = [
 
   { name: "tokenEmitterImpl", address: base.TokenEmitterImpl },
   { name: "tokenEmitter", address: base.TokenEmitter },
+
+  { name: "rewardPoolImpl", address: base.RewardPoolImpl },
+  { name: "rewardPool", address: base.RewardPool },
+
+  { name: "superToken", address: "0xeb796bdb90ffa0f28255275e16936d25d3418603" as `0x${string}` },
+
+  {
+    name: "gdav1Forwarder",
+    address: "0x6DA13Bde224A05a288748d857b9e7DDEffd1dE08" as `0x${string}`,
+  },
 ]
 
 export default defineConfig(() => {

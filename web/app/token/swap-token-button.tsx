@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+import { Button, ButtonProps } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -10,26 +10,35 @@ import {
 } from "@/components/ui/dialog"
 import { Grant } from "@prisma/client"
 import { useRef } from "react"
-import { base } from "viem/chains"
 import { SwapTokenBox } from "./swap-token-box"
+import Link from "next/link"
 
 interface Props {
   flow: Grant
-  defaultTokenAmount: bigint
+  defaultTokenAmount?: bigint
+  extraInfo?: "curator" | "apply" | "challenge"
   onSuccess?: (hash: string) => void
+  size?: ButtonProps["size"]
+  variant?: ButtonProps["variant"]
+  text?: string
 }
 
-const chainId = base.id
-
 export function SwapTokenButton(props: Props) {
-  const { flow, defaultTokenAmount } = props
+  const {
+    flow,
+    defaultTokenAmount = BigInt(1e18),
+    size = "default",
+    text = "Swap",
+    variant = "default",
+    extraInfo,
+  } = props
   const ref = useRef<HTMLButtonElement>(null)
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button type="button" ref={ref}>
-          Buy
+        <Button size={size} variant={variant} type="button" ref={ref}>
+          {text}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-screen-xs">
@@ -39,9 +48,40 @@ export function SwapTokenButton(props: Props) {
           </DialogTitle>
         </DialogHeader>
         <ul className="my-4 space-y-6">
+          {extraInfo && (
+            <li className="flex items-start space-x-4">
+              <>
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
+                  1
+                </span>
+                {extraInfo === "curator" && (
+                  <p>
+                    Buy TCR tokens to{" "}
+                    <Link href="/curate" className="underline">
+                      become a curator
+                    </Link>{" "}
+                    and earn a stream of USDC for verifying impact of grantees.
+                  </p>
+                )}
+                {extraInfo === "apply" && (
+                  <p>
+                    Buy {Number(defaultTokenAmount) / 1e18} TCR tokens to pay your application fee.
+                    If your grant is approved, you will get your application fee back.
+                  </p>
+                )}
+                {extraInfo === "challenge" && (
+                  <p>
+                    Buy {Number(defaultTokenAmount) / 1e18} TCR tokens to challenge a grant. If your
+                    challenge is successful, you will win the applicant&apos;s bond and be repaid
+                    your challenge fee.
+                  </p>
+                )}
+              </>
+            </li>
+          )}
           <li className="flex items-start space-x-4">
             <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
-              1
+              {!extraInfo ? "1" : "2"}
             </span>
             <p>
               Prices change based on supply and demand according to an S shaped{" "}

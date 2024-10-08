@@ -2,7 +2,9 @@ import { Status } from "@/lib/enums"
 import { Party } from "@/lib/kv/disputeVote"
 import { Dispute, Grant } from "@prisma/client"
 
-export function canRequestBeExecuted(grant: Grant) {
+export function canRequestBeExecuted(
+  grant: Pick<Grant, "challengePeriodEndsAt" | "isDisputed" | "status">,
+) {
   const { challengePeriodEndsAt, isDisputed, status } = grant
 
   if (!isPendingRequest(status)) return false
@@ -11,7 +13,10 @@ export function canRequestBeExecuted(grant: Grant) {
   return challengePeriodEndsAt <= Date.now() / 1000
 }
 
-export function canDisputeBeExecuted(dispute: Dispute) {
+export function canDisputeBeExecuted(
+  dispute?: Pick<Dispute, "appealPeriodEndTime" | "isExecuted">,
+) {
+  if (!dispute) return false
   const { appealPeriodEndTime, isExecuted } = dispute
 
   if (isExecuted) return false
@@ -19,12 +24,25 @@ export function canDisputeBeExecuted(dispute: Dispute) {
   return appealPeriodEndTime <= Date.now() / 1000
 }
 
-export function canDisputeBeVotedOn(dispute: Dispute) {
-  const { appealPeriodEndTime, isExecuted, votingStartTime } = dispute
+export function canDisputeBeVotedOn(
+  dispute: Pick<Dispute, "votingEndTime" | "isExecuted" | "votingStartTime">,
+) {
+  const { votingEndTime, isExecuted, votingStartTime } = dispute
+
+  const isAfterVotingStartTime = votingStartTime <= Date.now() / 1000
+  const isBeforeVotingEndTime = votingEndTime >= Date.now() / 1000
 
   if (isExecuted) return false
 
-  return votingStartTime <= Date.now() / 1000 && appealPeriodEndTime >= Date.now() / 1000
+  return isAfterVotingStartTime && isBeforeVotingEndTime
+}
+
+export function isDisputeRevealingVotes(
+  dispute: Pick<Dispute, "votingEndTime" | "revealPeriodEndTime">,
+) {
+  const { votingEndTime, revealPeriodEndTime } = dispute
+
+  return votingEndTime <= Date.now() / 1000 && revealPeriodEndTime >= Date.now() / 1000
 }
 
 export function isDisputeResolvedForNoneParty(dispute?: Dispute) {
@@ -47,7 +65,9 @@ export function isRequestRejected(grant: Grant, dispute?: Dispute) {
   return isDisputed === 0 && isResolved === 1
 }
 
-export function isDisputeWaitingForVoting(dispute: Dispute) {
+export function isDisputeWaitingForVoting(
+  dispute: Pick<Dispute, "isExecuted" | "votingStartTime">,
+) {
   const { isExecuted, votingStartTime } = dispute
 
   if (isExecuted) return false
@@ -55,7 +75,15 @@ export function isDisputeWaitingForVoting(dispute: Dispute) {
   return votingStartTime > Date.now() / 1000
 }
 
-export function canBeChallenged(grant: Grant) {
+export function isDisputeVotingOver(dispute: Pick<Dispute, "votingEndTime">) {
+  const { votingEndTime } = dispute
+
+  return votingEndTime < Date.now() / 1000
+}
+
+export function canBeChallenged(
+  grant: Pick<Grant, "challengePeriodEndsAt" | "isDisputed" | "status">,
+) {
   const { challengePeriodEndsAt, isDisputed, status } = grant
 
   if (!isPendingRequest(status)) return false

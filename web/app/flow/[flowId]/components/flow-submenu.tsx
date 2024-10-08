@@ -1,12 +1,14 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { cn, getEthAddress } from "@/lib/utils"
 import Link from "next/link"
 import { useSelectedLayoutSegment } from "next/navigation"
 import { VotingToggle } from "./voting-toggle"
 import { SwapTokenButton } from "@/app/token/swap-token-button"
 import { Grant } from "@prisma/client"
+import { useAccount } from "wagmi"
+import { useERC20Balances } from "@/lib/tcr/use-erc20-balances"
 
 interface Props {
   flowId: string
@@ -18,6 +20,8 @@ export const FlowSubmenu = (props: Props) => {
   const { flowId, isTopLevel, flow } = props
 
   const segment = useSelectedLayoutSegment()
+  const { address } = useAccount()
+  const { balances } = useERC20Balances([getEthAddress(flow.erc20)], address)
 
   const isApproved = segment === null
   const isApplications = segment === "applications"
@@ -65,17 +69,21 @@ export const FlowSubmenu = (props: Props) => {
       </div>
 
       <div className="max-sm:hidden">
-        {isApproved && <VotingToggle />}
-        {(isDrafts || isApplications) && (
-          <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2">
+          <SwapTokenButton
+            text={balances?.[0] ? "Buy $TCR" : "Become curator"}
+            flow={flow}
+            extraInfo="curator"
+            variant="secondary"
+            defaultTokenAmount={BigInt(1e18)}
+          />
+          {isApproved && <VotingToggle />}
+          {(isDrafts || isApplications) && (
             <Link href={`/apply/${flowId}`}>
-              <Button variant="secondary">
-                {isTopLevel ? "Suggest category" : "Apply for a grant"}
-              </Button>
+              <Button>{isTopLevel ? "Suggest category" : "Apply for a grant"}</Button>
             </Link>
-            <SwapTokenButton flow={flow} defaultTokenAmount={BigInt(1e18)} />
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   )

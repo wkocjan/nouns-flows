@@ -3,6 +3,7 @@ import { UserProfile } from "@/components/user-profile/user-profile"
 import {
   canDisputeBeExecuted,
   canDisputeBeVotedOn,
+  isDisputeRevealingVotes,
   isDisputeWaitingForVoting,
 } from "@/lib/database/helpers/application"
 import { getEthAddress } from "@/lib/utils"
@@ -31,7 +32,7 @@ export function StatusDisputed(props: Props) {
     )
   }
 
-  if (canDisputeBeVotedOn(dispute)) {
+  if (canDisputeBeVotedOn(dispute) || isDisputeRevealingVotes(dispute)) {
     return (
       <div className="space-y-4 text-sm">
         <Challenger />

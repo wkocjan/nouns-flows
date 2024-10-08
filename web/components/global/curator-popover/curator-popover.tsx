@@ -2,19 +2,29 @@
 
 import { Badge } from "@/components/ui/badge"
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { cn, getIpfsUrl } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 import { Grant } from "@prisma/client"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { formatEther } from "viem"
 import { useAccount } from "wagmi"
-import { useUserTcrTokens } from "./use-user-tcr-tokens"
-import Image from "next/image"
+import { useUserTcrTokens } from "./hooks/use-user-tcr-tokens"
+import { SwapTokenButton } from "@/app/token/swap-token-button"
+import { CuratorGrants } from "./curator-grants"
+import {
+  canDisputeBeExecuted,
+  canRequestBeExecuted,
+  isDisputeVotingOver,
+} from "@/lib/database/helpers/application"
+import { TokenRow } from "./token-row"
 
-export const CuratorPopover = () => {
+type ActiveTab = "active" | "upcoming" | "voted"
+
+export const CuratorPopover = ({ flow }: { flow: Grant }) => {
   const [isVisible, setIsVisible] = useState(false)
+  const [activeTab, setActiveTab] = useState<ActiveTab>("active")
   const { address } = useAccount()
-  const { tokens, totalBalance } = useUserTcrTokens(address)
+  const { tokens, totalBalance, totalRewardsBalance } = useUserTcrTokens(address)
   const closeRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -25,31 +35,54 @@ export const CuratorPopover = () => {
 
   const closePopover = () => closeRef.current?.click()
 
+  // active subgrants are all that aren't currently active or didn't resolved non-active
+  const activeSubgrants = tokens.flatMap((token) =>
+    token.flow.subgrants.filter(
+      (g) =>
+        !g.isActive &&
+        !g.isResolved &&
+        !canRequestBeExecuted(g) &&
+        !canDisputeBeExecuted(g.disputes?.[0]),
+    ),
+  )
+
+  const votedSubgrants = tokens.flatMap((token) =>
+    token.flow.subgrants.filter(
+      (g) =>
+        ((!g.isResolved && g.isDisputed) || g.isResolved) &&
+        g.disputes?.length &&
+        isDisputeVotingOver(g.disputes[0]),
+    ),
+  )
+
   return (
     <Popover>
       <PopoverTrigger>
-        <Badge className="h-[26px] rounded-full text-xs" variant="warning">
-          {formatEther(totalBalance || BigInt(0))}
+        <Badge className="h-[26px] rounded-full text-xs" variant="success">
+          ${formatEther(totalRewardsBalance)}
         </Badge>
       </PopoverTrigger>
       <PopoverContent className="w-full max-w-[100vw] md:mr-8 md:w-[480px]">
         <PopoverClose ref={closeRef} className="hidden" />
-        <p className="text-sm text-muted-foreground">
-          You{" "}
-          <Link
-            href="/curate"
-            className="text-primary underline transition-colors hover:text-primary/80"
-            onClick={closePopover}
-          >
-            curate
-          </Link>{" "}
-          {tokens.length} categories with {formatEther(totalBalance || BigInt(0))} tokens.
-        </p>
+        <div className="flex flex-row items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            You{" "}
+            <Link
+              href="/curate"
+              className="text-primary underline transition-colors hover:text-primary/80"
+              onClick={closePopover}
+            >
+              curate
+            </Link>{" "}
+            {tokens.length} categories with {formatEther(totalBalance || BigInt(0))} tokens.
+          </p>
+          <SwapTokenButton size="xs" flow={flow} />
+        </div>
         <div className="mt-6">
           <div className="mb-2 grid grid-cols-5 gap-2 text-xs font-medium text-muted-foreground">
             <div className="col-start-3 text-center">Balance</div>
-            <div className="text-center max-sm:break-all">Challenged</div>
-            <div className="text-center max-sm:break-all">Awaiting</div>
+            <div className="text-center max-sm:break-all">Grants</div>
+            <div className="text-center max-sm:break-all">Rewards</div>
           </div>
           {tokens.map(({ id, flow, amount }) => (
             <TokenRow
@@ -64,55 +97,55 @@ export const CuratorPopover = () => {
             />
           ))}
         </div>
+
+        <div className="flex flex-col space-y-5 border-t border-border pt-7">
+          <p className="text-sm text-muted-foreground">
+            Curate incoming grants to continue earning rewards.
+          </p>
+          <div className="flex flex-row items-center space-x-3 text-sm">
+            <VotingMenuItem
+              onClick={() => setActiveTab("active")}
+              isActive={activeTab === "active"}
+              label="Active"
+            />
+
+            <VotingMenuItem
+              onClick={() => setActiveTab("voted")}
+              isActive={activeTab === "voted"}
+              label="Voted"
+            />
+          </div>
+        </div>
+        <div className="mt-2">
+          {activeTab === "active" && (
+            <CuratorGrants closePopover={closePopover} grants={activeSubgrants} />
+          )}
+          {activeTab === "voted" && (
+            <CuratorGrants closePopover={closePopover} grants={votedSubgrants} />
+          )}
+        </div>
       </PopoverContent>
     </Popover>
   )
 }
 
-interface TokenRowProps {
-  flow: Pick<Grant, "id" | "title" | "image">
-  challengedCount: number
-  awaitingCount: number
-  closePopover: () => void
-  balance: string
-}
-
-function TokenRow(props: TokenRowProps) {
-  const { flow, challengedCount, awaitingCount, closePopover, balance } = props
-
+const VotingMenuItem = ({
+  onClick,
+  isActive,
+  label,
+}: {
+  onClick: () => void
+  isActive: boolean
+  label: string
+}) => {
   return (
-    <div className="grid grid-cols-5 items-center gap-2 border-t border-border py-2">
-      <div className="col-span-2 flex items-center space-x-2 overflow-hidden">
-        <Image
-          src={getIpfsUrl(flow.image)}
-          alt={flow.title}
-          className="size-6 flex-shrink-0 rounded-full object-cover max-sm:hidden"
-          width={24}
-          height={24}
-        />
-        <Link
-          href={`/flow/${flow.id}`}
-          className="truncate text-sm hover:underline"
-          onClick={closePopover}
-        >
-          {flow.title}
-        </Link>
-      </div>
-      <div className="text-center text-sm font-medium">{formatEther(BigInt(balance))}</div>
-      <div
-        className={cn("text-center text-sm font-medium", {
-          "text-muted-foreground opacity-75": challengedCount === 0,
-        })}
-      >
-        {challengedCount}
-      </div>
-      <div
-        className={cn("text-center text-sm font-medium", {
-          "text-muted-foreground opacity-75": awaitingCount === 0,
-        })}
-      >
-        {awaitingCount}
-      </div>
+    <div
+      onClick={onClick}
+      className={cn("cursor-pointer text-sm", {
+        "text-muted-foreground opacity-75": !isActive,
+      })}
+    >
+      {label}
     </div>
   )
 }

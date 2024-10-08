@@ -16,6 +16,7 @@ import { FlowWithGrants } from "@/lib/database/queries/flow"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import { FlowHeaderUserVotes } from "./flow-header-user-votes"
+import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
 
 interface Props {
   flow: FlowWithGrants
@@ -59,33 +60,13 @@ export const FlowHeader = (props: Props) => {
         <div className="grid w-full grid-cols-2 gap-x-4 gap-y-8 text-sm md:w-auto md:shrink-0 md:grid-cols-4">
           <div className="md:text-center">
             <p className="mb-1.5 text-muted-foreground">Grants</p>
-            <div className="space-x-1">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Badge variant="success">{flow.subgrants.filter((g) => g.isActive).length}</Badge>
-                </TooltipTrigger>
-                <TooltipContent>Approved</TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Badge variant="warning">
-                    {flow.subgrants.filter((g) => g.isDisputed && !g.isActive).length}
-                  </Badge>
-                </TooltipTrigger>
-                <TooltipContent>Challenged</TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Badge variant="outline">
-                    {
-                      flow.subgrants.filter((g) => !g.isActive && !g.isDisputed && !g.isResolved)
-                        .length
-                    }
-                  </Badge>
-                </TooltipTrigger>
-                <TooltipContent>Awaiting</TooltipContent>
-              </Tooltip>
-            </div>
+            <GrantStatusCountBadges
+              challengedCount={flow.subgrants.filter((g) => g.isDisputed && !g.isActive).length}
+              awaitingCount={
+                flow.subgrants.filter((g) => !g.isActive && !g.isDisputed && !g.isResolved).length
+              }
+              approvedCount={flow.subgrants.filter((g) => g.isActive).length}
+            />
           </div>
           <div className="md:text-center">
             <p className="mb-1.5 text-muted-foreground">Budget</p>

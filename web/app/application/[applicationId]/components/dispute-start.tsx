@@ -103,36 +103,43 @@ export function ApplicationChallengeButton(props: Props) {
         </ul>
         <div className="flex justify-end space-x-2">
           {!hasEnoughBalance && (
-            <SwapTokenButton flow={flow} defaultTokenAmount={challengeSubmissionCost} />
+            <SwapTokenButton
+              text={`Buy ${token.symbol} to challenge`}
+              extraInfo="challenge"
+              flow={flow}
+              defaultTokenAmount={challengeSubmissionCost}
+            />
           )}
-          <Button
-            disabled={!hasEnoughBalance || token.isApproving || isLoading}
-            loading={token.isApproving || isLoading}
-            type="button"
-            onClick={async () => {
-              if (!hasEnoughAllowance) {
-                return token.approve(challengeSubmissionCost)
-              }
+          {hasEnoughBalance && (
+            <Button
+              disabled={token.isApproving || isLoading}
+              loading={token.isApproving || isLoading}
+              type="button"
+              onClick={async () => {
+                if (!hasEnoughAllowance) {
+                  return token.approve(challengeSubmissionCost)
+                }
 
-              try {
-                await prepareWallet()
+                try {
+                  await prepareWallet()
 
-                const evidence = "" // Currently not used
+                  const evidence = "" // Currently not used
 
-                writeContract({
-                  address: getEthAddress(flow.tcr),
-                  abi: [...flowTcrImplAbi, ...erc20VotesArbitratorImplAbi],
-                  functionName: "challengeRequest",
-                  args: [grant.id as Address, evidence],
-                  chainId: base.id,
-                })
-              } catch (e: any) {
-                toast.error(e.message, { id: toastId })
-              }
-            }}
-          >
-            {!hasEnoughAllowance && "Approve and "} Challenge
-          </Button>
+                  writeContract({
+                    address: getEthAddress(flow.tcr),
+                    abi: [...flowTcrImplAbi, ...erc20VotesArbitratorImplAbi],
+                    functionName: "challengeRequest",
+                    args: [grant.id as Address, evidence],
+                    chainId: base.id,
+                  })
+                } catch (e: any) {
+                  toast.error(e.message, { id: toastId })
+                }
+              }}
+            >
+              {!hasEnoughAllowance && "Approve and "} Challenge
+            </Button>
+          )}
         </div>
       </DialogContent>
     </Dialog>

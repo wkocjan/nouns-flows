@@ -65,7 +65,6 @@ export function TokenSwitcherDialog({
               switchToken(token, tokenEmitter)
               ref.current?.click() // close dialog
             }}
-            currentToken={currentToken}
             currentTokenEmitter={currentTokenEmitter}
             tokens={tokens}
           />

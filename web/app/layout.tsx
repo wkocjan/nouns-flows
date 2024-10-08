@@ -52,7 +52,7 @@ export default async function RootLayout(props: Readonly<{ children: React.React
                 </h2>
                 <MenuDesktop />
                 <div className="flex items-center space-x-2.5">
-                  <CuratorPopover />
+                  <CuratorPopover flow={pool} />
                   <RecipientPopover />
                   <MenuAvatar />
                   <MenuMobile />

@@ -4,13 +4,16 @@ import {
   erc20VotesArbitratorAddress,
   erc20VotesMintableAddress,
   flowTcrAddress,
+  rewardPoolImplAbi,
   tokenEmitterAddress,
 } from "../../abis"
 import { Status } from "../enums"
 
-ponder.on("NounsFlow:Initialized", async (params) => {
-  const { context } = params
+ponder.on("NounsFlow:FlowInitialized", async (params) => {
+  const { context, event } = params
   const { Grant } = context.db
+
+  const { parent: parentContract, managerRewardPool, superToken } = event.args
 
   const contract = context.contracts.NounsFlow.address.toLowerCase() as `0x${string}`
 
@@ -20,6 +23,24 @@ ponder.on("NounsFlow:Initialized", async (params) => {
     functionName: "flowMetadata",
   })
 
+  const [baselinePool, bonusPool, managerRewardSuperfluidPool] = await Promise.all([
+    context.client.readContract({
+      address: contract,
+      abi: context.contracts.NounsFlow.abi,
+      functionName: "baselinePool",
+    }),
+    context.client.readContract({
+      address: contract,
+      abi: context.contracts.NounsFlow.abi,
+      functionName: "bonusPool",
+    }),
+    context.client.readContract({
+      address: managerRewardPool,
+      abi: rewardPoolImplAbi,
+      functionName: "rewardPool",
+    }),
+  ])
+
   const currentTime = Math.floor(Date.now() / 1000)
 
   await Grant.create({
@@ -28,9 +49,14 @@ ponder.on("NounsFlow:Initialized", async (params) => {
       ...metadata,
       recipient: contract,
       isTopLevel: true,
+      baselinePool,
+      bonusPool,
       isFlow: true,
       isRemoved: false,
-      parentContract: zeroAddress,
+      parentContract,
+      managerRewardPool,
+      managerRewardSuperfluidPool,
+      superToken,
       submitter: zeroAddress,
       votesCount: "0",
       monthlyFlowRate: "0",

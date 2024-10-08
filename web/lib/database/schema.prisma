@@ -95,7 +95,12 @@ view Grant {
   isResolved            Int
   evidenceGroupID       String
   createdAt             Int
-  updatedAt             Int
+  updatedAt             Int 
+  baselinePool          String
+  bonusPool             String
+  managerRewardPool     String
+  superToken                  String
+  managerRewardSuperfluidPool String
 
   flow         Grant         @relation("Subgrants", fields: [flowId], references: [id])
   subgrants    Grant[]       @relation("Subgrants")
@@ -162,6 +167,9 @@ view DisputeVote {
   choice     Int?
   votes      String?
   reason     String?
+  committedAt Int
+  revealedBy String?
+  revealedAt Int?
 
   @@unique([disputeId, arbitrator, voter])
   @@schema("public")
@@ -172,6 +180,7 @@ view TokenHolder {
   tokenContract String
   flow          Grant  @relation(fields: [tokenContract], references: [erc20])
   holder        String
+  firstPurchase Int
   amount        String
 
   @@unique([tokenContract, holder])

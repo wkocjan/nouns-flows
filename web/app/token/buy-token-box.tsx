@@ -1,6 +1,6 @@
 "use client"
 
-import { useUserTcrTokens } from "@/components/global/curator-popover/use-user-tcr-tokens"
+import { useUserTcrTokens } from "@/components/global/curator-popover/hooks/use-user-tcr-tokens"
 import { createRelayClient } from "@/lib/relay/client"
 import { useERC20Balances } from "@/lib/tcr/use-erc20-balances"
 import { getEthAddress } from "@/lib/utils"
