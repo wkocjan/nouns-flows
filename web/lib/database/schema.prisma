@@ -13,6 +13,7 @@ model Draft {
   id              Int      @id @default(autoincrement())
   title           String
   description     String
+  tagline         String?
   image           String
   users           String[]
   isPrivate       Boolean  @default(true)

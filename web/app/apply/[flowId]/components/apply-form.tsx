@@ -50,6 +50,13 @@ export function ApplyForm(props: Props) {
         </div>
       </div>
 
+      {isFlow && (
+        <div className="space-y-1.5">
+          <Label htmlFor="tagline">Tagline</Label>
+          <Input placeholder="Short and sweet" id="tagline" name="tagline" />
+        </div>
+      )}
+
       <div className="space-y-1.5">
         <Label>Description</Label>
         <MarkdownInput

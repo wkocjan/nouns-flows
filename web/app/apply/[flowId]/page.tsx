@@ -26,7 +26,9 @@ export default async function ApplyFlowPage(props: Props) {
         {isTopLevel ? "Suggest new flow" : "Apply for a grant"}
       </h3>
       <p className="mt-1.5 text-balance text-sm text-muted-foreground">
-        {isTopLevel ? "Suggest a new flow." : "Outline your project and its potential impact."}
+        {isTopLevel
+          ? "Suggest a new funding flow to help people make impact."
+          : "Outline your project and its potential impact."}
       </p>
       <div className="mt-6 grid grid-cols-1 gap-12 lg:grid-cols-3">
         <Card className="lg:col-span-2">

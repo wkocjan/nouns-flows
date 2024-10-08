@@ -8,6 +8,7 @@ const schema = z.object({
   description: z.string().trim().min(1, "Description is required"),
   image: z.string().trim().min(1, "Image is required"),
   flowId: z.string().trim().min(1, "Flow is required"),
+  tagline: z.string().trim().max(100).optional(),
   isFlow: z.enum(["0", "1"]).transform((value) => value === "1"),
   users: z
     .array(
