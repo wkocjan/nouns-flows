@@ -42,7 +42,7 @@ export default async function Home() {
           </div>
           <div className="flex items-center space-x-2">
             <Link href={`/flow/${pool.id}/applications`}>
-              <Button variant="ghost">Suggest flows</Button>
+              <Button variant="ghost">Suggest flow</Button>
             </Link>
             <VotingToggle />
           </div>
