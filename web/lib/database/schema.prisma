@@ -25,11 +25,44 @@ model Draft {
 
   flow Grant @relation(fields: [flowId], references: [id])
 
-  @@index([isPrivate], map: "isPrivate_1")
-  @@index([isOnchain], map: "isOnchain_1")
-  @@index([flowId], map: "flowId_1")
-  @@index([createdAt], map: "createdAt_1")
+  @@index([isPrivate])
+  @@index([isOnchain])
+  @@index([flowId])
+  @@index([createdAt])
   @@map("Draft")
+  @@schema("web")
+}
+
+model Cast {
+  hash      String   @id
+  fid       Int
+  channelId String
+  text      String
+  images    String[]
+  createdAt DateTime
+  grantId   String?
+
+  grant Grant?        @relation(fields: [grantId], references: [id])
+  user  FarcasterUser @relation(fields: [fid], references: [fid])
+
+  @@index([fid])
+  @@index([channelId])
+  @@index([createdAt])
+  @@index([grantId])
+  @@map("Cast")
+  @@schema("web")
+}
+
+model FarcasterUser {
+  fid         Int      @id
+  username    String
+  displayName String
+  imageUrl    String
+  addresses   String[]
+
+  casts Cast[]
+
+  @@map("FarcasterUser")
   @@schema("web")
 }
 
@@ -69,6 +102,7 @@ view Grant {
   drafts       Draft[]
   disputes     Dispute[]
   tokenHolders TokenHolder[]
+  updates      Cast[]
 
   @@map("Grant")
   @@schema("public")

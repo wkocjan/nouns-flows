@@ -7,6 +7,14 @@
     {
       "path": "/crons/conversion-rates",
       "schedule": "*/10 * * * *"
+    },
+    {
+      "path": "/crons/casts",
+      "schedule": "*/4 * * * *"
+    },
+    {
+      "path": "/crons/updates",
+      "schedule": "*/5 * * * *"
     }
   ]
 }

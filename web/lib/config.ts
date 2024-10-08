@@ -17,3 +17,6 @@ export const NOUNS_SUBGRAPH_ID = "5qcR6rAfDMZCVGuZ6DDois7y4zyXqsyqvaqhE6NRRraW"
 
 // Max voting power for a user (limit # of nouns to vote with)
 export const MAX_VOTING_POWER = BigInt(6000)
+
+// Farcaster Channel ID
+export const FARCASTER_CHANNEL_ID = "nouns"
