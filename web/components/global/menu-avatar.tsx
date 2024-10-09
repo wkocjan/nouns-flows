@@ -3,17 +3,16 @@
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { MAX_VOTING_POWER, NOUNS_TOKEN } from "@/lib/config"
+import { openseaNftUrl } from "@/lib/utils"
 import { useDelegatedTokens } from "@/lib/voting/delegated-tokens/use-delegated-tokens"
 import { useVotingPower } from "@/lib/voting/use-voting-power"
 import { Avatar, ConnectKitButton } from "connectkit"
 import Image from "next/image"
 import { useRef } from "react"
+import { mainnet } from "viem/chains"
 import { useAccount, useDisconnect } from "wagmi"
 import { Alert, AlertDescription } from "../ui/alert"
 import { ModeToggle } from "./mode-toggle"
-import Link from "next/link"
-import { openseaNftUrl } from "@/lib/utils"
-import { mainnet } from "viem/chains"
 
 export const MenuAvatar = () => {
   const { address } = useAccount()
@@ -64,10 +63,10 @@ export const MenuAvatar = () => {
                           You may like to get involved in the following ways:
                         </p>
                         <div className="flex space-x-2.5">
-                          <Button asChild variant="outline">
+                          <Button asChild size="sm" className="w-full">
                             <a href="/apply">Apply for a grant</a>
                           </Button>
-                          <Button asChild variant="outline">
+                          <Button asChild size="sm" className="w-full">
                             <a href="/curate">Become a curator</a>
                           </Button>
                         </div>
@@ -119,7 +118,7 @@ export function Voter(props: { votingPower: bigint; tokenIds: bigint[] }) {
           <a
             target="_blank"
             key={tokenId}
-            className="flex items-center"
+            className="group flex items-center"
             href={openseaNftUrl(NOUNS_TOKEN, tokenId.toString(), mainnet.id)}
           >
             <Image
@@ -129,7 +128,9 @@ export function Voter(props: { votingPower: bigint; tokenIds: bigint[] }) {
               height={64}
               className="size-8 rounded-md object-cover"
             />
-            <span className="ml-2.5 text-sm text-muted-foreground">Noun {tokenId.toString()}</span>
+            <span className="ml-2.5 text-sm text-muted-foreground transition-colors group-hover:text-primary">
+              Noun {tokenId.toString()}
+            </span>
           </a>
         ))}
       </div>

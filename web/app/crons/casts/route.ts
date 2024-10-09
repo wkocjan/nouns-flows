@@ -4,6 +4,7 @@ import { FARCASTER_CHANNEL_ID } from "@/lib/config"
 import database from "@/lib/database"
 import { Cast as RawCast } from "@/lib/farcaster/client"
 import { getCastImages } from "@/lib/farcaster/get-cast-images"
+import { getCastVideos } from "@/lib/farcaster/get-cast-videos"
 import { getFarcasterChannelCasts } from "@/lib/farcaster/get-channel-casts"
 import { Cast, FarcasterUser } from "@prisma/client"
 import { NextResponse } from "next/server"
@@ -37,6 +38,7 @@ export async function GET() {
             fid: cast.author.fid,
             text: cast.text,
             images: getCastImages(cast),
+            videos: getCastVideos(cast),
             createdAt: new Date(cast.timestamp),
             grantId: null,
           }) satisfies Cast,

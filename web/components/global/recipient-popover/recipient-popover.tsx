@@ -1,17 +1,15 @@
 "use client"
 
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Currency } from "@/components/ui/currency"
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
-import { DownloadIcon } from "@radix-ui/react-icons"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { useAccount } from "wagmi"
-import { useUserGrants } from "./use-user-grants"
 import { WithdrawButton } from "../withdraw-button"
+import { useUserGrants } from "./use-user-grants"
 
 export const RecipientPopover = () => {
   const [isVisible, setIsVisible] = useState(false)
