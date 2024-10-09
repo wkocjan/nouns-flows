@@ -13,12 +13,15 @@ ponder.on("Balance:block", async (params) => {
   })
 
   for (const grant of items) {
-    const contract = grant.isTopLevel ? grant.recipient : grant.parentContract
+    const { parentContract, recipient, isFlow, isTopLevel } = grant
+    const contract = isTopLevel ? recipient : parentContract
+    const flowRateContract = isFlow ? recipient : parentContract
 
     const [totalEarned, monthlyFlowRate, claimableBalance] = await Promise.all([
-      getTotalEarned(context, contract, grant.recipient),
-      getMonthlyFlowRate(context, contract, grant.recipient, grant.isTopLevel),
-      getClaimableBalance(context, contract, grant.recipient),
+      getTotalEarned(context, contract, recipient),
+      // pull flow rate actually going out of flows
+      getMonthlyFlowRate(context, flowRateContract, recipient, isTopLevel),
+      getClaimableBalance(context, contract, recipient),
     ])
 
     await context.db.Grant.update({
