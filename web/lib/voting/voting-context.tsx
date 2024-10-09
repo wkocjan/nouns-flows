@@ -98,7 +98,7 @@ export const VotingProvider = (
             })
           }
 
-          const recipientIds = votes.map((vote) => toHex(vote.recipientId))
+          const recipientIds = votes.map((vote) => vote.recipientId as `0x${string}`)
           const percentAllocations = votes.map((vote) => (vote.bps / 10000) * PERCENTAGE_SCALE)
           const { ownershipStorageProofs, delegateStorageProofs, ...baseProofParams } = proofs
 
