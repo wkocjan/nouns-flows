@@ -11,7 +11,7 @@ export type IPoolNode = Node<{ pool: Grant }, "pool">
 
 function PoolNode(props: NodeProps<IPoolNode>) {
   const { sourcePosition = Position.Bottom, width, height } = props
-  const { image, title, monthlyFlowRate } = props.data.pool
+  const { image, title, monthlyIncomingFlowRate } = props.data.pool
 
   return (
     <div
@@ -28,7 +28,7 @@ function PoolNode(props: NodeProps<IPoolNode>) {
         />
         <div className="mt-2.5 text-lg font-medium text-card-foreground">{title}</div>
         <div className="mt-2 rounded-md bg-primary px-1.5 py-0.5 text-xs font-medium text-primary-foreground">
-          <Currency>{monthlyFlowRate}</Currency>
+          <Currency>{monthlyIncomingFlowRate}</Currency>
           /mo
         </div>
       </div>

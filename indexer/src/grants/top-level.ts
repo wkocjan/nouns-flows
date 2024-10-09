@@ -75,7 +75,7 @@ ponder.on("NounsFlow:FlowInitialized", async (params) => {
       superToken,
       submitter: zeroAddress,
       votesCount: "0",
-      monthlyFlowRate: "0",
+      monthlyIncomingFlowRate: "0",
       totalEarned: "0",
       claimableBalance: "0",
       tcr: flowTcrAddress[8453].toLowerCase(),

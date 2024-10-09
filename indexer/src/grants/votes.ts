@@ -1,5 +1,5 @@
 import { ponder, type Context, type Event } from "@/generated"
-import { getMonthlyFlowRate } from "./lib/monthly-flow"
+import { getMonthlyIncomingFlowRate } from "./lib/monthly-flow"
 
 ponder.on("NounsFlow:VoteCast", handleVoteCast)
 ponder.on("NounsFlowChildren:VoteCast", handleVoteCast)
@@ -47,12 +47,15 @@ async function handleVoteCast(params: {
   })
 
   for (const affectedGrantId of affectedGrantsIds) {
-    const [votesCount, monthlyFlowRate] = await Promise.all([
+    const [votesCount, monthlyIncomingFlowRate] = await Promise.all([
       getGrantVotesCount(context, affectedGrantId),
       getGrantBudget(context as Context, contract, affectedGrantId),
     ])
 
-    await context.db.Grant.update({ id: affectedGrantId, data: { votesCount, monthlyFlowRate } })
+    await context.db.Grant.update({
+      id: affectedGrantId,
+      data: { votesCount, monthlyIncomingFlowRate },
+    })
   }
 }
 
@@ -65,5 +68,5 @@ async function getGrantBudget(context: Context, contract: `0x${string}`, id: str
   const grant = await context.db.Grant.findUnique({ id })
   if (!grant) throw new Error(`Could not find grant ${id}`)
 
-  return getMonthlyFlowRate(context, contract, grant.recipient, grant.isTopLevel)
+  return getMonthlyIncomingFlowRate(context, contract, grant.recipient, grant.isTopLevel)
 }

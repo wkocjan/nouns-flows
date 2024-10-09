@@ -15,7 +15,7 @@ function FlowNode(props: NodeProps<Node<{ flow: Grant }, "flow">>) {
     height,
     data,
   } = props
-  const { title, id, monthlyFlowRate } = data.flow
+  const { title, id, monthlyIncomingFlowRate } = data.flow
 
   return (
     <div
@@ -32,7 +32,7 @@ function FlowNode(props: NodeProps<Node<{ flow: Grant }, "flow">>) {
 
           <div className="mt-2 flex items-center space-x-1">
             <Badge>
-              <Currency>{monthlyFlowRate}</Currency>
+              <Currency>{monthlyIncomingFlowRate}</Currency>
               /mo
             </Badge>
           </div>
