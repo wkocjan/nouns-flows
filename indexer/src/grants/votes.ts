@@ -64,9 +64,9 @@ async function getGrantVotesCount(context: Context<"NounsFlow:VoteCast">, recipi
   return votes.items.reduce((acc, v) => acc + BigInt(v.votesCount), BigInt(0)).toString()
 }
 
-async function getGrantBudget(context: Context, contract: `0x${string}`, id: string) {
+async function getGrantBudget(context: Context, parentContract: `0x${string}`, id: string) {
   const grant = await context.db.Grant.findUnique({ id })
   if (!grant) throw new Error(`Could not find grant ${id}`)
 
-  return getMonthlyIncomingFlowRate(context, contract, grant.recipient, grant.isTopLevel)
+  return getMonthlyIncomingFlowRate(context, parentContract, grant.recipient)
 }

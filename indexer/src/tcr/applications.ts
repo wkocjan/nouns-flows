@@ -57,6 +57,7 @@ async function handleItemSubmitted(params: {
       isRemoved: false,
       votesCount: "0",
       monthlyIncomingFlowRate: "0",
+      monthlyOutgoingFlowRate: "0",
       totalEarned: "0",
       claimableBalance: "0",
       tcr: "",
