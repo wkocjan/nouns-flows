@@ -15,12 +15,25 @@ import { base } from "viem/chains"
 import { FlowHeader } from "./components/flow-header"
 import { FlowSubmenu } from "./components/flow-submenu"
 import { getFlowWithGrants } from "@/lib/database/queries/flow"
+import { Metadata } from "next"
+import database from "@/lib/database"
 
 interface Props {
   params: {
     flowId: string
   }
 }
+
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const { flowId } = props.params
+
+  const flow = await database.grant.findFirstOrThrow({
+    where: { id: flowId, isFlow: 1 },
+  })
+
+  return { title: flow.title, description: flow.tagline }
+}
+
 export default async function FlowLayout(props: PropsWithChildren<Props>) {
   const { children } = props
   const { flowId } = props.params

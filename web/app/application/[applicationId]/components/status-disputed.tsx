@@ -27,7 +27,7 @@ export function StatusDisputed(props: Props) {
       <div className="space-y-4 text-sm">
         <Challenger />
         <VotingStartDate />
-        <li>Token holders vote whether to approve or reject it.</li>
+        <li>Token holders vote to approve or reject the application.</li>
       </div>
     )
   }
@@ -48,7 +48,6 @@ export function StatusDisputed(props: Props) {
       <div className="space-y-4 text-sm">
         <Challenger />
         <VotingEndDate />
-        <RevealDate />
         <Results />
         <ApplicationExecuteDisputeButton flow={flow} dispute={dispute} className="!mt-6 w-full" />
       </div>
@@ -60,7 +59,6 @@ export function StatusDisputed(props: Props) {
       <div className="space-y-4 text-sm">
         <Challenger />
         <VotingEndDate />
-        <RevealDate />
         <Results />
       </div>
     )
@@ -69,7 +67,7 @@ export function StatusDisputed(props: Props) {
   function Challenger() {
     return (
       <li>
-        <span>Application challenged by </span>
+        <span>Challenged by </span>
         <UserProfile address={getEthAddress(dispute.challenger)}>
           {(profile) => <span className="font-medium">{profile.display_name}</span>}
         </UserProfile>
@@ -93,7 +91,7 @@ export function StatusDisputed(props: Props) {
   function VotingEndDate() {
     return (
       <li>
-        Voting {currentTime < dispute.votingEndTime ? "will end" : "ended"}{" "}
+        Voting {currentTime < dispute.votingEndTime ? "ends" : "ended"}{" "}
         <DateTime date={new Date(dispute.votingEndTime * 1000)} relative className="font-medium" />
       </li>
     )
@@ -102,7 +100,7 @@ export function StatusDisputed(props: Props) {
   function RevealDate() {
     return (
       <li>
-        Votes reveal period {currentTime < dispute.revealPeriodEndTime ? "will end" : "ended"}{" "}
+        Votes reveal period {currentTime < dispute.revealPeriodEndTime ? "ends" : "ended"}{" "}
         <DateTime
           date={new Date(dispute.revealPeriodEndTime * 1000)}
           relative
@@ -113,6 +111,7 @@ export function StatusDisputed(props: Props) {
   }
 
   function Results() {
+    const noDecision = dispute.ruling === 0 && dispute.isExecuted
     const isPending = dispute.ruling === 0
     const isApproved = dispute.ruling === 1
     const didArbitrate = dispute.challengerPartyVotes != dispute.requesterPartyVotes
@@ -133,7 +132,7 @@ export function StatusDisputed(props: Props) {
               {isApproved ? "approved" : "rejected"}
             </span>
           </li>
-        ) : (
+        ) : !noDecision ? (
           <li>
             Pending{" "}
             {didArbitrate ? (
@@ -144,6 +143,10 @@ export function StatusDisputed(props: Props) {
               <span className="text-yellow-500">unresolved</span>
             )}{" "}
             execution
+          </li>
+        ) : (
+          <li>
+            <span className="text-yellow-500">Unresolved</span> execution
           </li>
         )}
         {Number(dispute.votes) > 0 && <VotesTicker dispute={dispute} className="!mt-6" />}

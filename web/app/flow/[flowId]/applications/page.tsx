@@ -87,7 +87,7 @@ export default async function FlowApplicationsPage(props: Props) {
                 </div>
               </TableCell>
 
-              <TableCell>{grant.isFlow ? "Category" : "Grant"}</TableCell>
+              <TableCell>{grant.isFlow ? "Flow" : "Grant"}</TableCell>
 
               <TableCell>
                 {!grant.isDisputed && canRequestBeExecuted(grant) && (

@@ -50,6 +50,13 @@ export function ApplyForm(props: Props) {
         </div>
       </div>
 
+      {isFlow && (
+        <div className="space-y-1.5">
+          <Label htmlFor="tagline">Tagline</Label>
+          <Input placeholder="Short and sweet" id="tagline" name="tagline" />
+        </div>
+      )}
+
       <div className="space-y-1.5">
         <Label>Description</Label>
         <MarkdownInput
@@ -59,9 +66,9 @@ export function ApplyForm(props: Props) {
 Briefly describe the problem your project aims to solve.
 
 ### Impact
-- Grow the Nouns ecosystem,
-- Create value for the community,
-- Do something that matters.
+- Describe the impact of your project.
+- Be specific
+- What does the world look like if your project is successful?
 
 ### Team
 Introduce the key members of your team and their relevant experience.

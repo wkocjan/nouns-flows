@@ -62,13 +62,13 @@ export const SwitchEthChainButton = ({
       <DropdownMenuContent side="top">
         <ChainMenuItem
           onClick={() => switchChain(mainnet.id)}
-          logoChild={<TokenLogo className="mr-4" width={30} height={30} src="/eth.png" alt="ETH" />}
+          logoChild={<TokenLogo className="mr-4" size={30} src="/eth.png" alt="ETH" />}
           chainName="Ethereum"
           balance={ethBalance?.value || BigInt(0)}
         />
         <ChainMenuItem
           onClick={() => switchChain(base.id)}
-          logoChild={<BaseEthLogo className="mr-2" width={30} height={30} />}
+          logoChild={<BaseEthLogo className="mr-2" size={30} />}
           chainName="Base"
           balance={baseEthBalance?.value || BigInt(0)}
         />

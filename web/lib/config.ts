@@ -4,7 +4,8 @@ import { nounsFlowAddress, nounsTokenAddress } from "./abis"
 export const NOUNS_FLOW = nounsFlowAddress[8453]
 
 // Nouns token contract (for voting power)
-export const NOUNS_TOKEN = nounsTokenAddress[1]
+export const NOUNS_TOKEN = (process.env.NOUNS_TOKEN_ADDRESS ||
+  nounsTokenAddress[1]) as `0x${string}`
 
 // x Noun = x * VOTING_POWER_SCALE votes
 export const VOTING_POWER_SCALE = BigInt(1000)

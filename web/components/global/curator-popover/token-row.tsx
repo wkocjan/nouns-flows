@@ -19,7 +19,7 @@ export function TokenRow(props: TokenRowProps) {
   const { flow, challengedCount, awaitingCount, closePopover, balance } = props
 
   return (
-    <div className="grid grid-cols-5 items-center gap-2 border-t border-border py-2">
+    <div className="grid grid-cols-5 items-center gap-2 border-t border-border py-2.5">
       <div className="col-span-2 flex items-center space-x-2 overflow-hidden">
         <Image
           src={getIpfsUrl(flow.image)}
@@ -42,7 +42,7 @@ export function TokenRow(props: TokenRowProps) {
         challengedCount={challengedCount}
         awaitingCount={awaitingCount}
       />
-      <div className="text-center text-sm font-medium text-green-500">
+      <div className="text-center text-sm font-medium">
         <WithdrawButton
           superToken={getEthAddress(flow.superToken)}
           pool={getEthAddress(flow.managerRewardSuperfluidPool)}

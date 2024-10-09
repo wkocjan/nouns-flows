@@ -18,11 +18,22 @@ import { redirect } from "next/navigation"
 import { DisputeUserVote } from "./components/dispute-user-vote"
 import { StatusDisputed } from "./components/status-disputed"
 import { StatusNotDisputed } from "./components/status-not-disputed"
+import { Metadata } from "next"
 
 interface Props {
   params: {
     applicationId: string
   }
+}
+
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const { applicationId } = props.params
+
+  const grant = await database.grant.findFirstOrThrow({
+    where: { id: applicationId },
+  })
+
+  return { title: grant.title, description: grant.tagline }
 }
 
 export default async function ApplicationPage({ params }: Props) {
@@ -122,12 +133,12 @@ export default async function ApplicationPage({ params }: Props) {
 
                 <div>
                   <h4 className="mb-1 text-[13px] text-muted-foreground">Type</h4>
-                  <p className="text-sm">{isFlow ? "Category" : "Grant"}</p>
+                  <p className="text-sm">{isFlow ? "Flow" : "Grant"}</p>
                 </div>
 
                 <div>
                   <h4 className="mb-1 text-[13px] text-muted-foreground">Challenged</h4>
-                  <span className="text-sm">{grant.isDisputed === 1 ? "Yes" : "No"}</span>
+                  <p className="text-sm">{grant.isDisputed === 1 ? "Yes" : "No"}</p>
                 </div>
               </div>
             </CardContent>

@@ -27,12 +27,12 @@ export function ActiveCuratorGrantRow({
 
   const { withdrawRewards, voterRewardsBalance } = useWithdrawVoterRewards(
     getEthAddress(grant.parentArbitrator),
-    BigInt(disputes[0].disputeId),
+    disputes[0]?.disputeId ? BigInt(disputes[0]?.disputeId) : BigInt(0),
     BigInt(0), // only 1 round for now
   )
 
   return (
-    <div className="grid grid-cols-4 items-center border-t border-border py-2">
+    <div className="grid grid-cols-4 items-center border-t border-border py-2.5">
       <div className="col-span-2 flex items-center space-x-2 overflow-hidden text-ellipsis">
         <Image
           src={getIpfsUrl(image)}
@@ -95,7 +95,7 @@ export function ActiveCuratorGrantRow({
         {Boolean(isResolved) && disputes?.[0] && (
           <div
             className={cn("text-xs text-muted-foreground", {
-              "text-green-500": disputes[0].votes?.length > 0,
+              "text-green-500": disputes[0].votes?.length > 0 && Number(voterRewardsBalance) > 0,
               "text-yellow-500": !disputes[0].votes?.length,
             })}
           >
@@ -114,7 +114,9 @@ export function ActiveCuratorGrantRow({
                     <DownloadIcon className="ml-1 size-3.5" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>Withdraw voter rewards</TooltipContent>
+                <TooltipContent>
+                  {voterRewardsBalance > 0 ? "Withdraw voter rewards" : "Already withdrawn"}
+                </TooltipContent>
               </Tooltip>
             ) : (
               <Tooltip>

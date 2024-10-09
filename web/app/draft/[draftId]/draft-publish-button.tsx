@@ -72,7 +72,7 @@ export function DraftPublishButton(props: Props) {
       <DialogContent className="sm:max-w-screen-sm">
         <DialogHeader>
           <DialogTitle className="text-center text-lg font-medium">
-            {action} &quot;{draft.title}&quot; {draft.isFlow ? "Category" : "Grant"}
+            {action} &quot;{draft.title}&quot; {draft.isFlow ? "Flow" : "Grant"}
           </DialogTitle>
         </DialogHeader>
         <ul className="my-4 space-y-6">
@@ -105,7 +105,8 @@ export function DraftPublishButton(props: Props) {
                 be returned.
               </p>
               <p className="mt-2.5 text-sm text-muted-foreground">
-                Your {token.symbol} balance: {formatEther(token.balance)}
+                Your ${token.symbol} balance: {formatEther(token.balance)} (
+                {formatEther(token.allowance)} approved)
               </p>
             </div>
           </li>
@@ -164,7 +165,7 @@ export function DraftPublishButton(props: Props) {
                             title: draft.title,
                             description: draft.description,
                             image: draft.image,
-                            tagline: "",
+                            tagline: draft.tagline || "",
                             url: "",
                           },
                           draft.isFlow ? RecipientType.FlowContract : RecipientType.ExternalAccount,

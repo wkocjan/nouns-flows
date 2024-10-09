@@ -55,12 +55,22 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
     ),
   )
 
+  const hasActiveSubgrants = activeSubgrants.length > 0
+
   return (
     <Popover>
       <PopoverTrigger>
-        <Badge className="h-[26px] rounded-full text-xs" variant="success">
-          ${formatEther(totalRewardsBalance)}
-        </Badge>
+        <div className="relative flex items-center">
+          <Badge
+            className="flex h-[26px] flex-row items-center space-x-1.5 rounded-full text-xs"
+            variant="success"
+          >
+            <span>${formatEther(totalRewardsBalance)}</span>
+            {hasActiveSubgrants && (
+              <div className="size-2 animate-pulse rounded-full bg-white/20 dark:bg-black/20"></div>
+            )}
+          </Badge>
+        </div>
       </PopoverTrigger>
       <PopoverContent className="w-full max-w-[100vw] md:mr-8 md:w-[480px]">
         <PopoverClose ref={closeRef} className="hidden" />
@@ -74,11 +84,12 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
             >
               curate
             </Link>{" "}
-            {tokens.length} flows with {formatEther(totalBalance || BigInt(0))} tokens.
+            {tokens.length} {`flow${tokens.length > 1 ? "s" : ""}`} with{" "}
+            {formatEther(totalBalance || BigInt(0))} tokens.
           </p>
           <SwapTokenButton size="xs" flow={flow} />
         </div>
-        <div className="mt-6">
+        <div className="mt-8">
           <div className="mb-2 grid grid-cols-5 gap-2 text-xs font-medium text-muted-foreground">
             <div className="col-start-3 text-center">Balance</div>
             <div className="text-center max-sm:break-all">Grants</div>
@@ -98,7 +109,7 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
           ))}
         </div>
 
-        <div className="flex flex-col space-y-5 border-t border-border pt-7">
+        <div className="flex flex-col space-y-5 border-t border-border pt-8">
           <p className="text-sm text-muted-foreground">
             Curate incoming grants to continue earning rewards.
           </p>

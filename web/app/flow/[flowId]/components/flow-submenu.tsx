@@ -80,7 +80,7 @@ export const FlowSubmenu = (props: Props) => {
           {isApproved && <VotingToggle />}
           {(isDrafts || isApplications) && (
             <Link href={`/apply/${flowId}`}>
-              <Button>{isTopLevel ? "Suggest category" : "Apply for a grant"}</Button>
+              <Button>{isTopLevel ? "Suggest flow" : "Apply for a grant"}</Button>
             </Link>
           )}
         </div>

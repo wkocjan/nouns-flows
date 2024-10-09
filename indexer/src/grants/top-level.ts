@@ -23,7 +23,13 @@ ponder.on("NounsFlow:FlowInitialized", async (params) => {
     functionName: "flowMetadata",
   })
 
-  const [baselinePool, bonusPool, managerRewardSuperfluidPool] = await Promise.all([
+  const [
+    baselinePool,
+    bonusPool,
+    managerRewardSuperfluidPool,
+    managerRewardPoolFlowRatePercent,
+    baselinePoolFlowRatePercent,
+  ] = await Promise.all([
     context.client.readContract({
       address: contract,
       abi: context.contracts.NounsFlow.abi,
@@ -38,6 +44,16 @@ ponder.on("NounsFlow:FlowInitialized", async (params) => {
       address: managerRewardPool,
       abi: rewardPoolImplAbi,
       functionName: "rewardPool",
+    }),
+    context.client.readContract({
+      address: contract,
+      abi: context.contracts.NounsFlow.abi,
+      functionName: "managerRewardPoolFlowRatePercent",
+    }),
+    context.client.readContract({
+      address: contract,
+      abi: context.contracts.NounsFlow.abi,
+      functionName: "baselinePoolFlowRatePercent",
     }),
   ])
 
@@ -66,6 +82,8 @@ ponder.on("NounsFlow:FlowInitialized", async (params) => {
       erc20: erc20VotesMintableAddress[8453].toLowerCase(),
       arbitrator: erc20VotesArbitratorAddress[8453].toLowerCase(),
       tokenEmitter: tokenEmitterAddress[8453].toLowerCase(),
+      managerRewardPoolFlowRatePercent,
+      baselinePoolFlowRatePercent,
       challengePeriodEndsAt: 0,
       status: Status.Registered,
       flowId: "",

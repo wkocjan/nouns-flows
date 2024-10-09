@@ -15,11 +15,22 @@ import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import { DraftPublishButton } from "./draft-publish-button"
 import { DateTime } from "@/components/ui/date-time"
+import { Metadata } from "next"
 
 interface Props {
   params: {
     draftId: string
   }
+}
+
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const { draftId } = props.params
+
+  const draft = await database.draft.findFirstOrThrow({
+    where: { id: Number(draftId) },
+  })
+
+  return { title: draft.title, description: draft.tagline }
 }
 
 export default async function DraftPage({ params }: Props) {
@@ -112,7 +123,7 @@ export default async function DraftPage({ params }: Props) {
 
                 <div>
                   <h4 className="mb-1 text-[13px] text-muted-foreground">Type</h4>
-                  <p>{isFlow ? "Category" : "Grant"}</p>
+                  <p>{isFlow ? "Flow" : "Grant"}</p>
                 </div>
 
                 <div>

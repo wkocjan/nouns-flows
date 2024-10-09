@@ -103,7 +103,7 @@ export function DisputeUserVote(props: Props) {
           }}
         >
           <ThickArrowUpIcon className="mr-2 size-4" />
-          Approve {grant.isFlow ? "category" : "grant"}
+          Approve {grant.isFlow ? "flow" : "grant"}
         </Button>
 
         <Button
@@ -128,13 +128,18 @@ export function DisputeUserVote(props: Props) {
             }
           }}
         >
-          Reject {grant.isFlow ? "category" : "grant"}
+          Reject {grant.isFlow ? "flow" : "grant"}
           <ThickArrowDownIcon className="ml-2 size-4" />
         </Button>
       </div>
       {!isVotingOpen && (
         <div className="mt-3 text-center text-xs text-muted-foreground">
           Voting is not open yet.
+        </div>
+      )}
+      {!canVoteOnchain && (
+        <div className="mt-3 text-center text-xs text-muted-foreground">
+          You don&apos;t have enough voting power to vote.
         </div>
       )}
       {canVoteOnchain && canVote && (
@@ -161,7 +166,7 @@ const RevealedVote = ({ disputeVote, grant }: { disputeVote: DisputeVote; grant:
       <b className={`capitalize ${disputeVote.choice === 1 ? "text-green-500" : "text-red-500"}`}>
         {disputeVote.choice === 1 ? "for" : "against"}
       </b>{" "}
-      this {grant.isFlow ? "category" : "grant"} with {disputeVote.votes} votes.
+      this {grant.isFlow ? "flow" : "grant"} with {disputeVote.votes} votes.
     </p>
   </div>
 )
