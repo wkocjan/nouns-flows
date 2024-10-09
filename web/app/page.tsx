@@ -120,7 +120,12 @@ export default async function Home() {
                     </TableCell>
                     <TableCell className="text-center">
                       <Badge>
-                        <Currency>{flow.monthlyFlowRate}</Currency>
+                        <Currency>
+                          {/* If flow is paying grants, show payment amount. If no grants, flow hasn't been spent, and should show incoming flow rate. */}
+                          {flow.subgrants.length > 0
+                            ? flow.monthlyOutgoingFlowRate
+                            : flow.monthlyIncomingFlowRate}
+                        </Currency>
                         /mo
                       </Badge>
                     </TableCell>
