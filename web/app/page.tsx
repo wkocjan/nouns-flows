@@ -54,8 +54,8 @@ export default async function Home() {
               <TableHeader>
                 <TableRow>
                   <TableHead colSpan={2}>Name</TableHead>
-                  <TableHead className="text-center"># Grants</TableHead>
-                  <TableHead className="text-center">Total Earned</TableHead>
+                  <TableHead className="text-center">Grants</TableHead>
+                  <TableHead className="text-center">Paid out</TableHead>
                   <TableHead className="text-center">Budget</TableHead>
                   <TableHead className="text-center">Total Votes</TableHead>
                   <TableHead className="text-center">Your Vote</TableHead>
