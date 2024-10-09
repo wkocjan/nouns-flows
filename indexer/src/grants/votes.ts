@@ -29,7 +29,7 @@ async function handleVoteCast(params: {
       },
       data: { isStale: true },
     })
-  ).forEach((r) => affectedGrantsIds.add(r.id))
+  ).forEach((vote) => affectedGrantsIds.add(vote.recipientId))
 
   // Create the new vote
   await context.db.Vote.create({
