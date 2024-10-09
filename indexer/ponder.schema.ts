@@ -37,6 +37,8 @@ export default createSchema((p) => ({
       managerRewardSuperfluidPool: p.string(),
       superToken: p.string(),
       updatedAt: p.int(),
+      managerRewardPoolFlowRatePercent: p.int(),
+      baselinePoolFlowRatePercent: p.int(),
     },
     {
       isTopLevelIndex: p.index("isTopLevel"),

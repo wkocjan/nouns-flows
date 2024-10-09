@@ -66,6 +66,8 @@ async function handleItemSubmitted(params: {
       superToken: "",
       managerRewardPool: "",
       managerRewardSuperfluidPool: "",
+      managerRewardPoolFlowRatePercent: 0,
+      baselinePoolFlowRatePercent: 0,
       baselinePool: "",
       bonusPool: "",
       status: Status.RegistrationRequested,

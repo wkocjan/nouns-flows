@@ -17,6 +17,7 @@ import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import { FlowHeaderUserVotes } from "./flow-header-user-votes"
 import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 interface Props {
   flow: FlowWithGrants
@@ -70,10 +71,19 @@ export const FlowHeader = (props: Props) => {
           </div>
           <div className="md:text-center">
             <p className="mb-1.5 text-muted-foreground">Budget</p>
-            <Badge>
-              <Currency>{flow.monthlyFlowRate}</Currency>
-              /mo
-            </Badge>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Badge className="cursor-help">
+                  <Currency>{flow.monthlyFlowRate}</Currency>
+                  /mo
+                </Badge>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto">
+                <p className="text-sm">
+                  {flow.managerRewardPoolFlowRatePercent / 1e4}% of monthly flow goes to curators
+                </p>
+              </PopoverContent>
+            </Popover>
           </div>
           <div className="md:text-center">
             <p className="mb-1.5 text-muted-foreground">Total Votes</p>

@@ -102,6 +102,8 @@ view Grant {
   managerRewardPool     String
   superToken                  String
   managerRewardSuperfluidPool String
+  managerRewardPoolFlowRatePercent Int
+  baselinePoolFlowRatePercent Int
 
   flow         Grant         @relation("Subgrants", fields: [flowId], references: [id])
   subgrants    Grant[]       @relation("Subgrants")
