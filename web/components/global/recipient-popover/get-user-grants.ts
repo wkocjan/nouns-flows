@@ -19,7 +19,7 @@ export const getUserGrants = unstable_cache(
         title: true,
         image: true,
         claimableBalance: true,
-        monthlyFlowRate: true,
+        monthlyIncomingFlowRate: true,
         totalEarned: true,
         baselinePool: true,
         parentContract: true,

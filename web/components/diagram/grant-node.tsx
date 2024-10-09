@@ -11,7 +11,7 @@ import { memo } from "react"
 
 function GrantNode(props: NodeProps<Node<{ grant: Grant }, "grant">>) {
   const { targetPosition = Position.Left, data, width, height } = props
-  const { image, title, monthlyFlowRate, id } = data.grant
+  const { image, title, monthlyIncomingFlowRate, id } = data.grant
 
   return (
     <div
@@ -34,7 +34,7 @@ function GrantNode(props: NodeProps<Node<{ grant: Grant }, "grant">>) {
 
         <div className="mt-2 flex items-center space-x-1">
           <Badge>
-            <Currency>{monthlyFlowRate}</Currency>
+            <Currency>{monthlyIncomingFlowRate}</Currency>
             /mo
           </Badge>
         </div>

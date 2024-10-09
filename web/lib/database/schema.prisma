@@ -84,7 +84,8 @@ view Grant {
   isRemoved                        Int
   isActive                         Int
   votesCount                       String
-  monthlyFlowRate                  String
+  monthlyIncomingFlowRate          String
+  monthlyOutgoingFlowRate          String
   totalEarned                      String
   claimableBalance                 String
   tcr                              String  @unique

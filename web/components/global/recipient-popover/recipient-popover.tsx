@@ -24,7 +24,8 @@ export const RecipientPopover = () => {
   if (!isVisible) return null
 
   const totalClaimable = grants.reduce((acc, grant) => acc + Number(grant.claimableBalance), 0)
-  const yearlyEarnings = 12 * grants.reduce((acc, grant) => acc + Number(grant.monthlyFlowRate), 0)
+  const yearlyEarnings =
+    12 * grants.reduce((acc, grant) => acc + Number(grant.monthlyIncomingFlowRate), 0)
 
   return (
     <Popover>

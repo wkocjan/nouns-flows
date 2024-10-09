@@ -98,7 +98,7 @@ export default async function FlowPage(props: Props) {
 
               <TableCell className="text-center">
                 <Badge>
-                  <Currency>{grant.monthlyFlowRate}</Currency>
+                  <Currency>{grant.monthlyIncomingFlowRate}</Currency>
                   /mo
                 </Badge>
               </TableCell>

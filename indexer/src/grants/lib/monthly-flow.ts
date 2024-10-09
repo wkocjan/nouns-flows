@@ -1,17 +1,26 @@
 import { Context } from "@/generated"
 import { formatEther, getAddress } from "viem"
 
-export async function getMonthlyFlowRate(
+export async function getMonthlyIncomingFlowRate(
   context: Context,
-  contract: string,
-  recipient: string,
-  isTopLevel: boolean
+  parentContract: string,
+  recipient: string
 ) {
+  const flowRate = await context.client.readContract({
+    address: getAddress(parentContract),
+    abi: context.contracts.NounsFlow.abi,
+    functionName: "getMemberTotalFlowRate",
+    args: [getAddress(recipient)],
+  })
+
+  return formatEther(flowRate * BigInt(60 * 60 * 24 * 30))
+}
+
+export async function getMonthlyOutgoingFlowRate(context: Context, contract: string) {
   const flowRate = await context.client.readContract({
     address: getAddress(contract),
     abi: context.contracts.NounsFlow.abi,
-    functionName: isTopLevel ? "getTotalFlowRate" : "getMemberTotalFlowRate",
-    args: isTopLevel ? undefined : [getAddress(recipient)],
+    functionName: "getTotalFlowRate",
   })
 
   return formatEther(flowRate * BigInt(60 * 60 * 24 * 30))
