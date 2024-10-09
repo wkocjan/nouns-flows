@@ -1,17 +1,18 @@
 "use client"
 
-import { WithdrawButton } from "@/components/global/withdraw-button"
 import { useEffect, useState } from "react"
 import { useAccount } from "wagmi"
+import { WithdrawSalaryButton } from "../../../../components/global/withdraw-salary-button"
 
 interface Props {
   recipient: string
   superToken: `0x${string}`
   pool: `0x${string}`
+  flow: `0x${string}`
 }
 
 export const ClaimableBalance = (props: Props) => {
-  const { recipient, superToken, pool } = props
+  const { recipient, superToken, pool, flow } = props
   const [isVisible, setIsVisible] = useState(false)
   const { address } = useAccount()
 
@@ -24,7 +25,7 @@ export const ClaimableBalance = (props: Props) => {
   return (
     <div>
       <h4 className="text-[13px] tracking-tight text-muted-foreground">Claimable</h4>
-      <WithdrawButton size="sm" superToken={superToken} pool={pool} />
+      <WithdrawSalaryButton flow={flow} size="sm" superToken={superToken} pool={pool} />
     </div>
   )
 }

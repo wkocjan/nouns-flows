@@ -1,21 +1,25 @@
-import { rewardPoolAbi, rewardPoolImplAbi } from "@/lib/abis"
 import { useAccount, useReadContract } from "wagmi"
 import { base } from "viem/chains"
+import { nounsFlowImplAbi } from "@/lib/abis"
 
-export const useClaimablePoolBalance = (pool: `0x${string}`) => {
+export const useClaimableFlowsBalance = (contract: `0x${string}`) => {
   const { address } = useAccount()
   const chainId = base.id
 
+  console.log({ contract })
+
   const { data: balance, isLoading } = useReadContract({
-    address: pool,
-    abi: rewardPoolImplAbi,
+    address: contract,
+    abi: nounsFlowImplAbi,
     chainId,
-    functionName: "getClaimableBalanceNow",
+    functionName: "getClaimableBalance",
     args: address ? [address] : undefined,
   })
 
+  console.log({ balance })
+
   return {
-    balance,
+    balance: balance || BigInt(0),
     isLoading,
   }
 }

@@ -8,8 +8,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { useAccount } from "wagmi"
-import { WithdrawButton } from "../withdraw-button"
 import { useUserGrants } from "./use-user-grants"
+import { WithdrawSalaryButton } from "../withdraw-salary-button"
 
 export const RecipientPopover = () => {
   const [isVisible, setIsVisible] = useState(false)
@@ -70,7 +70,8 @@ export const RecipientPopover = () => {
                   {grant.totalEarned}
                 </Currency>
                 <div className="flex items-center justify-center">
-                  <WithdrawButton
+                  <WithdrawSalaryButton
+                    flow={getEthAddress(grant.parentContract)}
                     superToken={getEthAddress(grant.flow.superToken)}
                     pool={getEthAddress(grant.flow.baselinePool)}
                   />

@@ -5,7 +5,7 @@ import { Grant } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
 import { formatEther } from "viem"
-import { WithdrawButton } from "../withdraw-button"
+import { WithdrawCuratorSalaryButton } from "../withdraw-curator-salary-button"
 
 interface TokenRowProps {
   flow: Pick<Grant, "id" | "title" | "image" | "superToken" | "managerRewardSuperfluidPool">
@@ -43,7 +43,7 @@ export function TokenRow(props: TokenRowProps) {
         awaitingCount={awaitingCount}
       />
       <div className="text-center text-sm font-medium">
-        <WithdrawButton
+        <WithdrawCuratorSalaryButton
           superToken={getEthAddress(flow.superToken)}
           pool={getEthAddress(flow.managerRewardSuperfluidPool)}
         />

@@ -6,7 +6,7 @@ import { Currency } from "@/components/ui/currency"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 
-export const WithdrawButton = ({
+export const WithdrawCuratorSalaryButton = ({
   superToken,
   pool,
   size = "xs",
@@ -15,8 +15,10 @@ export const WithdrawButton = ({
   pool: `0x${string}`
   size?: ButtonProps["size"]
 }) => {
-  const { withdraw, poolBalance } = useWithdrawSuperToken(superToken, pool)
+  const { withdraw } = useWithdrawSuperToken(superToken, pool)
   const { connect, isConnected } = useConnectSuperfluidDistributionPool(pool)
+
+  const poolBalance = BigInt(0)
 
   return (
     <Tooltip>
