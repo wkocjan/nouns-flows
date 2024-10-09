@@ -17,8 +17,6 @@ export const useWithdrawSuperToken = (superToken: `0x${string}`, pool: `0x${stri
     args: address ? [address] : undefined,
   })
 
-  const { balance: poolBalance } = useClaimablePoolBalance(pool)
-
   const { prepareWallet, writeContract, isLoading, toastId } = useContractTransaction({
     chainId,
     success: "Earnings withdrawn successfully!",
@@ -52,7 +50,6 @@ export const useWithdrawSuperToken = (superToken: `0x${string}`, pool: `0x${stri
   return {
     withdraw,
     totalBalance: balance,
-    poolBalance: poolBalance || BigInt(0),
     isLoading,
   }
 }
