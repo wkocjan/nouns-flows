@@ -66,7 +66,7 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
             variant="success"
           >
             <span>${formatEther(totalRewardsBalance)}</span>
-            {!hasActiveSubgrants && (
+            {hasActiveSubgrants && (
               <div className="size-2 animate-pulse rounded-full bg-white/20 dark:bg-black/20"></div>
             )}
           </Badge>
