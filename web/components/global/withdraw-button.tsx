@@ -4,6 +4,7 @@ import { useWithdrawSuperToken } from "./hooks/use-withdraw-super-token"
 import { useConnectSuperfluidDistributionPool } from "./hooks/use-connect-superfluid-distribution-pool"
 import { Currency } from "@/components/ui/currency"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { cn } from "@/lib/utils"
 
 export const WithdrawButton = ({
   superToken,
@@ -21,6 +22,9 @@ export const WithdrawButton = ({
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
+          className={cn({
+            "text-green-500": Number(poolBalance) > 0,
+          })}
           size={size}
           onClick={() => {
             if (!isConnected) {

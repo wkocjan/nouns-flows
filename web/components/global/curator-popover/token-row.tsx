@@ -42,7 +42,7 @@ export function TokenRow(props: TokenRowProps) {
         challengedCount={challengedCount}
         awaitingCount={awaitingCount}
       />
-      <div className="text-center text-sm font-medium text-green-500">
+      <div className="text-center text-sm font-medium">
         <WithdrawButton
           superToken={getEthAddress(flow.superToken)}
           pool={getEthAddress(flow.managerRewardSuperfluidPool)}

@@ -95,7 +95,7 @@ export function ActiveCuratorGrantRow({
         {Boolean(isResolved) && disputes?.[0] && (
           <div
             className={cn("text-xs text-muted-foreground", {
-              "text-green-500": disputes[0].votes?.length > 0,
+              "text-green-500": disputes[0].votes?.length > 0 && Number(voterRewardsBalance) > 0,
               "text-yellow-500": !disputes[0].votes?.length,
             })}
           >
