@@ -1,4 +1,4 @@
-import { rewardPoolAbi } from "@/lib/abis"
+import { rewardPoolAbi, rewardPoolImplAbi } from "@/lib/abis"
 import { useAccount, useReadContract } from "wagmi"
 import { base } from "viem/chains"
 
@@ -8,10 +8,10 @@ export const useClaimablePoolBalance = (pool: `0x${string}`) => {
 
   const { data: balance, isLoading } = useReadContract({
     address: pool,
-    abi: rewardPoolAbi,
+    abi: rewardPoolImplAbi,
     chainId,
     functionName: "getClaimableBalanceNow",
-    args: address ? [pool, address] : undefined,
+    args: address ? [address] : undefined,
   })
 
   return {

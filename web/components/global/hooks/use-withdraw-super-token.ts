@@ -3,10 +3,11 @@ import { superTokenAbi } from "@/lib/abis"
 import { useAccount, useReadContract } from "wagmi"
 import { base } from "viem/chains"
 import { toast } from "sonner"
-import { useClaimablePoolBalance } from "./use-claimable-pool-balance"
+import { useRouter } from "next/navigation"
 
 export const useWithdrawSuperToken = (superToken: `0x${string}`, pool: `0x${string}`) => {
   const { address } = useAccount()
+  const router = useRouter()
   const chainId = base.id
 
   const { data: balance } = useReadContract({
@@ -19,10 +20,10 @@ export const useWithdrawSuperToken = (superToken: `0x${string}`, pool: `0x${stri
 
   const { prepareWallet, writeContract, isLoading, toastId } = useContractTransaction({
     chainId,
-    success: "Earnings withdrawn successfully!",
+    success: "Earnings withdrawn!",
     onSuccess: (hash) => {
       // Handle successful withdrawal here if needed
-      console.log("Withdrawal transaction hash:", hash)
+      router.refresh()
     },
   })
 

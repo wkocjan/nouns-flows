@@ -22,6 +22,7 @@ export const getUserGrants = unstable_cache(
         monthlyIncomingFlowRate: true,
         totalEarned: true,
         baselinePool: true,
+        bonusPool: true,
         parentContract: true,
       },
       orderBy: {

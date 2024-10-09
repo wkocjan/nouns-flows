@@ -1,6 +1,6 @@
 import { useAccount, useReadContract } from "wagmi"
 import { base } from "viem/chains"
-import { nounsFlowAbi } from "@/lib/abis"
+import { nounsFlowImplAbi } from "@/lib/abis"
 
 export const useClaimableFlowsBalance = (contract: `0x${string}`) => {
   const { address } = useAccount()
@@ -10,7 +10,7 @@ export const useClaimableFlowsBalance = (contract: `0x${string}`) => {
 
   const { data: balance, isLoading } = useReadContract({
     address: contract,
-    abi: nounsFlowAbi,
+    abi: nounsFlowImplAbi,
     chainId,
     functionName: "getClaimableBalance",
     args: address ? [address] : undefined,
