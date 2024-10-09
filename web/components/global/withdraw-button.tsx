@@ -22,9 +22,7 @@ export const WithdrawButton = ({
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className={cn({
-            "text-green-500": Number(poolBalance) > 0,
-          })}
+          className={cn({ "text-green-500": Number(poolBalance) > 0 })}
           size={size}
           onClick={() => {
             if (!isConnected) {
@@ -40,9 +38,9 @@ export const WithdrawButton = ({
           <DownloadIcon className="ml-1 size-3.5" />
         </Button>
       </TooltipTrigger>
-      {!isConnected && <TooltipContent>Click to connect to the rewards pool.</TooltipContent>}
+      {!isConnected && <TooltipContent>Connect to the rewards pool</TooltipContent>}
       {isConnected && poolBalance === BigInt(0) && (
-        <TooltipContent>No rewards to withdraw.</TooltipContent>
+        <TooltipContent>No rewards to withdraw</TooltipContent>
       )}
     </Tooltip>
   )

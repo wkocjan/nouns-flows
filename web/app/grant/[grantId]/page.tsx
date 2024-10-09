@@ -14,11 +14,12 @@ import { Markdown } from "@/components/ui/markdown"
 import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
+import { Metadata } from "next"
 import Image from "next/image"
 import { ClaimableBalance } from "./components/claimable-balance"
+import { Updates } from "./components/updates"
 import { UserVotes } from "./components/user-votes"
 import { Voters } from "./components/voters"
-import { Metadata } from "next"
 
 interface Props {
   params: {
@@ -31,6 +32,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
   const grant = await database.grant.findFirstOrThrow({
     where: { id: grantId },
+    select: { title: true, tagline: true },
   })
 
   return { title: grant.title, description: grant.tagline }
@@ -41,7 +43,14 @@ export default async function GrantPage({ params }: Props) {
 
   const grant = await database.grant.findUniqueOrThrow({
     where: { id: grantId, isActive: 1 },
-    include: { flow: true },
+    include: {
+      flow: true,
+      updates: {
+        include: { user: true },
+        orderBy: { createdAt: "desc" },
+        take: 45,
+      },
+    },
   })
 
   const { title, tagline, description, flow, image, votesCount, parentContract } = grant
@@ -147,6 +156,10 @@ export default async function GrantPage({ params }: Props) {
             <Voters contract={getEthAddress(parentContract)} recipientId={grant.id} />
           )}
         </div>
+      </div>
+
+      <div className="mt-12 border-t border-border pt-6">
+        <Updates casts={grant.updates} recipient={grant.recipient} />
       </div>
     </div>
   )

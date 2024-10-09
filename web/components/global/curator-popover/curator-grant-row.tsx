@@ -32,7 +32,7 @@ export function ActiveCuratorGrantRow({
   )
 
   return (
-    <div className="grid grid-cols-4 items-center border-t border-border py-2.5">
+    <div className="grid grid-cols-4 items-center py-2.5">
       <div className="col-span-2 flex items-center space-x-2 overflow-hidden text-ellipsis">
         <Image
           src={getIpfsUrl(image)}

@@ -9,9 +9,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Grant } from "@prisma/client"
+import Link from "next/link"
 import { useRef } from "react"
 import { SwapTokenBox } from "./swap-token-box"
-import Link from "next/link"
 
 interface Props {
   flow: Grant
@@ -31,6 +31,7 @@ export function SwapTokenButton(props: Props) {
     text = "Swap",
     variant = "default",
     extraInfo,
+    onSuccess = () => {},
   } = props
   const ref = useRef<HTMLButtonElement>(null)
 
@@ -57,7 +58,10 @@ export function SwapTokenButton(props: Props) {
                 {extraInfo === "curator" && (
                   <p>
                     Buy TCR tokens to{" "}
-                    <Link href="/curate" className="underline">
+                    <Link
+                      href="/curate"
+                      className="text-primary underline transition-colors hover:text-primary/80"
+                    >
                       become a curator
                     </Link>{" "}
                     and earn a stream of USDC for verifying impact of grantees.
@@ -89,7 +93,7 @@ export function SwapTokenButton(props: Props) {
                 href="https://github.com/rocketman-21/flow-contracts/blob/main/src/token-issuance/BondingSCurve.sol"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline"
+                className="text-primary underline transition-colors hover:text-primary/80"
               >
                 bonding curve
               </a>
@@ -98,7 +102,7 @@ export function SwapTokenButton(props: Props) {
                 href="https://www.desmos.com/calculator/tnhqeskyi3"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline"
+                className="text-primary underline transition-colors hover:text-primary/80"
               >
                 here
               </a>
@@ -106,11 +110,7 @@ export function SwapTokenButton(props: Props) {
             </p>
           </li>
         </ul>
-        <SwapTokenBox
-          onSuccess={props.onSuccess || (() => {})}
-          flow={flow}
-          defaultTokenAmount={defaultTokenAmount}
-        />
+        <SwapTokenBox onSuccess={onSuccess} flow={flow} defaultTokenAmount={defaultTokenAmount} />
       </DialogContent>
     </Dialog>
   )
