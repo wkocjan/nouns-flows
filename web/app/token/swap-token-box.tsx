@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button"
 import { getEthAddress } from "@/lib/utils"
 import { Grant } from "@prisma/client"
 import { useState } from "react"
+import { Address } from "viem"
 import { BuyTokenBox } from "./buy-token-box"
 import { SellTokenBox } from "./sell-token-box"
-import { Address } from "viem"
 
 interface Props {
   flow: Grant
@@ -23,9 +23,7 @@ export function SwapTokenBox(props: Props) {
   const [token, setToken] = useState(flow.erc20 as Address)
   const [tokenEmitter, setTokenEmitter] = useState(flow.tokenEmitter as Address)
 
-  const parentFlowContract = flow.isTopLevel
-    ? getEthAddress(flow.recipient)
-    : getEthAddress(flow.parentContract)
+  const parentFlowContract = getEthAddress(flow.isTopLevel ? flow.recipient : flow.parentContract)
 
   return (
     <div className="flex flex-col space-y-3">

@@ -32,5 +32,5 @@ export const getUserGrants = unstable_cache(
     return grants
   },
   ["user-grants"],
-  { revalidate: 120 }, // 2 minutes
+  { revalidate: 60 }, // 1 minute
 )

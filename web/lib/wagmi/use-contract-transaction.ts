@@ -40,6 +40,7 @@ export const useContractTransaction = (args?: {
 
     if (isLoading && hash) {
       toast.loading(loading, {
+        description: "",
         action: {
           label: "View",
           onClick: () => window.open(explorerUrl(hash, chainId)),

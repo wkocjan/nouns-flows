@@ -40,6 +40,7 @@ model Cast {
   channelId String
   text      String
   images    String[]
+  videos    String[]
   createdAt DateTime
   grantId   String?
 
@@ -68,42 +69,42 @@ model FarcasterUser {
 }
 
 view Grant {
-  id                    String  @id
-  recipient             String
-  flowId                String
-  submitter             String
-  parentContract        String
-  isTopLevel            Int
-  isFlow                Int
-  title                 String
-  description           String
-  image                 String
-  tagline               String?
-  url                   String?
-  isRemoved             Int
-  isActive              Int
-  votesCount            String
-  monthlyFlowRate       String
-  totalEarned           String
-  claimableBalance      String
-  tcr                   String  @unique
-  erc20                 String  @unique
-  arbitrator            String  @unique
-  tokenEmitter          String  @unique
-  status                Int
-  challengePeriodEndsAt Int
-  isDisputed            Int
-  isResolved            Int
-  evidenceGroupID       String
-  createdAt             Int
-  updatedAt             Int 
-  baselinePool          String
-  bonusPool             String
-  managerRewardPool     String
-  superToken                  String
-  managerRewardSuperfluidPool String
+  id                               String  @id
+  recipient                        String
+  flowId                           String
+  submitter                        String
+  parentContract                   String
+  isTopLevel                       Int
+  isFlow                           Int
+  title                            String
+  description                      String
+  image                            String
+  tagline                          String?
+  url                              String?
+  isRemoved                        Int
+  isActive                         Int
+  votesCount                       String
+  monthlyFlowRate                  String
+  totalEarned                      String
+  claimableBalance                 String
+  tcr                              String  @unique
+  erc20                            String  @unique
+  arbitrator                       String  @unique
+  tokenEmitter                     String  @unique
+  status                           Int
+  challengePeriodEndsAt            Int
+  isDisputed                       Int
+  isResolved                       Int
+  evidenceGroupID                  String
+  createdAt                        Int
+  updatedAt                        Int
+  baselinePool                     String
+  bonusPool                        String
+  managerRewardPool                String
+  superToken                       String
+  managerRewardSuperfluidPool      String
   managerRewardPoolFlowRatePercent Int
-  baselinePoolFlowRatePercent Int
+  baselinePoolFlowRatePercent      Int
 
   flow         Grant         @relation("Subgrants", fields: [flowId], references: [id])
   subgrants    Grant[]       @relation("Subgrants")
@@ -161,17 +162,17 @@ view Dispute {
 }
 
 view DisputeVote {
-  id         String  @id
-  arbitrator String
-  disputeId  String
-  commitHash String
-  voter      String
-  choice     Int?
-  votes      String?
-  reason     String?
+  id          String  @id
+  arbitrator  String
+  disputeId   String
+  commitHash  String
+  voter       String
+  choice      Int?
+  votes       String?
+  reason      String?
   committedAt Int
-  revealedBy String?
-  revealedAt Int?
+  revealedBy  String?
+  revealedAt  Int?
 
   @@unique([disputeId, arbitrator, voter])
   @@schema("public")

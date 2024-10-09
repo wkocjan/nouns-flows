@@ -1,7 +1,7 @@
 "use client"
 
-import { ActiveCuratorGrant } from "./hooks/get-user-tcr-tokens"
 import { ActiveCuratorGrantRow } from "./curator-grant-row"
+import { ActiveCuratorGrant } from "./hooks/get-user-tcr-tokens"
 
 interface ActiveCuratorGrantsProps {
   grants: ActiveCuratorGrant[]
@@ -9,9 +9,7 @@ interface ActiveCuratorGrantsProps {
 }
 
 export function CuratorGrants(props: ActiveCuratorGrantsProps) {
-  const { grants: rawGrants, closePopover } = props
-
-  const grants = rawGrants.sort((a, b) => b.challengePeriodEndsAt - a.challengePeriodEndsAt)
+  const { grants, closePopover } = props
 
   if (grants.length === 0) {
     return (
@@ -22,10 +20,12 @@ export function CuratorGrants(props: ActiveCuratorGrantsProps) {
   }
 
   return (
-    <div className="flex flex-col">
-      {grants.map((grant) => (
-        <ActiveCuratorGrantRow closePopover={closePopover} key={grant.title} grant={grant} />
-      ))}
+    <div className="flex flex-col divide-y divide-border">
+      {grants
+        .sort((a, b) => b.challengePeriodEndsAt - a.challengePeriodEndsAt)
+        .map((grant) => (
+          <ActiveCuratorGrantRow closePopover={closePopover} key={grant.title} grant={grant} />
+        ))}
     </div>
   )
 }
