@@ -8,13 +8,13 @@ import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { useAccount } from "wagmi"
-import { useUserGrants } from "./use-user-grants"
 import { WithdrawSalaryButton } from "../withdraw-salary-button"
+import { useUserGrants } from "./use-user-grants"
 
 export const RecipientPopover = () => {
   const [isVisible, setIsVisible] = useState(false)
   const { address } = useAccount()
-  const { grants } = useUserGrants(address)
+  const { grants, claimableBalance, earnings } = useUserGrants(address)
   const closeRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -23,22 +23,18 @@ export const RecipientPopover = () => {
 
   if (!isVisible) return null
 
-  const totalClaimable = grants.reduce((acc, grant) => acc + Number(grant.claimableBalance), 0)
-  const yearlyEarnings =
-    12 * grants.reduce((acc, grant) => acc + Number(grant.monthlyIncomingFlowRate), 0)
-
   return (
     <Popover>
       <PopoverTrigger>
         <Badge className="h-[26px] rounded-full text-xs">
-          <Currency>{totalClaimable}</Currency>
+          <Currency>{claimableBalance}</Currency>
         </Badge>
       </PopoverTrigger>
       <PopoverContent className="w-full max-w-[100vw] md:mr-8 md:w-[480px]">
         <PopoverClose ref={closeRef} className="hidden" />
         <div>
           <p className="text-sm text-muted-foreground">
-            You&apos;re earning <Currency>{yearlyEarnings}</Currency> per year.
+            You&apos;re earning <Currency>{earnings.yearly}</Currency> per year.
           </p>
           <div className="mt-4">
             <div className="mb-2 grid grid-cols-4 gap-2 text-xs font-medium text-muted-foreground">
