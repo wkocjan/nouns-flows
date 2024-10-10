@@ -22,3 +22,7 @@
 
 .bn-container[data-markdown-editor][data-color-scheme="dark"] {
 }
+
+.bn-container[data-markdown-editor] > .bn-editor {
+  padding-inline: 8px;
+}

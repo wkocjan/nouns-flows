@@ -39,6 +39,7 @@ export default function MarkdownEditor(props: Props) {
         onUpdate && editor.blocksToMarkdownLossy(editor.document).then(onUpdate)
       }}
       data-markdown-editor
+      sideMenu={false}
     />
   )
 }
