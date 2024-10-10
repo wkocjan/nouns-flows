@@ -3,15 +3,27 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Currency } from "@/components/ui/currency"
 import database from "@/lib/database"
-import { getIpfsUrl } from "@/lib/utils"
+import { cn, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import Noggles from "@/public/noggles.svg"
+import { getPool } from "@/lib/database/queries/pool"
+import { Metadata } from "next"
+
+export async function generateMetadata(): Promise<Metadata> {
+  const pool = await getPool()
+
+  return {
+    title: `Apply for a grant - ${pool.title}`,
+    description: `Start grant application in ${pool.title} by selecting a flow.`,
+  }
+}
 
 export default async function ApplyPage() {
   const flows = await database.grant.findMany({
-    where: { isFlow: 1, isActive: 1, isTopLevel: 0 },
+    where: { isFlow: 1, isActive: 1 },
+    orderBy: [{ isTopLevel: "asc" }, { title: "asc" }],
   })
 
   return (
@@ -46,22 +58,29 @@ export default async function ApplyPage() {
                     <CardContent className="p-4">
                       <div className="flex flex-col items-center">
                         <Image
-                          src={getIpfsUrl(flow.image)}
+                          src={flow.isTopLevel ? Noggles : getIpfsUrl(flow.image)}
                           alt={flow.title}
                           width={64}
                           height={64}
-                          className="mb-4 size-10 rounded-full object-cover lg:size-16"
+                          className={cn(
+                            "mb-4 size-10 rounded-full lg:size-16",
+                            flow.isTopLevel ? "object-fit" : "object-cover",
+                          )}
                         />
                         <h3 className="text-center text-base font-medium transition-colors group-hover:text-primary lg:text-lg">
-                          {flow.title}
+                          {flow.isTopLevel ? "Create a flow" : flow.title}
                         </h3>
                         <p className="mb-2 text-center text-sm text-muted-foreground">
-                          {flow.tagline}
+                          {flow.isTopLevel
+                            ? "Create a new outcome funding pool for Nouns."
+                            : flow.tagline}
                         </p>
-                        <Badge className="mt-2">
-                          <Currency>{flow.monthlyIncomingFlowRate}</Currency>
-                          /mo
-                        </Badge>
+                        {flow.isTopLevel === 0 && (
+                          <Badge className="mt-2">
+                            <Currency>{flow.monthlyIncomingFlowRate}</Currency>
+                            /mo
+                          </Badge>
+                        )}
                       </div>
                     </CardContent>
                   </Card>
@@ -69,33 +88,8 @@ export default async function ApplyPage() {
               ))}
             </>
           )}
-          <NewFlowCard />
         </div>
       </div>
     </main>
   )
 }
-
-const NewFlowCard = () => (
-  <Link href="/new-flow" className="group h-full transition-transform md:hover:-translate-y-2">
-    <Card className="h-full">
-      <CardContent className="p-4">
-        <div className="flex flex-col items-center">
-          <Image
-            src={Noggles}
-            alt="Noggles"
-            width={64}
-            height={64}
-            className="object-fit mb-4 size-10 lg:size-16"
-          />
-          <h3 className="text-center text-base font-medium transition-colors group-hover:text-primary lg:text-lg">
-            Create a flow
-          </h3>
-          <p className="mb-2 text-center text-sm text-muted-foreground">
-            Create a new outcome funding pool for Nouns.
-          </p>
-        </div>
-      </CardContent>
-    </Card>
-  </Link>
-)
