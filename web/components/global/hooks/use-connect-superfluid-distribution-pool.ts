@@ -10,14 +10,23 @@ export const useConnectSuperfluidDistributionPool = (rewardPoolAddress: `0x${str
   const router = useRouter()
   const chainId = base.id
 
-  const { data: isConnected, refetch } = useReadContract({
+  const {
+    data: isConnected,
+    refetch,
+    isLoading,
+  } = useReadContract({
     address: gdav1ForwarderAddress[chainId],
     abi: gdav1ForwarderAbi,
     functionName: "isMemberConnected",
     args: address ? [rewardPoolAddress, address] : undefined,
   })
 
-  const { prepareWallet, writeContract, isLoading, toastId } = useContractTransaction({
+  const {
+    prepareWallet,
+    writeContract,
+    isLoading: isConnecting,
+    toastId,
+  } = useContractTransaction({
     chainId,
     success: "Successfully connected to Superfluid pool!",
     onSuccess: async (hash) => {
@@ -48,8 +57,9 @@ export const useConnectSuperfluidDistributionPool = (rewardPoolAddress: `0x${str
   }
 
   return {
+    isLoading,
     connect,
     isConnected,
-    isConnecting: isLoading,
+    isConnecting,
   }
 }

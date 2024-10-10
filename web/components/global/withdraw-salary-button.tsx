@@ -1,11 +1,13 @@
+"use client"
+
 import { Button, ButtonProps } from "@/components/ui/button"
-import { DownloadIcon } from "@radix-ui/react-icons"
-import { useWithdrawSuperToken } from "./hooks/use-withdraw-super-token"
-import { useConnectSuperfluidDistributionPool } from "./hooks/use-connect-superfluid-distribution-pool"
 import { Currency } from "@/components/ui/currency"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
+import { DownloadIcon } from "@radix-ui/react-icons"
 import { useClaimableFlowsBalance } from "./hooks/use-claimable-flows-balance"
+import { useConnectSuperfluidDistributionPool } from "./hooks/use-connect-superfluid-distribution-pool"
+import { useWithdrawSuperToken } from "./hooks/use-withdraw-super-token"
 
 export const WithdrawSalaryButton = ({
   superToken,
@@ -19,11 +21,9 @@ export const WithdrawSalaryButton = ({
   size?: ButtonProps["size"]
 }) => {
   const { withdraw } = useWithdrawSuperToken(superToken, pool)
-  const { connect, isConnected } = useConnectSuperfluidDistributionPool(pool)
+  const { connect, isConnected, isLoading } = useConnectSuperfluidDistributionPool(pool)
 
-  const { balance, isLoading } = useClaimableFlowsBalance(flow)
-
-  console.log("balance", balance)
+  const { balance } = useClaimableFlowsBalance(flow)
 
   return (
     <Tooltip>
@@ -45,7 +45,7 @@ export const WithdrawSalaryButton = ({
           <DownloadIcon className="ml-1 size-3.5" />
         </Button>
       </TooltipTrigger>
-      {!isConnected && <TooltipContent>Connect to the rewards pool</TooltipContent>}
+      {!isConnected && !isLoading && <TooltipContent>Connect to the rewards pool</TooltipContent>}
       {isConnected && balance === BigInt(0) && (
         <TooltipContent>No rewards to withdraw</TooltipContent>
       )}

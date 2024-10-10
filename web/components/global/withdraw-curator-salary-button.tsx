@@ -1,10 +1,10 @@
 import { Button, ButtonProps } from "@/components/ui/button"
-import { DownloadIcon } from "@radix-ui/react-icons"
-import { useWithdrawSuperToken } from "./hooks/use-withdraw-super-token"
-import { useConnectSuperfluidDistributionPool } from "./hooks/use-connect-superfluid-distribution-pool"
 import { Currency } from "@/components/ui/currency"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
+import { DownloadIcon } from "@radix-ui/react-icons"
+import { useConnectSuperfluidDistributionPool } from "./hooks/use-connect-superfluid-distribution-pool"
+import { useWithdrawSuperToken } from "./hooks/use-withdraw-super-token"
 
 export const WithdrawCuratorSalaryButton = ({
   superToken,
@@ -16,7 +16,7 @@ export const WithdrawCuratorSalaryButton = ({
   size?: ButtonProps["size"]
 }) => {
   const { withdraw } = useWithdrawSuperToken(superToken, pool)
-  const { connect, isConnected } = useConnectSuperfluidDistributionPool(pool)
+  const { connect, isConnected, isLoading } = useConnectSuperfluidDistributionPool(pool)
 
   const poolBalance = BigInt(0)
 
@@ -40,10 +40,10 @@ export const WithdrawCuratorSalaryButton = ({
           <DownloadIcon className="ml-1 size-3.5" />
         </Button>
       </TooltipTrigger>
-      {!isConnected && <TooltipContent>Connect to the rewards pool</TooltipContent>}
-      {isConnected && poolBalance === BigInt(0) && (
-        <TooltipContent>No rewards to withdraw</TooltipContent>
-      )}
+      <TooltipContent>
+        {!isConnected && !isLoading && "Connect to the rewards pool"}
+        {isConnected && poolBalance === BigInt(0) && "No rewards to withdraw"}
+      </TooltipContent>
     </Tooltip>
   )
 }
