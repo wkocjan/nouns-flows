@@ -48,7 +48,7 @@ const GrantCountWithTooltip = ({
 }) => {
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
+      <TooltipTrigger>
         <GrantCountBadge count={count} type={type} />
       </TooltipTrigger>
       <TooltipContent className="capitalize">{type}</TooltipContent>
