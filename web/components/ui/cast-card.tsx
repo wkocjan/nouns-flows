@@ -3,21 +3,24 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { DateTime } from "@/components/ui/date-time"
-import { Cast, FarcasterUser } from "@prisma/client"
+import { getIpfsUrl } from "@/lib/utils"
+import { Cast, FarcasterUser, Grant } from "@prisma/client"
 import Linkify from "linkify-react"
 import dynamic from "next/dynamic"
+import Image from "next/image"
+import Link from "next/link"
 
 const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false })
 
 interface Props {
-  cast: Cast & { user: FarcasterUser }
+  cast: Cast & { user: FarcasterUser; grant?: Pick<Grant, "title" | "image"> | null }
 }
 
 export const CastCard = (props: Props) => {
   const { cast } = props
 
   return (
-    <Card className="w-full">
+    <Card className="w-full break-inside-avoid">
       <CardHeader className="flex w-full flex-row items-center justify-between space-x-2.5 space-y-0 pb-2">
         <a
           className="flex items-center space-x-2.5 truncate transition-opacity hover:opacity-80"
@@ -53,8 +56,8 @@ export const CastCard = (props: Props) => {
         {(cast.videos?.length > 0 || cast.images?.length > 0) && (
           <div className="mt-4 grid grid-cols-1 gap-2.5">
             {cast.videos?.map((video) => (
-              <div key={video} className="h-auto w-full">
-                <ReactPlayer url={video} width="100%" height="100%" controls />
+              <div key={video} className="h-auto w-full overflow-hidden rounded-lg">
+                <ReactPlayer url={video} width="100%" height="100%" controls c />
               </div>
             ))}
             {cast.images?.map((image) => (
@@ -74,6 +77,22 @@ export const CastCard = (props: Props) => {
                 />
               </a>
             ))}
+          </div>
+        )}
+        {cast.grant && (
+          <div className="mt-2.5 flex translate-y-1 justify-center md:translate-y-2.5">
+            <Link href={`/grant/${cast.grantId}`} className="group flex items-center space-x-2">
+              <span className="text-xs text-muted-foreground transition-colors group-hover:text-foreground">
+                {cast.grant.title}
+              </span>
+              <Image
+                src={getIpfsUrl(cast.grant.image)}
+                alt={cast.grant.title}
+                width={20}
+                height={20}
+                className="rounded-full"
+              />
+            </Link>
           </div>
         )}
       </CardContent>
