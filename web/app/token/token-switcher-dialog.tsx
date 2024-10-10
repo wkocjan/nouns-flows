@@ -12,7 +12,6 @@ import { TokenLogo } from "./token-logo"
 import { getIpfsUrl } from "@/lib/utils"
 import { base } from "viem/chains"
 import { useERC20TokensForParent } from "@/lib/tcr/use-erc20s-for-parent"
-import Image from "next/image"
 import { SkeletonLoader } from "@/components/ui/skeleton"
 import { TokenList } from "./token-list"
 import { Address } from "viem"
@@ -45,7 +44,7 @@ export function TokenSwitcherDialog({
       <DialogTrigger asChild>
         <button ref={ref} className="flex flex-shrink-0">
           <CurrencyDisplay>
-            <TokenLogo src={getIpfsUrl(flow?.image || "")} alt="TCR token" />
+            {flow?.image && <TokenLogo src={getIpfsUrl(flow?.image || "")} alt="TCR token" />}
             <span className="px-1">
               {tokens?.find((erc20) => erc20.address === currentToken)?.symbol}
             </span>
