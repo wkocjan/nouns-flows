@@ -5,7 +5,7 @@ import { base } from "viem/chains"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 
-export const useWithdrawSuperToken = (superToken: `0x${string}`, pool: `0x${string}`) => {
+export const useWithdrawSuperToken = (superToken: `0x${string}`) => {
   const { address } = useAccount()
   const router = useRouter()
   const chainId = base.id

@@ -21,3 +21,5 @@ export const MAX_VOTING_POWER = BigInt(6000)
 
 // Farcaster Channel ID
 export const FARCASTER_CHANNEL_ID = "nouns"
+
+export const MULTICALL_ADDRESS = "0xcA11bde05977b3631167028862bE2a173976CA11" as `0x${string}`

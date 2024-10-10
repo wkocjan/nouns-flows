@@ -11,17 +11,17 @@ import { useWithdrawSuperToken } from "./hooks/use-withdraw-super-token"
 
 export const WithdrawSalaryButton = ({
   superToken,
-  pool,
+  pools,
   flow,
   size = "xs",
 }: {
   superToken: `0x${string}`
-  pool: `0x${string}`
+  pools: `0x${string}`[]
   flow: `0x${string}`
   size?: ButtonProps["size"]
 }) => {
-  const { withdraw } = useWithdrawSuperToken(superToken, pool)
-  const { connect, isConnected, isLoading } = useConnectSuperfluidDistributionPool(pool)
+  const { withdraw } = useWithdrawSuperToken(superToken)
+  const { connect, isConnected, isLoading } = useConnectSuperfluidDistributionPool(pools)
 
   const { balance } = useClaimableFlowsBalance(flow)
 

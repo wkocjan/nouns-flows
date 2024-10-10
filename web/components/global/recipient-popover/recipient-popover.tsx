@@ -69,7 +69,9 @@ export const RecipientPopover = () => {
                   <WithdrawSalaryButton
                     flow={getEthAddress(grant.parentContract)}
                     superToken={getEthAddress(grant.flow.superToken)}
-                    pool={getEthAddress(grant.flow.baselinePool)}
+                    pools={[grant.flow.baselinePool, grant.flow.bonusPool].map((pool) =>
+                      getEthAddress(pool),
+                    )}
                   />
                 </div>
               </div>
