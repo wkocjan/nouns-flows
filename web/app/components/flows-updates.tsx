@@ -12,6 +12,8 @@ export const FlowsUpdates = async () => {
     include: { user: true, grant: { select: { title: true, image: true } } },
   })
 
+  if (casts.length === 0) return null
+
   return (
     <section>
       <div className="flex items-center space-x-4">
@@ -19,13 +21,11 @@ export const FlowsUpdates = async () => {
         <p className="translate-y-px text-sm text-muted-foreground">Latest news from builders</p>
       </div>
 
-      {casts.length > 0 && (
-        <div className="mt-4 columns-1 gap-2.5 space-y-2.5 sm:columns-2 lg:columns-3 xl:columns-4">
-          {casts.map((cast) => (
-            <CastCard key={cast.hash} cast={cast} />
-          ))}
-        </div>
-      )}
+      <div className="mt-4 columns-1 gap-2.5 space-y-2.5 sm:columns-2 lg:columns-3 xl:columns-4">
+        {casts.map((cast) => (
+          <CastCard key={cast.hash} cast={cast} />
+        ))}
+      </div>
     </section>
   )
 }
