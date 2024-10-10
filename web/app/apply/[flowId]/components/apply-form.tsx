@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import { FileInput } from "@/components/ui/file-input"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -79,7 +80,24 @@ Include any other details that support your application.`}
         />
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex flex-col max-sm:space-y-4 md:flex-row md:items-center md:justify-between md:space-x-2.5">
+        {!isFlow && (
+          <div className="items-top flex space-x-2">
+            <Checkbox id="requirements" name="requirements" />
+            <div className="grid gap-1.5 leading-none">
+              <label
+                htmlFor="requirements"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Accept terms and conditions
+              </label>
+              <p className="text-sm text-muted-foreground">
+                My application matches the flow requirements and guidelines
+              </p>
+            </div>
+          </div>
+        )}
+
         <SubmitButton />
       </div>
     </form>
