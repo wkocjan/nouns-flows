@@ -1,27 +1,29 @@
-import { Button } from "@/components/ui/button"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import database from "@/lib/database"
 import { getPool } from "@/lib/database/queries/pool"
 import {
+  AngleIcon,
   EyeOpenIcon,
   GlobeIcon,
   LayersIcon,
   LightningBoltIcon,
   MagnifyingGlassIcon,
-  AngleIcon,
   StarFilledIcon,
   TargetIcon,
   TokensIcon,
 } from "@radix-ui/react-icons"
+import { Metadata } from "next"
 import Image from "next/image"
-import Illustration from "./curate.svg"
 import { SwapTokenButton } from "../token/swap-token-button"
+import Illustration from "./curate.svg"
+
+export async function generateMetadata(): Promise<Metadata> {
+  const pool = await getPool()
+  return {
+    title: `Curate and Earn | ${pool.title}`,
+    description:
+      "Join our community of curators to manage the grants list and ensure the highest quality projects are funded.",
+  }
+}
 
 export default async function CurateAndEarnPage() {
   const pool = await getPool()

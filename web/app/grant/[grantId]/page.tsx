@@ -20,6 +20,7 @@ import { ClaimableBalance } from "./components/claimable-balance"
 import { Updates } from "./components/updates"
 import { UserVotes } from "./components/user-votes"
 import { Voters } from "./components/voters"
+import { getPool } from "@/lib/database/queries/pool"
 
 interface Props {
   params: {
@@ -30,12 +31,14 @@ interface Props {
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const { grantId } = props.params
 
+  const pool = await getPool()
+
   const grant = await database.grant.findFirstOrThrow({
     where: { id: grantId },
     select: { title: true, tagline: true },
   })
 
-  return { title: grant.title, description: grant.tagline }
+  return { title: `${grant.title} - ${pool.title}`, description: grant.tagline }
 }
 
 export default async function GrantPage({ params }: Props) {

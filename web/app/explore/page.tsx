@@ -1,6 +1,15 @@
 import database from "@/lib/database"
 import { getPool } from "@/lib/database/queries/pool"
 import { FullDiagram } from "./diagram"
+import { Metadata } from "next"
+
+export async function generateMetadata(): Promise<Metadata> {
+  const pool = await getPool()
+  return {
+    title: `Explore - ${pool.title}`,
+    description: `Diagram of all flows and grants in ${pool.title} `,
+  }
+}
 
 export default async function ExplorePage() {
   const flows = await database.grant.findMany({
