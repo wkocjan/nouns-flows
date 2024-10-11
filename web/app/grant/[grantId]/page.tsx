@@ -21,6 +21,8 @@ import { Updates } from "./components/updates"
 import { UserVotes } from "./components/user-votes"
 import { Voters } from "./components/voters"
 import { getPool } from "@/lib/database/queries/pool"
+import { CurationCard } from "./components/curation-card"
+import { Status } from "@/lib/enums"
 
 interface Props {
   params: {
@@ -48,6 +50,7 @@ export default async function GrantPage({ params }: Props) {
     where: { id: grantId, isActive: 1 },
     include: {
       flow: true,
+      disputes: true,
       updates: {
         include: { user: true },
         orderBy: { createdAt: "desc" },
@@ -99,6 +102,7 @@ export default async function GrantPage({ params }: Props) {
               <p className="text-base text-muted-foreground md:text-lg">{tagline}</p>
             </div>
           </div>
+
           <div className="mt-6 space-y-4 text-pretty text-sm md:text-base">
             <Markdown>{description}</Markdown>
           </div>
@@ -156,6 +160,9 @@ export default async function GrantPage({ params }: Props) {
               </div>
             </CardContent>
           </Card>
+
+          <CurationCard grant={grant} flow={flow} disputes={grant.disputes} />
+
           {Number(votesCount) > 0 && (
             <Voters contract={getEthAddress(parentContract)} recipientId={grant.id} />
           )}

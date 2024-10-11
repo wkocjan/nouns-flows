@@ -1,20 +1,20 @@
-import Link from "next/link"
-import Image from "next/image"
-import { ActiveCuratorGrant } from "./hooks/get-user-tcr-tokens"
-import { useWithdrawVoterRewards } from "./hooks/use-withdraw-voter-rewards"
-import { cn, getEthAddress, getIpfsUrl } from "@/lib/utils"
-import { DateTime } from "@/components/ui/date-time"
 import {
   canBeChallenged,
   canDisputeBeExecuted,
   canDisputeBeVotedOn,
   isDisputeRevealingVotes,
   isDisputeWaitingForVoting,
-} from "@/lib/database/helpers/application"
+} from "@/app/components/dispute/helpers"
 import { Button } from "@/components/ui/button"
-import { DownloadIcon } from "@radix-ui/react-icons"
+import { DateTime } from "@/components/ui/date-time"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { cn, getEthAddress, getIpfsUrl } from "@/lib/utils"
+import { DownloadIcon } from "@radix-ui/react-icons"
+import Image from "next/image"
+import Link from "next/link"
 import { formatEther } from "viem"
+import { ActiveCuratorGrant } from "./hooks/get-user-tcr-tokens"
+import { useWithdrawVoterRewards } from "./hooks/use-withdraw-voter-rewards"
 
 export function ActiveCuratorGrantRow({
   grant,

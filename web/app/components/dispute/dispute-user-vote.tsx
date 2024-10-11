@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { erc20VotesArbitratorImplAbi } from "@/lib/abis"
 import { useDisputeVote } from "@/lib/tcr/dispute/use-dispute-votes"
+import { useArbitratorData } from "@/lib/tcr/use-arbitrator-data"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { Dispute, DisputeVote, Grant } from "@prisma/client"
@@ -10,11 +11,10 @@ import { ThickArrowDownIcon, ThickArrowUpIcon } from "@radix-ui/react-icons"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
+import { formatEther } from "viem"
 import { base } from "viem/chains"
 import { useAccount } from "wagmi"
-import { useSecretVoteHash } from "../hooks/useSecretVoteHash"
-import { useArbitratorData } from "@/lib/tcr/use-arbitrator-data"
-import { formatEther } from "viem"
+import { useSecretVoteHash } from "./useSecretVoteHash"
 
 interface Props {
   grant: Grant

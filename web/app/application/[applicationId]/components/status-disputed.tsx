@@ -1,15 +1,15 @@
-import { DateTime } from "@/components/ui/date-time"
-import { UserProfile } from "@/components/user-profile/user-profile"
+import { DisputeExecuteButton } from "@/app/components/dispute/dispute-execute"
 import {
   canDisputeBeExecuted,
   canDisputeBeVotedOn,
   isDisputeRevealingVotes,
   isDisputeWaitingForVoting,
-} from "@/lib/database/helpers/application"
+} from "@/app/components/dispute/helpers"
+import { VotesTicker } from "@/app/components/dispute/votes-ticker"
+import { DateTime } from "@/components/ui/date-time"
+import { UserProfile } from "@/components/user-profile/user-profile"
 import { getEthAddress } from "@/lib/utils"
 import { Dispute, Grant } from "@prisma/client"
-import { ApplicationExecuteDisputeButton } from "./dispute-execute"
-import { VotesTicker } from "./votes-ticker"
 
 interface Props {
   grant: Grant
@@ -18,16 +18,18 @@ interface Props {
 }
 
 export function StatusDisputed(props: Props) {
-  const { dispute, flow } = props
+  const { dispute, flow, grant } = props
 
   const currentTime = Date.now() / 1000
+
+  const type = grant.isActive ? "removal request" : "application"
 
   if (isDisputeWaitingForVoting(dispute)) {
     return (
       <div className="space-y-4 text-sm">
         <Challenger />
         <VotingStartDate />
-        <li>Token holders vote to approve or reject the application.</li>
+        <li>Token holders vote to approve or reject the {type}.</li>
       </div>
     )
   }
@@ -49,7 +51,7 @@ export function StatusDisputed(props: Props) {
         <Challenger />
         <VotingEndDate />
         <Results />
-        <ApplicationExecuteDisputeButton flow={flow} dispute={dispute} className="!mt-6 w-full" />
+        <DisputeExecuteButton flow={flow} dispute={dispute} className="!mt-6 w-full" />
       </div>
     )
   }
@@ -67,7 +69,7 @@ export function StatusDisputed(props: Props) {
   function Challenger() {
     return (
       <li>
-        <span>Challenged by </span>
+        <span>{grant.isActive ? "Challenged by " : "Requested removal by "}</span>
         <UserProfile address={getEthAddress(dispute.challenger)}>
           {(profile) => <span className="font-medium">{profile.display_name}</span>}
         </UserProfile>

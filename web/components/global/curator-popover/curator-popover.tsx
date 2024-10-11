@@ -1,14 +1,14 @@
 "use client"
 
-import { SwapTokenButton } from "@/app/token/swap-token-button"
-import { Badge } from "@/components/ui/badge"
-import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   canDisputeBeExecuted,
   canRequestBeExecuted,
   isDisputeVotingOver,
-} from "@/lib/database/helpers/application"
+} from "@/app/components/dispute/helpers"
+import { SwapTokenButton } from "@/app/token/swap-token-button"
+import { Badge } from "@/components/ui/badge"
+import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Grant } from "@prisma/client"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"

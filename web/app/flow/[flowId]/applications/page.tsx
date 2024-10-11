@@ -1,7 +1,17 @@
 import "server-only"
 
-import { ApplicationExecuteDisputeButton } from "@/app/application/[applicationId]/components/dispute-execute"
-import { ApplicationExecuteRequestButton } from "@/app/application/[applicationId]/components/request-execute"
+import { DisputeExecuteButton } from "@/app/components/dispute/dispute-execute"
+import { DisputeVoteCta } from "@/app/components/dispute/dispute-vote-cta"
+import {
+  canBeChallenged,
+  canDisputeBeExecuted,
+  canDisputeBeVotedOn,
+  canRequestBeExecuted,
+  isDisputeResolvedForNoneParty,
+  isDisputeWaitingForVoting,
+  isRequestRejected,
+} from "@/app/components/dispute/helpers"
+import { RequestExecuteButton } from "@/app/components/dispute/request-execute"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { DateTime } from "@/components/ui/date-time"
@@ -16,23 +26,13 @@ import {
 } from "@/components/ui/table"
 import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database"
-import {
-  canBeChallenged,
-  canDisputeBeExecuted,
-  canDisputeBeVotedOn,
-  canRequestBeExecuted,
-  isDisputeResolvedForNoneParty,
-  isDisputeWaitingForVoting,
-  isRequestRejected,
-} from "@/lib/database/helpers/application"
 import { getFlow } from "@/lib/database/queries/flow"
 import { Status } from "@/lib/enums"
+import { getPinataUrl } from "@/lib/pinata/get-file-url"
 import { getEthAddress } from "@/lib/utils"
 import Link from "next/link"
-import { ApplicationDisputeVoteCta } from "@/app/application/[applicationId]/components/dispute-vote-cta"
-import { getPinataUrl } from "@/lib/pinata/get-file-url"
-import { GrantTitleCell } from "../components/grant-title-cell"
 import { GrantLogoCell } from "../components/grant-logo-cell"
+import { GrantTitleCell } from "../components/grant-title-cell"
 
 interface Props {
   params: {
@@ -46,7 +46,7 @@ export default async function FlowApplicationsPage(props: Props) {
   const [flow, grants] = await Promise.all([
     getFlow(flowId),
     database.grant.findMany({
-      where: { flowId, status: { in: [Status.RegistrationRequested, Status.Absent] } },
+      where: { flowId, status: { in: [Status.RegistrationRequested] } },
       include: { disputes: true },
     }),
   ])
@@ -169,7 +169,7 @@ export default async function FlowApplicationsPage(props: Props) {
               <TableCell className="w-[100px] max-w-[100px]">
                 <div className="flex justify-end">
                   {canRequestBeExecuted(grant) && (
-                    <ApplicationExecuteRequestButton grant={grant} flow={flow} />
+                    <RequestExecuteButton grant={grant} flow={flow} />
                   )}
                   {canBeChallenged(grant) && (
                     <Link href={`/application/${grant.id}`}>
@@ -177,10 +177,10 @@ export default async function FlowApplicationsPage(props: Props) {
                     </Link>
                   )}
                   {dispute && canDisputeBeExecuted(dispute) && (
-                    <ApplicationExecuteDisputeButton flow={flow} dispute={dispute} />
+                    <DisputeExecuteButton flow={flow} dispute={dispute} />
                   )}
                   {dispute && !canDisputeBeExecuted(dispute) && (
-                    <ApplicationDisputeVoteCta dispute={dispute} grant={grant} />
+                    <DisputeVoteCta dispute={dispute} grant={grant} />
                   )}
                 </div>
               </TableCell>

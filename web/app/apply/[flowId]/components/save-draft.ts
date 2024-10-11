@@ -40,12 +40,10 @@ export async function saveDraft(formData: FormData, user?: `0x${string}`) {
       throw new Error(Object.values(errors).flat().join(", "))
     }
 
+    const { requirements, ...rest } = validation.data
+
     await database.draft.create({
-      data: {
-        ...validation.data,
-        isPrivate: false,
-        isOnchain: false,
-      },
+      data: { ...rest, isPrivate: false, isOnchain: false },
     })
     return { error: false }
   } catch (error) {

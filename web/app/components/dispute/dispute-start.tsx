@@ -1,5 +1,6 @@
 "use client"
 
+import { canBeChallenged } from "@/app/components/dispute/helpers"
 import { SwapTokenButton } from "@/app/token/swap-token-button"
 import { Button } from "@/components/ui/button"
 import {
@@ -10,7 +11,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { erc20VotesArbitratorImplAbi, flowTcrImplAbi } from "@/lib/abis"
-import { canBeChallenged } from "@/lib/database/helpers/application"
 import { useTcrData } from "@/lib/tcr/use-tcr-data"
 import { useTcrToken } from "@/lib/tcr/use-tcr-token"
 import { getEthAddress } from "@/lib/utils"
@@ -28,7 +28,7 @@ interface Props {
   className?: string
 }
 
-export function ApplicationChallengeButton(props: Props) {
+export function DisputeStartButton(props: Props) {
   const { grant, flow, className } = props
   const router = useRouter()
 
@@ -52,6 +52,8 @@ export function ApplicationChallengeButton(props: Props) {
   const hasEnoughBalance = token.balance >= challengeSubmissionCost
   const hasEnoughAllowance = token.allowance >= challengeSubmissionCost
 
+  const type = grant.isActive ? "removal request" : "application"
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -61,8 +63,8 @@ export function ApplicationChallengeButton(props: Props) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-screen-sm">
         <DialogHeader>
-          <DialogTitle className="text-center text-lg font-medium">
-            Challenge Application
+          <DialogTitle className="text-center text-lg font-medium capitalize">
+            Challenge {type}
           </DialogTitle>
         </DialogHeader>
         <ul className="my-4 space-y-6">
@@ -71,8 +73,8 @@ export function ApplicationChallengeButton(props: Props) {
               1
             </span>
             <p className="text-sm">
-              Challenging this application costs {formatEther(challengeSubmissionCost)}{" "}
-              {token.symbol} and will kick off a voting period.
+              Challenging this {type} costs {formatEther(challengeSubmissionCost)} {token.symbol}{" "}
+              and will kick off a voting period.
             </p>
           </li>
           <li className="flex items-start space-x-4">
@@ -80,8 +82,7 @@ export function ApplicationChallengeButton(props: Props) {
               2
             </span>
             <p className="text-sm">
-              {token.name} holders anonymously vote on whether the application should be accepted or
-              not.
+              {token.name} holders anonymously vote on whether the {type} should be accepted or not.
             </p>
           </li>
           <li className="flex items-start space-x-4">
