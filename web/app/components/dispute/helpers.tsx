@@ -95,3 +95,18 @@ export function canBeChallenged(
 function isPendingRequest(status: number) {
   return status === Status.ClearingRequested || status === Status.RegistrationRequested
 }
+
+export function formatEvidence(evidence: string) {
+  const groups = evidence.split(" || ")
+
+  const [type, ...comments] = groups
+  return (
+    <>
+      Reason provided:
+      <div className="mt-1 pl-5 text-muted-foreground">
+        <strong className="font-medium capitalize">{type.replaceAll("-", " ")}</strong>
+        {comments.length > 0 && ` - ${comments.join(" ")}`}
+      </div>
+    </>
+  )
+}

@@ -19,6 +19,7 @@ import Link from "next/link"
 import { VotingBar } from "./components/voting-bar"
 import { VotingInput } from "./components/voting-input"
 import { GrantLogoCell } from "./components/grant-logo-cell"
+import { Status } from "@/lib/enums"
 
 interface Props {
   params: {
@@ -51,7 +52,7 @@ export default async function FlowPage(props: Props) {
             <TableRow key={grant.id}>
               <GrantLogoCell image={getIpfsUrl(grant.image)} title={grant.title} />
 
-              <TableCell>
+              <TableCell className="space-y-1.5">
                 <div className="max-w-[250px] overflow-hidden truncate text-ellipsis">
                   <Link
                     href={
@@ -63,6 +64,9 @@ export default async function FlowPage(props: Props) {
                     {grant.title}
                   </Link>
                 </div>
+                {grant.status === Status.ClearingRequested && (
+                  <Badge variant="destructive">Removal Requested</Badge>
+                )}
                 {/* {grant.isChallenged && (
                       <HoverCard openDelay={250}>
                         <HoverCardTrigger>

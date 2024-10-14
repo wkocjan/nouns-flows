@@ -31,6 +31,7 @@ async function handleDisputeCreated(params: {
     data: {
       disputeId: id.toString(),
       grantId: "", // unknown now, to be updated later in the Dispute event (code below)
+      evidenceGroupID: "",
       arbitrator,
       challenger,
       arbitrable: arbitrable.toString().toLowerCase(),
@@ -54,7 +55,7 @@ async function handleDispute(params: {
   context: Context<"NounsFlowTcr:Dispute">
 }) {
   const { event, context } = params
-  const { _arbitrator, _disputeID, _itemID } = event.args
+  const { _arbitrator, _disputeID, _itemID, _evidenceGroupID } = event.args
 
   const disputeId = _disputeID.toString()
   const arbitrator = _arbitrator.toString().toLowerCase()
@@ -66,6 +67,6 @@ async function handleDispute(params: {
 
   await context.db.Dispute.updateMany({
     where: { disputeId, arbitrator },
-    data: { grantId: _itemID.toString() },
+    data: { grantId: _itemID.toString(), evidenceGroupID: _evidenceGroupID.toString() },
   })
 }

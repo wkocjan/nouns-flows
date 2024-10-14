@@ -1,16 +1,12 @@
 "use client"
 
+import { isDisputeResolvedForNoneParty, isRequestRejected } from "@/app/components/dispute/helpers"
 import { Button } from "@/components/ui/button"
-import {
-  isDisputeResolvedForNoneParty,
-  isRequestRejected,
-} from "@/lib/database/helpers/application"
-
 import { Dispute, Grant } from "@prisma/client"
 import Link from "next/link"
-import { useVotingReceipt } from "../hooks/useVotingReceipt"
-import { useAccount } from "wagmi"
 import { Address } from "viem"
+import { useAccount } from "wagmi"
+import { useVotingReceipt } from "./useVotingReceipt"
 
 interface Props {
   dispute: Dispute
@@ -18,7 +14,7 @@ interface Props {
   className?: string
 }
 
-export function ApplicationDisputeVoteCta(props: Props) {
+export function DisputeVoteCta(props: Props) {
   const { dispute, grant } = props
   const { address } = useAccount()
 
