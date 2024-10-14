@@ -76,7 +76,7 @@ const reasons = [
       </>
     ),
   },
-]
+] as const
 
 export function GrantRemoveRequestButton(props: Props) {
   const { grant, flow } = props
@@ -107,7 +107,7 @@ export function GrantRemoveRequestButton(props: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="sm" type="button" ref={ref} className="w-full" variant="secondary">
+        <Button type="button" ref={ref} className="w-full" variant="outline">
           Request {grant.isFlow ? "Flow" : "Grant"} removal
         </Button>
       </DialogTrigger>
@@ -216,7 +216,7 @@ export function GrantRemoveRequestButton(props: Props) {
                     functionName: "removeItem",
                     address: getEthAddress(flow.tcr),
                     chainId,
-                    args: [grant.id as `0x${string}`, reason + (comment ? `: ${comment}` : "")],
+                    args: [grant.id as `0x${string}`, reason + (comment ? ` || ${comment}` : "")],
                   })
                 } catch (e: any) {
                   toast.error(e.message, { id: toastId })

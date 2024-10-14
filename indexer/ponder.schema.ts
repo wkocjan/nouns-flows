@@ -90,11 +90,13 @@ export default createSchema((p) => ({
       ruling: p.int(),
       totalSupply: p.string(),
       isExecuted: p.boolean(),
+      evidenceGroupID: p.string(),
     },
     {
       arbitratorIndex: p.index("arbitrator"),
       disputeIdIndex: p.index("disputeId"),
       grantIdIndex: p.index("grantId"),
+      evidenceGroupIDIndex: p.index("evidenceGroupID"),
     }
   ),
   DisputeVote: p.createTable(
@@ -127,6 +129,20 @@ export default createSchema((p) => ({
     {
       tokenContractIndex: p.index("tokenContract"),
       holderIndex: p.index("holder"),
+    }
+  ),
+  Evidence: p.createTable(
+    {
+      id: p.string(),
+      arbitrator: p.string(),
+      evidenceGroupID: p.string(),
+      evidence: p.string(),
+      party: p.string(),
+      blockNumber: p.string(),
+    },
+    {
+      arbitratorIndex: p.index("arbitrator"),
+      evidenceGroupIDIndex: p.index("evidenceGroupID"),
     }
   ),
 }))

@@ -96,7 +96,7 @@ view Grant {
   challengePeriodEndsAt            Int
   isDisputed                       Int
   isResolved                       Int
-  evidenceGroupID                  String
+  evidenceGroupID                  String  @unique
   createdAt                        Int
   updatedAt                        Int
   baselinePool                     String
@@ -113,6 +113,7 @@ view Grant {
   disputes     Dispute[]
   tokenHolders TokenHolder[]
   updates      Cast[]
+  evidences    Evidence[]
 
   @@map("Grant")
   @@schema("public")
@@ -141,7 +142,7 @@ view PonderMeta {
 }
 
 view Dispute {
-  id                   String @id
+  id                   String     @id
   disputeId            String
   arbitrator           String
   arbitrable           String
@@ -157,7 +158,9 @@ view Dispute {
   creationBlock        Int
   totalSupply          String
   isExecuted           Int
-  grant                Grant  @relation(fields: [grantId], references: [id])
+  evidenceGroupID      String     @unique
+  grant                Grant      @relation(fields: [grantId], references: [id])
+  evidences            Evidence[]
 
   @@schema("public")
 }
@@ -188,5 +191,19 @@ view TokenHolder {
   amount        String
 
   @@unique([tokenContract, holder])
+  @@schema("public")
+}
+
+view Evidence {
+  id              String @id
+  arbitrator      String
+  evidenceGroupID String
+  evidence        String
+  party           String
+  blockNumber     String
+
+  dispute Dispute @relation(fields: [evidenceGroupID], references: [evidenceGroupID])
+  grant   Grant   @relation(fields: [evidenceGroupID], references: [evidenceGroupID])
+
   @@schema("public")
 }

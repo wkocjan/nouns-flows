@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { erc20VotesArbitratorImplAbi } from "@/lib/abis"
 import { useDisputeVote } from "@/lib/tcr/dispute/use-dispute-votes"
 import { useArbitratorData } from "@/lib/tcr/use-arbitrator-data"
-import { getEthAddress } from "@/lib/utils"
+import { cn, getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { Dispute, DisputeVote, Grant } from "@prisma/client"
 import { ThickArrowDownIcon, ThickArrowUpIcon } from "@radix-ui/react-icons"
@@ -27,6 +27,8 @@ export function DisputeUserVote(props: Props) {
   const router = useRouter()
   const { address } = useAccount()
   const [canVote, setCanVote] = useState(false)
+
+  const mirrored = grant.isActive
 
   const { disputeVote, mutate } = useDisputeVote(
     dispute.disputeId,
@@ -87,14 +89,14 @@ export function DisputeUserVote(props: Props) {
           type="button"
           onClick={async () => {
             try {
-              if (!forCommitHash) throw new Error("No secret hash")
+              if (!forCommitHash || !againstCommitHash) throw new Error("No secret hash")
               await prepareWallet()
 
               writeContract({
                 address: getEthAddress(flow.arbitrator),
                 abi: erc20VotesArbitratorImplAbi,
                 functionName: "commitVote",
-                args: [BigInt(dispute.disputeId), forCommitHash],
+                args: [BigInt(dispute.disputeId), mirrored ? againstCommitHash : forCommitHash],
                 chainId: base.id,
               })
             } catch (e: any) {
@@ -103,7 +105,7 @@ export function DisputeUserVote(props: Props) {
           }}
         >
           <ThickArrowUpIcon className="mr-2 size-4" />
-          Approve {grant.isFlow ? "flow" : "grant"}
+          {mirrored ? "Keep" : "Approve"} {grant.isFlow ? "flow" : "grant"}
         </Button>
 
         <Button
@@ -113,14 +115,14 @@ export function DisputeUserVote(props: Props) {
           className="grow"
           onClick={async () => {
             try {
-              if (!againstCommitHash) throw new Error("No secret hash")
+              if (!againstCommitHash || !forCommitHash) throw new Error("No secret hash")
               await prepareWallet()
 
               writeContract({
                 address: getEthAddress(flow.arbitrator),
                 abi: erc20VotesArbitratorImplAbi,
                 functionName: "commitVote",
-                args: [BigInt(dispute.disputeId), againstCommitHash],
+                args: [BigInt(dispute.disputeId), mirrored ? forCommitHash : againstCommitHash],
                 chainId: base.id,
               })
             } catch (e: any) {
@@ -128,7 +130,7 @@ export function DisputeUserVote(props: Props) {
             }
           }}
         >
-          Reject {grant.isFlow ? "flow" : "grant"}
+          {mirrored ? "Remove" : "Reject"} {grant.isFlow ? "flow" : "grant"}
           <ThickArrowDownIcon className="ml-2 size-4" />
         </Button>
       </div>
@@ -158,18 +160,25 @@ const UnrevealedVote = () => (
   </div>
 )
 
-const RevealedVote = ({ disputeVote, grant }: { disputeVote: DisputeVote; grant: Grant }) => (
-  <div className="space-y-4 text-sm">
-    <p>Your vote has been revealed and counted.</p>
-    <p>
-      You voted{" "}
-      <b className={`capitalize ${disputeVote.choice === 1 ? "text-green-500" : "text-red-500"}`}>
-        {disputeVote.choice === 1 ? "for" : "against"}
-      </b>{" "}
-      this {grant.isFlow ? "flow" : "grant"} with {disputeVote.votes} votes.
-    </p>
-  </div>
-)
+const RevealedVote = ({ disputeVote, grant }: { disputeVote: DisputeVote; grant: Grant }) => {
+  const mirrored = grant.isActive
+
+  return (
+    <div className="space-y-4 text-sm">
+      <p>Your vote has been revealed and counted.</p>
+      <p>
+        You voted{" "}
+        <b
+          className={`capitalize ${disputeVote.choice === (mirrored ? 2 : 1) ? "text-green-500" : "text-red-500"}`}
+        >
+          {disputeVote.choice === 1 ? "for" : "against"}
+        </b>{" "}
+        {grant.isActive ? "removing" : "approving"} this {grant.isFlow ? "flow" : "grant"} with{" "}
+        {disputeVote.votes} votes.
+      </p>
+    </div>
+  )
+}
 
 const CommittedVote = () => (
   <div className="space-y-4 text-sm">

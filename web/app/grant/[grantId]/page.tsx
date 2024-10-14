@@ -13,16 +13,15 @@ import { Currency } from "@/components/ui/currency"
 import { Markdown } from "@/components/ui/markdown"
 import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database"
+import { getPool } from "@/lib/database/queries/pool"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import { Metadata } from "next"
 import Image from "next/image"
 import { ClaimableBalance } from "./components/claimable-balance"
+import { CurationCard } from "./components/curation-card"
 import { Updates } from "./components/updates"
 import { UserVotes } from "./components/user-votes"
 import { Voters } from "./components/voters"
-import { getPool } from "@/lib/database/queries/pool"
-import { CurationCard } from "./components/curation-card"
-import { Status } from "@/lib/enums"
 
 interface Props {
   params: {
@@ -50,7 +49,11 @@ export default async function GrantPage({ params }: Props) {
     where: { id: grantId, isActive: 1 },
     include: {
       flow: true,
-      disputes: true,
+      disputes: {
+        orderBy: { creationBlock: "desc" },
+        include: { evidences: true },
+        take: 1,
+      },
       updates: {
         include: { user: true },
         orderBy: { createdAt: "desc" },
@@ -161,7 +164,7 @@ export default async function GrantPage({ params }: Props) {
             </CardContent>
           </Card>
 
-          <CurationCard grant={grant} flow={flow} disputes={grant.disputes} />
+          <CurationCard grant={grant} flow={flow} dispute={grant.disputes?.[0]} />
 
           {Number(votesCount) > 0 && (
             <Voters contract={getEthAddress(parentContract)} recipientId={grant.id} />

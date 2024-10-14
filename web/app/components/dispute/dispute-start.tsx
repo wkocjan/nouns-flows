@@ -82,7 +82,8 @@ export function DisputeStartButton(props: Props) {
               2
             </span>
             <p className="text-sm">
-              {token.name} holders anonymously vote on whether the {type} should be accepted or not.
+              &quot;{token.name}&quot; ({token.symbol}) holders anonymously vote on whether the{" "}
+              {type} should be accepted or not.
             </p>
           </li>
           <li className="flex items-start space-x-4">

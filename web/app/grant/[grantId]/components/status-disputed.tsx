@@ -4,12 +4,14 @@ import { DisputeExecuteButton } from "@/app/components/dispute/dispute-execute"
 import {
   canDisputeBeExecuted,
   canDisputeBeVotedOn,
+  formatEvidence,
   isDisputeRevealingVotes,
   isDisputeWaitingForVoting,
 } from "@/app/components/dispute/helpers"
 import { VotesTicker } from "@/app/components/dispute/votes-ticker"
 import { DateTime } from "@/components/ui/date-time"
 import { UserProfile } from "@/components/user-profile/user-profile"
+import database from "@/lib/database"
 import { getEthAddress } from "@/lib/utils"
 import { Dispute, Grant } from "@prisma/client"
 
@@ -20,7 +22,7 @@ interface Props {
 }
 
 export async function StatusDisputed(props: Props) {
-  const { dispute, flow } = props
+  const { dispute, flow, grant } = props
 
   const currentTime = Date.now() / 1000
 
@@ -28,8 +30,9 @@ export async function StatusDisputed(props: Props) {
     return (
       <div className="space-y-4 text-sm">
         <Challenger />
+        <Evidence />
         <VotingStartDate />
-        <li>Token holders vote to approve or reject the application.</li>
+        <li>Token holders vote to keep or remove this {grant.isFlow ? "flow" : "grant"}.</li>
       </div>
     )
   }
@@ -38,6 +41,7 @@ export async function StatusDisputed(props: Props) {
     return (
       <div className="space-y-4 text-sm">
         <Challenger />
+        <Evidence />
         <VotingStartDate />
         <VotingEndDate />
         <RevealDate />
@@ -49,6 +53,7 @@ export async function StatusDisputed(props: Props) {
     return (
       <div className="space-y-4 text-sm">
         <Challenger />
+        <Evidence />
         <VotingEndDate />
         <Results />
         <DisputeExecuteButton flow={flow} dispute={dispute} className="!mt-6 w-full" />
@@ -60,6 +65,7 @@ export async function StatusDisputed(props: Props) {
     return (
       <div className="space-y-4 text-sm">
         <Challenger />
+        <Evidence />
         <VotingEndDate />
         <Results />
       </div>
@@ -69,12 +75,23 @@ export async function StatusDisputed(props: Props) {
   async function Challenger() {
     return (
       <li>
-        <span>Challenged by</span>{" "}
         <UserProfile address={getEthAddress(dispute.challenger)}>
           {(profile) => <span className="font-medium">{profile.display_name}</span>}
         </UserProfile>
+        <span> requested removal of this {grant.isFlow ? "flow" : "grant"}.</span>
       </li>
     )
+  }
+
+  async function Evidence() {
+    const evidence = await database.evidence.findFirst({
+      where: { evidenceGroupID: grant.evidenceGroupID },
+      orderBy: { blockNumber: "asc" },
+    })
+
+    if (!evidence) return null
+
+    return <li>{formatEvidence(evidence.evidence)}</li>
   }
 
   function VotingStartDate() {
@@ -129,8 +146,8 @@ export async function StatusDisputed(props: Props) {
         </li>
         {!isPending ? (
           <li>
-            Request has been{" "}
-            <span className={isApproved ? "text-green-500" : "text-red-500"}>
+            Removal request has been{" "}
+            <span className={isApproved ? "text-red-500" : "text-green-500"}>
               {isApproved ? "approved" : "rejected"}
             </span>
           </li>
@@ -138,8 +155,8 @@ export async function StatusDisputed(props: Props) {
           <li>
             Pending{" "}
             {didArbitrate ? (
-              <span className={requesterWon ? "text-green-500" : "text-red-500"}>
-                {requesterWon ? "approval" : "rejection"}
+              <span className={requesterWon ? "text-red-500" : "text-green-500"}>
+                {requesterWon ? "remove" : "keep"} {grant.isFlow ? "flow" : "grant"}
               </span>
             ) : (
               <span className="text-yellow-500">unresolved</span>
@@ -151,7 +168,7 @@ export async function StatusDisputed(props: Props) {
             <span className="text-yellow-500">Unresolved</span> execution
           </li>
         )}
-        {Number(dispute.votes) > 0 && <VotesTicker dispute={dispute} className="!mt-6" />}
+        {Number(dispute.votes) > 0 && <VotesTicker dispute={dispute} className="!mt-6" mirrored />}
       </>
     )
   }
