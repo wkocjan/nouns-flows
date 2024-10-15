@@ -25,7 +25,7 @@ export const WithdrawSalaryButton = ({
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className={cn({ "text-green-600 dark:text-green-500": Number(balance) > 0 })}
+          className={cn({ "text-green-600 dark:text-green-500": Number(balance) > 1e17 })}
           size={size}
           onClick={() => {
             withdraw()
