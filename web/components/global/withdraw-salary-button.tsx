@@ -11,7 +11,7 @@ import { useBulkPoolWithdrawMacro } from "./hooks/use-bulk-pool-withdraw-macro"
 export const WithdrawSalaryButton = ({
   pools,
   flow,
-  size = "xs",
+  size = "sm",
 }: {
   pools: `0x${string}`[]
   flow: `0x${string}`
