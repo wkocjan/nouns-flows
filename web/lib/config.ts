@@ -25,7 +25,8 @@ export const BULK_WITHDRAW_MACRO = "0xd391e17927b1560d6847f90bc3d58b7f95122c9a" 
 // Max voting power for a user (limit # of nouns to vote with)
 export const MAX_VOTING_POWER = BigInt(6000)
 
-// Farcaster Channel ID
-export const FARCASTER_CHANNEL_ID = "nouns"
+// Farcaster Channel IDs
+export const NOUNS_CHANNEL_ID = "nouns"
+export const FLOWS_CHANNEL_ID = "flows"
 
 export const MULTICALL_ADDRESS = "0xcA11bde05977b3631167028862bE2a173976CA11" as `0x${string}`

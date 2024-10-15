@@ -1,6 +1,6 @@
 import "server-only"
 
-import { FARCASTER_CHANNEL_ID } from "@/lib/config"
+import { FLOWS_CHANNEL_ID, NOUNS_CHANNEL_ID } from "@/lib/config"
 import database from "@/lib/database"
 import { Cast as RawCast } from "@/lib/farcaster/client"
 import { getCastImages } from "@/lib/farcaster/get-cast-images"
@@ -12,7 +12,7 @@ import { NextResponse } from "next/server"
 export const dynamic = "force-dynamic"
 export const maxDuration = 300
 
-const channelId = FARCASTER_CHANNEL_ID
+const channelIds = [NOUNS_CHANNEL_ID, FLOWS_CHANNEL_ID]
 
 export async function GET() {
   try {
@@ -23,9 +23,15 @@ export async function GET() {
 
     const latestTime = latestCast ? latestCast.createdAt.getTime() : 0
 
-    const casts = (await getFarcasterChannelCasts(channelId, latestTime ? 100 : 250)).filter(
-      (cast) => new Date(cast.timestamp).getTime() > latestTime,
-    )
+    const casts: Array<RawCast & { channelId: string }> = []
+
+    for (const channelId of channelIds) {
+      const channelCasts = (
+        await getFarcasterChannelCasts(channelId, latestTime ? 100 : 250)
+      ).filter((cast) => new Date(cast.timestamp).getTime() > latestTime)
+
+      casts.push(...channelCasts.map((cast) => ({ ...cast, channelId })))
+    }
 
     const usersCount = await upserFarcasterUsers(casts)
 
@@ -34,7 +40,7 @@ export async function GET() {
         (cast) =>
           ({
             hash: cast.hash,
-            channelId,
+            channelId: cast.channelId,
             fid: cast.author.fid,
             text: cast.text,
             images: getCastImages(cast),
