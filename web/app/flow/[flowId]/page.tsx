@@ -54,7 +54,7 @@ export default async function FlowPage(props: Props) {
         <TableHeader>
           <TableRow>
             <TableHead colSpan={2}>Name</TableHead>
-            <TableHead>Builders</TableHead>
+            {!flow.isTopLevel && <TableHead>Builders</TableHead>}
             <TableHead className="text-center">Total Earned</TableHead>
             <TableHead className="text-center">Budget</TableHead>
             <TableHead className="text-center">Total Votes</TableHead>
@@ -89,39 +89,41 @@ export default async function FlowPage(props: Props) {
                     <Badge variant="destructive">Removal Requested</Badge>
                   )}
                 </TableCell>
-                <TableCell>
-                  <div className="relative inline-flex">
-                    <UserProfile address={getEthAddress(grant.recipient)} key={grant.recipient}>
-                      {(profile) => (
-                        <Avatar className="size-8 bg-accent text-xs">
-                          <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
-                          <AvatarFallback>{profile.display_name[0].toUpperCase()}</AvatarFallback>
-                        </Avatar>
-                      )}
-                    </UserProfile>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <span
-                          className={cn(
-                            "absolute right-0 top-0 mx-2 inline-block size-2.5 translate-x-full cursor-help rounded-full",
-                            {
-                              "bg-red-500": !hasRecentUpdate,
-                              "bg-green-500": hasRecentUpdate,
-                            },
-                          )}
-                        />
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        {hasUpdate && (
-                          <p>
-                            Posted update <DateTime date={grant.updates[0]?.createdAt} relative />
-                          </p>
+                {!flow.isTopLevel && (
+                  <TableCell>
+                    <div className="relative inline-flex">
+                      <UserProfile address={getEthAddress(grant.recipient)} key={grant.recipient}>
+                        {(profile) => (
+                          <Avatar className="size-8 bg-accent text-xs">
+                            <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
+                            <AvatarFallback>{profile.display_name[0].toUpperCase()}</AvatarFallback>
+                          </Avatar>
                         )}
-                        {!hasUpdate && <p>Builder hasn&apos;t posted any updates yet</p>}
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                </TableCell>
+                      </UserProfile>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span
+                            className={cn(
+                              "absolute right-0 top-0 mx-2 inline-block size-2.5 translate-x-full cursor-help rounded-full",
+                              {
+                                "bg-red-500": !hasRecentUpdate,
+                                "bg-green-500": hasRecentUpdate,
+                              },
+                            )}
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          {hasUpdate && (
+                            <p>
+                              Posted update <DateTime date={grant.updates[0]?.createdAt} relative />
+                            </p>
+                          )}
+                          {!hasUpdate && <p>Builder hasn&apos;t posted any updates yet</p>}
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                  </TableCell>
+                )}
 
                 <TableCell className="text-center">
                   <Currency>{grant.totalEarned}</Currency>
