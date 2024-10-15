@@ -31,8 +31,6 @@ export const useBulkPoolWithdrawMacro = (pools: `0x${string}`[]) => {
       await prepareWallet()
       const args = encodeAbiParameters([{ type: "address[]", name: "pools" }], [pools])
 
-      console.log({ args, pools })
-
       writeContract({
         account: address,
         address: MACRO_FORWARDER,

@@ -25,8 +25,8 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
   const closeRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
-    setIsVisible(!!address && tokens.length > 0)
-  }, [address, tokens])
+    setIsVisible(!!address)
+  }, [address])
 
   if (!isVisible) return null
 
@@ -81,47 +81,58 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
             >
               curate
             </Link>{" "}
-            {tokens.length} {`flow${tokens.length > 1 ? "s" : ""}`} with{" "}
+            {tokens.length} {`flow${tokens.length !== 1 ? "s" : ""}`} with{" "}
             {formatEther(totalBalance || BigInt(0))} tokens.
           </p>
           <SwapTokenButton size="xs" flow={flow} />
         </div>
-        <div className="mt-8">
-          <div className="mb-2 grid grid-cols-6 gap-2 text-xs font-medium text-muted-foreground">
-            <div className="col-start-4 text-center">Balance</div>
-            <div className="text-center max-sm:break-all">Grants</div>
-            <div className="text-center max-sm:break-all">Rewards</div>
-          </div>
-          {tokens.map(({ id, flow, amount }) => (
-            <TokenRow
-              key={id}
-              flow={flow}
-              balance={amount}
-              challengedCount={flow.subgrants.filter((g) => g.isDisputed && !g.isActive).length}
-              awaitingCount={
-                flow.subgrants.filter((g) => !g.isActive && !g.isDisputed && !g.isResolved).length
-              }
-              closePopover={closePopover}
-            />
-          ))}
-        </div>
+        {tokens.length > 0 ? (
+          <>
+            <div className="mt-8">
+              <div className="mb-2 grid grid-cols-6 gap-2 text-xs font-medium text-muted-foreground">
+                <div className="col-start-4 text-center">Balance</div>
+                <div className="text-center max-sm:break-all">Grants</div>
+                <div className="text-center max-sm:break-all">Rewards</div>
+              </div>
+              {tokens.map(({ id, flow, amount }) => (
+                <TokenRow
+                  key={id}
+                  flow={flow}
+                  balance={amount}
+                  challengedCount={flow.subgrants.filter((g) => g.isDisputed && !g.isActive).length}
+                  awaitingCount={
+                    flow.subgrants.filter((g) => !g.isActive && !g.isDisputed && !g.isResolved)
+                      .length
+                  }
+                  closePopover={closePopover}
+                />
+              ))}
+            </div>
 
-        <p className="mt-8 border-t border-border pt-4 text-sm text-muted-foreground">
-          Curate incoming grants to continue earning rewards.
-        </p>
+            <p className="mt-8 border-t border-border pt-4 text-sm text-muted-foreground">
+              Curate incoming grants to continue earning rewards.
+            </p>
 
-        <Tabs defaultValue="active" className="mt-4 w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="active">Active</TabsTrigger>
-            <TabsTrigger value="voted">Voted</TabsTrigger>
-          </TabsList>
-          <TabsContent value="active">
-            <CuratorGrants closePopover={closePopover} grants={activeSubgrants} />
-          </TabsContent>
-          <TabsContent value="voted">
-            <CuratorGrants closePopover={closePopover} grants={votedSubgrants} />
-          </TabsContent>
-        </Tabs>
+            <Tabs defaultValue="active" className="mt-4 w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="active">Active</TabsTrigger>
+                <TabsTrigger value="voted">Voted</TabsTrigger>
+              </TabsList>
+              <TabsContent value="active">
+                <CuratorGrants closePopover={closePopover} grants={activeSubgrants} />
+              </TabsContent>
+              <TabsContent value="voted">
+                <CuratorGrants closePopover={closePopover} grants={votedSubgrants} />
+              </TabsContent>
+            </Tabs>
+          </>
+        ) : (
+          <>
+            <div className="mt-8 flex flex-col items-center justify-center rounded-xl border-t border-border bg-gray-200/30 py-6 text-sm text-muted-foreground dark:bg-gray-800">
+              <p> Buy TCR tokens to curate grants and earn rewards.</p>
+            </div>
+          </>
+        )}
       </PopoverContent>
     </Popover>
   )

@@ -17,8 +17,6 @@ export const WithdrawCuratorSalaryButton = ({
 
   const { balance, isLoading } = useClaimablePoolBalance(pool)
 
-  console.log("balance", balance)
-
   return (
     <Tooltip>
       <TooltipTrigger asChild>
