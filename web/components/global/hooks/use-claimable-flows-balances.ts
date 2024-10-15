@@ -11,7 +11,7 @@ export const useClaimableFlowsBalances = (contracts: `0x${string}`[]) => {
   )
 
   return {
-    totalBalance: formatEther(data || BigInt(0)),
+    totalBalance: data || BigInt(0),
     ...rest,
   }
 }

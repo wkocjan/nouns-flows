@@ -45,7 +45,7 @@ export const RecipientPopover = () => {
       <PopoverTrigger>
         <Badge className="h-[26px] rounded-full text-xs">
           {/* Pull from contracts directly for more up to date balance */}
-          <Currency>{totalBalance || claimableBalance}</Currency>
+          <Currency>{Number(totalBalance) / 1e18 || claimableBalance}</Currency>
         </Badge>
       </PopoverTrigger>
       <PopoverContent className="w-full max-w-[100vw] md:mr-8 md:w-[480px]">
