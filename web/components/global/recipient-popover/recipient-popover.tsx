@@ -10,12 +10,16 @@ import { useEffect, useRef, useState } from "react"
 import { useAccount } from "wagmi"
 import { WithdrawSalaryButton } from "../withdraw-salary-button"
 import { useUserGrants } from "./use-user-grants"
+import { useClaimableFlowsBalances } from "../hooks/use-claimable-flows-balances"
 
 export const RecipientPopover = () => {
   const [isVisible, setIsVisible] = useState(false)
   const { address } = useAccount()
   const { grants, claimableBalance, earnings } = useUserGrants(address)
   const closeRef = useRef<HTMLButtonElement>(null)
+  const { totalBalance } = useClaimableFlowsBalances(
+    grants.map((grant) => getEthAddress(grant.parentContract)),
+  )
 
   useEffect(() => {
     setIsVisible(!!address && grants.length > 0)
@@ -27,7 +31,8 @@ export const RecipientPopover = () => {
     <Popover>
       <PopoverTrigger>
         <Badge className="h-[26px] rounded-full text-xs">
-          <Currency>{claimableBalance}</Currency>
+          {/* Pull from contracts directly for more up to date balance */}
+          <Currency>{totalBalance || claimableBalance}</Currency>
         </Badge>
       </PopoverTrigger>
       <PopoverContent className="w-full max-w-[100vw] md:mr-8 md:w-[480px]">
