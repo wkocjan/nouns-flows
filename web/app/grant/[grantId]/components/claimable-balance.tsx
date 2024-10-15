@@ -1,8 +1,8 @@
 "use client"
 
+import { WithdrawSalaryButton } from "@/components/global/withdraw-salary-button"
 import { useEffect, useState } from "react"
 import { useAccount } from "wagmi"
-import { WithdrawSalaryButton } from "../../../../components/global/withdraw-salary-button"
 
 interface Props {
   recipient: string

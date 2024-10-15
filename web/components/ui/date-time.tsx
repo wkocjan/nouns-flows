@@ -1,17 +1,51 @@
 "use client"
 
-import { HTMLProps } from "react"
+import { HTMLProps, useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 
-interface DateProps extends Omit<HTMLProps<HTMLTimeElement>, "dateTime"> {
+interface Props extends Omit<HTMLProps<HTMLTimeElement>, "dateTime"> {
   date: Date
   locale?: Intl.LocalesArgument
   options?: Intl.DateTimeFormatOptions
   relative?: boolean
 }
 
-function getRelativeTime(date: Date, locale: Intl.LocalesArgument = "en-US") {
-  const now = new Date()
-  const diff = date.getTime() - now.getTime()
+export function DateTime(props: Props) {
+  const { date, locale = "en-US", options, relative = false, ...rest } = props
+  const [currentDate, setCurrentDate] = useState(new Date())
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!relative) return
+
+    const diff = date.getTime() - currentDate.getTime()
+    const isWithinFiveMinutes = Math.abs(diff) <= 5 * 60 * 1000
+
+    if (isWithinFiveMinutes) {
+      const interval = setInterval(() => {
+        const newCurrentDate = new Date()
+        setCurrentDate(newCurrentDate)
+
+        // Refresh when the date is reached
+        if (Math.abs(date.getTime() - newCurrentDate.getTime()) < 1000) {
+          router.refresh()
+          clearInterval(interval)
+        }
+      }, 1000)
+
+      return () => clearInterval(interval)
+    }
+  }, [relative, date, currentDate, router])
+
+  return (
+    <time dateTime={date.toISOString()} title={date.toString()} suppressHydrationWarning {...rest}>
+      {relative ? getRelativeTime(date, currentDate, locale) : date.toLocaleString(locale, options)}
+    </time>
+  )
+}
+
+function getRelativeTime(date: Date, currentDate: Date, locale: Intl.LocalesArgument = "en-US") {
+  const diff = date.getTime() - currentDate.getTime()
   const formatter = new Intl.RelativeTimeFormat(locale, { numeric: "auto" })
 
   const absDiff = Math.abs(diff)
@@ -26,22 +60,4 @@ function getRelativeTime(date: Date, locale: Intl.LocalesArgument = "en-US") {
   if (hours !== 0) return formatter.format(sign * hours, "hour")
   if (minutes !== 0) return formatter.format(sign * minutes, "minute")
   return formatter.format(sign * seconds, "second")
-}
-
-export function DateTime({
-  date,
-  locale = "en-US",
-  options,
-  relative = false,
-  ...rest
-}: DateProps) {
-  const displayText = relative
-    ? getRelativeTime(date, locale)
-    : date.toLocaleString(locale, options)
-
-  return (
-    <time dateTime={date.toISOString()} title={date.toString()} suppressHydrationWarning {...rest}>
-      {displayText}
-    </time>
-  )
 }

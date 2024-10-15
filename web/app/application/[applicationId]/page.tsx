@@ -15,10 +15,10 @@ import database from "@/lib/database"
 import { getEthAddress, getIpfsUrl, isProduction } from "@/lib/utils"
 import Image from "next/image"
 import { redirect } from "next/navigation"
-import { DisputeUserVote } from "./components/dispute-user-vote"
 import { StatusDisputed } from "./components/status-disputed"
 import { StatusNotDisputed } from "./components/status-not-disputed"
 import { Metadata } from "next"
+import { DisputeUserVote } from "@/app/components/dispute/dispute-user-vote"
 
 interface Props {
   params: {
@@ -151,7 +151,7 @@ export default async function ApplicationPage({ params }: Props) {
               {grant.isDisputed === 0 && grant.isResolved == 0 && (
                 <StatusNotDisputed grant={grant} flow={flow} />
               )}
-              {(grant.isDisputed === 1 || grant.isResolved === 1) && (
+              {(grant.isDisputed === 1 || grant.isResolved === 1) && dispute && (
                 <StatusDisputed grant={grant} dispute={dispute} flow={flow} />
               )}
             </CardContent>

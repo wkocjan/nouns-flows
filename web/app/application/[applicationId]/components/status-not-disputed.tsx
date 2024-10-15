@@ -1,8 +1,8 @@
+import { DisputeStartButton } from "@/app/components/dispute/dispute-start"
+import { canRequestBeExecuted } from "@/app/components/dispute/helpers"
+import { RequestExecuteButton } from "@/app/components/dispute/request-execute"
 import { DateTime } from "@/components/ui/date-time"
-import { canRequestBeExecuted } from "@/lib/database/helpers/application"
 import { Grant } from "@prisma/client"
-import { ApplicationChallengeButton } from "./dispute-start"
-import { ApplicationExecuteRequestButton } from "./request-execute"
 
 interface Props {
   grant: Grant
@@ -20,7 +20,7 @@ export const StatusNotDisputed = (props: Props) => {
         </li>
         <li>No one decided to challenge it.</li>
         <li>Execute the application to finalize the process.</li>
-        <ApplicationExecuteRequestButton grant={grant} flow={flow} className="!mt-6 w-full" />
+        <RequestExecuteButton grant={grant} flow={flow} className="!mt-6 w-full" />
       </div>
     )
   }
@@ -42,7 +42,7 @@ export const StatusNotDisputed = (props: Props) => {
         the application is automatically approved.
       </li>
 
-      <ApplicationChallengeButton grant={grant} flow={flow} className="!mt-6 w-full" />
+      <DisputeStartButton grant={grant} flow={flow} className="!mt-6 w-full" />
     </div>
   )
 }

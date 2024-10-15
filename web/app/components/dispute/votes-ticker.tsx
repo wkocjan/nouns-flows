@@ -3,17 +3,18 @@ import { Dispute } from "@prisma/client"
 interface Props {
   dispute: Dispute
   className?: string
+  mirrored?: boolean
 }
 
 export const VotesTicker = (props: Props) => {
-  const { dispute, className = "" } = props
+  const { dispute, className = "", mirrored = false } = props
 
-  const requesterVotes = Number(dispute.requesterPartyVotes)
-  const challengerVotes = Number(dispute.challengerPartyVotes)
+  const greenVotes = Number(mirrored ? dispute.challengerPartyVotes : dispute.requesterPartyVotes)
+  const redVotes = Number(mirrored ? dispute.requesterPartyVotes : dispute.challengerPartyVotes)
   const totalVotes = Number(dispute.votes)
-  const revealedVotes = requesterVotes + challengerVotes
+  const revealedVotes = greenVotes + redVotes
   const notRevealedVotes = totalVotes - revealedVotes
-  const requesterPercentage = (requesterVotes / totalVotes) * 100
+  const greenPercentage = (greenVotes / totalVotes) * 100
   const notRevealedPercentage = ((totalVotes - revealedVotes) / totalVotes) * 100
 
   return (
@@ -23,9 +24,9 @@ export const VotesTicker = (props: Props) => {
           const position = (index / 50) * 100
 
           let color = "bg-muted"
-          if (position < requesterPercentage) {
+          if (position < greenPercentage) {
             color = "bg-green-500"
-          } else if (position < requesterPercentage + notRevealedPercentage) {
+          } else if (position < greenPercentage + notRevealedPercentage) {
             color = "bg-muted-foreground"
           } else {
             color = "bg-red-500"
@@ -35,9 +36,9 @@ export const VotesTicker = (props: Props) => {
         })}
       </div>
       <div className="mt-1.5 flex justify-between text-xs">
-        <span className="text-green-500">{dispute.requesterPartyVotes || "0"}</span>
+        <span className="text-green-500">{greenVotes || "0"}</span>
         <span className="text-muted-foreground">{notRevealedVotes} not revealed</span>
-        <span className="text-red-500">{dispute.challengerPartyVotes || "0"}</span>
+        <span className="text-red-500">{redVotes || "0"}</span>
       </div>
     </div>
   )
