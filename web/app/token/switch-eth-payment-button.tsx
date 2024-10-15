@@ -1,20 +1,18 @@
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { cn } from "@/lib/utils"
+import { ChevronDownIcon } from "@radix-ui/react-icons"
+import { RelayChain } from "@reservoir0x/relay-sdk"
+import { base, mainnet } from "viem/chains"
+import { useAccount, useBalance } from "wagmi"
 import { BaseEthLogo } from "./base-eth-logo"
 import { CurrencyDisplay } from "./currency-display"
-import Image from "next/image"
-import { TokenLogo } from "./token-logo"
-import Caret from "@/public/caret-down.svg"
 import { TokenBalance } from "./token-balance"
-import { useAccount, useBalance } from "wagmi"
-import { base, mainnet } from "viem/chains"
-import { RelayChain } from "@reservoir0x/relay-sdk"
-import { cn } from "@/lib/utils"
-import SvgCaretDown from "@/icons/caret-down"
+import { TokenLogo } from "./token-logo"
 
 export const SwitchEthChainButton = ({
   switchChain,
@@ -55,7 +53,7 @@ export const SwitchEthChainButton = ({
             </div>
 
             <span className="pr-1">ETH</span>
-            <SvgCaretDown className="mt-0.5 h-2 w-auto pr-1 text-black dark:text-white" />
+            <ChevronDownIcon className="mt-0.5 h-4 w-auto pr-1 text-black dark:text-white" />
           </CurrencyDisplay>
         </button>
       </DropdownMenuTrigger>

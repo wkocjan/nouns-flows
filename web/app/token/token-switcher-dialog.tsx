@@ -7,17 +7,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { CurrencyDisplay } from "./currency-display"
-import { TokenLogo } from "./token-logo"
-import { getIpfsUrl } from "@/lib/utils"
-import { base } from "viem/chains"
-import { useERC20TokensForParent } from "@/lib/tcr/use-erc20s-for-parent"
 import { SkeletonLoader } from "@/components/ui/skeleton"
-import { TokenList } from "./token-list"
-import { Address } from "viem"
-import { useRef } from "react"
+import { useERC20TokensForParent } from "@/lib/tcr/use-erc20s-for-parent"
 import { useFlowForToken } from "@/lib/tcr/use-flow-for-token"
-import SvgCaretDown from "@/icons/caret-down"
+import { getIpfsUrl } from "@/lib/utils"
+import { ChevronDownIcon } from "@radix-ui/react-icons"
+import { useRef } from "react"
+import { Address } from "viem"
+import { base } from "viem/chains"
+import { CurrencyDisplay } from "./currency-display"
+import { TokenList } from "./token-list"
+import { TokenLogo } from "./token-logo"
 
 interface Props {
   switchToken: (token: Address, tokenEmitter: Address) => void
@@ -48,7 +48,7 @@ export function TokenSwitcherDialog({
             <span className="px-1">
               {tokens?.find((erc20) => erc20.address === currentToken)?.symbol}
             </span>
-            <SvgCaretDown className="mt-0.5 h-2 w-auto pr-1 text-black dark:text-white" />
+            <ChevronDownIcon className="mt-0.5 h-4 w-auto pr-1 text-black dark:text-white" />
           </CurrencyDisplay>
         </button>
       </DialogTrigger>
