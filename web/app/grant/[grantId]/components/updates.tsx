@@ -1,6 +1,6 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { CastCard } from "@/components/ui/cast-card"
-import { FARCASTER_CHANNEL_ID } from "@/lib/config"
+import { FLOWS_CHANNEL_ID, NOUNS_CHANNEL_ID } from "@/lib/config"
 import { Cast, FarcasterUser } from "@prisma/client"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { PostUpdate } from "./post-update"
@@ -25,8 +25,8 @@ export const Updates = (props: Props) => {
           <ExclamationTriangleIcon className="size-4" />
           <AlertTitle className="text-base">No updates yet</AlertTitle>
           <AlertDescription>
-            The grantee hasn&apos;t posted any updates for this grant yet. We collect updates from
-            the /{FARCASTER_CHANNEL_ID} channel on Farcaster.
+            The grantee hasn&apos;t posted any updates for this grant yet. We collect updates from /
+            {NOUNS_CHANNEL_ID} or /{FLOWS_CHANNEL_ID} channels on Farcaster.
           </AlertDescription>
         </Alert>
       )}

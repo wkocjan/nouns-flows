@@ -2,8 +2,10 @@ import { unstable_cache } from "next/cache"
 import { farcaster } from "./client"
 
 export const getFarcasterUserByEthAddress = unstable_cache(
-  async (address: `0x${string}`) => {
+  async (rawAddress: `0x${string}`) => {
     try {
+      const address = rawAddress.toLowerCase()
+
       const users = await farcaster.fetchBulkUsersByEthereumAddress([address])
       if (Object.keys(users).length === 0 || !users[address]) return null
 

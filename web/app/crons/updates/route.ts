@@ -1,6 +1,5 @@
 import "server-only"
 
-import { FARCASTER_CHANNEL_ID } from "@/lib/config"
 import database from "@/lib/database"
 import { getItem, saveItem } from "@/lib/kv/kvStore"
 import { isProduction } from "@/lib/utils"
@@ -28,7 +27,6 @@ export async function GET() {
 
     const casts = await database.cast.findMany({
       where: {
-        channelId: FARCASTER_CHANNEL_ID,
         createdAt: { gt: lastAnalyzedDate },
         user: { addresses: { hasSome: recipients } },
       },
