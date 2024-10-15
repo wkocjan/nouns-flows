@@ -150,7 +150,6 @@ export default async function GrantPage({ params }: Props) {
                 <ClaimableBalance
                   flow={getEthAddress(grant.parentContract)}
                   recipient={grant.recipient}
-                  superToken={getEthAddress(grant.flow.superToken)}
                   pools={[grant.flow.baselinePool, grant.flow.bonusPool].map((pool) =>
                     getEthAddress(pool),
                   )}

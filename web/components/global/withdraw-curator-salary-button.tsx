@@ -3,47 +3,39 @@ import { Currency } from "@/components/ui/currency"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 import { DownloadIcon } from "@radix-ui/react-icons"
-import { useConnectSuperfluidDistributionPool } from "./hooks/use-connect-superfluid-distribution-pool"
-import { useWithdrawSuperToken } from "./hooks/use-withdraw-super-token"
+import { useBulkPoolWithdrawMacro } from "./hooks/use-bulk-pool-withdraw-macro"
+import { useClaimablePoolBalance } from "./hooks/use-claimable-pool-balance"
 
 export const WithdrawCuratorSalaryButton = ({
-  superToken,
   pool,
   size = "xs",
 }: {
-  superToken: `0x${string}`
   pool: `0x${string}`
   size?: ButtonProps["size"]
 }) => {
-  const { withdraw } = useWithdrawSuperToken(superToken, pool)
-  const { connect, isConnected, isLoading } = useConnectSuperfluidDistributionPool(pool)
+  const { withdraw } = useBulkPoolWithdrawMacro([pool])
 
-  const poolBalance = BigInt(0)
+  const { balance, isLoading } = useClaimablePoolBalance(pool)
+
+  console.log("balance", balance)
 
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className={cn({ "text-green-500": Number(poolBalance) > 0 })}
+          className={cn({ "text-green-500": Number(balance) > 0 })}
           size={size}
           onClick={() => {
-            if (!isConnected) {
-              connect()
-            } else {
-              withdraw(poolBalance)
-            }
+            withdraw()
           }}
           variant="ghost"
-          disabled={poolBalance === BigInt(0) && isConnected}
+          disabled={balance === BigInt(0) || isLoading}
         >
-          <Currency className="text-center text-sm">{Number(poolBalance) / 1e18}</Currency>
+          <Currency className="text-center text-sm">{Number(balance) / 1e18}</Currency>
           <DownloadIcon className="ml-1 size-3.5" />
         </Button>
       </TooltipTrigger>
-      <TooltipContent>
-        {!isConnected && !isLoading && "Connect to the rewards pool"}
-        {isConnected && poolBalance === BigInt(0) && "No rewards to withdraw"}
-      </TooltipContent>
+      <TooltipContent>{balance === BigInt(0) && "No rewards to withdraw"}</TooltipContent>
     </Tooltip>
   )
 }

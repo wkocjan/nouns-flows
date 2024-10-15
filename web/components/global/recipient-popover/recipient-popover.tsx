@@ -68,7 +68,6 @@ export const RecipientPopover = () => {
                 <div className="flex items-center justify-center">
                   <WithdrawSalaryButton
                     flow={getEthAddress(grant.parentContract)}
-                    superToken={getEthAddress(grant.flow.superToken)}
                     pools={[grant.flow.baselinePool, grant.flow.bonusPool].map((pool) =>
                       getEthAddress(pool),
                     )}

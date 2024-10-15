@@ -1,22 +1,16 @@
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
-import { superTokenAbi } from "@/lib/abis"
-import { useAccount, useReadContract } from "wagmi"
+import { superfluidMacroForwarderAbi } from "@/lib/abis"
+import { useAccount } from "wagmi"
 import { base } from "viem/chains"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { BULK_WITHDRAW_MACRO, MACRO_FORWARDER } from "@/lib/config"
+import { encodeAbiParameters } from "viem"
 
-export const useWithdrawSuperToken = (superToken: `0x${string}`) => {
+export const useBulkPoolWithdrawMacro = (pools: `0x${string}`[]) => {
   const { address } = useAccount()
   const router = useRouter()
   const chainId = base.id
-
-  const { data: balance } = useReadContract({
-    address: superToken,
-    abi: superTokenAbi,
-    chainId,
-    functionName: "balanceOf",
-    args: address ? [address] : undefined,
-  })
 
   const { prepareWallet, writeContract, isLoading, toastId } = useContractTransaction({
     chainId,
@@ -27,7 +21,7 @@ export const useWithdrawSuperToken = (superToken: `0x${string}`) => {
     },
   })
 
-  const withdraw = async (amount: bigint) => {
+  const withdraw = async () => {
     if (!address) {
       toast.error("Wallet not connected")
       return
@@ -35,13 +29,17 @@ export const useWithdrawSuperToken = (superToken: `0x${string}`) => {
 
     try {
       await prepareWallet()
+      const args = encodeAbiParameters([{ type: "address[]", name: "pools" }], [pools])
+
+      console.log({ args, pools })
 
       writeContract({
         account: address,
-        address: superToken,
-        abi: superTokenAbi,
-        functionName: "downgradeTo",
-        args: [address, amount],
+        address: MACRO_FORWARDER,
+        abi: superfluidMacroForwarderAbi,
+        chainId,
+        functionName: "runMacro",
+        args: [BULK_WITHDRAW_MACRO, args],
       })
     } catch (e: any) {
       toast.error(e.message, { id: toastId })
@@ -50,7 +48,6 @@ export const useWithdrawSuperToken = (superToken: `0x${string}`) => {
 
   return {
     withdraw,
-    totalBalance: balance,
     isLoading,
   }
 }

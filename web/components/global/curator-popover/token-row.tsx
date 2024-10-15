@@ -43,10 +43,7 @@ export function TokenRow(props: TokenRowProps) {
         awaitingCount={awaitingCount}
       />
       <div className="text-center text-sm font-medium">
-        <WithdrawCuratorSalaryButton
-          superToken={getEthAddress(flow.superToken)}
-          pool={getEthAddress(flow.managerRewardSuperfluidPool)}
-        />
+        <WithdrawCuratorSalaryButton pool={getEthAddress(flow.managerRewardSuperfluidPool)} />
       </div>
     </div>
   )

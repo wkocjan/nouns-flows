@@ -6,13 +6,12 @@ import { WithdrawSalaryButton } from "../../../../components/global/withdraw-sal
 
 interface Props {
   recipient: string
-  superToken: `0x${string}`
   pools: `0x${string}`[]
   flow: `0x${string}`
 }
 
 export const ClaimableBalance = (props: Props) => {
-  const { recipient, superToken, pools, flow } = props
+  const { recipient, pools, flow } = props
   const [isVisible, setIsVisible] = useState(false)
   const { address } = useAccount()
 
@@ -25,7 +24,7 @@ export const ClaimableBalance = (props: Props) => {
   return (
     <div>
       <h4 className="text-[13px] tracking-tight text-muted-foreground">Claimable</h4>
-      <WithdrawSalaryButton flow={flow} size="sm" superToken={superToken} pools={pools} />
+      <WithdrawSalaryButton flow={flow} size="sm" pools={pools} />
     </div>
   )
 }

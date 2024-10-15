@@ -16,6 +16,12 @@ export const PERCENTAGE_SCALE = 1e6
 // Subgraph ID
 export const NOUNS_SUBGRAPH_ID = "5qcR6rAfDMZCVGuZ6DDois7y4zyXqsyqvaqhE6NRRraW"
 
+// Macro forwarder address (same across all chains)
+export const MACRO_FORWARDER = "0xfD01285b9435bc45C243E5e7F978E288B2912de6" as `0x${string}`
+
+// Bulk withdraw macro address (same across all chains)
+export const BULK_WITHDRAW_MACRO = "0xd391e17927b1560d6847f90bc3d58b7f95122c9a" as `0x${string}`
+
 // Max voting power for a user (limit # of nouns to vote with)
 export const MAX_VOTING_POWER = BigInt(6000)
 
