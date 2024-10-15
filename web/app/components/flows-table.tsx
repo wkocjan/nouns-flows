@@ -87,10 +87,7 @@ export const FlowsTable = (props: Props) => {
               </Tooltip>
             </TableCell>
             <TableCell className="text-center">
-              <AnimatedSalary
-                value={Number(flow.totalEarned)}
-                monthlyRate={Number(flow.monthlyOutgoingFlowRate)}
-              />
+              <Currency>{Number(flow.totalEarned)}</Currency>
             </TableCell>
             <TableCell className="text-center">
               <Badge>
