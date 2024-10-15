@@ -117,7 +117,7 @@ export default async function FlowPage(props: Props) {
                             Posted update <DateTime date={grant.updates[0]?.createdAt} relative />
                           </p>
                         )}
-                        {!hasUpdate && <p>User hasn&apos;t posted any updates yet</p>}
+                        {!hasUpdate && <p>Builder hasn&apos;t posted any updates yet</p>}
                       </TooltipContent>
                     </Tooltip>
                   </div>

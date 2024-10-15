@@ -25,8 +25,8 @@ export const Updates = (props: Props) => {
           <ExclamationTriangleIcon className="size-4" />
           <AlertTitle className="text-base">No updates yet</AlertTitle>
           <AlertDescription>
-            The grantee hasn&apos;t posted any updates for this grant yet. We collect updates from /
-            {NOUNS_CHANNEL_ID} or /{FLOWS_CHANNEL_ID} channels on Farcaster.
+            This project&apos;s builder hasn&apos;t posted any updates for this project yet. We
+            collect updates from /{NOUNS_CHANNEL_ID} or /{FLOWS_CHANNEL_ID} channels on Farcaster.
           </AlertDescription>
         </Alert>
       )}
