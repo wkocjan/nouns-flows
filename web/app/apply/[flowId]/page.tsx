@@ -44,19 +44,18 @@ export default async function ApplyFlowPage(props: Props) {
             <ApplyForm flowId={flowId} isFlow={isTopLevel === 1} />
           </CardContent>
         </Card>
-        {!isTopLevel && (
-          <div className="max-sm:order-first">
-            <div className="rounded-lg border-2 border-dashed border-foreground/75 p-4 lg:p-5">
-              <div className="flex items-center justify-between space-x-2">
-                <h4 className="font-medium tracking-tight">Guidelines & requirements</h4>
-                <ExclamationTriangleIcon className="size-6" />
-              </div>
-              <div className="mt-6 space-y-2.5 text-sm leading-normal">
-                <Markdown>{flow.description}</Markdown>
-              </div>
+
+        <div className="max-sm:order-first">
+          <div className="rounded-lg border-2 border-dashed border-foreground/75 p-4 lg:p-5">
+            <div className="flex items-center justify-between space-x-2">
+              <h4 className="font-medium tracking-tight">Guidelines & requirements</h4>
+              <ExclamationTriangleIcon className="size-6" />
+            </div>
+            <div className="mt-6 space-y-2.5 text-sm leading-normal">
+              <Markdown>{flow.description}</Markdown>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </main>
   )
