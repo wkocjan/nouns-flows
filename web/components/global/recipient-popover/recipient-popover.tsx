@@ -1,9 +1,14 @@
 "use client"
 
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { Currency } from "@/components/ui/currency"
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { getEthAddress, getIpfsUrl } from "@/lib/utils"
+import { getUserUpdatesChannel } from "@/lib/farcaster/get-user-updates-channel"
+import { useServerFunction } from "@/lib/hooks/use-server-function"
+import { getEthAddress, getIpfsUrl, getShortEthAddress } from "@/lib/utils"
+import { PlusIcon } from "@radix-ui/react-icons"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
@@ -21,11 +26,19 @@ export const RecipientPopover = () => {
     grants.map((grant) => getEthAddress(grant.parentContract)),
   )
 
+  const { data, isLoading } = useServerFunction(getUserUpdatesChannel, "updates-channel", [address])
+
   useEffect(() => {
     setIsVisible(!!address && grants.length > 0)
   }, [address, grants])
 
   if (!isVisible) return null
+
+  const { isFlowsMember, isNounsMember, updatesChannel, hasFarcasterAccount } = data || {}
+
+  const canPostUpdates = !isLoading && (isNounsMember || isFlowsMember)
+  const needsVerify = !isLoading && !hasFarcasterAccount
+  const shouldJoinFlowsChannel = !isLoading && !isNounsMember && !isFlowsMember
 
   return (
     <Popover>
@@ -38,10 +51,22 @@ export const RecipientPopover = () => {
       <PopoverContent className="w-full max-w-[100vw] md:mr-8 md:w-[480px]">
         <PopoverClose ref={closeRef} className="hidden" />
         <div>
-          <p className="text-sm text-muted-foreground">
-            You&apos;re earning <Currency>{earnings.yearly}</Currency> per year.
-          </p>
-          <div className="mt-4">
+          <div className="flex items-center justify-between space-x-1.5">
+            <p className="text-sm text-muted-foreground">
+              You&apos;re earning <Currency>{earnings.yearly}</Currency> per year.
+            </p>
+            {canPostUpdates && (
+              <a
+                href={`https://warpcast.com/~/compose?text=&channelKey=${updatesChannel}`}
+                target="_blank"
+              >
+                <Button size="xs" variant="outline">
+                  <PlusIcon className="mr-1.5 size-3" /> Update
+                </Button>
+              </a>
+            )}
+          </div>
+          <div className="mt-6">
             <div className="mb-2 grid grid-cols-4 gap-2 text-xs font-medium text-muted-foreground">
               <div className="col-start-3 text-center">Earned</div>
               <div className="text-center">Claimable</div>
@@ -81,6 +106,36 @@ export const RecipientPopover = () => {
               </div>
             ))}
           </div>
+          {needsVerify && (
+            <Alert className="mt-6" variant="default">
+              <AlertDescription>
+                Please connect your wallet address ({getShortEthAddress(address)}) with Farcaster
+                account.
+                <br />
+                <Button asChild size="sm" variant="default" className="mt-2">
+                  <a href="https://warpcast.com/~/settings/verified-addresses" target="_blank">
+                    Verify on Farcaster
+                  </a>
+                </Button>
+              </AlertDescription>
+            </Alert>
+          )}
+          {shouldJoinFlowsChannel && (
+            <Alert className="mt-6" variant="default">
+              <AlertDescription>
+                Please join the Flows channel on Farcaster to post updates about your work.
+                <br />
+                <Button asChild size="sm" variant="default" className="mt-2">
+                  <a
+                    href="https://warpcast.com/~/channel/flows/join?inviteCode=35EHtdIhE-ivqVxl2SaEFg"
+                    target="_blank"
+                  >
+                    Join /flows
+                  </a>
+                </Button>
+              </AlertDescription>
+            </Alert>
+          )}
         </div>
       </PopoverContent>
     </Popover>
