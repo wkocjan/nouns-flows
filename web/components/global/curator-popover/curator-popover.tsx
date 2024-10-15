@@ -17,6 +17,7 @@ import { useAccount } from "wagmi"
 import { CuratorGrants } from "./curator-grants"
 import { useUserTcrTokens } from "./hooks/use-user-tcr-tokens"
 import { TokenRow } from "./token-row"
+import { Currency } from "@/components/ui/currency"
 
 export const CuratorPopover = ({ flow }: { flow: Grant }) => {
   const [isVisible, setIsVisible] = useState(false)
@@ -62,7 +63,7 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
             className="flex h-[26px] flex-row items-center space-x-1 rounded-full text-xs"
             variant="success"
           >
-            <span>${formatEther(totalRewardsBalance)}</span>
+            <Currency>{formatEther(totalRewardsBalance)}</Currency>
             {hasActiveSubgrants && (
               <div className="size-1.5 animate-pulse rounded-full bg-white/50"></div>
             )}

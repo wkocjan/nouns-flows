@@ -1,6 +1,6 @@
 import { Button, ButtonProps } from "@/components/ui/button"
 import { Currency } from "@/components/ui/currency"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 import { DownloadIcon } from "@radix-ui/react-icons"
 import { useBulkPoolWithdrawMacro } from "./hooks/use-bulk-pool-withdraw-macro"
@@ -21,7 +21,7 @@ export const WithdrawCuratorSalaryButton = ({
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className={cn({ "text-green-500": Number(balance) > 0 })}
+          className={cn({ "text-green-500": Number(balance) > 1e17 })}
           size={size}
           onClick={() => {
             withdraw()
@@ -33,7 +33,6 @@ export const WithdrawCuratorSalaryButton = ({
           <DownloadIcon className="ml-1 size-3.5" />
         </Button>
       </TooltipTrigger>
-      <TooltipContent>{balance === BigInt(0) && "No rewards to withdraw"}</TooltipContent>
     </Tooltip>
   )
 }

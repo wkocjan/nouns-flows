@@ -12,7 +12,7 @@ export const Currency = (props: PropsWithChildren<Props>) => {
   let maximumFractionDigits = 2
 
   if (amountNumber < 0.001) {
-    maximumFractionDigits = 4
+    maximumFractionDigits = 3
   } else if (amountNumber < 10) {
     maximumFractionDigits = 2
   } else {

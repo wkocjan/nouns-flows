@@ -2,12 +2,12 @@
 
 import { getEthAddress } from "@/lib/utils"
 import { useReadContracts } from "wagmi"
-import { rewardPoolAbi } from "@/lib/abis"
+import { rewardPoolImplAbi } from "@/lib/abis"
 import { base } from "viem/chains"
 
 export function useUserTotalRewardsBalance(pools: string[], address?: string) {
   const poolsContracts = pools.map((pool) => ({
-    abi: rewardPoolAbi,
+    abi: rewardPoolImplAbi,
     chainId: base.id,
     address: getEthAddress(pool),
     functionName: "getClaimableBalanceNow",
@@ -20,6 +20,15 @@ export function useUserTotalRewardsBalance(pools: string[], address?: string) {
 
   return {
     totalRewardsBalance:
-      data?.reduce((acc, data) => acc + BigInt(data.result || 0), BigInt(0)) || BigInt(0),
+      data?.reduce((acc, data) => {
+        if (
+          typeof data.result === "bigint" ||
+          typeof data.result === "string" ||
+          typeof data.result === "number"
+        ) {
+          return acc + BigInt(data.result || 0)
+        }
+        return acc
+      }, BigInt(0)) || BigInt(0),
   }
 }
