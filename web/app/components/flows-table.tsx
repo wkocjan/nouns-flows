@@ -14,6 +14,7 @@ import { Grant } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
 import { VotingInput } from "../flow/[flowId]/components/voting-input"
+import { AnimatedSalary } from "@/components/global/animated-salary"
 
 interface Props {
   flows: Array<Grant & { subgrants: Grant[] }>
@@ -86,7 +87,10 @@ export const FlowsTable = (props: Props) => {
               </Tooltip>
             </TableCell>
             <TableCell className="text-center">
-              <Currency>{flow.totalEarned}</Currency>
+              <AnimatedSalary
+                value={Number(flow.totalEarned)}
+                monthlyRate={Number(flow.monthlyOutgoingFlowRate)}
+              />
             </TableCell>
             <TableCell className="text-center">
               <Badge>

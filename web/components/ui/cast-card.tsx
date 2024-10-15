@@ -85,13 +85,15 @@ export const CastCard = (props: Props) => {
               <span className="text-xs text-muted-foreground transition-colors group-hover:text-foreground">
                 {cast.grant.title}
               </span>
-              <Image
-                src={getIpfsUrl(cast.grant.image)}
-                alt={cast.grant.title}
-                width={20}
-                height={20}
-                className="rounded-full"
-              />
+              <div style={{ width: `20px`, height: `20px` }}>
+                <Image
+                  src={getIpfsUrl(cast.grant.image)}
+                  alt={cast.grant.title}
+                  width={20}
+                  height={20}
+                  className="size-[20px] rounded-full object-cover"
+                />
+              </div>
             </Link>
           </div>
         )}
