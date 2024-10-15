@@ -27,7 +27,7 @@ export const FlowsTable = (props: Props) => {
       <TableHeader>
         <TableRow>
           <TableHead colSpan={2}>Name</TableHead>
-          <TableHead className="text-center">Grants</TableHead>
+          <TableHead className="text-center">Flows</TableHead>
           <TableHead className="text-center">Paid out</TableHead>
           <TableHead className="text-center">Budget</TableHead>
           <TableHead className="text-center">Total Votes</TableHead>

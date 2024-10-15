@@ -5,7 +5,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const pool = await getPool()
   return {
     title: `About | ${pool.title}`,
-    description: "Learn more about the grants program and how to apply for funding.",
+    description: "Learn more about the flows program and how to apply for funding.",
   }
 }
 

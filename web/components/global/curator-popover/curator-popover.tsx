@@ -92,7 +92,7 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
             <div className="mt-8">
               <div className="mb-2 grid grid-cols-6 gap-2 text-xs font-medium text-muted-foreground">
                 <div className="col-start-4 text-center">Balance</div>
-                <div className="text-center max-sm:break-all">Grants</div>
+                <div className="text-center max-sm:break-all">Flows</div>
                 <div className="text-center max-sm:break-all">Rewards</div>
               </div>
               {tokens.map(({ id, flow, amount }) => (
@@ -111,7 +111,7 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
             </div>
 
             <p className="mt-8 border-t border-border pt-4 text-sm text-muted-foreground">
-              Curate incoming grants to continue earning rewards.
+              Curate incoming flows to continue earning rewards.
             </p>
 
             <Tabs defaultValue="active" className="mt-4 w-full">
@@ -130,7 +130,7 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
         ) : (
           <>
             <div className="mt-8 flex flex-col items-center justify-center rounded-xl border-t border-border bg-gray-200/30 py-6 text-sm text-muted-foreground dark:bg-gray-800">
-              <p> Buy TCR tokens to curate grants and earn rewards.</p>
+              <p> Buy TCR tokens to curate flows and earn rewards.</p>
             </div>
           </>
         )}

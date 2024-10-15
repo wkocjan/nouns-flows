@@ -14,7 +14,7 @@ export function CuratorGrants(props: ActiveCuratorGrantsProps) {
   if (grants.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-xl bg-gray-200/30 py-6 text-sm text-muted-foreground dark:bg-gray-800">
-        <p>No pending grants. Keep up the great work!</p>
+        <p>No pending flows. Keep up the great work!</p>
       </div>
     )
   }

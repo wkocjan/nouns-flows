@@ -25,11 +25,13 @@ export default async function Home() {
       <main className="container mt-2.5 pb-24 md:mt-8">
         <div className="flex flex-row items-center justify-between">
           <div>
-            <h3 className="font-semibold leading-none tracking-tight md:text-lg">{pool.title}</h3>
+            <Link href={`/flow/${pool.id}`}>
+              <h3 className="font-semibold leading-none tracking-tight md:text-lg">{pool.title}</h3>
+            </Link>
             <p className="mt-1.5 text-sm text-muted-foreground max-sm:hidden">{pool.tagline}</p>
           </div>
           <div className="flex items-center space-x-2">
-            <Link href={`/flow/${pool.id}/applications`}>
+            <Link href={`/apply/${pool.id}`}>
               <Button variant="ghost">Suggest flow</Button>
             </Link>
             <VotingToggle />

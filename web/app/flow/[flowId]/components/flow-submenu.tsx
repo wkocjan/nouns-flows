@@ -71,7 +71,7 @@ export const FlowSubmenu = (props: Props) => {
       <div className="max-sm:hidden">
         <div className="flex items-center space-x-2">
           <SwapTokenButton
-            text={balances?.[0] ? "Buy $TCR" : "Become curator"}
+            text={balances?.[0] ? (!isTopLevel ? "Buy $TCR" : "Buy $FLOWS") : "Become curator"}
             flow={flow}
             extraInfo="curator"
             variant="secondary"

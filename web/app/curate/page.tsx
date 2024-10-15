@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: `Curate and Earn | ${pool.title}`,
     description:
-      "Join our community of curators to manage the grants list and ensure the highest quality projects are funded.",
+      "Join our community of curators to manage the flows list and ensure the highest quality projects are funded.",
   }
 }
 
@@ -43,8 +43,8 @@ export default async function CurateAndEarnPage() {
               Become a Curator
             </p>
             <p className="mt-6 text-lg leading-8 text-muted-foreground">
-              Join our community of curators to manage the grants list and ensure the highest
-              quality projects are funded.
+              Join our community of curators to manage the flows list and ensure the highest quality
+              projects are funded.
             </p>
             <p className="mt-4 text-lg leading-8 text-muted-foreground">
               As a Curator you have two jobs that you will be rewarded for:
@@ -53,13 +53,13 @@ export default async function CurateAndEarnPage() {
               {[
                 {
                   name: "Review Applications",
-                  description: "Evaluate new grants, challenge if needed, and vote on acceptance",
+                  description: "Evaluate new flows, challenge if needed, and vote on acceptance",
                   icon: MagnifyingGlassIcon,
                 },
                 {
                   name: "Monitor Projects",
                   description:
-                    "Track progress of funded grants. Challenge inactive or declining projects",
+                    "Track progress of funded flows. Challenge inactive or declining projects",
                   icon: EyeOpenIcon,
                 },
               ].map((job) => (
@@ -103,7 +103,7 @@ export default async function CurateAndEarnPage() {
                 >
                   Token Curated Registries (TCR)
                 </a>
-                . It&apos;s fully up to the community to curate grants recipients.
+                . It&apos;s fully up to the community to curate flow recipients.
               </p>
             </div>
             <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:max-w-none">
@@ -185,7 +185,7 @@ export default async function CurateAndEarnPage() {
                     icon: TargetIcon,
                     name: "Challenge Rewards",
                     description:
-                      "Earn flow tokens by successfully challenging grant applications. When an application is rejected after your challenge, you receive the applicant's token fee.",
+                      "Earn flow tokens by successfully challenging flow applications. When an application is rejected after your challenge, you receive the applicant's token fee.",
                   },
                   {
                     icon: StarFilledIcon,

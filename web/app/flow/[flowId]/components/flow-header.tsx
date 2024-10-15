@@ -60,7 +60,7 @@ export const FlowHeader = (props: Props) => {
         </div>
         <div className="grid w-full grid-cols-2 gap-x-4 gap-y-8 text-sm md:w-auto md:shrink-0 md:grid-cols-4">
           <div className="md:text-center">
-            <p className="mb-1.5 text-muted-foreground">Grants</p>
+            <p className="mb-1.5 text-muted-foreground">Flows</p>
             <GrantStatusCountBadges
               challengedCount={flow.subgrants.filter((g) => g.isDisputed && !g.isActive).length}
               awaitingCount={
