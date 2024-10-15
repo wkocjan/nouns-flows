@@ -67,11 +67,11 @@ export const StatusNotDisputed = async (props: Props) => {
   return (
     <div className="space-y-4 text-sm">
       <li>
-        Grant has been created <DateTime date={new Date(grant.createdAt * 1000)} relative />
+        Created <DateTime date={new Date(grant.createdAt * 1000)} relative />
       </li>
       <li>
-        Curators of the &quot;{flow.title}&quot; flow can anytime request the removal of the grant
-        if they think there is a valid reason to do so.
+        Curators of the &quot;{flow.title}&quot; flow can request the removal of this project if
+        they think there is a valid reason to do so.
       </li>
 
       {grant.status === Status.Registered && (

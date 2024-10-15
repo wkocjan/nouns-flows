@@ -98,7 +98,7 @@ export default async function GrantPage({ params }: Props) {
               alt={title}
               width={64}
               height={64}
-              className="size-16 shrink-0 rounded-md"
+              className="size-16 shrink-0 rounded-md object-cover"
             />
             <div>
               <h1 className="text-xl font-bold md:text-3xl">{title}</h1>

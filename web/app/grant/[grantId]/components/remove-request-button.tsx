@@ -45,7 +45,7 @@ const reasons = [
     label: (
       <>
         Inactive -{" "}
-        <span className="text-xs text-muted-foreground">Grant without recent updates</span>
+        <span className="text-xs text-muted-foreground">Project without recent updates</span>
       </>
     ),
   },
@@ -108,7 +108,7 @@ export function GrantRemoveRequestButton(props: Props) {
     <Dialog>
       <DialogTrigger asChild>
         <Button type="button" ref={ref} className="w-full" variant="outline">
-          Request {grant.isFlow ? "Flow" : "Grant"} removal
+          Start removal process
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-screen-lg">
@@ -119,7 +119,7 @@ export function GrantRemoveRequestButton(props: Props) {
         </DialogHeader>
         <div className="grid grid-cols-2 divide-x divide-border">
           <div className="md:pr-6">
-            <h2 className="font-medium tracking-tight">&quot;{flow.title}&quot;</h2>
+            <h2 className="font-medium tracking-tight">{flow.title}</h2>
             <h3 className="text-sm text-muted-foreground">Guidelines & requirements</h3>
             <div className="mt-6 space-y-2.5 text-sm leading-normal">
               <Markdown>{flow.description}</Markdown>
@@ -129,7 +129,7 @@ export function GrantRemoveRequestButton(props: Props) {
             <Step i={1}>
               <p>
                 Requesting a removal is a significant action and should only be undertaken if the
-                grant fails to meet the specified requirements or is underperforming.
+                project fails to meet the specified requirements or is underperforming.
               </p>
             </Step>
             <Step i={2}>
@@ -171,7 +171,9 @@ export function GrantRemoveRequestButton(props: Props) {
             </Step>
             <Step i={5}>
               <div>
-                <p>If not challenged, grant will be removed and your fee will be returned.</p>
+                <p>
+                  If not challenged, this project will be removed and your fee will be returned.
+                </p>
                 <p className="mt-2.5 text-sm text-muted-foreground">
                   Your ${token.symbol} balance: {formatEther(token.balance)} (
                   {formatEther(token.allowance)} approved)

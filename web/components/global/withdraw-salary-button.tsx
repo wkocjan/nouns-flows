@@ -21,6 +21,36 @@ export const WithdrawSalaryButton = ({
 
   const { balance, isLoading } = useClaimableFlowsBalance(flow)
 
+  const getTextSize = (size: ButtonProps["size"]) => {
+    switch (size) {
+      case "xs":
+        return "text-xs"
+      case "sm":
+        return "text-sm"
+      case "default":
+        return "text-base"
+      case "lg":
+        return "text-lg"
+      default:
+        return "text-sm"
+    }
+  }
+
+  const getIconSize = (size: ButtonProps["size"]) => {
+    switch (size) {
+      case "xs":
+        return "size-3"
+      case "sm":
+        return "size-3.5"
+      case "default":
+        return "size-4"
+      case "lg":
+        return "size-5"
+      default:
+        return "size-3.5"
+    }
+  }
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -33,8 +63,10 @@ export const WithdrawSalaryButton = ({
           variant="ghost"
           disabled={balance === BigInt(0) || isLoading}
         >
-          <Currency className="text-center text-sm">{Number(balance) / 1e18}</Currency>
-          <DownloadIcon className="ml-1 size-3.5" />
+          <Currency className={cn("text-center", getTextSize(size))}>
+            {Number(balance) / 1e18}
+          </Currency>
+          <DownloadIcon className={cn("ml-1", getIconSize(size))} />
         </Button>
       </TooltipTrigger>
       {balance === BigInt(0) && !isLoading && (
