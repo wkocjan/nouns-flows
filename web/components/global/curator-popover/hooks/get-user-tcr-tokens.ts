@@ -18,6 +18,7 @@ export const getUserTcrTokens = cache(async (address: `0x${string}`) => {
             superToken: true,
             managerRewardSuperfluidPool: true,
             managerRewardPool: true,
+            monthlyRewardPoolFlowRate: true,
             title: true,
             erc20: true,
             arbitrator: true,

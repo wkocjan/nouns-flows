@@ -11,7 +11,13 @@ import { TcrTokenBalance } from "@/components/ui/tcr-token-balance"
 interface TokenRowProps {
   flow: Pick<
     Grant,
-    "id" | "title" | "image" | "superToken" | "managerRewardSuperfluidPool" | "erc20"
+    | "id"
+    | "title"
+    | "image"
+    | "superToken"
+    | "managerRewardSuperfluidPool"
+    | "erc20"
+    | "monthlyRewardPoolFlowRate"
   >
   challengedCount: number
   awaitingCount: number
@@ -44,6 +50,7 @@ export function TokenRow(props: TokenRowProps) {
         erc20={getAddress(flow.erc20)}
         className="text-center text-sm font-medium"
         balance={formatEther(BigInt(balance))}
+        monthlyRewardPoolRate={flow.monthlyRewardPoolFlowRate}
       />
       <GrantStatusCountBadges
         hideChallenged={challengedCount === 0}

@@ -1,10 +1,6 @@
 "use client"
 
-import {
-  canDisputeBeExecuted,
-  canRequestBeExecuted,
-  isDisputeVotingOver,
-} from "@/app/components/dispute/helpers"
+import { canDisputeBeExecuted, isDisputeVotingOver } from "@/app/components/dispute/helpers"
 import { SwapTokenButton } from "@/app/token/swap-token-button"
 import { Badge } from "@/components/ui/badge"
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -12,7 +8,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Grant } from "@prisma/client"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
-import { formatEther } from "viem"
 import { useAccount } from "wagmi"
 import { CuratorGrants } from "./curator-grants"
 import { useUserTcrTokens } from "./hooks/use-user-tcr-tokens"
@@ -23,7 +18,7 @@ import { Currency } from "@/components/ui/currency"
 export const CuratorPopover = ({ flow }: { flow: Grant }) => {
   const [isVisible, setIsVisible] = useState(false)
   const { address } = useAccount()
-  const { tokens, totalBalance, earnings } = useUserTcrTokens(address)
+  const { tokens, earnings } = useUserTcrTokens(address)
   const closeRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
