@@ -57,7 +57,7 @@ export function MenuDesktop() {
 
   return (
     <>
-      <nav className="hidden md:space-x-8 lg:flex lg:flex-row">
+      <nav className="hidden lg:flex lg:grow lg:flex-row lg:justify-center lg:space-x-8">
         {menu.map(({ name, href, isCurrent }) => (
           <Link
             key={name}
