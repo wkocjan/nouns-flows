@@ -1,3 +1,4 @@
+import { AnimatedSalary } from "@/components/global/animated-salary"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -141,7 +142,10 @@ export default async function GrantPage({ params }: Props) {
                 <div>
                   <h4 className="text-[13px] text-muted-foreground">Total Earned</h4>
                   <p className="mt-1 text-lg font-medium">
-                    <Currency>{grant.totalEarned}</Currency>
+                    <AnimatedSalary
+                      value={grant.totalEarned}
+                      monthlyRate={grant.monthlyIncomingFlowRate}
+                    />
                   </p>
                 </div>
                 <div>

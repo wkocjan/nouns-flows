@@ -87,15 +87,17 @@ export const FlowsTable = (props: Props) => {
               </Tooltip>
             </TableCell>
             <TableCell className="text-center">
-              <Currency>{Number(flow.totalEarned)}</Currency>
+              <AnimatedSalary
+                value={flow.totalEarned}
+                monthlyRate={
+                  flow.isFlow ? flow.monthlyOutgoingFlowRate : flow.monthlyIncomingFlowRate
+                }
+              />
             </TableCell>
             <TableCell className="text-center">
               <Badge>
                 <Currency>
-                  {/* If flow is paying grants, show payment amount. If no grants, flow hasn't been spent, and should show incoming flow rate. */}
-                  {flow.subgrants.length > 0
-                    ? flow.monthlyOutgoingFlowRate
-                    : flow.monthlyIncomingFlowRate}
+                  {flow.isFlow ? flow.monthlyOutgoingFlowRate : flow.monthlyIncomingFlowRate}
                 </Currency>
                 /mo
               </Badge>

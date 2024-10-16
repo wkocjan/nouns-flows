@@ -24,7 +24,7 @@ export const ClaimableBalance = (props: Props) => {
   return (
     <div>
       <h4 className="text-[13px] tracking-tight text-muted-foreground">Claimable</h4>
-      <div className="-ml-3.5 -mt-0.5">
+      <div className="-ml-3.5 -mt-[0.1em]">
         <WithdrawSalaryButton flow={flow} size="default" pools={pools} />
       </div>
     </div>

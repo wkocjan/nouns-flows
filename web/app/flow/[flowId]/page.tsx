@@ -21,6 +21,7 @@ import Link from "next/link"
 import { GrantLogoCell } from "./components/grant-logo-cell"
 import { VotingBar } from "./components/voting-bar"
 import { VotingInput } from "./components/voting-input"
+import { AnimatedSalary } from "@/components/global/animated-salary"
 
 interface Props {
   params: {
@@ -126,7 +127,10 @@ export default async function FlowPage(props: Props) {
                 )}
 
                 <TableCell className="text-center">
-                  <Currency>{grant.totalEarned}</Currency>
+                  <AnimatedSalary
+                    value={grant.totalEarned}
+                    monthlyRate={grant.monthlyIncomingFlowRate}
+                  />
                 </TableCell>
 
                 <TableCell className="text-center">

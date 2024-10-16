@@ -8,24 +8,19 @@ interface Props {
 export const Currency = (props: PropsWithChildren<Props>) => {
   const { children: amount, as: Component = "span", ...rest } = props
 
-  const amountNumber = Number(amount)
-  let maximumFractionDigits = 2
-
-  if (amountNumber < 0.001) {
-    maximumFractionDigits = 3
-  } else if (amountNumber < 10) {
-    maximumFractionDigits = 2
-  } else {
-    maximumFractionDigits = 0
-  }
-
   return (
     <Component {...rest}>
       {Intl.NumberFormat("en", {
         style: "currency",
         currency: "USD",
-        maximumFractionDigits,
+        maximumFractionDigits: getCurrencyFractionDigits(Number(amount)),
       }).format(Number(amount))}
     </Component>
   )
+}
+
+function getCurrencyFractionDigits(amount: number) {
+  if (amount < 0.001) return 3
+  if (amount < 10) return 2
+  return 0
 }
