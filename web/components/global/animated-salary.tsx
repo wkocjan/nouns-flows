@@ -17,7 +17,7 @@ export function AnimatedSalary({ value, monthlyRate }: Props) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentValue((prev) => prev + Number(monthlyRate) / 60 / 60 / 24)
+      setCurrentValue((prev) => prev + Number(monthlyRate) / 60 / 60 / 24 / 30)
     }, 1000)
     return () => clearInterval(interval)
   }, [monthlyRate])
