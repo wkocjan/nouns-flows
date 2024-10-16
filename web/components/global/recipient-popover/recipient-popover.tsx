@@ -13,18 +13,15 @@ import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { useAccount } from "wagmi"
+import { AnimatedSalary } from "../animated-salary"
 import { WithdrawSalaryButton } from "../withdraw-salary-button"
 import { useUserGrants } from "./use-user-grants"
-import { useClaimableFlowsBalances } from "../hooks/use-claimable-flows-balances"
 
 export const RecipientPopover = () => {
   const [isVisible, setIsVisible] = useState(false)
   const { address } = useAccount()
-  const { grants, claimableBalance, earnings } = useUserGrants(address)
+  const { grants, earnings } = useUserGrants(address)
   const closeRef = useRef<HTMLButtonElement>(null)
-  const { totalBalance } = useClaimableFlowsBalances(
-    grants.map((grant) => getEthAddress(grant.parentContract)),
-  )
 
   const { data, isLoading } = useServerFunction(getUserUpdatesChannel, "updates-channel", [address])
 
@@ -44,8 +41,10 @@ export const RecipientPopover = () => {
     <Popover>
       <PopoverTrigger>
         <Badge className="h-[26px] rounded-full text-xs">
-          {/* Pull from contracts directly for more up to date balance */}
-          <Currency>{Number(totalBalance) / 1e18 || claimableBalance}</Currency>
+          <AnimatedSalary
+            value={earnings.claimable ? Number(earnings.claimable) / 1e18 : 0}
+            monthlyRate={earnings.monthly}
+          />
         </Badge>
       </PopoverTrigger>
       <PopoverContent className="w-full max-w-[100vw] md:mr-8 md:w-[480px]">
