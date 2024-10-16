@@ -18,6 +18,7 @@ import { CuratorGrants } from "./curator-grants"
 import { useUserTcrTokens } from "./hooks/use-user-tcr-tokens"
 import { TokenRow } from "./token-row"
 import { AnimatedSalary } from "../animated-salary"
+import { Currency } from "@/components/ui/currency"
 
 export const CuratorPopover = ({ flow }: { flow: Grant }) => {
   const [isVisible, setIsVisible] = useState(false)
@@ -73,7 +74,7 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
           </Badge>
         </div>
       </PopoverTrigger>
-      <PopoverContent className="w-full max-w-[100vw] md:mr-8 md:w-[500px]">
+      <PopoverContent className="w-full max-w-[100vw] md:mr-8 md:w-[550px]">
         <PopoverClose ref={closeRef} className="hidden" />
         <div className="flex flex-row items-center justify-between">
           <p className="text-sm text-muted-foreground">
@@ -86,8 +87,10 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
               curate
             </Link>{" "}
             {tokens.length} {`flow${tokens.length !== 1 ? "s" : ""}`} with{" "}
-            {formatEther(totalBalance || BigInt(0))} tokens.
+            {formatEther(totalBalance || BigInt(0))} tokens. (<Currency>{earnings.yearly}</Currency>{" "}
+            / yr)
           </p>
+
           <SwapTokenButton size="xs" flow={flow} />
         </div>
         {tokens.length > 0 ? (

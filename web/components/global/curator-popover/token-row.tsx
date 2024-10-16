@@ -4,11 +4,15 @@ import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import { Grant } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
-import { formatEther } from "viem"
+import { formatEther, getAddress } from "viem"
 import { WithdrawCuratorSalaryButton } from "../withdraw-curator-salary-button"
+import { TcrTokenBalance } from "@/components/ui/tcr-token-balance"
 
 interface TokenRowProps {
-  flow: Pick<Grant, "id" | "title" | "image" | "superToken" | "managerRewardSuperfluidPool">
+  flow: Pick<
+    Grant,
+    "id" | "title" | "image" | "superToken" | "managerRewardSuperfluidPool" | "erc20"
+  >
   challengedCount: number
   awaitingCount: number
   closePopover: () => void
@@ -36,7 +40,11 @@ export function TokenRow(props: TokenRowProps) {
           {flow.title}
         </Link>
       </div>
-      <div className="text-center text-sm font-medium">{formatEther(BigInt(balance))}</div>
+      <TcrTokenBalance
+        erc20={getAddress(flow.erc20)}
+        className="text-center text-sm font-medium"
+        balance={formatEther(BigInt(balance))}
+      />
       <GrantStatusCountBadges
         hideChallenged={challengedCount === 0}
         challengedCount={challengedCount}
