@@ -58,6 +58,7 @@ async function handleItemSubmitted(params: {
       votesCount: "0",
       monthlyIncomingFlowRate: "0",
       monthlyOutgoingFlowRate: "0",
+      rewardPoolFlowRate: "0",
       totalEarned: "0",
       claimableBalance: "0",
       tcr: "",
