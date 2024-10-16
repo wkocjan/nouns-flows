@@ -11,7 +11,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Markdown } from "@/components/ui/markdown"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { FlowWithGrants } from "@/lib/database/queries/flow"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
@@ -85,7 +84,8 @@ export const FlowHeader = (props: Props) => {
               </PopoverTrigger>
               <PopoverContent className="w-auto">
                 <p className="text-sm">
-                  {flow.managerRewardPoolFlowRatePercent / 1e4}% of monthly flow goes to curators
+                  <Currency>{flow.monthlyRewardPoolFlowRate || 0}</Currency>/month of flow goes to
+                  curators ({flow.managerRewardPoolFlowRatePercent / 1e4}%)
                 </p>
               </PopoverContent>
             </Popover>
