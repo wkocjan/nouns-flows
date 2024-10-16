@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import { BULK_WITHDRAW_MACRO, MACRO_FORWARDER } from "@/lib/config"
 import { encodeAbiParameters } from "viem"
 
-export const useBulkPoolWithdrawMacro = (pools: `0x${string}`[]) => {
+export const useBulkPoolWithdrawMacro = (pools: `0x${string}`[], onSuccess?: () => void) => {
   const { address } = useAccount()
   const router = useRouter()
   const chainId = base.id
@@ -18,6 +18,7 @@ export const useBulkPoolWithdrawMacro = (pools: `0x${string}`[]) => {
     onSuccess: (hash) => {
       // Handle successful withdrawal here if needed
       router.refresh()
+      onSuccess?.()
     },
   })
 

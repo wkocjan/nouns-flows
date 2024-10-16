@@ -12,7 +12,7 @@ export function useUserGrants(address: string | undefined) {
     getUserGrants(getEthAddress(address!)),
   )
 
-  const { data } = useReadContracts({
+  const { data, refetch } = useReadContracts({
     contracts: grants.map((grant) => ({
       address: getAddress(grant.parentContract) as Address,
       abi: nounsFlowImplAbi,
@@ -32,6 +32,10 @@ export function useUserGrants(address: string | undefined) {
 
   return {
     grants,
+    refetch: () => {
+      refetch()
+      rest.mutate()
+    },
     earnings: {
       claimable,
       monthly,

@@ -20,7 +20,7 @@ import { useUserGrants } from "./use-user-grants"
 export const RecipientPopover = () => {
   const [isVisible, setIsVisible] = useState(false)
   const { address } = useAccount()
-  const { grants, earnings } = useUserGrants(address)
+  const { grants, earnings, refetch } = useUserGrants(address)
   const closeRef = useRef<HTMLButtonElement>(null)
 
   const { data, isLoading } = useServerFunction(getUserUpdatesChannel, "updates-channel", [address])
@@ -96,6 +96,7 @@ export const RecipientPopover = () => {
                 </Currency>
                 <div className="flex items-center justify-center">
                   <WithdrawSalaryButton
+                    onSuccess={refetch}
                     flow={getEthAddress(grant.parentContract)}
                     pools={[grant.flow.baselinePool, grant.flow.bonusPool].map((pool) =>
                       getEthAddress(pool),
