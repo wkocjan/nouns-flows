@@ -86,7 +86,7 @@ view Grant {
   votesCount                       String
   monthlyIncomingFlowRate          String
   monthlyOutgoingFlowRate          String
-  rewardPoolFlowRate               String
+  monthlyRewardPoolFlowRate               String
   totalEarned                      String
   claimableBalance                 String
   tcr                              String  @unique
