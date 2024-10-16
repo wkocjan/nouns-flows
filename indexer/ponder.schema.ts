@@ -20,6 +20,7 @@ export default createSchema((p) => ({
       votesCount: p.string(),
       monthlyIncomingFlowRate: p.string(),
       monthlyOutgoingFlowRate: p.string(),
+      rewardPoolFlowRate: p.string(),
       totalEarned: p.string(),
       claimableBalance: p.string(),
       tcr: p.string(),
