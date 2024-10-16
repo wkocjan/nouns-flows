@@ -10,6 +10,7 @@ import {
 import { VotesTicker } from "@/app/components/dispute/votes-ticker"
 import { DateTime } from "@/components/ui/date-time"
 import { UserProfile } from "@/components/user-profile/user-profile"
+import database from "@/lib/database"
 import { getEthAddress } from "@/lib/utils"
 import { Dispute, Grant } from "@prisma/client"
 
@@ -20,7 +21,7 @@ interface Props {
 }
 
 export async function StatusDisputed(props: Props) {
-  const { dispute, flow } = props
+  const { dispute, flow, grant } = props
 
   const currentTime = Date.now() / 1000
 
@@ -28,6 +29,7 @@ export async function StatusDisputed(props: Props) {
     return (
       <div className="space-y-4 text-sm">
         <Challenger />
+        <Evidence />
         <VotingStartDate />
         <li>Token holders vote to approve or reject the application.</li>
       </div>
@@ -38,6 +40,7 @@ export async function StatusDisputed(props: Props) {
     return (
       <div className="space-y-4 text-sm">
         <Challenger />
+        <Evidence />
         <VotingStartDate />
         <VotingEndDate />
         <RevealDate />
@@ -49,6 +52,7 @@ export async function StatusDisputed(props: Props) {
     return (
       <div className="space-y-4 text-sm">
         <Challenger />
+        <Evidence />
         <VotingEndDate />
         <Results />
         <DisputeExecuteButton flow={flow} dispute={dispute} className="!mt-6 w-full" />
@@ -60,6 +64,7 @@ export async function StatusDisputed(props: Props) {
     return (
       <div className="space-y-4 text-sm">
         <Challenger />
+        <Evidence />
         <VotingEndDate />
         <Results />
       </div>
@@ -73,6 +78,22 @@ export async function StatusDisputed(props: Props) {
         <UserProfile address={getEthAddress(dispute.challenger)}>
           {(profile) => <span className="font-medium">{profile.display_name}</span>}
         </UserProfile>
+      </li>
+    )
+  }
+
+  async function Evidence() {
+    const evidence = await database.evidence.findFirst({
+      where: { evidenceGroupID: grant.evidenceGroupID },
+      orderBy: { blockNumber: "asc" },
+    })
+
+    if (!evidence) return null
+
+    return (
+      <li>
+        Reason provided:
+        <div className="mt-1 pl-5 text-muted-foreground">{evidence.evidence}</div>
       </li>
     )
   }

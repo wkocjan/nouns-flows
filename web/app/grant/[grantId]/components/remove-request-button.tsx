@@ -196,7 +196,7 @@ export function GrantRemoveRequestButton(props: Props) {
           )}
           {hasEnoughBalance && (
             <Button
-              disabled={!hasEnoughBalance || token.isApproving || isLoading}
+              disabled={token.isApproving || isLoading}
               loading={token.isApproving || isLoading}
               type="button"
               onClick={async () => {
