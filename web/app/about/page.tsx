@@ -1,3 +1,4 @@
+import { VideoPlayer } from "@/components/ui/video-player"
 import { getPool } from "@/lib/database/queries/pool"
 import { Metadata } from "next"
 
@@ -12,7 +13,65 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function AboutPage() {
   return (
     <main className="container mt-2.5 md:mt-6">
-      <p>About...</p>
+      <div className="grid grid-cols-1 gap-x-6 gap-y-4 pb-16 md:grid-cols-2">
+        <Category title="About" />
+
+        <Video
+          url="https://stream.warpcast.com/v1/video/a5501c8b4a94b104840de30618f4cf1e.m3u8"
+          title="An introduction to flows.wtf"
+        />
+
+        <Category title="For builders" />
+
+        <Video
+          url="https://stream.warpcast.com/v1/video/1f913f31252eec4c3f6e6c2f932c718d.m3u8"
+          title="How to get funded as a builder (pt 1)"
+        />
+        <Video
+          url="https://stream.warpcast.com/v1/video/a2dbf2b1c0c15f8abc0d554e7be33e66.m3u8"
+          title="How to get funded as a builder (pt 2)"
+        />
+
+        <Category title="For Nouns DAO members" />
+
+        <Video
+          url="https://stream.warpcast.com/v1/video/0dee1ffd9a47f9034294fb539f98b2f1.m3u8"
+          title="How to vote as a nouner (pt. 1) ⌐◨-◨"
+        />
+
+        <Video
+          url="https://stream.warpcast.com/v1/video/e9fa8d75917d1fc84e4bc2f515999f2e.m3u8"
+          title="How to vote as a nouner (pt. 2) ⌐◨-◨"
+        />
+      </div>
     </main>
+  )
+}
+
+function Category(props: { title: string }) {
+  const { title } = props
+  return (
+    <h2 className="col-span-full mt-8 border-b pb-2.5 text-lg font-medium tracking-tight md:text-xl">
+      {title}
+    </h2>
+  )
+}
+
+function Video(props: { url: string; title: string }) {
+  const { url, title } = props
+  return (
+    <div>
+      <div className="mt-2.5 aspect-video rounded-lg bg-black/80">
+        <VideoPlayer
+          url={url}
+          controls
+          width="100%"
+          height="100%"
+          style={{ objectFit: "cover", borderRadius: "var(--radius)", overflow: "hidden" }}
+          playsinline={true}
+        />
+      </div>
+      <h3 className="mt-2.5 text-center text-muted-foreground max-sm:text-sm">{title}</h3>
+    </div>
   )
 }

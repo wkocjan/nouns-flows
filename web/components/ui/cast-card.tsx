@@ -1,16 +1,12 @@
-"use client"
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { DateTime } from "@/components/ui/date-time"
 import { getIpfsUrl } from "@/lib/utils"
 import { Cast, FarcasterUser, Grant } from "@prisma/client"
 import Linkify from "linkify-react"
-import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
-
-const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false })
+import { VideoPlayer } from "./video-player"
 
 interface Props {
   cast: Cast & { user: FarcasterUser; grant?: Pick<Grant, "title" | "image"> | null }
@@ -57,7 +53,7 @@ export const CastCard = (props: Props) => {
           <div className="mt-4 grid grid-cols-1 gap-2.5">
             {cast.videos?.map((video) => (
               <div key={video} className="h-auto w-full overflow-hidden rounded-lg">
-                <ReactPlayer url={video} width="100%" height="100%" controls c />
+                <VideoPlayer url={video} width="100%" height="100%" controls />
               </div>
             ))}
             {cast.images?.map((image) => (
