@@ -22,7 +22,7 @@ export function AnimatedSalary({ value, monthlyRate }: Props) {
     return () => clearInterval(interval)
   }, [monthlyRate])
 
-  const fractionDigits = getCurrencyFractionDigits(Number(value))
+  const fractionDigits = getCurrencyFractionDigits(Number(monthlyRate))
 
   return (
     <NumberFlow
@@ -39,8 +39,11 @@ export function AnimatedSalary({ value, monthlyRate }: Props) {
   )
 }
 
-export function getCurrencyFractionDigits(amount: number) {
-  if (amount < 10) return 4
-  if (amount < 1000) return 3
-  return 2
+export function getCurrencyFractionDigits(rate: number) {
+  if (rate === 0) return 2
+  if (rate < 1) return 7
+  if (rate < 10) return 6
+  if (rate < 100) return 5
+  if (rate < 1000) return 4
+  return 3
 }
