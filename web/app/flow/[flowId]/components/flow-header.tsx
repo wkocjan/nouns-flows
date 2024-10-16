@@ -82,10 +82,16 @@ export const FlowHeader = (props: Props) => {
                   /mo
                 </Badge>
               </PopoverTrigger>
-              <PopoverContent className="w-auto">
+              <PopoverContent className="flex w-auto flex-col space-y-2">
                 <p className="text-sm">
-                  <Currency>{flow.monthlyRewardPoolFlowRate || 0}</Currency>/month of flow goes to
-                  curators ({flow.managerRewardPoolFlowRatePercent / 1e4}%)
+                  <Currency>{flow.monthlyIncomingFlowRate || 0}</Currency>/month incoming flow.
+                </p>
+                <p className="text-sm">
+                  <Currency>{flow.monthlyOutgoingFlowRate || 0}</Currency>/month outgoing flow.
+                </p>
+                <p className="text-sm">
+                  <Currency>{flow.monthlyRewardPoolFlowRate || 0}</Currency>/month goes to curators
+                  ({flow.managerRewardPoolFlowRatePercent / 1e4}%)
                 </p>
               </PopoverContent>
             </Popover>
