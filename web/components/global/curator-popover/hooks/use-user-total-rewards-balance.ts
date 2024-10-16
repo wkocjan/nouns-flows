@@ -10,25 +10,55 @@ export function useUserTotalRewardsBalance(pools: string[], address?: string) {
     abi: rewardPoolImplAbi,
     chainId: base.id,
     address: getEthAddress(pool),
-    functionName: "getClaimableBalanceNow",
+
     args: address ? [getEthAddress(address)] : undefined,
   }))
 
-  const { data } = useReadContracts({
-    contracts: poolsContracts,
+  const { data: claimableBalances } = useReadContracts({
+    contracts: poolsContracts.map((pool) => ({
+      ...pool,
+      functionName: "getClaimableBalanceNow",
+    })),
   })
 
+  const { data: memberFlowRates } = useReadContracts({
+    contracts: poolsContracts.map((pool) => ({
+      ...pool,
+      functionName: "getMemberFlowRate",
+    })),
+  })
+
+  const monthly =
+    (memberFlowRates?.reduce((acc, data) => {
+      if (
+        typeof data.result === "bigint" ||
+        typeof data.result === "string" ||
+        typeof data.result === "number"
+      ) {
+        // flow rate is in wei per second
+        // so convert to seconds in a month
+        return acc + Number(data.result || 0 * 24 * 60 * 60 * 30)
+      }
+      return acc
+    }, 0) || 0) / 1e18
+
+  const claimable =
+    claimableBalances?.reduce((acc, data) => {
+      if (
+        typeof data.result === "bigint" ||
+        typeof data.result === "string" ||
+        typeof data.result === "number"
+      ) {
+        return acc + BigInt(data.result || 0)
+      }
+      return acc
+    }, BigInt(0)) || BigInt(0)
+
   return {
-    totalRewardsBalance:
-      data?.reduce((acc, data) => {
-        if (
-          typeof data.result === "bigint" ||
-          typeof data.result === "string" ||
-          typeof data.result === "number"
-        ) {
-          return acc + BigInt(data.result || 0)
-        }
-        return acc
-      }, BigInt(0)) || BigInt(0),
+    earnings: {
+      claimable,
+      monthly,
+      yearly: 12 * monthly,
+    },
   }
 }

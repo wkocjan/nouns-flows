@@ -51,18 +51,20 @@ export default function AboutPage() {
 
         <Video
           url="https://stream.warpcast.com/v1/video/0dee1ffd9a47f9034294fb539f98b2f1.m3u8"
-          title="How to vote as a nouner (pt. 1) ⌐◨-◨"
+          title="How to vote (pt. 1) ⌐◨-◨"
         />
 
         <Video
           url="https://stream.warpcast.com/v1/video/e9fa8d75917d1fc84e4bc2f515999f2e.m3u8"
-          title="How to vote as a nouner (pt. 2) ⌐◨-◨"
+          title="How to vote (pt. 2) ⌐◨-◨"
         />
 
         <Video
           url="https://stream.warpcast.com/v1/video/ba088294ab1a31aa1eda868ea669ba29.m3u8"
           title="How to suggest a flow ⌐◨-◨"
         />
+
+        <Category title="For curators 🚀" />
       </div>
     </main>
   )

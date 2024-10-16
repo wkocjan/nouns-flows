@@ -10,15 +10,15 @@ export function useUserTcrTokens(address: string | undefined) {
     getUserTcrTokens(getEthAddress(address!!.toLowerCase())),
   )
 
-  const { totalRewardsBalance } = useUserTotalRewardsBalance(
+  const { earnings } = useUserTotalRewardsBalance(
     data?.map((token) => token.flow.managerRewardPool) || [],
     address,
   )
 
   return {
+    earnings,
     tokens: data || [],
     totalBalance: data?.reduce((acc, token) => acc + BigInt(token.amount), BigInt(0)),
-    totalRewardsBalance,
     ...rest,
   }
 }
