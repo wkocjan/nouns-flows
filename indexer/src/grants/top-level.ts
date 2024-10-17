@@ -81,7 +81,6 @@ ponder.on("NounsFlow:FlowInitialized", async (params) => {
       monthlyBaselinePoolFlowRate: "0",
       monthlyBonusPoolFlowRate: "0",
       totalEarned: "0",
-      claimableBalance: "0",
       tcr: flowTcrAddress[8453].toLowerCase(),
       erc20: erc20VotesMintableAddress[8453].toLowerCase(),
       arbitrator: erc20VotesArbitratorAddress[8453].toLowerCase(),

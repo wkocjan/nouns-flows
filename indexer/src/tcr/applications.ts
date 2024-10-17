@@ -62,7 +62,6 @@ async function handleItemSubmitted(params: {
       monthlyBaselinePoolFlowRate: "0",
       monthlyBonusPoolFlowRate: "0",
       totalEarned: "0",
-      claimableBalance: "0",
       tcr: "",
       erc20: "",
       arbitrator: "",
