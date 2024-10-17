@@ -44,9 +44,9 @@ export default async function ApplicationPage({ params }: Props) {
     include: { flow: true, disputes: true },
   })
 
-  if (grant.isActive === 1 && isProduction()) return redirect(`/grant/${grant.id}`)
+  if (grant.isActive === 1 && isProduction()) return redirect(`/item/${grant.id}`)
 
-  const { title, description, flow, image, createdAt, isFlow } = grant
+  const { title, description, flow, image, createdAt, isFlow, isTopLevel } = grant
 
   const dispute = grant.disputes[0]
 
@@ -103,7 +103,9 @@ export default async function ApplicationPage({ params }: Props) {
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <h4 className="text-[13px] text-muted-foreground">Builders</h4>
+                  <h4 className="text-[13px] text-muted-foreground">
+                    {isTopLevel ? "Proposer" : "Builder"}
+                  </h4>
                   <div className="mt-1 flex space-x-0.5">
                     <UserProfile
                       address={getEthAddress(grant.isFlow ? grant.submitter : grant.recipient)}

@@ -77,7 +77,7 @@ export const CastCard = (props: Props) => {
         )}
         {cast.grant && (
           <div className="mt-2.5 flex translate-y-1 justify-center md:translate-y-2.5">
-            <Link href={`/grant/${cast.grantId}`} className="group flex items-center space-x-2">
+            <Link href={`/item/${cast.grantId}`} className="group flex items-center space-x-2">
               <span className="text-xs text-muted-foreground transition-colors group-hover:text-foreground">
                 {cast.grant.title}
               </span>

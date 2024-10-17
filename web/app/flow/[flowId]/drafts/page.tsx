@@ -38,12 +38,14 @@ export default async function FlowDraftsPage(props: Props) {
     orderBy: { createdAt: "desc" },
   })
 
+  const { isTopLevel } = flow
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead colSpan={2}>Name</TableHead>
-          <TableHead>Builder(s)</TableHead>
+          <TableHead>{isTopLevel ? "Proposer" : "Builders"}</TableHead>
           <TableHead className="text-center">Type</TableHead>
           <TableHead className="text-center">Created At</TableHead>
           <TableHead className="text-right">Action</TableHead>

@@ -34,7 +34,7 @@ export async function analyzeCast(cast: Cast, grants: Array<Grant & { flow: Gran
         ${grants
           .map(
             (g) =>
-              `Grant ID: ${g.id}\nGrant URL: https://flows.wtf/grant/${g.id}}\nTitle: ${g.title}\nGrant category: ${g.flow.title}\nDescription: ${g.description}`,
+              `Grant ID: ${g.id}\nGrant URL: https://flows.wtf/item/${g.id}}\nTitle: ${g.title}\nGrant category: ${g.flow.title}\nDescription: ${g.description}`,
           )
           .join("\n\n\n")}
         `,

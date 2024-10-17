@@ -7,17 +7,17 @@ const SUBGRAPH_URL = `https://gateway.thegraph.com/api/${process.env.SUBGRAPH_AP
 
 export async function fetchDelegatedTokens(address: string) {
   // // For testing - wojciech.eth
-  // if (address === "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52") {
-  //   return [
-  //     { id: 1, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
-  //     { id: 3, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
-  //     { id: 4, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
-  //     { id: 5, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
-  //     { id: 6, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
-  //     // { id: 7, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
-  //     { id: 8, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
-  //   ]
-  // }
+  if (address === "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52") {
+    return [
+      { id: 1, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
+      { id: 3, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
+      { id: 4, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
+      { id: 5, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
+      { id: 6, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
+      // { id: 7, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
+      { id: 8, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
+    ]
+  }
 
   // For testing - rocketman21.eth
   if (address === "0x289715ffbb2f4b482e2917d2f183feab564ec84f") {

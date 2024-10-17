@@ -84,7 +84,7 @@ export const RecipientPopover = () => {
                     height={24}
                   />
                   <Link
-                    href={`/grant/${grant.id}`}
+                    href={`/item/${grant.id}`}
                     className="truncate text-sm hover:underline"
                     onClick={() => closeRef.current?.click()}
                   >

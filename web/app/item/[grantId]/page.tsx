@@ -36,7 +36,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const pool = await getPool()
 
   const grant = await database.grant.findFirstOrThrow({
-    where: { id: grantId },
+    where: { id: grantId, isTopLevel: 0 },
     select: { title: true, tagline: true },
   })
 
@@ -47,7 +47,7 @@ export default async function GrantPage({ params }: Props) {
   const { grantId } = params
 
   const grant = await database.grant.findUniqueOrThrow({
-    where: { id: grantId, isActive: 1 },
+    where: { id: grantId, isActive: 1, isTopLevel: 0 },
     include: {
       flow: true,
       disputes: {
@@ -63,7 +63,7 @@ export default async function GrantPage({ params }: Props) {
     },
   })
 
-  const { title, tagline, description, flow, image, votesCount, parentContract } = grant
+  const { title, tagline, description, flow, image, votesCount, parentContract, isFlow } = grant
 
   return (
     <div className="container mt-2.5 pb-24 md:mt-6">
@@ -73,20 +73,24 @@ export default async function GrantPage({ params }: Props) {
             <BreadcrumbLink href="/">Flows</BreadcrumbLink>
           </BreadcrumbItem>
 
-          {flow && (
-            <>
-              <BreadcrumbSeparator />
+          <BreadcrumbSeparator />
 
-              <BreadcrumbItem>
-                <BreadcrumbLink href={`/flow/${flow.id}`}>{flow.title}</BreadcrumbLink>
-              </BreadcrumbItem>
-            </>
+          {isFlow === 0 && (
+            <BreadcrumbItem>
+              <BreadcrumbLink href={`/flow/${flow.id}`}>{flow.title}</BreadcrumbLink>
+            </BreadcrumbItem>
+          )}
+
+          {isFlow === 1 && (
+            <BreadcrumbItem>
+              <BreadcrumbLink href={`/flow/${grant.id}`}>{grant.title}</BreadcrumbLink>
+            </BreadcrumbItem>
           )}
 
           <BreadcrumbSeparator />
 
           <BreadcrumbItem>
-            <BreadcrumbPage>{title}</BreadcrumbPage>
+            <BreadcrumbPage>{isFlow ? "Flow details" : title}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -119,19 +123,21 @@ export default async function GrantPage({ params }: Props) {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-                <div>
-                  <h4 className="text-[13px] text-muted-foreground">Builders</h4>
-                  <div className="mt-1 flex space-x-0.5">
-                    <UserProfile address={getEthAddress(grant.recipient)} key={grant.recipient}>
-                      {(profile) => (
-                        <Avatar className="size-7 bg-accent text-xs">
-                          <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
-                          <AvatarFallback>{profile.display_name[0].toUpperCase()}</AvatarFallback>
-                        </Avatar>
-                      )}
-                    </UserProfile>
+                {!isFlow && (
+                  <div>
+                    <h4 className="text-[13px] text-muted-foreground">Builders</h4>
+                    <div className="mt-1 flex space-x-0.5">
+                      <UserProfile address={getEthAddress(grant.recipient)} key={grant.recipient}>
+                        {(profile) => (
+                          <Avatar className="size-7 bg-accent text-xs">
+                            <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
+                            <AvatarFallback>{profile.display_name[0].toUpperCase()}</AvatarFallback>
+                          </Avatar>
+                        )}
+                      </UserProfile>
+                    </div>
                   </div>
-                </div>
+                )}
                 <div>
                   <h4 className="text-[13px] text-muted-foreground">Budget</h4>
                   <Badge className="mt-2">
@@ -140,7 +146,9 @@ export default async function GrantPage({ params }: Props) {
                   </Badge>
                 </div>
                 <div>
-                  <h4 className="text-[13px] text-muted-foreground">Total Earned</h4>
+                  <h4 className="text-[13px] text-muted-foreground">
+                    {isFlow ? "Paid out" : "Total Earned"}
+                  </h4>
                   <p className="mt-1 text-lg font-medium">
                     <AnimatedSalary
                       value={grant.totalEarned}
@@ -177,9 +185,11 @@ export default async function GrantPage({ params }: Props) {
         </div>
       </div>
 
-      <div className="mt-12 border-t border-border pt-6">
-        <Updates casts={grant.updates} recipient={grant.recipient} />
-      </div>
+      {!isFlow && (
+        <div className="mt-12 border-t border-border pt-6">
+          <Updates casts={grant.updates} recipient={grant.recipient} />
+        </div>
+      )}
     </div>
   )
 }

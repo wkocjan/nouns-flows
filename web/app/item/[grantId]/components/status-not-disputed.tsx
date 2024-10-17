@@ -70,8 +70,8 @@ export const StatusNotDisputed = async (props: Props) => {
         Created <DateTime date={new Date(grant.createdAt * 1000)} relative />
       </li>
       <li>
-        Curators of the &quot;{flow.title}&quot; flow can request the removal of this project if
-        they think there is a valid reason to do so.
+        Curators of the &quot;{flow.title}&quot; flow can request the removal of this{" "}
+        {grant.isFlow ? "flow" : "grant"} if they think there is a valid reason to do so.
       </li>
 
       {grant.status === Status.Registered && (

@@ -1,14 +1,13 @@
 import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
+import { TcrTokenBalance } from "@/components/ui/tcr-token-balance"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
-
 import { Grant } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
 import { formatEther, getAddress } from "viem"
 import { WithdrawCuratorSalaryButton } from "../withdraw-curator-salary-button"
-import { TcrTokenBalance } from "@/components/ui/tcr-token-balance"
 
-interface TokenRowProps {
+interface Props {
   flow: Pick<
     Grant,
     | "id"
@@ -19,18 +18,17 @@ interface TokenRowProps {
     | "erc20"
     | "monthlyRewardPoolFlowRate"
   >
-  challengedCount: number
-  awaitingCount: number
+  subgrants: Grant[]
   closePopover: () => void
   balance: string
 }
 
-export function TokenRow(props: TokenRowProps) {
-  const { flow, challengedCount, awaitingCount, closePopover, balance } = props
+export function TokenRow(props: Props) {
+  const { flow, closePopover, balance, subgrants } = props
 
   return (
-    <div className="grid grid-cols-6 items-center gap-2 border-t border-border py-2.5">
-      <div className="col-span-3 flex items-center space-x-2 overflow-hidden">
+    <div className="grid grid-cols-5 items-center gap-2 border-t border-border py-2.5">
+      <div className="col-span-2 flex items-center space-x-2 overflow-hidden">
         <Image
           src={getIpfsUrl(flow.image)}
           alt={flow.title}
@@ -52,11 +50,7 @@ export function TokenRow(props: TokenRowProps) {
         balance={formatEther(BigInt(balance))}
         monthlyRewardPoolRate={flow.monthlyRewardPoolFlowRate}
       />
-      <GrantStatusCountBadges
-        hideChallenged={challengedCount === 0}
-        challengedCount={challengedCount}
-        awaitingCount={awaitingCount}
-      />
+      <GrantStatusCountBadges subgrants={subgrants} />
       <div className="text-center text-sm font-medium">
         <WithdrawCuratorSalaryButton pool={getEthAddress(flow.managerRewardSuperfluidPool)} />
       </div>

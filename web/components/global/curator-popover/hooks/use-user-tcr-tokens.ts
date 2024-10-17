@@ -7,7 +7,7 @@ import { useUserTotalRewardsBalance } from "./use-user-total-rewards-balance"
 
 export function useUserTcrTokens(address: string | undefined) {
   const { data, ...rest } = useSWR(address ? `${address}_tcr_tokens` : null, () =>
-    getUserTcrTokens(getEthAddress(address!!.toLowerCase())),
+    getUserTcrTokens(getEthAddress(address!!)),
   )
 
   const { earnings } = useUserTotalRewardsBalance(

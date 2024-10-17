@@ -1,57 +1,48 @@
-import { Badge } from "./badge"
-import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip"
+import { Badge } from "@/components/ui/badge"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { isGrantApproved, isGrantAwaiting, isGrantChallenged } from "@/lib/utils"
+import { Grant } from "@prisma/client"
 
-export const GrantStatusCountBadges = ({
-  challengedCount,
-  awaitingCount,
-  approvedCount,
-  hideChallenged,
-}: {
-  challengedCount: number
-  awaitingCount: number
-  approvedCount?: number
-  hideChallenged?: boolean
-}) => {
+interface Props {
+  subgrants: Grant[]
+  alwaysShowAll?: boolean
+  isTopLevel?: boolean
+  showLabel?: boolean
+}
+
+export const GrantStatusCountBadges = (props: Props) => {
+  const { subgrants, alwaysShowAll = false, isTopLevel = false, showLabel = false } = props
+
+  const approved = subgrants.filter((g) => isGrantApproved(g)).length
+  const challenged = subgrants.filter((g) => isGrantChallenged(g)).length
+  const awaiting = subgrants.filter((g) => isGrantAwaiting(g)).length
+
+  const label = showLabel ? (isTopLevel ? "flows" : "grants") : ""
+
   return (
     <div className="flex items-center justify-center space-x-1">
-      {(approvedCount || 0) > 0 && (
-        <GrantCountWithTooltip count={approvedCount || 0} type="approved" />
+      {(approved > 0 || alwaysShowAll) && (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Badge variant="success">{approved}</Badge>
+          </TooltipTrigger>
+          <TooltipContent>Approved {label}</TooltipContent>
+        </Tooltip>
       )}
-      {!hideChallenged && <GrantCountWithTooltip count={challengedCount} type="challenged" />}
-      <GrantCountWithTooltip count={awaitingCount} type="awaiting" />
+      {(challenged > 0 || alwaysShowAll) && (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Badge variant="warning">{challenged}</Badge>
+          </TooltipTrigger>
+          <TooltipContent>Challenged {label} </TooltipContent>
+        </Tooltip>
+      )}
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Badge variant="outline">{awaiting}</Badge>
+        </TooltipTrigger>
+        <TooltipContent>Awaiting {label}</TooltipContent>
+      </Tooltip>
     </div>
-  )
-}
-
-const GrantCountBadge = ({
-  count,
-  type,
-}: {
-  count: number
-  type: "approved" | "challenged" | "awaiting"
-}) => {
-  return (
-    <Badge
-      variant={type === "approved" ? "success" : type === "challenged" ? "warning" : "outline"}
-    >
-      {count}
-    </Badge>
-  )
-}
-
-const GrantCountWithTooltip = ({
-  count,
-  type,
-}: {
-  count: number
-  type: "approved" | "challenged" | "awaiting"
-}) => {
-  return (
-    <Tooltip>
-      <TooltipTrigger>
-        <GrantCountBadge count={count} type={type} />
-      </TooltipTrigger>
-      <TooltipContent className="capitalize">{type}</TooltipContent>
-    </Tooltip>
   )
 }
