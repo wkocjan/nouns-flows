@@ -69,7 +69,8 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
         <PopoverClose ref={closeRef} className="hidden" />
         <div className="flex flex-row items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            You&apos;re earning <Currency>{earnings.yearly}</Currency> per year by{" "}
+            You&apos;re earning <Currency>{earnings.yearly}</Currency> per year
+            {tokens.length > 0 ? " by" : ","}{" "}
             <Link
               href="/curate"
               className="text-primary underline transition-colors hover:text-primary/80"
@@ -77,7 +78,7 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
             >
               curating
             </Link>{" "}
-            {tokens.length} {`flow${tokens.length !== 1 ? "s" : ""}`}.
+            {tokens.length || "no"} {`flow${tokens.length !== 1 ? "s" : ""}`}.
           </p>
 
           <SwapTokenButton size="xs" flow={flow} />

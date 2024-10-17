@@ -21,6 +21,8 @@ export default createSchema((p) => ({
       monthlyIncomingFlowRate: p.string(),
       monthlyOutgoingFlowRate: p.string(),
       monthlyRewardPoolFlowRate: p.string(),
+      monthlyBaselinePoolFlowRate: p.string(),
+      monthlyBonusPoolFlowRate: p.string(),
       totalEarned: p.string(),
       claimableBalance: p.string(),
       tcr: p.string(),

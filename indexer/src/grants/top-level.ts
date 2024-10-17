@@ -78,6 +78,8 @@ ponder.on("NounsFlow:FlowInitialized", async (params) => {
       monthlyIncomingFlowRate: "0",
       monthlyOutgoingFlowRate: "0",
       monthlyRewardPoolFlowRate: "0",
+      monthlyBaselinePoolFlowRate: "0",
+      monthlyBonusPoolFlowRate: "0",
       totalEarned: "0",
       claimableBalance: "0",
       tcr: flowTcrAddress[8453].toLowerCase(),

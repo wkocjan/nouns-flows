@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog"
 import { Markdown } from "@/components/ui/markdown"
 import { FlowWithGrants } from "@/lib/database/queries/flow"
-import { explorerUrl, getEthAddress, getIpfsUrl } from "@/lib/utils"
+import { cn, explorerUrl, getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import { FlowHeaderUserVotes } from "./flow-header-user-votes"
 import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
@@ -59,7 +59,12 @@ export const FlowHeader = (props: Props) => {
             </Dialog>
           </div>
         </div>
-        <div className="grid w-full grid-cols-2 gap-x-4 gap-y-8 text-sm md:w-auto md:shrink-0 md:grid-cols-4">
+        <div
+          className={cn("grid w-full gap-x-4 gap-y-8 text-sm md:w-auto md:shrink-0", {
+            "grid-cols-2 md:grid-cols-2": flow.isTopLevel,
+            "grid-cols-2 md:grid-cols-4": !flow.isTopLevel,
+          })}
+        >
           <div className="md:text-center">
             <p className="mb-1.5 text-muted-foreground">Flows</p>
             <GrantStatusCountBadges
@@ -105,12 +110,19 @@ export const FlowHeader = (props: Props) => {
               </PopoverContent>
             </Popover>
           </div>
-          <div className="md:text-center">
-            <p className="mb-1.5 text-muted-foreground">Total Votes</p>
-            <p className="font-medium">{flow.votesCount} </p>
-          </div>
+          {!flow.isTopLevel && (
+            <>
+              <div className="md:text-center">
+                <p className="mb-1.5 text-muted-foreground">Total Votes</p>
+                <p className="font-medium">{flow.votesCount} </p>
+              </div>
 
-          <FlowHeaderUserVotes parent={getEthAddress(flow.parentContract)} recipientId={flow.id} />
+              <FlowHeaderUserVotes
+                parent={getEthAddress(flow.parentContract)}
+                recipientId={flow.id}
+              />
+            </>
+          )}
         </div>
       </CardContent>
     </Card>
