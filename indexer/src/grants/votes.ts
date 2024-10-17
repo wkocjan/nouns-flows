@@ -1,5 +1,5 @@
 import { ponder, type Context, type Event } from "@/generated"
-import { getMonthlyIncomingFlowRate, getMonthlyOutgoingFlowRate } from "./lib/monthly-flow"
+import { getMonthlyIncomingFlowRate } from "./lib/monthly-flow"
 
 ponder.on("NounsFlow:VoteCast", handleVoteCast)
 ponder.on("NounsFlowChildren:VoteCast", handleVoteCast)
@@ -47,16 +47,9 @@ async function handleVoteCast(params: {
   })
 
   for (const affectedGrantId of affectedGrantsIds) {
-    const [
-      votesCount,
-      monthlyIncomingFlowRate,
-      monthlyOutgoingFlowRate,
-      monthlyRewardPoolFlowRate,
-    ] = await Promise.all([
+    const [votesCount, monthlyIncomingFlowRate] = await Promise.all([
       getGrantVotesCount(context, affectedGrantId),
       getGrantBudget(context as Context, contract, affectedGrantId),
-      getGrantMonthlyOutgoingFlowRate(context as Context, contract, affectedGrantId),
-      getGrantMonthlyRewardPoolFlowRate(context as Context, contract, affectedGrantId),
     ])
 
     await context.db.Grant.update({
@@ -64,8 +57,6 @@ async function handleVoteCast(params: {
       data: {
         votesCount,
         monthlyIncomingFlowRate,
-        monthlyOutgoingFlowRate,
-        monthlyRewardPoolFlowRate,
       },
     })
   }
@@ -81,26 +72,4 @@ async function getGrantBudget(context: Context, parentContract: `0x${string}`, i
   if (!grant) throw new Error(`Could not find grant ${id}`)
 
   return getMonthlyIncomingFlowRate(context, parentContract, grant.recipient)
-}
-
-async function getGrantMonthlyOutgoingFlowRate(
-  context: Context,
-  parentContract: `0x${string}`,
-  id: string
-) {
-  const grant = await context.db.Grant.findUnique({ id })
-  if (!grant) throw new Error(`Could not find grant ${id}`)
-
-  return getMonthlyOutgoingFlowRate(context, grant.recipient)
-}
-
-async function getGrantMonthlyRewardPoolFlowRate(
-  context: Context,
-  parentContract: `0x${string}`,
-  id: string
-) {
-  const grant = await context.db.Grant.findUnique({ id })
-  if (!grant) throw new Error(`Could not find grant ${id}`)
-
-  return getMonthlyRewardPoolFlowRate(context, grant.recipient)
 }
