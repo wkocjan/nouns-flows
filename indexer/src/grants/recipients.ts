@@ -1,5 +1,6 @@
 import { ponder, type Context, type Event } from "@/generated"
 import { formatEther } from "viem"
+import { BASELINE_MEMBER_UNITS } from "../consts"
 
 ponder.on("NounsFlowChildren:RecipientCreated", handleRecipientCreated)
 ponder.on("NounsFlow:RecipientCreated", handleRecipientCreated)
@@ -19,17 +20,20 @@ async function handleRecipientCreated(params: {
 
   const parentContract = event.log.address.toLowerCase()
 
-  await handleSiblings(context.db, parentContract)
-
   await context.db.Grant.update({
     id: recipientId.toString(),
     data: {
       ...metadata,
+      baselineMemberUnits: BASELINE_MEMBER_UNITS.toString(),
+      bonusMemberUnits: "1",
+      totalMemberUnits: (BigInt(BASELINE_MEMBER_UNITS) + BigInt(1)).toString(),
       recipient: recipient.toLowerCase(),
       updatedAt: Number(event.block.timestamp),
       isActive: true,
     },
   })
+
+  await handleSiblings(context.db, parentContract)
 }
 
 async function handleRecipientRemoved(params: {
@@ -49,7 +53,9 @@ async function handleRecipientRemoved(params: {
 }
 
 async function handleSiblings(db: Context["db"], parentContract: string) {
-  const { items } = await db.Grant.findMany({ where: { parentContract } })
+  const { items } = await db.Grant.findMany({
+    where: { parentContract, isActive: true, isRemoved: false },
+  })
   const { items: parents } = await db.Grant.findMany({
     where: { recipient: parentContract },
   })
