@@ -56,7 +56,7 @@ export default async function FlowPage(props: Props) {
           <TableRow>
             <TableHead colSpan={2}>Name</TableHead>
             {!flow.isTopLevel && <TableHead>Builders</TableHead>}
-            <TableHead className="text-center">Total Earned</TableHead>
+            <TableHead className="text-center">Paid out</TableHead>
             <TableHead className="text-center">Budget</TableHead>
             <TableHead className="text-center">Total Votes</TableHead>
             <TableHead className="text-center">Your Vote</TableHead>
@@ -77,7 +77,7 @@ export default async function FlowPage(props: Props) {
                   <div className="max-w-[250px] overflow-hidden truncate text-ellipsis">
                     <Link
                       href={
-                        flow.isTopLevel && grant.isFlow ? `/flow/${grant.id}` : `/grant/${grant.id}`
+                        flow.isTopLevel && grant.isFlow ? `/flow/${grant.id}` : `/item/${grant.id}`
                       }
                       className="text-sm font-medium duration-100 ease-out hover:text-primary md:text-lg"
                       tabIndex={-1}

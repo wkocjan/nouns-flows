@@ -23,27 +23,7 @@ export const getUserTcrTokens = cache(async (address: `0x${string}`) => {
             erc20: true,
             arbitrator: true,
             image: true,
-            subgrants: {
-              select: {
-                disputes: {
-                  select: {
-                    votingEndTime: true,
-                    votingStartTime: true,
-                    revealPeriodEndTime: true,
-                    disputeId: true,
-                    isExecuted: true,
-                  },
-                },
-                isActive: true,
-                isDisputed: true,
-                isResolved: true,
-                title: true,
-                image: true,
-                id: true,
-                status: true,
-                challengePeriodEndsAt: true,
-              },
-            },
+            subgrants: { include: { disputes: true } },
           },
         },
       },

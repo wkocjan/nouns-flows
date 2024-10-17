@@ -2,23 +2,15 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card"
 import { Currency } from "@/components/ui/currency"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Markdown } from "@/components/ui/markdown"
-import { FlowWithGrants } from "@/lib/database/queries/flow"
-import { cn, explorerUrl, getEthAddress, getIpfsUrl } from "@/lib/utils"
-import Image from "next/image"
-import { FlowHeaderUserVotes } from "./flow-header-user-votes"
 import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { FlowWithGrants } from "@/lib/database/queries/flow"
+import { Status } from "@/lib/enums"
+import { cn, explorerUrl, getEthAddress, getIpfsUrl } from "@/lib/utils"
+import Image from "next/image"
 import Link from "next/link"
 import { base } from "viem/chains"
+import { FlowHeaderUserVotes } from "./flow-header-user-votes"
 
 interface Props {
   flow: FlowWithGrants
@@ -26,6 +18,7 @@ interface Props {
 
 export const FlowHeader = (props: Props) => {
   const { flow } = props
+  const { isTopLevel } = flow
 
   return (
     <Card>
@@ -39,41 +32,32 @@ export const FlowHeader = (props: Props) => {
             width="80"
           />
           <div>
-            <CardTitle className="text-base font-bold md:text-xl">{flow.title}</CardTitle>
+            <div className="flex items-center space-x-2">
+              <CardTitle className="text-base font-bold md:text-xl">{flow.title}</CardTitle>
+              {flow.status === Status.ClearingRequested && (
+                <Link href={`/item/${flow.id}`}>
+                  <Badge variant="destructive">Removal Requested</Badge>
+                </Link>
+              )}
+            </div>
             <CardDescription className="text-sm">{flow.tagline}</CardDescription>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="link" size="sm" className="p-0">
-                  Read more
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-screen-sm">
-                <DialogHeader>
-                  <DialogTitle>{flow.title}</DialogTitle>
-                  <DialogDescription>{flow.tagline}</DialogDescription>
-                </DialogHeader>
-                <div className="mt-4 space-y-4 text-sm text-muted-foreground md:text-base">
-                  <Markdown>{flow.description}</Markdown>
-                </div>
-              </DialogContent>
-            </Dialog>
+
+            {!isTopLevel && (
+              <Button variant="link" size="sm" className="p-0" asChild>
+                <Link href={`/item/${flow.id}`}>Read more</Link>
+              </Button>
+            )}
           </div>
         </div>
         <div
           className={cn("grid w-full gap-x-4 gap-y-8 text-sm md:w-auto md:shrink-0", {
-            "grid-cols-2 md:grid-cols-2": flow.isTopLevel,
-            "grid-cols-2 md:grid-cols-4": !flow.isTopLevel,
+            "grid-cols-2 md:grid-cols-2": isTopLevel,
+            "grid-cols-2 md:grid-cols-4": !isTopLevel,
           })}
         >
           <div className="md:text-center">
-            <p className="mb-1.5 text-muted-foreground">Flows</p>
-            <GrantStatusCountBadges
-              challengedCount={flow.subgrants.filter((g) => g.isDisputed && !g.isActive).length}
-              awaitingCount={
-                flow.subgrants.filter((g) => !g.isActive && !g.isDisputed && !g.isResolved).length
-              }
-              approvedCount={flow.subgrants.filter((g) => g.isActive).length}
-            />
+            <p className="mb-1.5 text-muted-foreground">{isTopLevel ? "Flows" : "Grants"}</p>
+            <GrantStatusCountBadges subgrants={flow.subgrants} alwaysShowAll />
           </div>
           <div className="md:text-center">
             <p className="mb-1.5 text-muted-foreground">Budget</p>
@@ -107,7 +91,7 @@ export const FlowHeader = (props: Props) => {
                   href={explorerUrl(flow.recipient, base.id, "address")}
                   target="_blank"
                 >
-                  View on Etherscan
+                  View on Explorer
                 </Link>
               </PopoverContent>
             </Popover>

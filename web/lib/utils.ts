@@ -1,6 +1,8 @@
+import { Grant } from "@prisma/client"
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { base, baseSepolia, mainnet } from "viem/chains"
+import { Status } from "./enums"
 import { getPinataUrl } from "./pinata/get-file-url"
 import { SupportedChainId } from "./wagmi/config"
 
@@ -61,4 +63,20 @@ export function openseaNftUrl(contract: string, tokenId: string, chainId: number
   }
 
   return `${url}/${contract}/${tokenId}`
+}
+
+export function isGrantApproved(grant: Grant) {
+  const { status } = grant
+  return status === Status.Registered || status === Status.ClearingRequested
+}
+
+export function isGrantChallenged(grant: Grant) {
+  const { status, isDisputed, isResolved } = grant
+
+  if (status === Status.ClearingRequested) return true
+  return status === Status.RegistrationRequested && isDisputed === 1 && isResolved === 0
+}
+
+export function isGrantAwaiting(grant: Grant) {
+  return grant.status === Status.RegistrationRequested
 }

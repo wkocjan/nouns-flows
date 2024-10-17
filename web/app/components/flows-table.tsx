@@ -1,3 +1,4 @@
+import { AnimatedSalary } from "@/components/global/animated-salary"
 import { Badge } from "@/components/ui/badge"
 import { Currency } from "@/components/ui/currency"
 import {
@@ -8,13 +9,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { Status } from "@/lib/enums"
 import { getIpfsUrl } from "@/lib/utils"
 import { Grant } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
 import { VotingInput } from "../flow/[flowId]/components/voting-input"
-import { AnimatedSalary } from "@/components/global/animated-salary"
+import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
 
 interface Props {
   flows: Array<Grant & { subgrants: Grant[] }>
@@ -28,7 +29,7 @@ export const FlowsTable = (props: Props) => {
       <TableHeader>
         <TableRow>
           <TableHead colSpan={2}>Name</TableHead>
-          <TableHead className="text-center">Flows</TableHead>
+          <TableHead className="text-center">Grants</TableHead>
           <TableHead className="text-center">Paid out</TableHead>
           <TableHead className="text-center">Budget</TableHead>
           <TableHead className="text-center">Total Votes</TableHead>
@@ -58,33 +59,12 @@ export const FlowsTable = (props: Props) => {
               <p className="text-xs tracking-tight text-muted-foreground max-sm:hidden md:text-sm">
                 {flow.tagline}
               </p>
+              {flow.status === Status.ClearingRequested && (
+                <Badge variant="destructive">Removal Requested</Badge>
+              )}
             </TableCell>
-            <TableCell className="space-x-1 text-center">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Badge variant="success">{flow.subgrants.filter((g) => g.isActive).length}</Badge>
-                </TooltipTrigger>
-                <TooltipContent>Approved</TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Badge variant="warning">
-                    {flow.subgrants.filter((g) => g.isDisputed && !g.isActive).length}
-                  </Badge>
-                </TooltipTrigger>
-                <TooltipContent>Challenged</TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Badge variant="outline">
-                    {
-                      flow.subgrants.filter((g) => !g.isActive && !g.isDisputed && !g.isResolved)
-                        .length
-                    }
-                  </Badge>
-                </TooltipTrigger>
-                <TooltipContent>Awaiting</TooltipContent>
-              </Tooltip>
+            <TableCell>
+              <GrantStatusCountBadges subgrants={flow.subgrants} alwaysShowAll />
             </TableCell>
             <TableCell className="text-center">
               <AnimatedSalary

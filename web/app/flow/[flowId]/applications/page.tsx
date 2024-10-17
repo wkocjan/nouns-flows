@@ -52,12 +52,14 @@ export default async function FlowApplicationsPage(props: Props) {
     }),
   ])
 
+  const { isTopLevel } = flow
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead colSpan={2}>Name</TableHead>
-          <TableHead>Builders</TableHead>
+          <TableHead>{isTopLevel ? "Proposer" : "Builders"}</TableHead>
           <TableHead>Type</TableHead>
           <TableHead>Status</TableHead>
           <TableHead className="text-right">Action</TableHead>

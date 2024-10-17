@@ -105,6 +105,8 @@ export function GrantRemoveRequestButton(props: Props) {
   const hasEnoughBalance = token.balance >= removeItemCost
   const hasEnoughAllowance = token.allowance >= removeItemCost
 
+  const type = grant.isFlow ? "flow" : "grant"
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -140,8 +142,8 @@ export function GrantRemoveRequestButton(props: Props) {
           <ul className="my-4 space-y-6 text-sm md:pl-6">
             <Step i={1}>
               <p>
-                Requesting a removal is a significant action and should only be undertaken if the
-                project fails to meet the specified requirements or is underperforming.
+                Requesting a removal is a significant action and should only be undertaken if the{" "}
+                {type} fails to meet the specified requirements or is underperforming.
               </p>
             </Step>
             <Step i={2}>
@@ -183,9 +185,7 @@ export function GrantRemoveRequestButton(props: Props) {
             </Step>
             <Step i={5}>
               <div>
-                <p>
-                  If not challenged, this project will be removed and your fee will be returned.
-                </p>
+                <p>If not challenged, this {type} will be removed and your fee will be returned.</p>
                 <p className="mt-2.5 text-sm text-muted-foreground">
                   Your ${token.symbol} balance: {formatEther(token.balance)} (
                   {formatEther(token.allowance)} approved)

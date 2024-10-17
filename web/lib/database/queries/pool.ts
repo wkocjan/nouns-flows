@@ -4,7 +4,10 @@ import { unstable_cache } from "next/cache"
 
 export const getPool = unstable_cache(
   async () => {
-    return await database.grant.findFirstOrThrow({ where: { isTopLevel: 1, isFlow: 1 } })
+    return await database.grant.findFirstOrThrow({
+      where: { isTopLevel: 1, isFlow: 1 },
+      include: { subgrants: true },
+    })
   },
   [NOUNS_FLOW],
   { revalidate: 60 },

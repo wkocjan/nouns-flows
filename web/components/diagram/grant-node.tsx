@@ -27,7 +27,7 @@ function GrantNode(props: NodeProps<Node<{ grant: Grant }, "grant">>) {
           className="size-8 rounded-full"
         />
         <h2 className="mt-1 line-clamp-1 text-[13px] font-medium text-card-foreground">
-          <Link href={`/grant/${id}`} className="duration-100 hover:text-primary">
+          <Link href={`/item/${id}`} className="duration-100 hover:text-primary">
             {title}
           </Link>
         </h2>
