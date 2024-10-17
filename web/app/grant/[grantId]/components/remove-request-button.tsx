@@ -10,27 +10,27 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Markdown } from "@/components/ui/markdown"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 import { flowTcrImplAbi } from "@/lib/abis"
 import { useTcrData } from "@/lib/tcr/use-tcr-data"
 import { useTcrToken } from "@/lib/tcr/use-tcr-token"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { Grant } from "@prisma/client"
+import { useModal } from "connectkit"
 import { useRouter } from "next/navigation"
 import { PropsWithChildren, useRef, useState } from "react"
 import { toast } from "sonner"
 import { formatEther } from "viem"
 import { base } from "viem/chains"
 import { useAccount } from "wagmi"
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import React from "react"
 
 interface Props {
   grant: Grant
@@ -84,6 +84,7 @@ export function GrantRemoveRequestButton(props: Props) {
   const router = useRouter()
   const [reason, setReason] = useState<string | null>(null)
   const [comment, setComment] = useState<string>("")
+  const { setOpen } = useModal()
 
   const ref = useRef<HTMLButtonElement>(null)
 
@@ -107,7 +108,18 @@ export function GrantRemoveRequestButton(props: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button type="button" ref={ref} className="w-full" variant="outline">
+        <Button
+          type="button"
+          ref={ref}
+          className="w-full"
+          variant="outline"
+          onClick={(e) => {
+            if (!address) {
+              setOpen(true)
+              e.preventDefault()
+            }
+          }}
+        >
           Start removal process
         </Button>
       </DialogTrigger>
