@@ -2,6 +2,7 @@ import {
   canBeChallenged,
   canDisputeBeExecuted,
   canDisputeBeVotedOn,
+  canRequestBeExecuted,
   isDisputeRevealingVotes,
   isDisputeWaitingForVoting,
 } from "@/app/components/dispute/helpers"
@@ -57,6 +58,11 @@ export function ActiveCuratorGrantRow({
               <DateTime date={new Date(challengePeriodEndsAt * 1000)} relative />
             </b>
           </div>
+        )}
+        {canRequestBeExecuted(grant) && (
+          <Link onClick={closePopover} href={`/application/${id}`}>
+            <Button size="xs">Execute</Button>
+          </Link>
         )}
         {Boolean(grant.isDisputed) && disputes?.[0] && (
           <>

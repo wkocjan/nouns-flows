@@ -15,13 +15,3 @@ export async function getMonthlyIncomingFlowRate(
 
   return formatEther(flowRate * BigInt(60 * 60 * 24 * 30))
 }
-
-export async function getMonthlyOutgoingFlowRate(context: Context, contract: string) {
-  const flowRate = await context.client.readContract({
-    address: getAddress(contract),
-    abi: context.contracts.NounsFlow.abi,
-    functionName: "getTotalFlowRate",
-  })
-
-  return formatEther(flowRate * BigInt(60 * 60 * 24 * 30))
-}

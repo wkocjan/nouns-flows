@@ -11,13 +11,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Markdown } from "@/components/ui/markdown"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { FlowWithGrants } from "@/lib/database/queries/flow"
-import { getEthAddress, getIpfsUrl } from "@/lib/utils"
+import { cn, explorerUrl, getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import { FlowHeaderUserVotes } from "./flow-header-user-votes"
 import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import Link from "next/link"
+import { base } from "viem/chains"
 
 interface Props {
   flow: FlowWithGrants
@@ -58,7 +59,12 @@ export const FlowHeader = (props: Props) => {
             </Dialog>
           </div>
         </div>
-        <div className="grid w-full grid-cols-2 gap-x-4 gap-y-8 text-sm md:w-auto md:shrink-0 md:grid-cols-4">
+        <div
+          className={cn("grid w-full gap-x-4 gap-y-8 text-sm md:w-auto md:shrink-0", {
+            "grid-cols-2 md:grid-cols-2": flow.isTopLevel,
+            "grid-cols-2 md:grid-cols-4": !flow.isTopLevel,
+          })}
+        >
           <div className="md:text-center">
             <p className="mb-1.5 text-muted-foreground">Flows</p>
             <GrantStatusCountBadges
@@ -83,19 +89,42 @@ export const FlowHeader = (props: Props) => {
                   /mo
                 </Badge>
               </PopoverTrigger>
-              <PopoverContent className="w-auto">
+              <PopoverContent className="flex w-auto flex-col space-y-2">
+                {!flow.isTopLevel && (
+                  <p className="text-sm">
+                    <Currency>{flow.monthlyIncomingFlowRate || 0}</Currency>/month incoming flow.
+                  </p>
+                )}
                 <p className="text-sm">
-                  {flow.managerRewardPoolFlowRatePercent / 1e4}% of monthly flow goes to curators
+                  <Currency>{flow.monthlyOutgoingFlowRate || 0}</Currency>/month outgoing flow.
                 </p>
+                <p className="text-sm">
+                  <Currency>{flow.monthlyRewardPoolFlowRate || 0}</Currency>/month goes to curators
+                  ({flow.managerRewardPoolFlowRatePercent / 1e4}%)
+                </p>
+                <Link
+                  className="text-sm underline"
+                  href={explorerUrl(flow.recipient, base.id, "address")}
+                  target="_blank"
+                >
+                  View on Etherscan
+                </Link>
               </PopoverContent>
             </Popover>
           </div>
-          <div className="md:text-center">
-            <p className="mb-1.5 text-muted-foreground">Total Votes</p>
-            <p className="font-medium">{flow.votesCount} </p>
-          </div>
+          {!flow.isTopLevel && (
+            <>
+              <div className="md:text-center">
+                <p className="mb-1.5 text-muted-foreground">Total Votes</p>
+                <p className="font-medium">{flow.votesCount} </p>
+              </div>
 
-          <FlowHeaderUserVotes parent={getEthAddress(flow.parentContract)} recipientId={flow.id} />
+              <FlowHeaderUserVotes
+                parent={getEthAddress(flow.parentContract)}
+                recipientId={flow.id}
+              />
+            </>
+          )}
         </div>
       </CardContent>
     </Card>

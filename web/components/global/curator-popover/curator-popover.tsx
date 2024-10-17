@@ -1,10 +1,6 @@
 "use client"
 
-import {
-  canDisputeBeExecuted,
-  canRequestBeExecuted,
-  isDisputeVotingOver,
-} from "@/app/components/dispute/helpers"
+import { canDisputeBeExecuted, isDisputeVotingOver } from "@/app/components/dispute/helpers"
 import { SwapTokenButton } from "@/app/token/swap-token-button"
 import { Badge } from "@/components/ui/badge"
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -12,7 +8,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Grant } from "@prisma/client"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
-import { formatEther } from "viem"
 import { useAccount } from "wagmi"
 import { CuratorGrants } from "./curator-grants"
 import { useUserTcrTokens } from "./hooks/use-user-tcr-tokens"
@@ -23,7 +18,7 @@ import { Currency } from "@/components/ui/currency"
 export const CuratorPopover = ({ flow }: { flow: Grant }) => {
   const [isVisible, setIsVisible] = useState(false)
   const { address } = useAccount()
-  const { tokens, totalBalance, earnings } = useUserTcrTokens(address)
+  const { tokens, earnings } = useUserTcrTokens(address)
   const closeRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -37,11 +32,7 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
   // active subgrants are all that aren't currently active or didn't resolved non-active
   const activeSubgrants = tokens.flatMap((token) =>
     token.flow.subgrants.filter(
-      (g) =>
-        !g.isActive &&
-        !g.isResolved &&
-        !canRequestBeExecuted(g) &&
-        !canDisputeBeExecuted(g.disputes?.[0]),
+      (g) => !g.isActive && !g.isResolved && !canDisputeBeExecuted(g.disputes?.[0]),
     ),
   )
 
@@ -78,17 +69,16 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
         <PopoverClose ref={closeRef} className="hidden" />
         <div className="flex flex-row items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            You{" "}
+            You&apos;re earning <Currency>{earnings.yearly}</Currency> per year
+            {tokens.length > 0 ? " by" : ","}{" "}
             <Link
               href="/curate"
               className="text-primary underline transition-colors hover:text-primary/80"
               onClick={closePopover}
             >
-              curate
+              curating
             </Link>{" "}
-            {tokens.length} {`flow${tokens.length !== 1 ? "s" : ""}`} with{" "}
-            {formatEther(totalBalance || BigInt(0))} tokens. (<Currency>{earnings.yearly}</Currency>{" "}
-            / yr)
+            {tokens.length || "no"} {`flow${tokens.length !== 1 ? "s" : ""}`}.
           </p>
 
           <SwapTokenButton size="xs" flow={flow} />
@@ -101,19 +91,23 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
                 <div className="text-center max-sm:break-all">Flows</div>
                 <div className="text-center max-sm:break-all">Rewards</div>
               </div>
-              {tokens.map(({ id, flow, amount }) => (
-                <TokenRow
-                  key={id}
-                  flow={flow}
-                  balance={amount}
-                  challengedCount={flow.subgrants.filter((g) => g.isDisputed && !g.isActive).length}
-                  awaitingCount={
-                    flow.subgrants.filter((g) => !g.isActive && !g.isDisputed && !g.isResolved)
-                      .length
-                  }
-                  closePopover={closePopover}
-                />
-              ))}
+              {tokens
+                .sort((a, b) => Number(b.amount) - Number(a.amount))
+                .map(({ id, flow, amount }) => (
+                  <TokenRow
+                    key={id}
+                    flow={flow}
+                    balance={amount}
+                    challengedCount={
+                      flow.subgrants.filter((g) => g.isDisputed && !g.isActive).length
+                    }
+                    awaitingCount={
+                      flow.subgrants.filter((g) => !g.isActive && !g.isDisputed && !g.isResolved)
+                        .length
+                    }
+                    closePopover={closePopover}
+                  />
+                ))}
             </div>
 
             <p className="mt-8 border-t border-border pt-4 text-sm text-muted-foreground">

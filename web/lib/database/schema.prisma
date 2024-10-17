@@ -77,21 +77,26 @@ view Grant {
   isTopLevel                       Int
   isFlow                           Int
   title                            String
-  description                      String
-  image                            String
-  tagline                          String?
-  url                              String?
-  isRemoved                        Int
-  isActive                         Int
-  votesCount                       String
-  monthlyIncomingFlowRate          String
-  monthlyOutgoingFlowRate          String
-  totalEarned                      String
-  claimableBalance                 String
-  tcr                              String  @unique
-  erc20                            String  @unique
-  arbitrator                       String  @unique
-  tokenEmitter                     String  @unique
+  description                        String
+  image                              String
+  tagline                            String?
+  url                                String?
+  isRemoved                          Int
+  isActive                           Int
+  votesCount                         String
+  monthlyIncomingFlowRate            String
+  monthlyOutgoingFlowRate            String
+  monthlyRewardPoolFlowRate          String
+  monthlyBaselinePoolFlowRate         String
+  monthlyBonusPoolFlowRate            String
+  bonusMemberUnits                   String
+  baselineMemberUnits                String
+  totalMemberUnits                   String
+  totalEarned                          String
+  tcr                                  String  @unique
+  erc20                                String  @unique
+  arbitrator                           String  @unique
+  tokenEmitter                         String  @unique
   status                           Int
   challengePeriodEndsAt            Int
   isDisputed                       Int

@@ -8,6 +8,7 @@ import {
   canDisputeBeVotedOn,
   canRequestBeExecuted,
   isDisputeResolvedForNoneParty,
+  isDisputeRevealingVotes,
   isDisputeWaitingForVoting,
   isRequestRejected,
 } from "@/app/components/dispute/helpers"
@@ -151,6 +152,16 @@ export default async function FlowApplicationsPage(props: Props) {
                         </strong>
                         <span className="text-xs text-muted-foreground">
                           Application not approved
+                        </span>
+                      </div>
+                    )}
+                    {isDisputeRevealingVotes(dispute) && (
+                      <div className="flex flex-col">
+                        <strong className="font-medium text-gray-600 dark:text-gray-400">
+                          Revealing
+                        </strong>
+                        <span className="text-xs text-muted-foreground">
+                          Votes are being revealed.
                         </span>
                       </div>
                     )}
