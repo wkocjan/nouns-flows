@@ -110,7 +110,7 @@ export function Voter(props: { votingPower: bigint; tokenIds: bigint[] }) {
 
   return (
     <>
-      <p className="text-sm text-muted-foreground">
+      <div className="text-sm text-muted-foreground">
         You can vote with{" "}
         {new Intl.PluralRules("en-US", { type: "cardinal" }).select(tokensCount) === "one"
           ? `${tokensCount} Noun`
@@ -127,7 +127,7 @@ export function Voter(props: { votingPower: bigint; tokenIds: bigint[] }) {
             </AlertDescription>
           </Alert>
         )}
-      </p>
+      </div>
       <div className="mt-6 grid grid-cols-2 gap-4 border-t border-border pt-6">
         {tokenIds.map((tokenId) => (
           <a
