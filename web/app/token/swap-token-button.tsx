@@ -48,7 +48,7 @@ export function SwapTokenButton(props: Props) {
             Buy and sell TCR tokens
           </DialogTitle>
         </DialogHeader>
-        <ul className="my-4 space-y-6">
+        <ul className="my-4 space-y-6 text-sm">
           {extraInfo && (
             <li className="flex items-start space-x-4">
               <>
