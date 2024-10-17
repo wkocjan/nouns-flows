@@ -41,7 +41,7 @@ export default async function ApplyFlowPage(props: Props) {
       <div className="mt-6 grid grid-cols-1 gap-12 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardContent>
-            <ApplyForm flowId={flowId} isFlow={isTopLevel === 1} />
+            <ApplyForm flow={flow} isFlow={isTopLevel === 1} />
           </CardContent>
         </Card>
 

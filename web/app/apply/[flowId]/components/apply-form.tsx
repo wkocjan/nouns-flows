@@ -1,44 +1,94 @@
 "use client"
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { FileInput } from "@/components/ui/file-input"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { MarkdownInput } from "@/components/ui/markdown-input"
+import { nounsFlowImplAbi } from "@/lib/abis"
+import { getShortEthAddress } from "@/lib/utils"
+import { Grant } from "@prisma/client"
+import { useModal } from "connectkit"
 import { useRouter } from "next/navigation"
 import { useFormStatus } from "react-dom"
 import { toast } from "sonner"
-import { useAccount } from "wagmi"
+import { Address } from "viem"
+import { useAccount, useReadContract } from "wagmi"
 import { saveDraft } from "./save-draft"
 
 interface Props {
-  flowId: string
+  flow: Grant
   isFlow: boolean
 }
 
 export function ApplyForm(props: Props) {
-  const { flowId, isFlow } = props
+  const { flow, isFlow } = props
 
   const { address } = useAccount()
+  const { setOpen } = useModal()
   const router = useRouter()
 
+  const { data: recipientExists = false } = useReadContract({
+    address: flow.tcr as Address,
+    abi: nounsFlowImplAbi,
+    functionName: "recipientExists",
+    args: [address!],
+    query: {
+      enabled: !!address,
+    },
+  })
+
   async function handleSubmit(formData: FormData) {
+    if (!address) {
+      toast.error("You need to sign in to submit the application")
+      return
+    }
+
+    if (recipientExists) {
+      toast.error("You have already applied to this flow")
+      return
+    }
+
     const result = await saveDraft(formData, address)
     if (result.error) {
       toast.error(result.error)
     } else {
       // wait 1 second
       await new Promise((resolve) => setTimeout(resolve, 1000))
-      router.push(`/flow/${flowId}/drafts`)
+      router.push(`/flow/${flow.id}/drafts`)
       toast.success("Draft saved! Redirecting...")
     }
   }
 
   return (
     <form action={handleSubmit} className="space-y-6">
+      {recipientExists && (
+        <Alert variant="destructive">
+          <AlertTitle className="text-base">You have already applied to this flow</AlertTitle>
+          <AlertDescription>
+            User {getShortEthAddress(address!)} already exists as a recipient in the &quot;
+            {flow.title}&quot; flow.
+            <br />
+            Only one application per user is allowed.
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {!address && (
+        <Alert variant="warning" className="flex items-center justify-between space-x-4">
+          <div>
+            <AlertTitle className="text-base">Connect your wallet</AlertTitle>
+            <AlertDescription>You need to sign in to submit the application.</AlertDescription>
+          </div>
+          <Button onClick={() => setOpen(true)} type="button">
+            Connect Wallet
+          </Button>
+        </Alert>
+      )}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <input type="hidden" name="flowId" value={flowId} />
+        <input type="hidden" name="flowId" value={flow.id} />
         <input type="hidden" name="isFlow" value={isFlow ? "1" : "0"} />
         <div className="space-y-1.5">
           <Label htmlFor="title">Title</Label>
@@ -96,17 +146,18 @@ Include any other details that support your application.`}
           </div>
         </div>
 
-        <SubmitButton />
+        <SubmitButton disabled={recipientExists || !address} />
       </div>
     </form>
   )
 }
 
-function SubmitButton() {
+function SubmitButton(props: { disabled: boolean }) {
+  const { disabled } = props
   const { pending } = useFormStatus()
 
   return (
-    <Button type="submit" size="lg" disabled={pending}>
+    <Button type="submit" size="lg" disabled={pending || disabled}>
       Save draft
     </Button>
   )
