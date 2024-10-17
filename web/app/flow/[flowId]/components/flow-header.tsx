@@ -12,11 +12,13 @@ import {
 } from "@/components/ui/dialog"
 import { Markdown } from "@/components/ui/markdown"
 import { FlowWithGrants } from "@/lib/database/queries/flow"
-import { getEthAddress, getIpfsUrl } from "@/lib/utils"
+import { explorerUrl, getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Image from "next/image"
 import { FlowHeaderUserVotes } from "./flow-header-user-votes"
 import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import Link from "next/link"
+import { base } from "viem/chains"
 
 interface Props {
   flow: FlowWithGrants
@@ -93,6 +95,13 @@ export const FlowHeader = (props: Props) => {
                   <Currency>{flow.monthlyRewardPoolFlowRate || 0}</Currency>/month goes to curators
                   ({flow.managerRewardPoolFlowRatePercent / 1e4}%)
                 </p>
+                <Link
+                  className="text-sm underline"
+                  href={explorerUrl(flow.recipient, base.id, "address")}
+                  target="_blank"
+                >
+                  View on Etherscan
+                </Link>
               </PopoverContent>
             </Popover>
           </div>
