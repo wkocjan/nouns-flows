@@ -1,4 +1,4 @@
-import { createConfig } from "@ponder/core"
+import { createConfig, rateLimit } from "@ponder/core"
 import { createPublicClient, http, parseAbiItem } from "viem"
 import { base } from "viem/chains"
 import {
@@ -16,7 +16,9 @@ import {
 
 const client = createPublicClient({
   chain: base,
-  transport: http(process.env.PONDER_RPC_URL_8453),
+  transport: rateLimit(http(process.env.PONDER_RPC_URL_8453), {
+    requestsPerSecond: 10,
+  }),
 })
 
 const currentBlock = Number(await client.getBlockNumber())
