@@ -89,6 +89,9 @@ view Grant {
   monthlyRewardPoolFlowRate          String
   monthlyBaselinePoolFlowRate         String
   monthlyBonusPoolFlowRate            String
+  bonusMemberUnits                   String
+  baselineMemberUnits                String
+  totalMemberUnits                   String
   totalEarned                          String
   tcr                                  String  @unique
   erc20                                String  @unique

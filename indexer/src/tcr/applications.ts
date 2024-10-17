@@ -1,6 +1,7 @@
 import { ponder, type Context, type Event } from "@/generated"
 import { decodeAbiParameters, getAddress } from "viem"
 import { RecipientType, Status } from "../enums"
+import { BASELINE_MEMBER_UNITS } from "../consts"
 
 ponder.on("NounsFlowTcr:ItemSubmitted", handleItemSubmitted)
 ponder.on("NounsFlowTcrChildren:ItemSubmitted", handleItemSubmitted)
@@ -61,6 +62,9 @@ async function handleItemSubmitted(params: {
       monthlyRewardPoolFlowRate: "0",
       monthlyBaselinePoolFlowRate: "0",
       monthlyBonusPoolFlowRate: "0",
+      bonusMemberUnits: "1",
+      baselineMemberUnits: BASELINE_MEMBER_UNITS.toString(),
+      totalMemberUnits: (BigInt(BASELINE_MEMBER_UNITS) + BigInt(1)).toString(),
       totalEarned: "0",
       tcr: "",
       erc20: "",

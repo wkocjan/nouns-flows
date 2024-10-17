@@ -1,5 +1,4 @@
 import { ponder, type Context, type Event } from "@/generated"
-import { getMonthlyIncomingFlowRate } from "./lib/monthly-flow"
 import { formatEther, getAddress } from "viem"
 
 ponder.on("NounsFlowChildren:RecipientCreated", handleRecipientCreated)

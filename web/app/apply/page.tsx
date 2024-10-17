@@ -63,8 +63,8 @@ export default async function ApplyPage() {
                           width={64}
                           height={64}
                           className={cn(
-                            "mb-4 size-10 rounded-full lg:size-16",
-                            flow.isTopLevel ? "object-fit" : "object-cover",
+                            "mb-4 size-10 lg:size-16",
+                            flow.isTopLevel ? "object-fit" : "rounded-full object-cover",
                           )}
                         />
                         <h3 className="text-center text-base font-medium transition-colors group-hover:text-primary lg:text-lg">

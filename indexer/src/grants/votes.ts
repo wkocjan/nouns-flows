@@ -1,5 +1,6 @@
 import { ponder, type Context, type Event } from "@/generated"
 import { getMonthlyIncomingFlowRate } from "./lib/monthly-flow"
+import { BASELINE_MEMBER_UNITS } from "../consts"
 
 ponder.on("NounsFlow:VoteCast", handleVoteCast)
 ponder.on("NounsFlowChildren:VoteCast", handleVoteCast)
@@ -9,7 +10,7 @@ async function handleVoteCast(params: {
   context: Context<"NounsFlow:VoteCast">
 }) {
   const { event, context } = params
-  const { recipientId, tokenId, bps, totalWeight } = event.args
+  const { recipientId, tokenId, bps, totalWeight, memberUnits: bonusMemberUnits } = event.args
 
   const blockNumber = event.block.number.toString()
   const voter = event.transaction.from.toLowerCase()
@@ -57,6 +58,8 @@ async function handleVoteCast(params: {
       data: {
         votesCount,
         monthlyIncomingFlowRate,
+        totalMemberUnits: (BigInt(BASELINE_MEMBER_UNITS) + BigInt(bonusMemberUnits)).toString(),
+        bonusMemberUnits: bonusMemberUnits.toString(),
       },
     })
   }
