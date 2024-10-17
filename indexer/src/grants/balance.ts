@@ -1,5 +1,4 @@
 import { ponder } from "@/generated"
-import { getClaimableBalance } from "./lib/claimable-balance"
 import { getMonthlyIncomingFlowRate } from "./lib/monthly-flow"
 import { getTotalEarned } from "./lib/total-earned"
 
@@ -13,12 +12,11 @@ ponder.on("Balance:block", async (params) => {
   })
 
   for (const grant of items) {
-    const { parentContract, recipient, isFlow, isTopLevel } = grant
+    const { parentContract, recipient, isTopLevel } = grant
 
-    const [totalEarned, monthlyIncomingFlowRate, claimableBalance] = await Promise.all([
+    const [totalEarned, monthlyIncomingFlowRate] = await Promise.all([
       isTopLevel ? "0" : getTotalEarned(context, parentContract, recipient),
       isTopLevel ? "0" : getMonthlyIncomingFlowRate(context, parentContract, recipient),
-      isFlow ? "0" : getClaimableBalance(context, parentContract, recipient),
     ])
 
     await context.db.Grant.update({
@@ -26,7 +24,6 @@ ponder.on("Balance:block", async (params) => {
       data: {
         totalEarned,
         monthlyIncomingFlowRate,
-        claimableBalance,
         updatedAt: Number(event.block.timestamp),
       },
     })

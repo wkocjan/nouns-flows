@@ -90,7 +90,6 @@ view Grant {
   monthlyBaselinePoolFlowRate         String
   monthlyBonusPoolFlowRate            String
   totalEarned                          String
-  claimableBalance                     String
   tcr                                  String  @unique
   erc20                                String  @unique
   arbitrator                           String  @unique

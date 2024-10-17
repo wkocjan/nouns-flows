@@ -18,7 +18,6 @@ export const getUserGrants = unstable_cache(
         id: true,
         title: true,
         image: true,
-        claimableBalance: true,
         monthlyIncomingFlowRate: true,
         totalEarned: true,
         baselinePool: true,
