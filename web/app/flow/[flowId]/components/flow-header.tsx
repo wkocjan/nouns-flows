@@ -90,9 +90,11 @@ export const FlowHeader = (props: Props) => {
                 </Badge>
               </PopoverTrigger>
               <PopoverContent className="flex w-auto flex-col space-y-2">
-                <p className="text-sm">
-                  <Currency>{flow.monthlyIncomingFlowRate || 0}</Currency>/month incoming flow.
-                </p>
+                {!flow.isTopLevel && (
+                  <p className="text-sm">
+                    <Currency>{flow.monthlyIncomingFlowRate || 0}</Currency>/month incoming flow.
+                  </p>
+                )}
                 <p className="text-sm">
                   <Currency>{flow.monthlyOutgoingFlowRate || 0}</Currency>/month outgoing flow.
                 </p>
