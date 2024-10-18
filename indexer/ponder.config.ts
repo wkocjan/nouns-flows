@@ -26,7 +26,7 @@ const client = createPublicClient({
 
 const currentBlock = Number(await client.getBlockNumber())
 
-const START_BLOCK = 21223059
+const START_BLOCK = 21227059
 const SECONDS_PER_BLOCK = 2
 
 export default createConfig({

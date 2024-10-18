@@ -10,13 +10,12 @@ async function handleMemberUnitsUpdated(params: {
   context: Context<"BonusPool:MemberUnitsUpdated">
 }) {
   const { event, context } = params
-  const { newUnits, member, token } = event.args
+  const { newUnits, member } = event.args
   const pool = event.log.address.toLowerCase()
 
   const { items } = await context.db.Grant.findMany({
     where: {
       OR: [{ baselinePool: pool }, { bonusPool: pool }],
-      superToken: token.toLowerCase(),
     },
   })
 
