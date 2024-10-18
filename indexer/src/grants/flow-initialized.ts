@@ -31,11 +31,13 @@ ponder.on("NounsFlow:FlowInitialized", async (params) => {
       abi: context.contracts.NounsFlow.abi,
       functionName: "flowMetadata",
     }),
-    context.client.readContract({
-      address: managerRewardPool,
-      abi: rewardPoolImplAbi,
-      functionName: "rewardPool",
-    }),
+    managerRewardPool != zeroAddress
+      ? context.client.readContract({
+          address: managerRewardPool,
+          abi: rewardPoolImplAbi,
+          functionName: "rewardPool",
+        })
+      : Promise.resolve(zeroAddress),
   ])
 
   await Grant.create({
@@ -61,7 +63,6 @@ ponder.on("NounsFlow:FlowInitialized", async (params) => {
       monthlyBonusPoolFlowRate: "0",
       bonusMemberUnits: "0",
       baselineMemberUnits: "0",
-      totalMemberUnits: "0",
       totalEarned: "0",
       tcr: flowTcrAddress[8453].toLowerCase(),
       erc20: erc20VotesMintableAddress[8453].toLowerCase(),
@@ -98,11 +99,14 @@ ponder.on("NounsFlowChildren:FlowInitialized", async (params) => {
     baselinePoolFlowRatePercent,
   } = event.args
 
-  const managerRewardSuperfluidPool = await context.client.readContract({
-    address: managerRewardPool,
-    abi: rewardPoolImplAbi,
-    functionName: "rewardPool",
-  })
+  const managerRewardSuperfluidPool =
+    managerRewardPool != zeroAddress
+      ? await context.client.readContract({
+          address: managerRewardPool,
+          abi: rewardPoolImplAbi,
+          functionName: "rewardPool",
+        })
+      : zeroAddress
 
   await Grant.updateMany({
     where: { recipient: contract },

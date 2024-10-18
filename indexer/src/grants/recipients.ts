@@ -1,6 +1,4 @@
 import { ponder, type Context, type Event } from "@/generated"
-import { formatEther } from "viem"
-import { BASELINE_MEMBER_UNITS } from "../consts"
 
 ponder.on("NounsFlowChildren:RecipientCreated", handleRecipientCreated)
 ponder.on("NounsFlow:RecipientCreated", handleRecipientCreated)
@@ -24,9 +22,6 @@ async function handleRecipientCreated(params: {
     id: recipientId.toString(),
     data: {
       ...metadata,
-      baselineMemberUnits: BASELINE_MEMBER_UNITS.toString(),
-      bonusMemberUnits: "1",
-      totalMemberUnits: (BigInt(BASELINE_MEMBER_UNITS) + BigInt(1)).toString(),
       recipient: recipient.toLowerCase(),
       updatedAt: Number(event.block.timestamp),
       isActive: true,
@@ -97,9 +92,6 @@ async function handleSiblings(db: Context["db"], parentContract: string) {
       id: sibling.id,
       data: {
         monthlyIncomingFlowRate,
-        totalMemberUnits: (baselineUnits + bonusUnits).toString(),
-        baselineMemberUnits: sibling.baselineMemberUnits,
-        bonusMemberUnits: sibling.bonusMemberUnits,
       },
     })
   }

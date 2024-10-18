@@ -1,1 +1,0 @@
-export const BASELINE_MEMBER_UNITS = 1e5

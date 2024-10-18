@@ -40,6 +40,10 @@ const baseContracts = [
     address: "0xfD01285b9435bc45C243E5e7F978E288B2912de6" as `0x${string}`,
   },
 
+  // for top level flow only
+  { name: "BaselinePool", address: base.BaselinePool },
+  { name: "BonusPool", address: base.BonusPool },
+
   {
     name: "SuperfluidPool",
     address: "0x9224413b9177e6c1d5721b4a4d1d00ec84b07ce7" as `0x${string}`,
