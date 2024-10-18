@@ -37,6 +37,8 @@ ponder.on("NounsFlowTcrFactory:FlowTCRDeployed", async (params) => {
       tokenEmitter: tokenEmitterProxy.toLowerCase(),
       managerRewardPool: rewardPoolProxy.toLowerCase(),
       managerRewardSuperfluidPool: managerRewardSuperfluidPool.toLowerCase(),
+      bonusMemberUnits: "1",
+      baselineMemberUnits: "1",
     },
   })
 })
