@@ -14,25 +14,24 @@ import {
   tcrFactoryImplAbi,
 } from "./abis"
 
-const client = createPublicClient({
-  chain: base,
-  transport: rateLimit(http(process.env.PONDER_RPC_URL_8453), {
-    requestsPerSecond: 10,
-  }),
-})
-
-const currentBlock = Number(await client.getBlockNumber())
+const currentBlock = Number(
+  await createPublicClient({
+    chain: base,
+    transport: http(process.env.PONDER_RPC_URL_8453),
+  }).getBlockNumber()
+)
 
 const START_BLOCK = 20118986
-const SECONDS_PER_BLOCK = 12
+const SECONDS_PER_BLOCK = 2
 
 export default createConfig({
   database: { kind: "postgres", schema: "public" },
   networks: {
     base: {
       chainId: base.id,
-      transport: http(process.env.PONDER_RPC_URL_8453),
-      maxRequestsPerSecond: 25,
+      transport: rateLimit(http(process.env.PONDER_RPC_URL_8453), {
+        requestsPerSecond: 15,
+      }),
     },
   },
   contracts: {
