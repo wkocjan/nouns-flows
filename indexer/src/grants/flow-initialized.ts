@@ -13,51 +13,32 @@ ponder.on("NounsFlow:FlowInitialized", async (params) => {
   const { context, event } = params
   const { Grant } = context.db
 
-  const { parent: parentContract, managerRewardPool, superToken } = event.args
+  const {
+    parent: parentContract,
+    managerRewardPool,
+    superToken,
+    baselinePool,
+    baselinePoolFlowRatePercent,
+    bonusPool,
+    managerRewardPoolFlowRatePercent,
+  } = event.args
 
   const contract = context.contracts.NounsFlow.address.toLowerCase() as `0x${string}`
 
-  const metadata = await context.client.readContract({
-    address: contract,
-    abi: context.contracts.NounsFlow.abi,
-    functionName: "flowMetadata",
-  })
-
-  const [
-    baselinePool,
-    bonusPool,
-    managerRewardSuperfluidPool,
-    managerRewardPoolFlowRatePercent,
-    baselinePoolFlowRatePercent,
-  ] = await Promise.all([
+  const [metadata, managerRewardSuperfluidPool] = await Promise.all([
     context.client.readContract({
       address: contract,
       abi: context.contracts.NounsFlow.abi,
-      functionName: "baselinePool",
+      functionName: "flowMetadata",
     }),
-    context.client.readContract({
-      address: contract,
-      abi: context.contracts.NounsFlow.abi,
-      functionName: "bonusPool",
-    }),
-    context.client.readContract({
-      address: managerRewardPool,
-      abi: rewardPoolImplAbi,
-      functionName: "rewardPool",
-    }),
-    context.client.readContract({
-      address: contract,
-      abi: context.contracts.NounsFlow.abi,
-      functionName: "managerRewardPoolFlowRatePercent",
-    }),
-    context.client.readContract({
-      address: contract,
-      abi: context.contracts.NounsFlow.abi,
-      functionName: "baselinePoolFlowRatePercent",
-    }),
+    managerRewardPool != zeroAddress
+      ? context.client.readContract({
+          address: managerRewardPool,
+          abi: rewardPoolImplAbi,
+          functionName: "rewardPool",
+        })
+      : Promise.resolve(zeroAddress),
   ])
-
-  const currentTime = Math.floor(Date.now() / 1000)
 
   await Grant.create({
     id: contract,
@@ -65,14 +46,14 @@ ponder.on("NounsFlow:FlowInitialized", async (params) => {
       ...metadata,
       recipient: contract,
       isTopLevel: true,
-      baselinePool,
-      bonusPool,
+      baselinePool: baselinePool.toLowerCase(),
+      bonusPool: bonusPool.toLowerCase(),
       isFlow: true,
       isRemoved: false,
-      parentContract,
-      managerRewardPool,
-      managerRewardSuperfluidPool,
-      superToken,
+      parentContract: parentContract.toLowerCase(),
+      managerRewardPool: managerRewardPool.toLowerCase(),
+      managerRewardSuperfluidPool: managerRewardSuperfluidPool.toLowerCase(),
+      superToken: superToken.toLowerCase(),
       submitter: zeroAddress,
       votesCount: "0",
       monthlyIncomingFlowRate: "0",
@@ -82,7 +63,6 @@ ponder.on("NounsFlow:FlowInitialized", async (params) => {
       monthlyBonusPoolFlowRate: "0",
       bonusMemberUnits: "0",
       baselineMemberUnits: "0",
-      totalMemberUnits: "0",
       totalEarned: "0",
       tcr: flowTcrAddress[8453].toLowerCase(),
       erc20: erc20VotesMintableAddress[8453].toLowerCase(),
@@ -93,8 +73,8 @@ ponder.on("NounsFlow:FlowInitialized", async (params) => {
       challengePeriodEndsAt: 0,
       status: Status.Registered,
       flowId: "",
-      updatedAt: currentTime,
-      createdAt: currentTime,
+      updatedAt: Number(event.block.timestamp),
+      createdAt: Number(event.block.timestamp),
       isDisputed: false,
       isResolved: false,
       evidenceGroupID: "",

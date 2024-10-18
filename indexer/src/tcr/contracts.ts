@@ -14,24 +14,7 @@ ponder.on("NounsFlowTcrFactory:FlowTCRDeployed", async (params) => {
     rewardPoolProxy,
   } = event.args
 
-  const [
-    baselinePool,
-    bonusPool,
-    superToken,
-    managerRewardSuperfluidPool,
-    managerRewardPoolFlowRatePercent,
-    baselinePoolFlowRatePercent,
-  ] = await Promise.all([
-    context.client.readContract({
-      address: flowProxy,
-      abi: context.contracts.NounsFlow.abi,
-      functionName: "baselinePool",
-    }),
-    context.client.readContract({
-      address: flowProxy,
-      abi: context.contracts.NounsFlow.abi,
-      functionName: "bonusPool",
-    }),
+  const [superToken, managerRewardSuperfluidPool, parentContract] = await Promise.all([
     context.client.readContract({
       address: flowProxy,
       abi: context.contracts.NounsFlow.abi,
@@ -45,29 +28,21 @@ ponder.on("NounsFlowTcrFactory:FlowTCRDeployed", async (params) => {
     context.client.readContract({
       address: flowProxy,
       abi: context.contracts.NounsFlow.abi,
-      functionName: "managerRewardPoolFlowRatePercent",
-    }),
-    context.client.readContract({
-      address: flowProxy,
-      abi: context.contracts.NounsFlow.abi,
-      functionName: "baselinePoolFlowRatePercent",
+      functionName: "parent",
     }),
   ])
 
   await Grant.updateMany({
     where: { recipient: flowProxy.toLowerCase() },
     data: {
+      superToken: superToken.toLowerCase(),
       tcr: flowTCRProxy.toLowerCase(),
       arbitrator: arbitratorProxy.toLowerCase(),
       erc20: erc20Proxy.toLowerCase(),
-      baselinePool: baselinePool.toLowerCase(),
-      bonusPool: bonusPool.toLowerCase(),
+      parentContract: parentContract.toLowerCase(),
       tokenEmitter: tokenEmitterProxy.toLowerCase(),
       managerRewardPool: rewardPoolProxy.toLowerCase(),
-      superToken: superToken.toLowerCase(),
       managerRewardSuperfluidPool: managerRewardSuperfluidPool.toLowerCase(),
-      managerRewardPoolFlowRatePercent: managerRewardPoolFlowRatePercent,
-      baselinePoolFlowRatePercent: baselinePoolFlowRatePercent,
     },
   })
 })

@@ -25,7 +25,6 @@ export default createSchema((p) => ({
       monthlyBonusPoolFlowRate: p.string(),
       bonusMemberUnits: p.string(),
       baselineMemberUnits: p.string(),
-      totalMemberUnits: p.string(),
       totalEarned: p.string(),
       tcr: p.string(),
       erc20: p.string(),
