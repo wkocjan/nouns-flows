@@ -65,8 +65,6 @@ async function handleRecipientRemoved(params: {
   const { event, context } = params
   const { recipientId } = event.args
 
-  const parentContract = event.log.address.toLowerCase()
-
   await context.db.Grant.update({
     id: recipientId.toString(),
     data: { isRemoved: true, isActive: false, monthlyIncomingFlowRate: "0" },

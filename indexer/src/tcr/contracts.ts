@@ -14,7 +14,7 @@ ponder.on("NounsFlowTcrFactory:FlowTCRDeployed", async (params) => {
     rewardPoolProxy,
   } = event.args
 
-  const [superToken, managerRewardSuperfluidPool] = await Promise.all([
+  const [superToken, managerRewardSuperfluidPool, parentContract] = await Promise.all([
     context.client.readContract({
       address: flowProxy,
       abi: context.contracts.NounsFlow.abi,
@@ -25,6 +25,11 @@ ponder.on("NounsFlowTcrFactory:FlowTCRDeployed", async (params) => {
       abi: rewardPoolImplAbi,
       functionName: "rewardPool",
     }),
+    context.client.readContract({
+      address: flowProxy,
+      abi: context.contracts.NounsFlow.abi,
+      functionName: "parent",
+    }),
   ])
 
   await Grant.updateMany({
@@ -34,11 +39,10 @@ ponder.on("NounsFlowTcrFactory:FlowTCRDeployed", async (params) => {
       tcr: flowTCRProxy.toLowerCase(),
       arbitrator: arbitratorProxy.toLowerCase(),
       erc20: erc20Proxy.toLowerCase(),
+      parentContract: parentContract.toLowerCase(),
       tokenEmitter: tokenEmitterProxy.toLowerCase(),
       managerRewardPool: rewardPoolProxy.toLowerCase(),
       managerRewardSuperfluidPool: managerRewardSuperfluidPool.toLowerCase(),
-      bonusMemberUnits: "1",
-      baselineMemberUnits: "1",
     },
   })
 })

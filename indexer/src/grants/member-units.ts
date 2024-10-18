@@ -79,7 +79,7 @@ async function handleSiblings(db: Context["db"], parentContract: string) {
       baselineSum + Number(item.baselineMemberUnits),
       bonusSum + Number(item.bonusMemberUnits),
     ],
-    [Number(parent.baselineMemberUnits), Number(parent.bonusMemberUnits)]
+    [1, 1] // the parent always has 1 unit directing the pool flow to itself
   )
 
   if (totalBaselineMemberUnits === 0 || totalBonusMemberUnits === 0) {
