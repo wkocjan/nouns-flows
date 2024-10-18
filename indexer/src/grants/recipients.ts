@@ -6,6 +6,37 @@ ponder.on("NounsFlow:RecipientCreated", handleRecipientCreated)
 ponder.on("NounsFlowChildren:RecipientRemoved", handleRecipientRemoved)
 ponder.on("NounsFlow:RecipientRemoved", handleRecipientRemoved)
 
+ponder.on("NounsFlowChildren:FlowRecipientCreated", handleFlowRecipientCreated)
+ponder.on("NounsFlow:FlowRecipientCreated", handleFlowRecipientCreated)
+
+async function handleFlowRecipientCreated(params: {
+  event: Event<"NounsFlow:FlowRecipientCreated">
+  context: Context<"NounsFlow:FlowRecipientCreated">
+}) {
+  const { event, context } = params
+  const {
+    recipient,
+    recipientId,
+    baselinePool,
+    bonusPool,
+    managerRewardPoolFlowRatePercent,
+    baselinePoolFlowRatePercent,
+  } = event.args
+
+  await context.db.Grant.update({
+    id: recipientId.toString(),
+    data: {
+      baselinePool: baselinePool.toLowerCase(),
+      bonusPool: bonusPool.toLowerCase(),
+      managerRewardPoolFlowRatePercent,
+      baselinePoolFlowRatePercent,
+      recipient: recipient.toLowerCase(),
+      updatedAt: Number(event.block.timestamp),
+      isActive: true,
+    },
+  })
+}
+
 async function handleRecipientCreated(params: {
   event: Event<"NounsFlow:RecipientCreated">
   context: Context<"NounsFlow:RecipientCreated">
@@ -16,8 +47,6 @@ async function handleRecipientCreated(params: {
     recipientId,
   } = event.args
 
-  const parentContract = event.log.address.toLowerCase()
-
   await context.db.Grant.update({
     id: recipientId.toString(),
     data: {
@@ -27,6 +56,8 @@ async function handleRecipientCreated(params: {
       isActive: true,
     },
   })
+
+  const parentContract = event.log.address.toLowerCase()
 
   await handleSiblings(context.db, parentContract)
 }
@@ -70,11 +101,18 @@ async function handleSiblings(db: Context["db"], parentContract: string) {
       baselineSum + Number(item.baselineMemberUnits),
       bonusSum + Number(item.bonusMemberUnits),
     ],
-    [0, 0]
+    [1, 1]
   )
 
-  console.log(items)
-  console.log(totalBaselineMemberUnits, totalBonusMemberUnits)
+  if (totalBaselineMemberUnits === 0 || totalBonusMemberUnits === 0) {
+    console.error({
+      totalBaselineMemberUnits,
+      totalBonusMemberUnits,
+      baselineFlowRate,
+      bonusFlowRate,
+    })
+    throw new Error("Invalid member units")
+  }
 
   // Calculate flow rate per unit for baseline and bonus pools
   const baselineFlowRatePerUnit = baselineFlowRate / totalBaselineMemberUnits

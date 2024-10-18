@@ -26,8 +26,8 @@ const client = createPublicClient({
 
 const currentBlock = Number(await client.getBlockNumber())
 
-const START_BLOCK = 20118986
-const SECONDS_PER_BLOCK = 12
+const START_BLOCK = 21223059
+const SECONDS_PER_BLOCK = 2
 
 export default createConfig({
   database: { kind: "postgres", schema: "public" },
@@ -50,7 +50,7 @@ export default createConfig({
       factory: {
         address: nounsFlowAddress[8453],
         event: parseAbiItem(
-          "event FlowRecipientCreated(bytes32 indexed recipientId, address indexed recipient)"
+          "event FlowRecipientCreated(bytes32 indexed recipientId, address indexed recipient, address baselinePool, address bonusPool, uint32 managerRewardPoolFlowRatePercent, uint32 baselinePoolFlowRatePercent)"
         ),
         parameter: "recipient",
       },
