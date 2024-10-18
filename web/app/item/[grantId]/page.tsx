@@ -23,6 +23,7 @@ import { CurationCard } from "./components/curation-card"
 import { Updates } from "./components/updates"
 import { UserVotes } from "./components/user-votes"
 import { Voters } from "./components/voters"
+import { Comments } from "@/components/comments/comments"
 
 interface Props {
   params: {
@@ -183,6 +184,10 @@ export default async function GrantPage({ params }: Props) {
             <Voters contract={getEthAddress(parentContract)} recipientId={grant.id} />
           )}
         </div>
+      </div>
+
+      <div className="mt-12 max-w-2xl">
+        <Comments commentableId={grant.id} />
       </div>
 
       {!isFlow && (

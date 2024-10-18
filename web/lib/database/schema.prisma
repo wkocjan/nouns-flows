@@ -68,6 +68,25 @@ model FarcasterUser {
   @@schema("web")
 }
 
+model Comment {
+  id            String   @id @default(cuid())
+  content       String
+  author        String
+  commentableId String
+  parentId      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies Comment[] @relation("CommentReplies")
+
+  @@index([commentableId])
+  @@index([parentId])
+  @@index([author])
+  @@map("Comment")
+  @@schema("web")
+}
+
 view Grant {
   id                               String  @id
   recipient                        String
@@ -77,25 +96,25 @@ view Grant {
   isTopLevel                       Int
   isFlow                           Int
   title                            String
-  description                        String
-  image                              String
-  tagline                            String?
-  url                                String?
-  isRemoved                          Int
-  isActive                           Int
-  votesCount                         String
-  monthlyIncomingFlowRate            String
-  monthlyOutgoingFlowRate            String
-  monthlyRewardPoolFlowRate          String
-  monthlyBaselinePoolFlowRate         String
-  monthlyBonusPoolFlowRate            String
-  bonusMemberUnits                   String
-  baselineMemberUnits                String
-  totalEarned                          String
-  tcr                                  String  @unique
-  erc20                                String  @unique
-  arbitrator                           String  @unique
-  tokenEmitter                         String  @unique
+  description                      String
+  image                            String
+  tagline                          String?
+  url                              String?
+  isRemoved                        Int
+  isActive                         Int
+  votesCount                       String
+  monthlyIncomingFlowRate          String
+  monthlyOutgoingFlowRate          String
+  monthlyRewardPoolFlowRate        String
+  monthlyBaselinePoolFlowRate      String
+  monthlyBonusPoolFlowRate         String
+  bonusMemberUnits                 String
+  baselineMemberUnits              String
+  totalEarned                      String
+  tcr                              String  @unique
+  erc20                            String  @unique
+  arbitrator                       String  @unique
+  tokenEmitter                     String  @unique
   status                           Int
   challengePeriodEndsAt            Int
   isDisputed                       Int
