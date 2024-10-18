@@ -73,6 +73,9 @@ async function handleSiblings(db: Context["db"], parentContract: string) {
     [0, 0]
   )
 
+  console.log(items)
+  console.log(totalBaselineMemberUnits, totalBonusMemberUnits)
+
   // Calculate flow rate per unit for baseline and bonus pools
   const baselineFlowRatePerUnit = baselineFlowRate / totalBaselineMemberUnits
   const bonusFlowRatePerUnit = bonusFlowRate / totalBonusMemberUnits
@@ -86,12 +89,17 @@ async function handleSiblings(db: Context["db"], parentContract: string) {
     const totalSiblingFlowRate = baselineFlowRate + bonusFlowRate
 
     // Convert flow rate to monthly amount
-    const monthlyIncomingFlowRate = (totalSiblingFlowRate * secondsPerMonth).toString()
+    const monthlyIncomingFlowRate = totalSiblingFlowRate * secondsPerMonth
+
+    if (isNaN(monthlyIncomingFlowRate)) {
+      console.error(totalSiblingFlowRate, baselineFlowRate, bonusFlowRate)
+      throw new Error(`Invalid monthly incoming flow rate: ${monthlyIncomingFlowRate}`)
+    }
 
     await db.Grant.update({
       id: sibling.id,
       data: {
-        monthlyIncomingFlowRate,
+        monthlyIncomingFlowRate: monthlyIncomingFlowRate.toString(),
       },
     })
   }

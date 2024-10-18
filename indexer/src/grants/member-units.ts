@@ -16,7 +16,6 @@ async function handleMemberUnitsUpdated(params: {
   const { items } = await context.db.Grant.findMany({
     where: {
       OR: [{ baselinePool: pool }, { bonusPool: pool }],
-      isFlow: false,
       superToken: token.toLowerCase(),
     },
   })
@@ -24,18 +23,36 @@ async function handleMemberUnitsUpdated(params: {
   const parentGrant = items[0]
 
   if (!parentGrant) {
-    return
+    console.error({ pool })
+    throw new Error(`Parent grant not found: ${pool}`)
   }
 
   const shouldUpdateBaseline = parentGrant.baselinePool === pool
   const shouldUpdateBonus = parentGrant.bonusPool === pool
 
-  await context.db.Grant.updateMany({
-    where: { parentContract: parentGrant.recipient, isFlow: true, recipient: member.toLowerCase() },
-    data: {
-      baselineMemberUnits: shouldUpdateBaseline ? newUnits.toString() : undefined,
-      bonusMemberUnits: shouldUpdateBonus ? newUnits.toString() : undefined,
-      updatedAt: Number(event.block.timestamp),
-    },
-  })
+  if (shouldUpdateBaseline)
+    await context.db.Grant.updateMany({
+      where: {
+        parentContract: parentGrant.recipient,
+        isFlow: true,
+        recipient: member.toLowerCase(),
+      },
+      data: {
+        baselineMemberUnits: newUnits.toString(),
+        updatedAt: Number(event.block.timestamp),
+      },
+    })
+
+  if (shouldUpdateBonus)
+    await context.db.Grant.updateMany({
+      where: {
+        parentContract: parentGrant.recipient,
+        isFlow: true,
+        recipient: member.toLowerCase(),
+      },
+      data: {
+        bonusMemberUnits: newUnits.toString(),
+        updatedAt: Number(event.block.timestamp),
+      },
+    })
 }
