@@ -1,3 +1,4 @@
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import database from "@/lib/database"
 import { getPool } from "@/lib/database/queries/pool"
 import {
@@ -125,9 +126,25 @@ export default async function CurateAndEarnPage() {
                       <>
                         Curate flows that align with your interests and expertise:
                         <ul className="mt-2 list-inside list-disc">
-                          {flows.map((flow) => (
+                          {flows.slice(0, 6).map((flow) => (
                             <li key={flow.id}>{flow.title}</li>
                           ))}
+                          {flows.length > 6 && (
+                            <li>
+                              <Tooltip>
+                                <TooltipTrigger className="cursor-help">
+                                  and <u>{flows.length - 6} more</u>...
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <ul className="list-inside list-disc">
+                                    {flows.slice(6).map((flow) => (
+                                      <li key={flow.id}>{flow.title}</li>
+                                    ))}
+                                  </ul>
+                                </TooltipContent>
+                              </Tooltip>
+                            </li>
+                          )}
                         </ul>
                       </>
                     ),
