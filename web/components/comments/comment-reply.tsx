@@ -1,7 +1,8 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+import { ChatBubbleIcon, Cross2Icon } from "@radix-ui/react-icons"
 import { useState } from "react"
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
 import { CommentForm } from "./comment-form"
 
 interface Props {
@@ -18,14 +19,28 @@ export function CommentReply(props: Props) {
 
   return (
     <>
-      <Button variant="link" size="sm" onClick={() => setShowReplyForm((c) => !c)} className="px-0">
-        {showReplyForm ? "Cancel" : "Reply"}
-      </Button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            type="button"
+            className="transition-colors hover:text-primary"
+            onClick={() => setShowReplyForm((c) => !c)}
+          >
+            {showReplyForm ? (
+              <Cross2Icon className="size-3.5" />
+            ) : (
+              <ChatBubbleIcon className="size-3.5" />
+            )}
+          </button>
+        </TooltipTrigger>
+        <TooltipContent>{showReplyForm ? "Cancel" : "Reply"}</TooltipContent>
+      </Tooltip>
       {showReplyForm && (
         <CommentForm
           commentableId={commentableId}
           parentId={parentId}
           onComment={() => setShowReplyForm(false)}
+          level={level + 1}
         />
       )}
     </>

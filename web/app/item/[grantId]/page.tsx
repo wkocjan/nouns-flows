@@ -96,7 +96,7 @@ export default async function GrantPage({ params }: Props) {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-5 md:gap-20">
+      <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-5">
         <div className="md:col-span-3">
           <div className="flex items-center space-x-4">
             <Image
@@ -112,9 +112,11 @@ export default async function GrantPage({ params }: Props) {
             </div>
           </div>
 
-          <div className="mt-6 space-y-4 text-pretty text-sm md:text-base">
+          <div className="mb-12 mt-6 space-y-4 text-pretty text-sm md:text-base">
             <Markdown>{description}</Markdown>
           </div>
+
+          {!isFlow && <Updates casts={grant.updates} recipient={grant.recipient} />}
         </div>
 
         <div className="space-y-4 md:col-span-2">
@@ -183,18 +185,19 @@ export default async function GrantPage({ params }: Props) {
           {Number(votesCount) > 0 && (
             <Voters contract={getEthAddress(parentContract)} recipientId={grant.id} />
           )}
+
+          {!isFlow && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Comments</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Comments commentableId={grant.id} maxHeight={450} />
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
-
-      <div className="mt-12 max-w-2xl">
-        <Comments commentableId={grant.id} />
-      </div>
-
-      {!isFlow && (
-        <div className="mt-12 border-t border-border pt-6">
-          <Updates casts={grant.updates} recipient={grant.recipient} />
-        </div>
-      )}
     </div>
   )
 }

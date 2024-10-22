@@ -13,10 +13,11 @@ interface Props {
   commentableId: string
   parentId?: string
   onComment?: () => void
+  level?: number
 }
 
 export function CommentForm(props: Props) {
-  const { commentableId, parentId, onComment } = props
+  const { commentableId, parentId, onComment, level = 1 } = props
   const [content, setContent] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { address } = useAccount()
@@ -53,9 +54,16 @@ export function CommentForm(props: Props) {
         // @ts-ignore
         style={{ fieldSizing: "content" }}
         autoFocus={!!parentId}
+        rows={1}
+        className="min-h-[1em]"
       />
-      <Button type="submit" disabled={!content.trim() || isSubmitting} loading={isSubmitting}>
-        {isSubmitting ? "Submitting..." : "Add comment"}
+      <Button
+        type="submit"
+        size="sm"
+        disabled={!content.trim() || isSubmitting}
+        loading={isSubmitting}
+      >
+        {isSubmitting ? "Submitting..." : `Add ${level === 1 ? "comment" : "reply"}`}
       </Button>
     </form>
   )

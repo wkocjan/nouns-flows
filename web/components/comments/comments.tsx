@@ -1,3 +1,4 @@
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { SkeletonLoader } from "@/components/ui/skeleton"
 import { Suspense } from "react"
 import { getComments } from "./comment-actions"
@@ -6,27 +7,32 @@ import { CommentItem } from "./comment-item"
 
 interface Props {
   commentableId: string
+  maxHeight?: number
 }
 
-export function Comments({ commentableId }: Props) {
+export function Comments({ commentableId, maxHeight }: Props) {
   return (
-    <div className="space-y-4">
+    <>
       <CommentForm commentableId={commentableId} />
       <Suspense fallback={<SkeletonLoader count={3} height={100} />}>
-        <CommentList commentableId={commentableId} />
+        <CommentList commentableId={commentableId} maxHeight={maxHeight} />
       </Suspense>
-    </div>
+    </>
   )
 }
 
-async function CommentList({ commentableId }: Props) {
+async function CommentList({ commentableId, maxHeight }: Props) {
   const { comments } = await getComments(commentableId)
 
+  if (comments.length === 0) {
+    return null
+  }
+
   return (
-    <div className="space-y-4">
+    <ScrollArea style={{ height: maxHeight }} className="mt-2.5 pr-4" type="hover">
       {comments.map((comment) => (
         <CommentItem key={comment.id} comment={comment} level={0} />
       ))}
-    </div>
+    </ScrollArea>
   )
 }
