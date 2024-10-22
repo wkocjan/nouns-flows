@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Status } from "@/lib/enums"
-import { getIpfsUrl } from "@/lib/utils"
+import { getIpfsUrl, isGrantApproved } from "@/lib/utils"
 import { Grant } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
@@ -37,57 +37,63 @@ export const FlowsTable = (props: Props) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {flows.map((flow) => (
-          <TableRow key={flow.title}>
-            <TableCell className="min-w-[64px] md:w-[92px]">
-              <Image
-                src={getIpfsUrl(flow.image)}
-                alt={flow.title}
-                width={64}
-                height={64}
-                className="aspect-square size-12 rounded-md object-cover md:size-16"
-              />
-            </TableCell>
-            <TableCell>
-              <Link
-                href={`/flow/${flow.id}`}
-                className="font-medium duration-100 ease-out hover:text-primary md:text-lg"
-                tabIndex={-1}
-              >
-                {flow.title}
-              </Link>
-              <p className="text-xs tracking-tight text-muted-foreground max-sm:hidden md:text-sm">
-                {flow.tagline}
-              </p>
-              {flow.status === Status.ClearingRequested && (
-                <Badge variant="destructive">Removal Requested</Badge>
-              )}
-            </TableCell>
-            <TableCell>
-              <GrantStatusCountBadges subgrants={flow.subgrants} alwaysShowAll />
-            </TableCell>
-            <TableCell className="text-center">
-              <AnimatedSalary
-                value={flow.totalEarned}
-                monthlyRate={
-                  flow.isFlow ? flow.monthlyOutgoingFlowRate : flow.monthlyIncomingFlowRate
-                }
-              />
-            </TableCell>
-            <TableCell className="text-center">
-              <Badge>
-                <Currency>
-                  {flow.isFlow ? flow.monthlyOutgoingFlowRate : flow.monthlyIncomingFlowRate}
-                </Currency>
-                /mo
-              </Badge>
-            </TableCell>
-            <TableCell className="text-center">{flow.votesCount}</TableCell>
-            <TableCell className="w-[100px] max-w-[100px] text-center">
-              <VotingInput recipientId={flow.id} />
-            </TableCell>
-          </TableRow>
-        ))}
+        {flows
+          .sort((a, b) => {
+            const aApprovedCount = a.subgrants.filter(isGrantApproved).length
+            const bApprovedCount = b.subgrants.filter(isGrantApproved).length
+            return bApprovedCount - aApprovedCount
+          })
+          .map((flow) => (
+            <TableRow key={flow.title}>
+              <TableCell className="min-w-[64px] md:w-[92px]">
+                <Image
+                  src={getIpfsUrl(flow.image)}
+                  alt={flow.title}
+                  width={64}
+                  height={64}
+                  className="aspect-square size-12 rounded-md object-cover md:size-16"
+                />
+              </TableCell>
+              <TableCell>
+                <Link
+                  href={`/flow/${flow.id}`}
+                  className="font-medium duration-100 ease-out hover:text-primary md:text-lg"
+                  tabIndex={-1}
+                >
+                  {flow.title}
+                </Link>
+                <p className="text-xs tracking-tight text-muted-foreground max-sm:hidden md:text-sm">
+                  {flow.tagline}
+                </p>
+                {flow.status === Status.ClearingRequested && (
+                  <Badge variant="destructive">Removal Requested</Badge>
+                )}
+              </TableCell>
+              <TableCell>
+                <GrantStatusCountBadges subgrants={flow.subgrants} alwaysShowAll />
+              </TableCell>
+              <TableCell className="text-center">
+                <AnimatedSalary
+                  value={flow.totalEarned}
+                  monthlyRate={
+                    flow.isFlow ? flow.monthlyOutgoingFlowRate : flow.monthlyIncomingFlowRate
+                  }
+                />
+              </TableCell>
+              <TableCell className="text-center">
+                <Badge>
+                  <Currency>
+                    {flow.isFlow ? flow.monthlyOutgoingFlowRate : flow.monthlyIncomingFlowRate}
+                  </Currency>
+                  /mo
+                </Badge>
+              </TableCell>
+              <TableCell className="text-center">{flow.votesCount}</TableCell>
+              <TableCell className="w-[100px] max-w-[100px] text-center">
+                <VotingInput recipientId={flow.id} />
+              </TableCell>
+            </TableRow>
+          ))}
       </TableBody>
     </Table>
   )
