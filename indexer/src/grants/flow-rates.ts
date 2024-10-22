@@ -37,6 +37,7 @@ async function handleChildFlowRatesToUpdate(params: {
 }) {
   const { event, context } = params
   console.error({ args: event.args })
+  console.error("Not implemented")
 
-  throw new Error("Not implemented")
+  // throw new Error("Not implemented")
 }
