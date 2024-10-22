@@ -65,7 +65,7 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
           </Badge>
         </div>
       </PopoverTrigger>
-      <PopoverContent className="w-full max-w-[100vw] md:mr-8 md:w-[620px]">
+      <PopoverContent className="w-full max-w-[100vw] md:mr-8 md:w-[600px]">
         <PopoverClose ref={closeRef} className="hidden" />
         <div className="flex flex-row items-center justify-between">
           <p className="text-sm text-muted-foreground">

@@ -1,7 +1,8 @@
-import { nounsFlowAddress, nounsTokenAddress } from "./abis"
+import { nounsTokenAddress } from "./abis"
+import { base as baseContracts } from "../addresses"
 
 // Flow contracts
-export const NOUNS_FLOW = nounsFlowAddress[8453]
+export const NOUNS_FLOW = baseContracts.NounsFlow
 
 // Nouns token contract (for voting power)
 export const NOUNS_TOKEN = (process.env.NEXT_PUBLIC_NOUNS_TOKEN_ADDRESS ||

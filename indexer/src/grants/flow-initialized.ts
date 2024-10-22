@@ -1,13 +1,8 @@
 import { ponder } from "@/generated"
 import { zeroAddress } from "viem"
-import {
-  erc20VotesArbitratorAddress,
-  erc20VotesMintableAddress,
-  flowTcrAddress,
-  rewardPoolImplAbi,
-  tokenEmitterAddress,
-} from "../../abis"
+import { rewardPoolImplAbi } from "../../abis"
 import { Status } from "../enums"
+import { base as baseContracts } from "../../addresses"
 
 ponder.on("NounsFlow:FlowInitialized", async (params) => {
   const { context, event } = params
@@ -64,10 +59,10 @@ ponder.on("NounsFlow:FlowInitialized", async (params) => {
       bonusMemberUnits: "0",
       baselineMemberUnits: "0",
       totalEarned: "0",
-      tcr: flowTcrAddress[8453].toLowerCase(),
-      erc20: erc20VotesMintableAddress[8453].toLowerCase(),
-      arbitrator: erc20VotesArbitratorAddress[8453].toLowerCase(),
-      tokenEmitter: tokenEmitterAddress[8453].toLowerCase(),
+      tcr: baseContracts.FlowTCR,
+      erc20: baseContracts.ERC20VotesMintable,
+      arbitrator: baseContracts.ERC20VotesArbitrator,
+      tokenEmitter: baseContracts.TokenEmitter,
       managerRewardPoolFlowRatePercent,
       baselinePoolFlowRatePercent,
       challengePeriodEndsAt: 0,

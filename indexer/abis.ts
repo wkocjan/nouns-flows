@@ -1,164 +1,4 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// BaselinePool
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x66a142039a1a2b718e6ce81ea6dcf006965ca574)
- */
-export const baselinePoolAbi = [
-  {
-    type: 'constructor',
-    inputs: [
-      { name: 'beacon', internalType: 'address', type: 'address' },
-      { name: 'data', internalType: 'bytes', type: 'bytes' },
-    ],
-    stateMutability: 'payable',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'previousAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-      {
-        name: 'newAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-    ],
-    name: 'AdminChanged',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'beacon',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'BeaconUpgraded',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'implementation',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'Upgraded',
-  },
-  { type: 'fallback', stateMutability: 'payable' },
-  { type: 'receive', stateMutability: 'payable' },
-] as const
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x66a142039a1a2b718e6ce81ea6dcf006965ca574)
- */
-export const baselinePoolAddress = {
-  8453: '0x66A142039a1a2B718e6CE81Ea6dCF006965cA574',
-} as const
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x66a142039a1a2b718e6ce81ea6dcf006965ca574)
- */
-export const baselinePoolConfig = {
-  address: baselinePoolAddress,
-  abi: baselinePoolAbi,
-} as const
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// BonusPool
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x969a3a201993b821456d2efcbd325a3e4297eecd)
- */
-export const bonusPoolAbi = [
-  {
-    type: 'constructor',
-    inputs: [
-      { name: 'beacon', internalType: 'address', type: 'address' },
-      { name: 'data', internalType: 'bytes', type: 'bytes' },
-    ],
-    stateMutability: 'payable',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'previousAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-      {
-        name: 'newAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-    ],
-    name: 'AdminChanged',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'beacon',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'BeaconUpgraded',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'implementation',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'Upgraded',
-  },
-  { type: 'fallback', stateMutability: 'payable' },
-  { type: 'receive', stateMutability: 'payable' },
-] as const
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x969a3a201993b821456d2efcbd325a3e4297eecd)
- */
-export const bonusPoolAddress = {
-  8453: '0x969a3a201993b821456D2eFcbd325A3e4297EEcD',
-} as const
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x969a3a201993b821456d2efcbd325a3e4297eecd)
- */
-export const bonusPoolConfig = {
-  address: bonusPoolAddress,
-  abi: bonusPoolAbi,
-} as const
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // SuperfluidPool
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -650,91 +490,11 @@ export const superfluidPoolConfig = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// erc20VotesArbitrator
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x93d1d644b7520080d22dbac5ccb6eeb435f77851)
- */
-export const erc20VotesArbitratorAbi = [
-  {
-    type: 'constructor',
-    inputs: [
-      { name: '_logic', internalType: 'address', type: 'address' },
-      { name: '_data', internalType: 'bytes', type: 'bytes' },
-    ],
-    stateMutability: 'payable',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'previousAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-      {
-        name: 'newAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-    ],
-    name: 'AdminChanged',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'beacon',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'BeaconUpgraded',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'implementation',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'Upgraded',
-  },
-  { type: 'fallback', stateMutability: 'payable' },
-  { type: 'receive', stateMutability: 'payable' },
-] as const
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x93d1d644b7520080d22dbac5ccb6eeb435f77851)
- */
-export const erc20VotesArbitratorAddress = {
-  8453: '0x93d1d644b7520080D22dbAc5cCb6eeB435f77851',
-} as const
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x93d1d644b7520080d22dbac5ccb6eeb435f77851)
- */
-export const erc20VotesArbitratorConfig = {
-  address: erc20VotesArbitratorAddress,
-  abi: erc20VotesArbitratorAbi,
-} as const
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // erc20VotesArbitratorImpl
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x41b07002a158fedfe4a53c2a5dbe5c5753668283)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x0b8e76232e4713ec69b73184dc4f7ced23befe38)
  */
 export const erc20VotesArbitratorImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'payable' },
@@ -1652,14 +1412,14 @@ export const erc20VotesArbitratorImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x41b07002a158fedfe4a53c2a5dbe5c5753668283)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x0b8e76232e4713ec69b73184dc4f7ced23befe38)
  */
 export const erc20VotesArbitratorImplAddress = {
-  8453: '0x41B07002a158fedFe4A53C2A5DBe5C5753668283',
+  8453: '0x0B8E76232E4713ec69b73184dc4f7Ced23bEFe38',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x41b07002a158fedfe4a53c2a5dbe5c5753668283)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x0b8e76232e4713ec69b73184dc4f7ced23befe38)
  */
 export const erc20VotesArbitratorImplConfig = {
   address: erc20VotesArbitratorImplAddress,
@@ -1667,91 +1427,11 @@ export const erc20VotesArbitratorImplConfig = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// erc20VotesMintable
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xa7963726532b90a8b15d7f01b5a68c19b664a7e7)
- */
-export const erc20VotesMintableAbi = [
-  {
-    type: 'constructor',
-    inputs: [
-      { name: '_logic', internalType: 'address', type: 'address' },
-      { name: '_data', internalType: 'bytes', type: 'bytes' },
-    ],
-    stateMutability: 'payable',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'previousAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-      {
-        name: 'newAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-    ],
-    name: 'AdminChanged',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'beacon',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'BeaconUpgraded',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'implementation',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'Upgraded',
-  },
-  { type: 'fallback', stateMutability: 'payable' },
-  { type: 'receive', stateMutability: 'payable' },
-] as const
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xa7963726532b90a8b15d7f01b5a68c19b664a7e7)
- */
-export const erc20VotesMintableAddress = {
-  8453: '0xa7963726532B90a8b15D7f01b5A68c19b664a7E7',
-} as const
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xa7963726532b90a8b15d7f01b5a68c19b664a7e7)
- */
-export const erc20VotesMintableConfig = {
-  address: erc20VotesMintableAddress,
-  abi: erc20VotesMintableAbi,
-} as const
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // erc20VotesMintableImpl
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xc9ed0027b34a343e494aeda4dcdf665f6881f8cb)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x5e951ef4a53fe27303235bb6e67fa3734eecb8ed)
  */
 export const erc20VotesMintableImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
@@ -2333,14 +2013,14 @@ export const erc20VotesMintableImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xc9ed0027b34a343e494aeda4dcdf665f6881f8cb)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x5e951ef4a53fe27303235bb6e67fa3734eecb8ed)
  */
 export const erc20VotesMintableImplAddress = {
-  8453: '0xC9ED0027b34A343E494aeda4dCDf665F6881f8Cb',
+  8453: '0x5E951ef4a53Fe27303235bb6E67fA3734eEcb8eD',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xc9ed0027b34a343e494aeda4dcdf665f6881f8cb)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x5e951ef4a53fe27303235bb6e67fa3734eecb8ed)
  */
 export const erc20VotesMintableImplConfig = {
   address: erc20VotesMintableImplAddress,
@@ -2348,91 +2028,11 @@ export const erc20VotesMintableImplConfig = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// flowTcr
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x8aae4038e027b905506b41cbdc9076ca27aa6e3a)
- */
-export const flowTcrAbi = [
-  {
-    type: 'constructor',
-    inputs: [
-      { name: '_logic', internalType: 'address', type: 'address' },
-      { name: '_data', internalType: 'bytes', type: 'bytes' },
-    ],
-    stateMutability: 'payable',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'previousAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-      {
-        name: 'newAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-    ],
-    name: 'AdminChanged',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'beacon',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'BeaconUpgraded',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'implementation',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'Upgraded',
-  },
-  { type: 'fallback', stateMutability: 'payable' },
-  { type: 'receive', stateMutability: 'payable' },
-] as const
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x8aae4038e027b905506b41cbdc9076ca27aa6e3a)
- */
-export const flowTcrAddress = {
-  8453: '0x8aae4038e027B905506B41CBDC9076ca27AA6E3a',
-} as const
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x8aae4038e027b905506b41cbdc9076ca27aa6e3a)
- */
-export const flowTcrConfig = {
-  address: flowTcrAddress,
-  abi: flowTcrAbi,
-} as const
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // flowTcrImpl
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xca25b4b875214bf983c21c8f28dfadbf26966abf)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xd590362f456ce80b89123c6e6a252377e3d1e0e0)
  */
 export const flowTcrImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'payable' },
@@ -3512,14 +3112,14 @@ export const flowTcrImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xca25b4b875214bf983c21c8f28dfadbf26966abf)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xd590362f456ce80b89123c6e6a252377e3d1e0e0)
  */
 export const flowTcrImplAddress = {
-  8453: '0xcA25B4B875214bF983c21C8F28dFaDBF26966abF',
+  8453: '0xd590362F456cE80b89123c6E6A252377e3D1E0E0',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xca25b4b875214bf983c21c8f28dfadbf26966abf)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xd590362f456ce80b89123c6e6a252377e3d1e0e0)
  */
 export const flowTcrImplConfig = {
   address: flowTcrImplAddress,
@@ -4081,91 +3681,11 @@ export const multicall3Config = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// nounsFlow
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x3ba841c7ec9ad4b625f4e1110c5e345f0c057469)
- */
-export const nounsFlowAbi = [
-  {
-    type: 'constructor',
-    inputs: [
-      { name: '_logic', internalType: 'address', type: 'address' },
-      { name: '_data', internalType: 'bytes', type: 'bytes' },
-    ],
-    stateMutability: 'payable',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'previousAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-      {
-        name: 'newAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-    ],
-    name: 'AdminChanged',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'beacon',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'BeaconUpgraded',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'implementation',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'Upgraded',
-  },
-  { type: 'fallback', stateMutability: 'payable' },
-  { type: 'receive', stateMutability: 'payable' },
-] as const
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x3ba841c7ec9ad4b625f4e1110c5e345f0c057469)
- */
-export const nounsFlowAddress = {
-  8453: '0x3Ba841c7Ec9Ad4b625f4E1110C5E345F0c057469',
-} as const
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x3ba841c7ec9ad4b625f4e1110c5e345f0c057469)
- */
-export const nounsFlowConfig = {
-  address: nounsFlowAddress,
-  abi: nounsFlowAbi,
-} as const
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // nounsFlowImpl
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x29590fb92e7d5b0e78ad8ba0006aa4a81c6d9181)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xcdfee0baafd18824a9313c057af6fcdb1117b8c1)
  */
 export const nounsFlowImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'payable' },
@@ -4186,6 +3706,7 @@ export const nounsFlowImplAbi = [
   { type: 'error', inputs: [], name: 'INVALID_VOTE_WEIGHT' },
   { type: 'error', inputs: [], name: 'NOT_ABLE_TO_VOTE_WITH_TOKEN' },
   { type: 'error', inputs: [], name: 'NOT_APPROVED_RECIPIENT' },
+  { type: 'error', inputs: [], name: 'NOT_A_VALID_CHILD_FLOW' },
   { type: 'error', inputs: [], name: 'NOT_MANAGER' },
   { type: 'error', inputs: [], name: 'NOT_OWNER_OR_MANAGER' },
   { type: 'error', inputs: [], name: 'NOT_OWNER_OR_PARENT' },
@@ -4258,6 +3779,19 @@ export const nounsFlowImplAbi = [
       },
     ],
     name: 'BeaconUpgraded',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'childFlows',
+        internalType: 'address[]',
+        type: 'address[]',
+        indexed: false,
+      },
+    ],
+    name: 'ChildFlowRatesToUpdate',
   },
   {
     type: 'event',
@@ -4981,13 +4515,6 @@ export const nounsFlowImplAbi = [
   {
     type: 'function',
     inputs: [],
-    name: 'getManagerRewardPoolBufferAmount',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
     name: 'getManagerRewardPoolFlowRate',
     outputs: [{ name: '', internalType: 'int96', type: 'int96' }],
     stateMutability: 'view',
@@ -5238,6 +4765,15 @@ export const nounsFlowImplAbi = [
   },
   {
     type: 'function',
+    inputs: [
+      { name: 'childFlows', internalType: 'address[]', type: 'address[]' },
+    ],
+    name: 'setChildFlowRates',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     inputs: [{ name: '_flowImpl', internalType: 'address', type: 'address' }],
     name: 'setFlowImpl',
     outputs: [],
@@ -5357,14 +4893,14 @@ export const nounsFlowImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x29590fb92e7d5b0e78ad8ba0006aa4a81c6d9181)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xcdfee0baafd18824a9313c057af6fcdb1117b8c1)
  */
 export const nounsFlowImplAddress = {
-  8453: '0x29590fB92e7d5b0E78Ad8bA0006Aa4a81C6d9181',
+  8453: '0xCDFee0baafd18824a9313C057Af6fcdB1117b8C1',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x29590fb92e7d5b0e78ad8ba0006aa4a81c6d9181)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xcdfee0baafd18824a9313c057af6fcdb1117b8c1)
  */
 export const nounsFlowImplConfig = {
   address: nounsFlowImplAddress,
@@ -6076,91 +5612,11 @@ export const nounsTokenConfig = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// rewardPool
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x2bcea857c12947f842b2281173f3ec37f98ac73d)
- */
-export const rewardPoolAbi = [
-  {
-    type: 'constructor',
-    inputs: [
-      { name: '_logic', internalType: 'address', type: 'address' },
-      { name: '_data', internalType: 'bytes', type: 'bytes' },
-    ],
-    stateMutability: 'payable',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'previousAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-      {
-        name: 'newAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-    ],
-    name: 'AdminChanged',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'beacon',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'BeaconUpgraded',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'implementation',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'Upgraded',
-  },
-  { type: 'fallback', stateMutability: 'payable' },
-  { type: 'receive', stateMutability: 'payable' },
-] as const
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x2bcea857c12947f842b2281173f3ec37f98ac73d)
- */
-export const rewardPoolAddress = {
-  8453: '0x2BcEA857c12947F842b2281173F3Ec37f98aC73d',
-} as const
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x2bcea857c12947f842b2281173f3ec37f98ac73d)
- */
-export const rewardPoolConfig = {
-  address: rewardPoolAddress,
-  abi: rewardPoolAbi,
-} as const
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // rewardPoolImpl
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xbd3289f99663f761bed7dea58fe2a566b3daaab0)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x924144f427006317decb68951b668a956113dddb)
  */
 export const rewardPoolImplAbi = [
   { type: 'error', inputs: [], name: 'ADDRESS_ZERO' },
@@ -6449,14 +5905,14 @@ export const rewardPoolImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xbd3289f99663f761bed7dea58fe2a566b3daaab0)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x924144f427006317decb68951b668a956113dddb)
  */
 export const rewardPoolImplAddress = {
-  8453: '0xBd3289F99663f761bed7dEa58Fe2a566b3daAAB0',
+  8453: '0x924144f427006317DecB68951b668A956113DDdB',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xbd3289f99663f761bed7dea58fe2a566b3daaab0)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x924144f427006317decb68951b668a956113dddb)
  */
 export const rewardPoolImplConfig = {
   address: rewardPoolImplAddress,
@@ -7799,91 +7255,11 @@ export const superfluidMacroForwarderConfig = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// tcrFactory
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xfddf42fd43d7aa09a1b3e062e0959e5f2135facb)
- */
-export const tcrFactoryAbi = [
-  {
-    type: 'constructor',
-    inputs: [
-      { name: '_logic', internalType: 'address', type: 'address' },
-      { name: '_data', internalType: 'bytes', type: 'bytes' },
-    ],
-    stateMutability: 'payable',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'previousAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-      {
-        name: 'newAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-    ],
-    name: 'AdminChanged',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'beacon',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'BeaconUpgraded',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'implementation',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'Upgraded',
-  },
-  { type: 'fallback', stateMutability: 'payable' },
-  { type: 'receive', stateMutability: 'payable' },
-] as const
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xfddf42fd43d7aa09a1b3e062e0959e5f2135facb)
- */
-export const tcrFactoryAddress = {
-  8453: '0xFdDf42FD43d7aa09a1B3e062E0959E5F2135FAcb',
-} as const
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xfddf42fd43d7aa09a1b3e062e0959e5f2135facb)
- */
-export const tcrFactoryConfig = {
-  address: tcrFactoryAddress,
-  abi: tcrFactoryAbi,
-} as const
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // tcrFactoryImpl
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xd784a1fd819de89c36027926f2fcae9eac3b298b)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x1932ad1e6cd63ccb66c3e171d51e478d8c457971)
  */
 export const tcrFactoryImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
@@ -8453,14 +7829,14 @@ export const tcrFactoryImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xd784a1fd819de89c36027926f2fcae9eac3b298b)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x1932ad1e6cd63ccb66c3e171d51e478d8c457971)
  */
 export const tcrFactoryImplAddress = {
-  8453: '0xD784A1Fd819DE89c36027926F2Fcae9Eac3B298b',
+  8453: '0x1932aD1E6CD63CCb66c3E171D51e478d8C457971',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xd784a1fd819de89c36027926f2fcae9eac3b298b)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x1932ad1e6cd63ccb66c3e171d51e478d8c457971)
  */
 export const tcrFactoryImplConfig = {
   address: tcrFactoryImplAddress,
@@ -8468,91 +7844,11 @@ export const tcrFactoryImplConfig = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// tokenEmitter
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x508085f48965ab708ccc709e5768690049c1053e)
- */
-export const tokenEmitterAbi = [
-  {
-    type: 'constructor',
-    inputs: [
-      { name: '_logic', internalType: 'address', type: 'address' },
-      { name: '_data', internalType: 'bytes', type: 'bytes' },
-    ],
-    stateMutability: 'payable',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'previousAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-      {
-        name: 'newAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-    ],
-    name: 'AdminChanged',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'beacon',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'BeaconUpgraded',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'implementation',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'Upgraded',
-  },
-  { type: 'fallback', stateMutability: 'payable' },
-  { type: 'receive', stateMutability: 'payable' },
-] as const
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x508085f48965ab708ccc709e5768690049c1053e)
- */
-export const tokenEmitterAddress = {
-  8453: '0x508085F48965ab708CCC709E5768690049C1053e',
-} as const
-
-/**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x508085f48965ab708ccc709e5768690049c1053e)
- */
-export const tokenEmitterConfig = {
-  address: tokenEmitterAddress,
-  abi: tokenEmitterAbi,
-} as const
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // tokenEmitterImpl
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x4a305c9ca5dff2f33b9faffae7b93bca6d90872b)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x0e552d343028eb30730c74436cd447ef6b11609a)
  */
 export const tokenEmitterImplAbi = [
   {
@@ -8994,14 +8290,14 @@ export const tokenEmitterImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x4a305c9ca5dff2f33b9faffae7b93bca6d90872b)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x0e552d343028eb30730c74436cd447ef6b11609a)
  */
 export const tokenEmitterImplAddress = {
-  8453: '0x4a305c9CA5dff2f33B9FafFae7b93bcA6D90872B',
+  8453: '0x0E552d343028Eb30730c74436CD447eF6B11609a',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x4a305c9ca5dff2f33b9faffae7b93bca6d90872b)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x0e552d343028eb30730c74436cd447ef6b11609a)
  */
 export const tokenEmitterImplConfig = {
   address: tokenEmitterImplAddress,

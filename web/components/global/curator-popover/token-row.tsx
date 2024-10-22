@@ -50,7 +50,9 @@ export function TokenRow(props: Props) {
         balance={formatEther(BigInt(balance))}
         monthlyRewardPoolRate={flow.monthlyRewardPoolFlowRate}
       />
+
       <GrantStatusCountBadges subgrants={subgrants} />
+
       <div className="text-center text-sm font-medium">
         <WithdrawCuratorSalaryButton pool={getEthAddress(flow.managerRewardSuperfluidPool)} />
       </div>

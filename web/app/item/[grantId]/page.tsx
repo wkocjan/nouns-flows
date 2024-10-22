@@ -139,7 +139,7 @@ export default async function GrantPage({ params }: Props) {
                   </div>
                 )}
                 <div>
-                  <h4 className="text-[13px] text-muted-foreground">Budget</h4>
+                  <h4 className="text-[13px] text-muted-foreground">Monthly budget</h4>
                   <Badge className="mt-2">
                     <Currency>{grant.monthlyIncomingFlowRate}</Currency>
                     /mo
@@ -157,7 +157,7 @@ export default async function GrantPage({ params }: Props) {
                   </p>
                 </div>
                 <div>
-                  <h4 className="text-[13px] text-muted-foreground">Total Votes</h4>
+                  <h4 className="text-[13px] text-muted-foreground">Community Votes</h4>
                   <p className="mt-1 text-lg font-medium">{grant.votesCount}</p>
                 </div>
                 <div>

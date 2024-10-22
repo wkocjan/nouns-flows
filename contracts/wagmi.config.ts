@@ -6,25 +6,18 @@ const mainnetContracts = [{ name: "nounsToken", address: mainnet.NounsToken }]
 
 const baseContracts = [
   { name: "nounsFlowImpl", address: base.NounsFlowImpl },
-  { name: "nounsFlow", address: base.NounsFlow },
 
   { name: "flowTcrImpl", address: base.FlowTCRImpl },
-  { name: "flowTcr", address: base.FlowTCR },
 
   { name: "erc20VotesArbitratorImpl", address: base.ERC20VotesArbitratorImpl },
-  { name: "erc20VotesArbitrator", address: base.ERC20VotesArbitrator },
 
   { name: "erc20VotesMintableImpl", address: base.ERC20VotesMintableImpl },
-  { name: "erc20VotesMintable", address: base.ERC20VotesMintable },
 
   { name: "tcrFactoryImpl", address: base.TCRFactoryImpl },
-  { name: "tcrFactory", address: base.TCRFactory },
 
   { name: "tokenEmitterImpl", address: base.TokenEmitterImpl },
-  { name: "tokenEmitter", address: base.TokenEmitter },
 
   { name: "rewardPoolImpl", address: base.RewardPoolImpl },
-  { name: "rewardPool", address: base.RewardPool },
 
   { name: "superToken", address: "0xeb796bdb90ffa0f28255275e16936d25d3418603" as `0x${string}` },
 
@@ -39,10 +32,6 @@ const baseContracts = [
     name: "superfluidMacroForwarder",
     address: "0xfD01285b9435bc45C243E5e7F978E288B2912de6" as `0x${string}`,
   },
-
-  // for top level flow only
-  { name: "BaselinePool", address: base.BaselinePool },
-  { name: "BonusPool", address: base.BonusPool },
 
   {
     name: "SuperfluidPool",

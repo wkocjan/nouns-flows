@@ -31,8 +31,8 @@ export const FlowsTable = (props: Props) => {
           <TableHead colSpan={2}>Name</TableHead>
           <TableHead className="text-center">Grants</TableHead>
           <TableHead className="text-center">Paid out</TableHead>
-          <TableHead className="text-center">Budget</TableHead>
-          <TableHead className="text-center">Total Votes</TableHead>
+          <TableHead className="text-center">Monthly support</TableHead>
+          <TableHead className="text-center">Community Votes</TableHead>
           <TableHead className="text-center">Your Vote</TableHead>
         </TableRow>
       </TableHeader>
