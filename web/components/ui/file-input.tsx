@@ -15,7 +15,7 @@ interface Props {
   maxFileSizeMB?: number
 }
 
-export function FileInput({ name, accept, onSuccess, maxFileSizeMB = 2 }: Props) {
+export function FileInput({ name, accept, onSuccess, maxFileSizeMB = 5 }: Props) {
   const { isUploading, uploadFile } = useFileUpload()
   const [hash, setHash] = useState<string>()
 

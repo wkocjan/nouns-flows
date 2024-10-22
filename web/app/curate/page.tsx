@@ -257,7 +257,12 @@ export default async function CurateAndEarnPage() {
                 </h3>
               </div>
               <div className="flex flex-col items-start gap-y-4 lg:flex-row lg:items-center lg:gap-x-4">
-                <SwapTokenButton size="lg" defaultTokenAmount={BigInt(1e18)} flow={pool} />
+                <SwapTokenButton
+                  text="Become curator"
+                  size="lg"
+                  defaultTokenAmount={BigInt(1e18)}
+                  flow={pool}
+                />
               </div>
             </div>
           </div>
