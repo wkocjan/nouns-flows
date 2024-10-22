@@ -1,492 +1,205 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// SuperfluidPool
+// cfav1Forwarder
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x9224413b9177e6c1d5721b4a4d1d00ec84b07ce7)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xcfA132E353cB4E398080B9700609bb008eceB125)
  */
-export const superfluidPoolAbi = [
+export const cfav1ForwarderAbi = [
   {
     type: 'constructor',
     inputs: [
-      {
-        name: 'gda',
-        internalType: 'contract GeneralDistributionAgreementV1',
-        type: 'address',
-      },
+      { name: 'host', internalType: 'contract ISuperfluid', type: 'address' },
     ],
     stateMutability: 'nonpayable',
   },
-  { type: 'error', inputs: [], name: 'SUPERFLUID_POOL_INVALID_TIME' },
-  { type: 'error', inputs: [], name: 'SUPERFLUID_POOL_NOT_GDA' },
-  { type: 'error', inputs: [], name: 'SUPERFLUID_POOL_NOT_POOL_ADMIN_OR_GDA' },
-  { type: 'error', inputs: [], name: 'SUPERFLUID_POOL_NO_POOL_MEMBERS' },
-  { type: 'error', inputs: [], name: 'SUPERFLUID_POOL_NO_ZERO_ADDRESS' },
+  { type: 'error', inputs: [], name: 'CFA_FWD_INVALID_FLOW_RATE' },
   {
-    type: 'error',
-    inputs: [],
-    name: 'SUPERFLUID_POOL_SELF_TRANSFER_NOT_ALLOWED',
-  },
-  {
-    type: 'error',
-    inputs: [],
-    name: 'SUPERFLUID_POOL_TRANSFER_UNITS_NOT_ALLOWED',
-  },
-  {
-    type: 'event',
-    anonymous: false,
+    type: 'function',
     inputs: [
-      {
-        name: 'owner',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'spender',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'value',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
+      { name: 'token', internalType: 'contract ISuperToken', type: 'address' },
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'receiver', internalType: 'address', type: 'address' },
+      { name: 'flowrate', internalType: 'int96', type: 'int96' },
+      { name: 'userData', internalType: 'bytes', type: 'bytes' },
     ],
-    name: 'Approval',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'token',
-        internalType: 'contract ISuperfluidToken',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'member',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'claimedAmount',
-        internalType: 'int256',
-        type: 'int256',
-        indexed: false,
-      },
-      {
-        name: 'totalClaimed',
-        internalType: 'int256',
-        type: 'int256',
-        indexed: false,
-      },
-    ],
-    name: 'DistributionClaimed',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      { name: 'version', internalType: 'uint8', type: 'uint8', indexed: false },
-    ],
-    name: 'Initialized',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'token',
-        internalType: 'contract ISuperfluidToken',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'member',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'oldUnits',
-        internalType: 'uint128',
-        type: 'uint128',
-        indexed: false,
-      },
-      {
-        name: 'newUnits',
-        internalType: 'uint128',
-        type: 'uint128',
-        indexed: false,
-      },
-    ],
-    name: 'MemberUnitsUpdated',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      { name: 'from', internalType: 'address', type: 'address', indexed: true },
-      { name: 'to', internalType: 'address', type: 'address', indexed: true },
-      {
-        name: 'value',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'Transfer',
+    name: 'createFlow',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
-    inputs: [],
-    name: 'GDA',
+    inputs: [
+      { name: 'token', internalType: 'contract ISuperToken', type: 'address' },
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'receiver', internalType: 'address', type: 'address' },
+      { name: 'userData', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'deleteFlow',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'token', internalType: 'contract ISuperToken', type: 'address' },
+      { name: 'account', internalType: 'address', type: 'address' },
+    ],
+    name: 'getAccountFlowInfo',
     outputs: [
-      {
-        name: '',
-        internalType: 'contract GeneralDistributionAgreementV1',
-        type: 'address',
-      },
+      { name: 'lastUpdated', internalType: 'uint256', type: 'uint256' },
+      { name: 'flowrate', internalType: 'int96', type: 'int96' },
+      { name: 'deposit', internalType: 'uint256', type: 'uint256' },
+      { name: 'owedDeposit', internalType: 'uint256', type: 'uint256' },
     ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'admin',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
     stateMutability: 'view',
   },
   {
     type: 'function',
     inputs: [
-      { name: 'owner', internalType: 'address', type: 'address' },
-      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'token', internalType: 'contract ISuperToken', type: 'address' },
+      { name: 'account', internalType: 'address', type: 'address' },
     ],
-    name: 'allowance',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    name: 'getAccountFlowrate',
+    outputs: [{ name: 'flowrate', internalType: 'int96', type: 'int96' }],
     stateMutability: 'view',
   },
   {
     type: 'function',
     inputs: [
-      { name: 'spender', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'token', internalType: 'contract ISuperToken', type: 'address' },
+      { name: 'flowrate', internalType: 'int96', type: 'int96' },
     ],
-    name: 'approve',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
-    name: 'balanceOf',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'castrate',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'memberAddr', internalType: 'address', type: 'address' }],
-    name: 'claimAll',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'claimAll',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'spender', internalType: 'address', type: 'address' },
-      { name: 'subtractedValue', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'decreaseAllowance',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'distributionFromAnyAddress',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'memberAddr', internalType: 'address', type: 'address' },
-      { name: 'time', internalType: 'uint32', type: 'uint32' },
-    ],
-    name: 'getClaimable',
-    outputs: [{ name: '', internalType: 'int256', type: 'int256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'memberAddr', internalType: 'address', type: 'address' }],
-    name: 'getClaimableNow',
+    name: 'getBufferAmountByFlowrate',
     outputs: [
-      { name: 'claimableBalance', internalType: 'int256', type: 'int256' },
-      { name: 'timestamp', internalType: 'uint256', type: 'uint256' },
+      { name: 'bufferAmount', internalType: 'uint256', type: 'uint256' },
     ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'time', internalType: 'uint32', type: 'uint32' }],
-    name: 'getDisconnectedBalance',
-    outputs: [{ name: 'balance', internalType: 'int256', type: 'int256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'memberAddr', internalType: 'address', type: 'address' }],
-    name: 'getMemberFlowRate',
-    outputs: [{ name: '', internalType: 'int96', type: 'int96' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'memberAddr', internalType: 'address', type: 'address' }],
-    name: 'getTotalAmountReceivedByMember',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'getTotalConnectedFlowRate',
-    outputs: [{ name: '', internalType: 'int96', type: 'int96' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'getTotalConnectedUnits',
-    outputs: [{ name: '', internalType: 'uint128', type: 'uint128' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'getTotalDisconnectedFlowRate',
-    outputs: [{ name: 'flowRate', internalType: 'int96', type: 'int96' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'getTotalDisconnectedUnits',
-    outputs: [{ name: '', internalType: 'uint128', type: 'uint128' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'getTotalFlowRate',
-    outputs: [{ name: '', internalType: 'int96', type: 'int96' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'getTotalUnits',
-    outputs: [{ name: '', internalType: 'uint128', type: 'uint128' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'memberAddr', internalType: 'address', type: 'address' }],
-    name: 'getUnits',
-    outputs: [{ name: '', internalType: 'uint128', type: 'uint128' }],
     stateMutability: 'view',
   },
   {
     type: 'function',
     inputs: [
-      { name: 'spender', internalType: 'address', type: 'address' },
-      { name: 'addedValue', internalType: 'uint256', type: 'uint256' },
+      { name: 'token', internalType: 'contract ISuperToken', type: 'address' },
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'receiver', internalType: 'address', type: 'address' },
     ],
-    name: 'increaseAllowance',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'admin_', internalType: 'address', type: 'address' },
-      {
-        name: 'superToken_',
-        internalType: 'contract ISuperfluidToken',
-        type: 'address',
-      },
-      {
-        name: 'transferabilityForUnitsOwner_',
-        internalType: 'bool',
-        type: 'bool',
-      },
-      {
-        name: 'distributionFromAnyAddress_',
-        internalType: 'bool',
-        type: 'bool',
-      },
-    ],
-    name: 'initialize',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'memberAddr', internalType: 'address', type: 'address' },
-      { name: 'doConnect', internalType: 'bool', type: 'bool' },
-      { name: 'time', internalType: 'uint32', type: 'uint32' },
-    ],
-    name: 'operatorConnectMember',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      {
-        name: 'index',
-        internalType: 'struct PDPoolIndex',
-        type: 'tuple',
-        components: [
-          { name: 'total_units', internalType: 'Unit', type: 'int128' },
-          {
-            name: '_wrapped_particle',
-            internalType: 'struct BasicParticle',
-            type: 'tuple',
-            components: [
-              { name: '_settled_at', internalType: 'Time', type: 'uint32' },
-              { name: '_flow_rate', internalType: 'FlowRate', type: 'int128' },
-              { name: '_settled_value', internalType: 'Value', type: 'int256' },
-            ],
-          },
-        ],
-      },
-    ],
-    name: 'operatorSetIndex',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'poolOperatorGetIndex',
+    name: 'getFlowInfo',
     outputs: [
-      {
-        name: '',
-        internalType: 'struct SuperfluidPool.PoolIndexData',
-        type: 'tuple',
-        components: [
-          { name: 'totalUnits', internalType: 'uint128', type: 'uint128' },
-          { name: 'wrappedSettledAt', internalType: 'uint32', type: 'uint32' },
-          { name: 'wrappedFlowRate', internalType: 'int96', type: 'int96' },
-          {
-            name: 'wrappedSettledValue',
-            internalType: 'int256',
-            type: 'int256',
-          },
-        ],
-      },
+      { name: 'lastUpdated', internalType: 'uint256', type: 'uint256' },
+      { name: 'flowrate', internalType: 'int96', type: 'int96' },
+      { name: 'deposit', internalType: 'uint256', type: 'uint256' },
+      { name: 'owedDeposit', internalType: 'uint256', type: 'uint256' },
     ],
     stateMutability: 'view',
   },
   {
     type: 'function',
-    inputs: [],
-    name: 'proxiableUUID',
-    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
-    stateMutability: 'pure',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'superToken',
+    inputs: [
+      { name: 'token', internalType: 'contract ISuperToken', type: 'address' },
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'flowOperator', internalType: 'address', type: 'address' },
+    ],
+    name: 'getFlowOperatorPermissions',
     outputs: [
-      { name: '', internalType: 'contract ISuperfluidToken', type: 'address' },
+      { name: 'permissions', internalType: 'uint8', type: 'uint8' },
+      { name: 'flowrateAllowance', internalType: 'int96', type: 'int96' },
     ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'totalSupply',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
   {
     type: 'function',
     inputs: [
-      { name: 'to', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'token', internalType: 'contract ISuperToken', type: 'address' },
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'receiver', internalType: 'address', type: 'address' },
     ],
-    name: 'transfer',
+    name: 'getFlowrate',
+    outputs: [{ name: 'flowrate', internalType: 'int96', type: 'int96' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'token', internalType: 'contract ISuperToken', type: 'address' },
+      { name: 'flowOperator', internalType: 'address', type: 'address' },
+    ],
+    name: 'grantPermissions',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
     stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     inputs: [
-      { name: 'from', internalType: 'address', type: 'address' },
-      { name: 'to', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'token', internalType: 'contract ISuperToken', type: 'address' },
+      { name: 'flowOperator', internalType: 'address', type: 'address' },
     ],
-    name: 'transferFrom',
+    name: 'revokePermissions',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
     stateMutability: 'nonpayable',
   },
   {
     type: 'function',
-    inputs: [],
-    name: 'transferabilityForUnitsOwner',
+    inputs: [
+      { name: 'token', internalType: 'contract ISuperToken', type: 'address' },
+      { name: 'receiver', internalType: 'address', type: 'address' },
+      { name: 'flowrate', internalType: 'int96', type: 'int96' },
+    ],
+    name: 'setFlowrate',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'view',
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     inputs: [
-      { name: 'memberAddr', internalType: 'address', type: 'address' },
-      { name: 'newUnits', internalType: 'uint128', type: 'uint128' },
+      { name: 'token', internalType: 'contract ISuperToken', type: 'address' },
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'receiver', internalType: 'address', type: 'address' },
+      { name: 'flowrate', internalType: 'int96', type: 'int96' },
     ],
-    name: 'updateMemberUnits',
+    name: 'setFlowrateFrom',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'token', internalType: 'contract ISuperToken', type: 'address' },
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'receiver', internalType: 'address', type: 'address' },
+      { name: 'flowrate', internalType: 'int96', type: 'int96' },
+      { name: 'userData', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'updateFlow',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'token', internalType: 'contract ISuperToken', type: 'address' },
+      { name: 'flowOperator', internalType: 'address', type: 'address' },
+      { name: 'permissions', internalType: 'uint8', type: 'uint8' },
+      { name: 'flowrateAllowance', internalType: 'int96', type: 'int96' },
+    ],
+    name: 'updateFlowOperatorPermissions',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
     stateMutability: 'nonpayable',
   },
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x9224413b9177e6c1d5721b4a4d1d00ec84b07ce7)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xcfA132E353cB4E398080B9700609bb008eceB125)
  */
-export const superfluidPoolAddress = {
-  8453: '0x9224413b9177E6c1D5721B4a4D1D00eC84B07Ce7',
+export const cfav1ForwarderAddress = {
+  8453: '0xcfA132E353cB4E398080B9700609bb008eceB125',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x9224413b9177e6c1d5721b4a4d1d00ec84b07ce7)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xcfA132E353cB4E398080B9700609bb008eceB125)
  */
-export const superfluidPoolConfig = {
-  address: superfluidPoolAddress,
-  abi: superfluidPoolAbi,
+export const cfav1ForwarderConfig = {
+  address: cfav1ForwarderAddress,
+  abi: cfav1ForwarderAbi,
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -494,7 +207,7 @@ export const superfluidPoolConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x0b8e76232e4713ec69b73184dc4f7ced23befe38)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xd3f45accf5012520e369adb0aad64bfc07d8c739)
  */
 export const erc20VotesArbitratorImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'payable' },
@@ -1412,14 +1125,14 @@ export const erc20VotesArbitratorImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x0b8e76232e4713ec69b73184dc4f7ced23befe38)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xd3f45accf5012520e369adb0aad64bfc07d8c739)
  */
 export const erc20VotesArbitratorImplAddress = {
-  8453: '0x0B8E76232E4713ec69b73184dc4f7Ced23bEFe38',
+  8453: '0xD3f45aCcf5012520E369ADb0AAD64BFC07D8C739',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x0b8e76232e4713ec69b73184dc4f7ced23befe38)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xd3f45accf5012520e369adb0aad64bfc07d8c739)
  */
 export const erc20VotesArbitratorImplConfig = {
   address: erc20VotesArbitratorImplAddress,
@@ -1431,7 +1144,7 @@ export const erc20VotesArbitratorImplConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x5e951ef4a53fe27303235bb6e67fa3734eecb8ed)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xa0a5849cfe19169c203b05704508cd6301d70154)
  */
 export const erc20VotesMintableImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
@@ -2013,14 +1726,14 @@ export const erc20VotesMintableImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x5e951ef4a53fe27303235bb6e67fa3734eecb8ed)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xa0a5849cfe19169c203b05704508cd6301d70154)
  */
 export const erc20VotesMintableImplAddress = {
-  8453: '0x5E951ef4a53Fe27303235bb6E67fA3734eEcb8eD',
+  8453: '0xA0a5849CfE19169c203b05704508cD6301d70154',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x5e951ef4a53fe27303235bb6e67fa3734eecb8ed)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xa0a5849cfe19169c203b05704508cd6301d70154)
  */
 export const erc20VotesMintableImplConfig = {
   address: erc20VotesMintableImplAddress,
@@ -2032,7 +1745,7 @@ export const erc20VotesMintableImplConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xd590362f456ce80b89123c6e6a252377e3d1e0e0)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xf71b9bf50cf1a1f0e67a542e3671bfad4d34de73)
  */
 export const flowTcrImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'payable' },
@@ -3112,14 +2825,14 @@ export const flowTcrImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xd590362f456ce80b89123c6e6a252377e3d1e0e0)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xf71b9bf50cf1a1f0e67a542e3671bfad4d34de73)
  */
 export const flowTcrImplAddress = {
-  8453: '0xd590362F456cE80b89123c6E6A252377e3D1E0E0',
+  8453: '0xF71B9bf50cf1a1F0e67A542E3671BfaD4d34De73',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xd590362f456ce80b89123c6e6a252377e3d1e0e0)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xf71b9bf50cf1a1f0e67a542e3671bfad4d34de73)
  */
 export const flowTcrImplConfig = {
   address: flowTcrImplAddress,
@@ -3685,7 +3398,7 @@ export const multicall3Config = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xcdfee0baafd18824a9313c057af6fcdb1117b8c1)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xc27d735c529c36fc26cba27d1540429d3b8cba87)
  */
 export const nounsFlowImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'payable' },
@@ -4507,6 +4220,13 @@ export const nounsFlowImplAbi = [
   },
   {
     type: 'function',
+    inputs: [],
+    name: 'getActualFlowRate',
+    outputs: [{ name: '', internalType: 'int96', type: 'int96' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     inputs: [{ name: 'member', internalType: 'address', type: 'address' }],
     name: 'getClaimableBalance',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
@@ -4893,14 +4613,14 @@ export const nounsFlowImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xcdfee0baafd18824a9313c057af6fcdb1117b8c1)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xc27d735c529c36fc26cba27d1540429d3b8cba87)
  */
 export const nounsFlowImplAddress = {
-  8453: '0xCDFee0baafd18824a9313C057Af6fcdB1117b8C1',
+  8453: '0xc27D735c529c36FC26cba27D1540429d3B8Cba87',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xcdfee0baafd18824a9313c057af6fcdb1117b8c1)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xc27d735c529c36fc26cba27d1540429d3b8cba87)
  */
 export const nounsFlowImplConfig = {
   address: nounsFlowImplAddress,
@@ -5616,7 +5336,7 @@ export const nounsTokenConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x924144f427006317decb68951b668a956113dddb)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x631e51d19e38a26ba7305378e742044797b56a80)
  */
 export const rewardPoolImplAbi = [
   { type: 'error', inputs: [], name: 'ADDRESS_ZERO' },
@@ -5734,6 +5454,13 @@ export const rewardPoolImplAbi = [
     inputs: [],
     name: 'funder',
     outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getActualFlowRate',
+    outputs: [{ name: '', internalType: 'int96', type: 'int96' }],
     stateMutability: 'view',
   },
   {
@@ -5905,14 +5632,14 @@ export const rewardPoolImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x924144f427006317decb68951b668a956113dddb)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x631e51d19e38a26ba7305378e742044797b56a80)
  */
 export const rewardPoolImplAddress = {
-  8453: '0x924144f427006317DecB68951b668A956113DDdB',
+  8453: '0x631E51d19E38a26bA7305378E742044797B56A80',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x924144f427006317decb68951b668a956113dddb)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x631e51d19e38a26ba7305378e742044797b56a80)
  */
 export const rewardPoolImplConfig = {
   address: rewardPoolImplAddress,
@@ -7255,11 +6982,502 @@ export const superfluidMacroForwarderConfig = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// superfluidPool
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x9224413b9177e6c1d5721b4a4d1d00ec84b07ce7)
+ */
+export const superfluidPoolAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      {
+        name: 'gda',
+        internalType: 'contract GeneralDistributionAgreementV1',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  { type: 'error', inputs: [], name: 'SUPERFLUID_POOL_INVALID_TIME' },
+  { type: 'error', inputs: [], name: 'SUPERFLUID_POOL_NOT_GDA' },
+  { type: 'error', inputs: [], name: 'SUPERFLUID_POOL_NOT_POOL_ADMIN_OR_GDA' },
+  { type: 'error', inputs: [], name: 'SUPERFLUID_POOL_NO_POOL_MEMBERS' },
+  { type: 'error', inputs: [], name: 'SUPERFLUID_POOL_NO_ZERO_ADDRESS' },
+  {
+    type: 'error',
+    inputs: [],
+    name: 'SUPERFLUID_POOL_SELF_TRANSFER_NOT_ALLOWED',
+  },
+  {
+    type: 'error',
+    inputs: [],
+    name: 'SUPERFLUID_POOL_TRANSFER_UNITS_NOT_ALLOWED',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'spender',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Approval',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'token',
+        internalType: 'contract ISuperfluidToken',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'member',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'claimedAmount',
+        internalType: 'int256',
+        type: 'int256',
+        indexed: false,
+      },
+      {
+        name: 'totalClaimed',
+        internalType: 'int256',
+        type: 'int256',
+        indexed: false,
+      },
+    ],
+    name: 'DistributionClaimed',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'version', internalType: 'uint8', type: 'uint8', indexed: false },
+    ],
+    name: 'Initialized',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'token',
+        internalType: 'contract ISuperfluidToken',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'member',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'oldUnits',
+        internalType: 'uint128',
+        type: 'uint128',
+        indexed: false,
+      },
+      {
+        name: 'newUnits',
+        internalType: 'uint128',
+        type: 'uint128',
+        indexed: false,
+      },
+    ],
+    name: 'MemberUnitsUpdated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Transfer',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'GDA',
+    outputs: [
+      {
+        name: '',
+        internalType: 'contract GeneralDistributionAgreementV1',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'admin',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+    ],
+    name: 'allowance',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'approve',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'castrate',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'memberAddr', internalType: 'address', type: 'address' }],
+    name: 'claimAll',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'claimAll',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'subtractedValue', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'decreaseAllowance',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'distributionFromAnyAddress',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'memberAddr', internalType: 'address', type: 'address' },
+      { name: 'time', internalType: 'uint32', type: 'uint32' },
+    ],
+    name: 'getClaimable',
+    outputs: [{ name: '', internalType: 'int256', type: 'int256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'memberAddr', internalType: 'address', type: 'address' }],
+    name: 'getClaimableNow',
+    outputs: [
+      { name: 'claimableBalance', internalType: 'int256', type: 'int256' },
+      { name: 'timestamp', internalType: 'uint256', type: 'uint256' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'time', internalType: 'uint32', type: 'uint32' }],
+    name: 'getDisconnectedBalance',
+    outputs: [{ name: 'balance', internalType: 'int256', type: 'int256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'memberAddr', internalType: 'address', type: 'address' }],
+    name: 'getMemberFlowRate',
+    outputs: [{ name: '', internalType: 'int96', type: 'int96' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'memberAddr', internalType: 'address', type: 'address' }],
+    name: 'getTotalAmountReceivedByMember',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getTotalConnectedFlowRate',
+    outputs: [{ name: '', internalType: 'int96', type: 'int96' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getTotalConnectedUnits',
+    outputs: [{ name: '', internalType: 'uint128', type: 'uint128' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getTotalDisconnectedFlowRate',
+    outputs: [{ name: 'flowRate', internalType: 'int96', type: 'int96' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getTotalDisconnectedUnits',
+    outputs: [{ name: '', internalType: 'uint128', type: 'uint128' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getTotalFlowRate',
+    outputs: [{ name: '', internalType: 'int96', type: 'int96' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getTotalUnits',
+    outputs: [{ name: '', internalType: 'uint128', type: 'uint128' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'memberAddr', internalType: 'address', type: 'address' }],
+    name: 'getUnits',
+    outputs: [{ name: '', internalType: 'uint128', type: 'uint128' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'addedValue', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'increaseAllowance',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'admin_', internalType: 'address', type: 'address' },
+      {
+        name: 'superToken_',
+        internalType: 'contract ISuperfluidToken',
+        type: 'address',
+      },
+      {
+        name: 'transferabilityForUnitsOwner_',
+        internalType: 'bool',
+        type: 'bool',
+      },
+      {
+        name: 'distributionFromAnyAddress_',
+        internalType: 'bool',
+        type: 'bool',
+      },
+    ],
+    name: 'initialize',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'memberAddr', internalType: 'address', type: 'address' },
+      { name: 'doConnect', internalType: 'bool', type: 'bool' },
+      { name: 'time', internalType: 'uint32', type: 'uint32' },
+    ],
+    name: 'operatorConnectMember',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'index',
+        internalType: 'struct PDPoolIndex',
+        type: 'tuple',
+        components: [
+          { name: 'total_units', internalType: 'Unit', type: 'int128' },
+          {
+            name: '_wrapped_particle',
+            internalType: 'struct BasicParticle',
+            type: 'tuple',
+            components: [
+              { name: '_settled_at', internalType: 'Time', type: 'uint32' },
+              { name: '_flow_rate', internalType: 'FlowRate', type: 'int128' },
+              { name: '_settled_value', internalType: 'Value', type: 'int256' },
+            ],
+          },
+        ],
+      },
+    ],
+    name: 'operatorSetIndex',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'poolOperatorGetIndex',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct SuperfluidPool.PoolIndexData',
+        type: 'tuple',
+        components: [
+          { name: 'totalUnits', internalType: 'uint128', type: 'uint128' },
+          { name: 'wrappedSettledAt', internalType: 'uint32', type: 'uint32' },
+          { name: 'wrappedFlowRate', internalType: 'int96', type: 'int96' },
+          {
+            name: 'wrappedSettledValue',
+            internalType: 'int256',
+            type: 'int256',
+          },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'proxiableUUID',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'superToken',
+    outputs: [
+      { name: '', internalType: 'contract ISuperfluidToken', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transfer',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transferFrom',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'transferabilityForUnitsOwner',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'memberAddr', internalType: 'address', type: 'address' },
+      { name: 'newUnits', internalType: 'uint128', type: 'uint128' },
+    ],
+    name: 'updateMemberUnits',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+] as const
+
+/**
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x9224413b9177e6c1d5721b4a4d1d00ec84b07ce7)
+ */
+export const superfluidPoolAddress = {
+  8453: '0x9224413b9177E6c1D5721B4a4D1D00eC84B07Ce7',
+} as const
+
+/**
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x9224413b9177e6c1d5721b4a4d1d00ec84b07ce7)
+ */
+export const superfluidPoolConfig = {
+  address: superfluidPoolAddress,
+  abi: superfluidPoolAbi,
+} as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // tcrFactoryImpl
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x1932ad1e6cd63ccb66c3e171d51e478d8c457971)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xb997d521e567a5eb363a6bd7358cd6c6da342ca4)
  */
 export const tcrFactoryImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
@@ -7829,14 +8047,14 @@ export const tcrFactoryImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x1932ad1e6cd63ccb66c3e171d51e478d8c457971)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xb997d521e567a5eb363a6bd7358cd6c6da342ca4)
  */
 export const tcrFactoryImplAddress = {
-  8453: '0x1932aD1E6CD63CCb66c3E171D51e478d8C457971',
+  8453: '0xb997D521e567a5Eb363A6BD7358CD6c6DA342Ca4',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x1932ad1e6cd63ccb66c3e171d51e478d8c457971)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xb997d521e567a5eb363a6bd7358cd6c6da342ca4)
  */
 export const tcrFactoryImplConfig = {
   address: tcrFactoryImplAddress,
@@ -7848,7 +8066,7 @@ export const tcrFactoryImplConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x0e552d343028eb30730c74436cd447ef6b11609a)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xbe05795f2e898eb9c6d86585854175354472c7c6)
  */
 export const tokenEmitterImplAbi = [
   {
@@ -8290,16 +8508,236 @@ export const tokenEmitterImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x0e552d343028eb30730c74436cd447ef6b11609a)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xbe05795f2e898eb9c6d86585854175354472c7c6)
  */
 export const tokenEmitterImplAddress = {
-  8453: '0x0E552d343028Eb30730c74436CD447eF6B11609a',
+  8453: '0xbe05795F2e898Eb9c6D86585854175354472c7c6',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x0e552d343028eb30730c74436cd447ef6b11609a)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0xbe05795f2e898eb9c6d86585854175354472c7c6)
  */
 export const tokenEmitterImplConfig = {
   address: tokenEmitterImplAddress,
   abi: tokenEmitterImplAbi,
+} as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// tokenVerifier
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x314fc0ae2bef43cf44f3e29e4500920a73a72ea9)
+ */
+export const tokenVerifierAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      { name: '_tokenAddress', internalType: 'address', type: 'address' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  { type: 'error', inputs: [], name: 'AccountProofVerificationFailed' },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'expected', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'actual', internalType: 'bytes32', type: 'bytes32' },
+    ],
+    name: 'BeaconRootDoesNotMatch',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'callData', internalType: 'bytes', type: 'bytes' }],
+    name: 'BeaconRootsOracleCallFailed',
+  },
+  { type: 'error', inputs: [], name: 'ContentLengthMismatch' },
+  { type: 'error', inputs: [], name: 'EmptyItem' },
+  { type: 'error', inputs: [], name: 'ExecutionStateRootMerkleProofFailed' },
+  { type: 'error', inputs: [], name: 'InvalidDataRemainder' },
+  { type: 'error', inputs: [], name: 'InvalidHeader' },
+  { type: 'error', inputs: [], name: 'StorageProofVerificationFailed' },
+  { type: 'error', inputs: [], name: 'UnexpectedList' },
+  { type: 'error', inputs: [], name: 'UnexpectedString' },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'voter', internalType: 'address', type: 'address' },
+      {
+        name: 'ownershipProof',
+        internalType: 'struct IStateProof.Parameters',
+        type: 'tuple',
+        components: [
+          { name: 'beaconRoot', internalType: 'bytes32', type: 'bytes32' },
+          {
+            name: 'beaconOracleTimestamp',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'executionStateRoot',
+            internalType: 'bytes32',
+            type: 'bytes32',
+          },
+          {
+            name: 'stateRootProof',
+            internalType: 'bytes32[]',
+            type: 'bytes32[]',
+          },
+          { name: 'accountProof', internalType: 'bytes[]', type: 'bytes[]' },
+          { name: 'storageProof', internalType: 'bytes[]', type: 'bytes[]' },
+        ],
+      },
+      {
+        name: 'delegateProof',
+        internalType: 'struct IStateProof.Parameters',
+        type: 'tuple',
+        components: [
+          { name: 'beaconRoot', internalType: 'bytes32', type: 'bytes32' },
+          {
+            name: 'beaconOracleTimestamp',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'executionStateRoot',
+            internalType: 'bytes32',
+            type: 'bytes32',
+          },
+          {
+            name: 'stateRootProof',
+            internalType: 'bytes32[]',
+            type: 'bytes32[]',
+          },
+          { name: 'accountProof', internalType: 'bytes[]', type: 'bytes[]' },
+          { name: 'storageProof', internalType: 'bytes[]', type: 'bytes[]' },
+        ],
+      },
+    ],
+    name: 'canVoteWithToken',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'delegate', internalType: 'address', type: 'address' },
+      {
+        name: 'proofParams',
+        internalType: 'struct IStateProof.Parameters',
+        type: 'tuple',
+        components: [
+          { name: 'beaconRoot', internalType: 'bytes32', type: 'bytes32' },
+          {
+            name: 'beaconOracleTimestamp',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'executionStateRoot',
+            internalType: 'bytes32',
+            type: 'bytes32',
+          },
+          {
+            name: 'stateRootProof',
+            internalType: 'bytes32[]',
+            type: 'bytes32[]',
+          },
+          { name: 'accountProof', internalType: 'bytes[]', type: 'bytes[]' },
+          { name: 'storageProof', internalType: 'bytes[]', type: 'bytes[]' },
+        ],
+      },
+    ],
+    name: 'isDelegate',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: 'account', internalType: 'address', type: 'address' },
+      {
+        name: 'proofParams',
+        internalType: 'struct IStateProof.Parameters',
+        type: 'tuple',
+        components: [
+          { name: 'beaconRoot', internalType: 'bytes32', type: 'bytes32' },
+          {
+            name: 'beaconOracleTimestamp',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'executionStateRoot',
+            internalType: 'bytes32',
+            type: 'bytes32',
+          },
+          {
+            name: 'stateRootProof',
+            internalType: 'bytes32[]',
+            type: 'bytes32[]',
+          },
+          { name: 'accountProof', internalType: 'bytes[]', type: 'bytes[]' },
+          { name: 'storageProof', internalType: 'bytes[]', type: 'bytes[]' },
+        ],
+      },
+    ],
+    name: 'isOwner',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'delegate', internalType: 'bytes', type: 'bytes' },
+      {
+        name: 'proofParams',
+        internalType: 'struct IStateProof.Parameters',
+        type: 'tuple',
+        components: [
+          { name: 'beaconRoot', internalType: 'bytes32', type: 'bytes32' },
+          {
+            name: 'beaconOracleTimestamp',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'executionStateRoot',
+            internalType: 'bytes32',
+            type: 'bytes32',
+          },
+          {
+            name: 'stateRootProof',
+            internalType: 'bytes32[]',
+            type: 'bytes32[]',
+          },
+          { name: 'accountProof', internalType: 'bytes[]', type: 'bytes[]' },
+          { name: 'storageProof', internalType: 'bytes[]', type: 'bytes[]' },
+        ],
+      },
+    ],
+    name: 'validateDelegateState',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+] as const
+
+/**
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x314fc0ae2bef43cf44f3e29e4500920a73a72ea9)
+ */
+export const tokenVerifierAddress = {
+  8453: '0x314fc0aE2BEf43cF44f3E29E4500920A73a72EA9',
+} as const
+
+/**
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x314fc0ae2bef43cf44f3e29e4500920a73a72ea9)
+ */
+export const tokenVerifierConfig = {
+  address: tokenVerifierAddress,
+  abi: tokenVerifierAbi,
 } as const
