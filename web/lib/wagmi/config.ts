@@ -29,6 +29,7 @@ export const config = createConfig(
 
     walletConnectProjectId: `${process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID}`,
 
+    batch: { multicall: { wait: 32, batchSize: 2048 } },
     appName: "Nouns Flows",
     appDescription: "",
     appUrl: "https://flows.wtf/",

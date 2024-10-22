@@ -32,7 +32,7 @@ export const Updates = (props: Props) => {
       )}
 
       {casts.length > 0 && (
-        <div className="mt-4 columns-1 gap-2.5 space-y-2.5 sm:columns-2 lg:columns-3 xl:columns-4">
+        <div className="mt-4 columns-1 gap-2.5 space-y-2.5 sm:columns-2">
           {casts.map((cast) => (
             <CastCard key={cast.hash} cast={cast} />
           ))}
