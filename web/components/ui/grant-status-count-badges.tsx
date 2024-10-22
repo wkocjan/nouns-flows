@@ -5,6 +5,7 @@ import { Grant } from "@prisma/client"
 import Link from "next/link"
 
 interface Props {
+  id: string
   subgrants: Grant[]
   alwaysShowAll?: boolean
   isTopLevel?: boolean
@@ -12,9 +13,7 @@ interface Props {
 }
 
 export const GrantStatusCountBadges = (props: Props) => {
-  const { subgrants, alwaysShowAll = false, isTopLevel = false, showLabel = false } = props
-
-  const parentContract = subgrants[0]?.parentContract
+  const { subgrants, alwaysShowAll = false, isTopLevel = false, showLabel = false, id } = props
 
   const approved = subgrants.filter((g) => isGrantApproved(g)).length
   const challenged = subgrants.filter((g) => isGrantChallenged(g)).length
@@ -27,7 +26,7 @@ export const GrantStatusCountBadges = (props: Props) => {
       {(approved > 0 || alwaysShowAll) && (
         <Tooltip>
           <TooltipTrigger asChild>
-            <Link tabIndex={-1} href={`/flow/${parentContract}`}>
+            <Link tabIndex={-1} href={`/flow/${id}`}>
               <Badge variant="success">{approved}</Badge>
             </Link>
           </TooltipTrigger>
@@ -37,7 +36,7 @@ export const GrantStatusCountBadges = (props: Props) => {
       {challenged > 0 && (
         <Tooltip>
           <TooltipTrigger asChild>
-            <Link tabIndex={-1} href={`/flow/${parentContract}`}>
+            <Link tabIndex={-1} href={`/flow/${id}`}>
               <Badge variant="warning">{challenged}</Badge>
             </Link>
           </TooltipTrigger>
@@ -46,7 +45,7 @@ export const GrantStatusCountBadges = (props: Props) => {
       )}
       <Tooltip>
         <TooltipTrigger asChild>
-          <Link tabIndex={-1} href={`/flow/${parentContract}/applications`}>
+          <Link tabIndex={-1} href={`/flow/${id}/applications`}>
             <Badge variant="outline">{awaiting}</Badge>
           </Link>
         </TooltipTrigger>

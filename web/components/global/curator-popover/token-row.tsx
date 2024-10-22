@@ -51,7 +51,7 @@ export function TokenRow(props: Props) {
         monthlyRewardPoolRate={flow.monthlyRewardPoolFlowRate}
       />
 
-      <GrantStatusCountBadges subgrants={subgrants} />
+      <GrantStatusCountBadges id={flow.id} subgrants={subgrants} />
 
       <div className="text-center text-sm font-medium">
         <WithdrawCuratorSalaryButton pool={getEthAddress(flow.managerRewardSuperfluidPool)} />

@@ -33,6 +33,7 @@ export default async function Home() {
                 </Link>
               </h3>
               <GrantStatusCountBadges
+                id={pool.id}
                 subgrants={pool.subgrants}
                 alwaysShowAll
                 isTopLevel
