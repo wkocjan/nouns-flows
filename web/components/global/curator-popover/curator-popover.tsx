@@ -14,6 +14,7 @@ import { useUserTcrTokens } from "./hooks/use-user-tcr-tokens"
 import { TokenRow } from "./token-row"
 import { AnimatedSalary } from "../animated-salary"
 import { Currency } from "@/components/ui/currency"
+import { Status } from "@/lib/enums"
 
 export const CuratorPopover = ({ flow }: { flow: Grant }) => {
   const [isVisible, setIsVisible] = useState(false)
@@ -32,7 +33,9 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
   // active subgrants are all that aren't currently active or didn't resolved non-active
   const activeSubgrants = tokens.flatMap((token) =>
     token.flow.subgrants.filter(
-      (g) => !g.isActive && !g.isResolved && !canDisputeBeExecuted(g.disputes?.[0]),
+      (g) =>
+        (!g.isActive && !g.isResolved && !canDisputeBeExecuted(g.disputes?.[0])) ||
+        g.status === Status.ClearingRequested,
     ),
   )
 

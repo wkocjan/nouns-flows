@@ -16,6 +16,7 @@ import Link from "next/link"
 import { formatEther } from "viem"
 import { ActiveCuratorGrant } from "./hooks/get-user-tcr-tokens"
 import { useWithdrawVoterRewards } from "./hooks/use-withdraw-voter-rewards"
+import { Status } from "@/lib/enums"
 
 export function ActiveCuratorGrantRow({
   grant,
@@ -53,7 +54,7 @@ export function ActiveCuratorGrantRow({
       <div className="col-span-2 flex items-center justify-end space-x-2 overflow-hidden text-ellipsis">
         {canBeChallenged(grant) && (
           <div className="text-xs text-muted-foreground">
-            Approved{" "}
+            {grant.status === Status.RegistrationRequested ? "Approved" : "Removed"}{" "}
             <b>
               <DateTime date={new Date(challengePeriodEndsAt * 1000)} relative />
             </b>
