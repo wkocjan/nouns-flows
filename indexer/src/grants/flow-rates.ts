@@ -27,17 +27,3 @@ async function handleFlowRateUpdated(params: {
 
   await handleIncomingFlowRates(context.db, recipient)
 }
-
-ponder.on("NounsFlow:ChildFlowRatesToUpdate", handleChildFlowRatesToUpdate)
-ponder.on("NounsFlowChildren:ChildFlowRatesToUpdate", handleChildFlowRatesToUpdate)
-
-async function handleChildFlowRatesToUpdate(params: {
-  event: Event<"NounsFlow:ChildFlowRatesToUpdate">
-  context: Context<"NounsFlow:ChildFlowRatesToUpdate">
-}) {
-  const { event, context } = params
-  console.error({ args: event.args })
-  console.error("Not implemented")
-
-  // throw new Error("Not implemented")
-}
