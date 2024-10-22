@@ -224,7 +224,7 @@ export default async function CurateAndEarnPage() {
                     icon: AngleIcon,
                     name: "Token Appreciation",
                     description:
-                      "Benefit from the token's designed price appreciation over time. The token's value is structured to increase, potentially yielding long-term gains.",
+                      "If you make an effort to curate a flow that allocates its budget effectively, the token price might reflect this success. This all assumes that you do a good job participating in curation.",
                   },
                 ].map((feature) => (
                   <div key={feature.name} className="relative pl-16">
