@@ -23,7 +23,7 @@ export function RequestExecuteButton(props: Props) {
   const { writeContract, prepareWallet } = useContractTransaction({
     onSuccess: async () => {
       // wait 1 second
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await new Promise((resolve) => setTimeout(resolve, 2000))
       router.push(`/flow/${flow.id}`)
     },
   })

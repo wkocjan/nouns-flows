@@ -27,7 +27,7 @@ export const GrantStatusCountBadges = (props: Props) => {
       {(approved > 0 || alwaysShowAll) && (
         <Tooltip>
           <TooltipTrigger asChild>
-            <Link href={`/flow/${parentContract}`}>
+            <Link tabIndex={-1} href={`/flow/${parentContract}`}>
               <Badge variant="success">{approved}</Badge>
             </Link>
           </TooltipTrigger>
@@ -37,7 +37,7 @@ export const GrantStatusCountBadges = (props: Props) => {
       {challenged > 0 && (
         <Tooltip>
           <TooltipTrigger asChild>
-            <Link href={`/flow/${parentContract}`}>
+            <Link tabIndex={-1} href={`/flow/${parentContract}`}>
               <Badge variant="warning">{challenged}</Badge>
             </Link>
           </TooltipTrigger>
@@ -46,7 +46,7 @@ export const GrantStatusCountBadges = (props: Props) => {
       )}
       <Tooltip>
         <TooltipTrigger asChild>
-          <Link href={`/flow/${parentContract}/applications`}>
+          <Link tabIndex={-1} href={`/flow/${parentContract}/applications`}>
             <Badge variant="outline">{awaiting}</Badge>
           </Link>
         </TooltipTrigger>

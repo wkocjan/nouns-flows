@@ -60,7 +60,7 @@ export const FlowHeader = (props: Props) => {
             <GrantStatusCountBadges subgrants={flow.subgrants} alwaysShowAll />
           </div>
           <div className="md:text-center">
-            <p className="mb-1.5 text-muted-foreground">Monthly support</p>
+            <p className="mb-1.5 text-muted-foreground">Budget</p>
             <Popover>
               <PopoverTrigger asChild>
                 <Badge className="cursor-help">

@@ -1,5 +1,6 @@
 import { ponder, type Context, type Event } from "@/generated"
 import { formatEther } from "viem"
+import { handleIncomingFlowRates } from "./lib/handle-incoming-flow-rates"
 
 ponder.on("NounsFlowChildren:FlowRateUpdated", handleFlowRateUpdated)
 ponder.on("NounsFlow:FlowRateUpdated", handleFlowRateUpdated)
@@ -23,4 +24,20 @@ async function handleFlowRateUpdated(params: {
       updatedAt: Number(event.block.timestamp),
     },
   })
+
+  await handleIncomingFlowRates(context.db, recipient)
+}
+
+ponder.on("NounsFlow:ChildFlowRatesToUpdate", handleChildFlowRatesToUpdate)
+ponder.on("NounsFlowChildren:ChildFlowRatesToUpdate", handleChildFlowRatesToUpdate)
+
+async function handleChildFlowRatesToUpdate(params: {
+  event: Event<"NounsFlow:ChildFlowRatesToUpdate">
+  context: Context<"NounsFlow:ChildFlowRatesToUpdate">
+}) {
+  const { event, context } = params
+  console.error({ args: event.args })
+  console.error("Not implemented")
+
+  // throw new Error("Not implemented")
 }

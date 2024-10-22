@@ -19,6 +19,8 @@ const baseContracts = [
 
   { name: "rewardPoolImpl", address: base.RewardPoolImpl },
 
+  { name: "tokenVerifier", address: base.TokenVerifier },
+
   { name: "superToken", address: "0xeb796bdb90ffa0f28255275e16936d25d3418603" as `0x${string}` },
 
   { name: "multicall3", address: "0xcA11bde05977b3631167028862bE2a173976CA11" as `0x${string}` },
@@ -29,12 +31,17 @@ const baseContracts = [
   },
 
   {
+    name: "cfav1Forwarder",
+    address: "0xcfA132E353cB4E398080B9700609bb008eceB125" as `0x${string}`,
+  },
+
+  {
     name: "superfluidMacroForwarder",
     address: "0xfD01285b9435bc45C243E5e7F978E288B2912de6" as `0x${string}`,
   },
 
   {
-    name: "SuperfluidPool",
+    name: "superfluidPool",
     address: "0x9224413b9177e6c1d5721b4a4d1d00ec84b07ce7" as `0x${string}`,
   },
 ]

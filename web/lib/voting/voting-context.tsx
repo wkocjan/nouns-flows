@@ -9,7 +9,16 @@ import { PropsWithChildren, createContext, useContext, useEffect, useState } fro
 import { toast } from "sonner"
 import { toHex } from "viem"
 import { useAccount } from "wagmi"
-import { nounsFlowImplAbi } from "../abis"
+import {
+  cfav1ForwarderAbi,
+  erc20VotesMintableImplAbi,
+  gdav1ForwarderAbi,
+  nounsFlowImplAbi,
+  rewardPoolImplAbi,
+  superfluidMacroForwarderAbi,
+  superfluidPoolAbi,
+  tokenVerifierAbi,
+} from "../abis"
 import { PERCENTAGE_SCALE } from "../config"
 import { useUserVotes } from "./user-votes/use-user-votes"
 
@@ -106,7 +115,15 @@ export const VotingProvider = (
 
           writeContract({
             account: address,
-            abi: nounsFlowImplAbi,
+            abi: [
+              ...nounsFlowImplAbi,
+              ...rewardPoolImplAbi,
+              ...erc20VotesMintableImplAbi,
+              ...superfluidPoolAbi,
+              ...tokenVerifierAbi,
+              ...gdav1ForwarderAbi,
+              ...cfav1ForwarderAbi,
+            ],
             functionName: "castVotes",
             address: contract,
             chainId,
