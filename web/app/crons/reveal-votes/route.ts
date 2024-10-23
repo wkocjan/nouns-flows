@@ -1,5 +1,3 @@
-import "server-only"
-
 import { NextResponse } from "next/server"
 import database from "@/lib/database"
 import { getDecryptedItem } from "@/lib/kv/kvStore"
@@ -11,6 +9,7 @@ import { l2Client } from "@/lib/viem/client"
 import { waitForTransactionReceipt } from "viem/actions"
 
 export const dynamic = "force-dynamic"
+export const revalidate = 0
 export const maxDuration = 300
 
 export async function GET() {

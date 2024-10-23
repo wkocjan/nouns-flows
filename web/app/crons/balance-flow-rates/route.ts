@@ -1,5 +1,3 @@
-import "server-only"
-
 import { NextResponse } from "next/server"
 import { getBalanceFlowRatesWalletClient } from "@/lib/viem/walletClient"
 import { NOUNS_FLOW } from "@/lib/config"
@@ -10,6 +8,7 @@ import { getContract } from "viem"
 import { l2Client } from "@/lib/viem/client"
 
 export const dynamic = "force-dynamic"
+export const revalidate = 0
 export const maxDuration = 300
 
 export async function GET() {

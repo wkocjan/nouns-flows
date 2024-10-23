@@ -5,7 +5,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import pluralize from "pluralize"
 
 interface Props {
-  isGoingNegative: boolean
   flow: {
     isFlow: number
     monthlyOutgoingFlowRate: string
@@ -15,7 +14,14 @@ interface Props {
   display: string
 }
 
-export const MonthlyBudget = ({ isGoingNegative, flow, approvedGrants, display }: Props) => {
+export const MonthlyBudget = ({ flow, approvedGrants, display }: Props) => {
+  const isGoingNegative =
+    Number(flow.monthlyOutgoingFlowRate) > Number(flow.monthlyIncomingFlowRate)
+
+  const isNotStreamingEnough =
+    flow.isFlow &&
+    Number(flow.monthlyIncomingFlowRate) * 0.99 > Number(flow.monthlyOutgoingFlowRate)
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -31,6 +37,13 @@ export const MonthlyBudget = ({ isGoingNegative, flow, approvedGrants, display }
               Warning: More outgoing funds than incoming.{" "}
               <Currency>{Number(flow.monthlyOutgoingFlowRate)}</Currency> vs{" "}
               <Currency>{Number(flow.monthlyIncomingFlowRate)}</Currency>.
+              <br /> This will be automatically fixed within 1 minute.
+            </>
+          ) : isNotStreamingEnough ? (
+            <>
+              Warning: Not streaming enough funds.{" "}
+              <Currency>{Number(flow.monthlyIncomingFlowRate)}</Currency> vs{" "}
+              <Currency>{Number(flow.monthlyOutgoingFlowRate)}</Currency>.
               <br /> This will be automatically fixed within 1 minute.
             </>
           ) : approvedGrants ? (

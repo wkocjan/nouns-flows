@@ -72,10 +72,6 @@ export default async function FlowPage(props: Props) {
             const hasRecentUpdate =
               hasUpdate && new Date().getTime() / 1000 - lastUpdateTime < 14 * 24 * 60 * 60
 
-            const isGoingNegative =
-              grant.isFlow == 1 &&
-              Number(grant.monthlyOutgoingFlowRate) > Number(grant.monthlyIncomingFlowRate)
-
             return (
               <TableRow key={grant.id}>
                 <GrantLogoCell image={getIpfsUrl(grant.image)} title={grant.title} />
@@ -141,11 +137,7 @@ export default async function FlowPage(props: Props) {
                 </TableCell>
 
                 <TableCell className="text-center">
-                  <MonthlyBudget
-                    display={grant.monthlyIncomingFlowRate}
-                    isGoingNegative={isGoingNegative}
-                    flow={grant}
-                  />
+                  <MonthlyBudget display={grant.monthlyIncomingFlowRate} flow={grant} />
                 </TableCell>
                 <TableCell className="text-center">{grant.votesCount}</TableCell>
 

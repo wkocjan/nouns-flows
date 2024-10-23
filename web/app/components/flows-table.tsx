@@ -41,10 +41,6 @@ export const FlowsTable = (props: Props) => {
       </TableHeader>
       <TableBody>
         {flows.sort(sortGrants).map((flow) => {
-          const isGoingNegative =
-            flow.isFlow == 1 &&
-            Number(flow.monthlyOutgoingFlowRate) > Number(flow.monthlyIncomingFlowRate)
-
           const approvedGrants = flow.subgrants.filter((g) => isGrantApproved(g)).length
 
           return (
@@ -93,7 +89,6 @@ export const FlowsTable = (props: Props) => {
                   display={
                     flow.isFlow ? flow.monthlyOutgoingFlowRate : flow.monthlyIncomingFlowRate
                   }
-                  isGoingNegative={isGoingNegative}
                   flow={flow}
                   approvedGrants={approvedGrants}
                 />
