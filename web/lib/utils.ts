@@ -28,10 +28,12 @@ export function explorerUrl(address: string, chainId: number, type: "tx" | "addr
   return `https://${explorerDomain[chainId as SupportedChainId]}/${type}/${address}`
 }
 
-export function getIpfsUrl(file: string, gateway: "pinata" | "ipfs" = "ipfs") {
-  const hash = file.replace("ipfs://", "")
+export function getIpfsUrl(url: string, gateway: "pinata" | "ipfs" = "ipfs") {
+  if (url.startsWith("http")) return url
 
-  if (gateway === "pinata") return getPinataUrl(file)
+  const hash = url.replace("ipfs://", "")
+
+  if (gateway === "pinata") return getPinataUrl(url)
 
   return `https://ipfs.io/ipfs/${hash}`
 }

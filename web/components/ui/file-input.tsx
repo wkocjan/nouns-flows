@@ -17,7 +17,7 @@ interface Props {
 
 export function FileInput({ name, accept, onSuccess, maxFileSizeMB = 5 }: Props) {
   const { isUploading, uploadFile } = useFileUpload()
-  const [hash, setHash] = useState<string>()
+  const [url, setUrl] = useState<string>()
 
   return (
     <div className="relative">
@@ -32,23 +32,22 @@ export function FileInput({ name, accept, onSuccess, maxFileSizeMB = 5 }: Props)
             return
           }
 
-          const hash = await uploadFile(file)
+          const ipfsUrl = await uploadFile(file)
 
-          if (hash) {
-            const ipfsHash = `ipfs://${hash}`
-            setHash(ipfsHash)
-            if (onSuccess) onSuccess(ipfsHash)
+          if (ipfsUrl) {
+            setUrl(ipfsUrl)
+            if (onSuccess) onSuccess(ipfsUrl)
           }
         }}
         accept={accept}
         disabled={isUploading}
         className="pr-10"
       />
-      <input type="hidden" name={name} value={hash} />
+      <input type="hidden" name={name} value={url} />
       <div className="absolute inset-y-0 right-0 flex items-center pl-3">
-        {hash && (
+        {url && (
           <Image
-            src={getPinataUrl(hash)}
+            src={getPinataUrl(url)}
             alt=" "
             width={32}
             height={32}
