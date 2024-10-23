@@ -57,13 +57,12 @@ export const MonthlyBudget = ({ flow, approvedGrants, display }: Props) => {
             </>
           ) : approvedGrants ? (
             <>
-              Splitting <Currency>{Number(flow.monthlyOutgoingFlowRate)}</Currency>/mo between{" "}
-              {approvedGrants} {pluralize("builders", approvedGrants)} every second.
+              Streaming <Currency>{Number(flow.monthlyOutgoingFlowRate)}</Currency>/mo to{" "}
+              {approvedGrants} {pluralize("builder", approvedGrants)}.
             </>
           ) : isFlow ? (
             <>
-              Splitting <Currency>{Number(flow.monthlyOutgoingFlowRate)}</Currency>/mo between
-              builders.
+              Streaming <Currency>{Number(flow.monthlyOutgoingFlowRate)}</Currency>/mo to builders.
             </>
           ) : (
             <>
