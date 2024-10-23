@@ -1,5 +1,6 @@
 import { ponder, type Context, type Event } from "@/generated"
 import { getMonthlyIncomingFlowRate } from "./lib/monthly-flow"
+import { handleIncomingFlowRates } from "./lib/handle-incoming-flow-rates"
 
 ponder.on("NounsFlow:VoteCast", handleVoteCast)
 ponder.on("NounsFlowChildren:VoteCast", handleVoteCast)
@@ -18,6 +19,8 @@ async function handleVoteCast(params: {
 
   const affectedGrantsIds = new Set([recipientId.toString()])
 
+  let hasPreviousVotes = false
+
   // Mark old votes for this token as stale
   ;(
     await context.db.Vote.updateMany({
@@ -29,7 +32,10 @@ async function handleVoteCast(params: {
       },
       data: { isStale: true },
     })
-  ).forEach((vote) => affectedGrantsIds.add(vote.recipientId))
+  ).forEach((vote) => {
+    affectedGrantsIds.add(vote.recipientId)
+    hasPreviousVotes = true
+  })
 
   // Create the new vote
   await context.db.Vote.create({
@@ -59,6 +65,11 @@ async function handleVoteCast(params: {
         monthlyIncomingFlowRate,
       },
     })
+  }
+  // if is a new voter, then we are adding new member units to the total
+  // so must handle all sibling flow rates
+  if (!hasPreviousVotes) {
+    await handleIncomingFlowRates(context.db, contract)
   }
 }
 
