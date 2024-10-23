@@ -104,6 +104,8 @@ view Grant {
   isActive                         Int
   votesCount                       String
   monthlyIncomingFlowRate          String
+  monthlyIncomingBaselineFlowRate  String
+  monthlyIncomingBonusFlowRate    String
   monthlyOutgoingFlowRate          String
   monthlyRewardPoolFlowRate        String
   monthlyBaselinePoolFlowRate      String

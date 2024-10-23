@@ -19,6 +19,8 @@ export default createSchema((p) => ({
       isActive: p.boolean(),
       votesCount: p.string(),
       monthlyIncomingFlowRate: p.string(),
+      monthlyIncomingBaselineFlowRate: p.string(),
+      monthlyIncomingBonusFlowRate: p.string(),
       monthlyOutgoingFlowRate: p.string(),
       monthlyRewardPoolFlowRate: p.string(),
       monthlyBaselinePoolFlowRate: p.string(),

@@ -16,8 +16,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { VotingInput } from "../flow/[flowId]/components/voting-input"
 import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import pluralize from "pluralize"
 import { MonthlyBudget } from "./monthly-budget"
 
 interface Props {

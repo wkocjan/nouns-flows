@@ -50,6 +50,8 @@ export async function handleIncomingFlowRates(db: Context["db"], parentContract:
 
     // Convert flow rate to monthly amount
     const monthlyIncomingFlowRate = totalSiblingFlowRate * secondsPerMonth
+    const monthlyIncomingBaselineFlowRate = baselineFlowRate * secondsPerMonth
+    const monthlyIncomingBonusFlowRate = bonusFlowRate * secondsPerMonth
 
     if (isNaN(monthlyIncomingFlowRate)) {
       console.error(totalSiblingFlowRate, baselineFlowRate, bonusFlowRate)
@@ -60,6 +62,8 @@ export async function handleIncomingFlowRates(db: Context["db"], parentContract:
       id: sibling.id,
       data: {
         monthlyIncomingFlowRate: monthlyIncomingFlowRate.toString(),
+        monthlyIncomingBaselineFlowRate: monthlyIncomingBaselineFlowRate.toString(),
+        monthlyIncomingBonusFlowRate: monthlyIncomingBonusFlowRate.toString(),
       },
     })
   }

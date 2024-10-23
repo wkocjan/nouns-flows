@@ -52,6 +52,8 @@ ponder.on("NounsFlow:FlowInitialized", async (params) => {
       submitter: zeroAddress,
       votesCount: "0",
       monthlyIncomingFlowRate: "0",
+      monthlyIncomingBaselineFlowRate: "0",
+      monthlyIncomingBonusFlowRate: "0",
       monthlyOutgoingFlowRate: "0",
       monthlyRewardPoolFlowRate: "0",
       monthlyBaselinePoolFlowRate: "0",

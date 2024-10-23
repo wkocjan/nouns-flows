@@ -3,24 +3,33 @@ import { Badge } from "@/components/ui/badge"
 import { Currency } from "@/components/ui/currency"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import pluralize from "pluralize"
+import { Grant } from "@prisma/client"
 
 interface Props {
-  flow: {
-    isFlow: number
-    monthlyOutgoingFlowRate: string
-    monthlyIncomingFlowRate: string
-  }
+  flow: Pick<
+    Grant,
+    | "isFlow"
+    | "monthlyOutgoingFlowRate"
+    | "monthlyIncomingFlowRate"
+    | "monthlyIncomingBaselineFlowRate"
+    | "monthlyIncomingBonusFlowRate"
+    | "monthlyBaselinePoolFlowRate"
+    | "monthlyBonusPoolFlowRate"
+    | "baselineMemberUnits"
+    | "bonusMemberUnits"
+  >
   approvedGrants?: number
   display: string
 }
 
 export const MonthlyBudget = ({ flow, approvedGrants, display }: Props) => {
+  const isFlow = flow.isFlow
+
   const isGoingNegative =
     Number(flow.monthlyOutgoingFlowRate) > Number(flow.monthlyIncomingFlowRate)
 
   const isNotStreamingEnough =
-    flow.isFlow &&
-    Number(flow.monthlyIncomingFlowRate) * 0.99 > Number(flow.monthlyOutgoingFlowRate)
+    isFlow && Number(flow.monthlyIncomingFlowRate) * 0.99 > Number(flow.monthlyOutgoingFlowRate)
 
   return (
     <Tooltip>
@@ -51,10 +60,17 @@ export const MonthlyBudget = ({ flow, approvedGrants, display }: Props) => {
               Splitting <Currency>{Number(flow.monthlyOutgoingFlowRate)}</Currency>/mo between{" "}
               {approvedGrants} {pluralize("builders", approvedGrants)} every second.
             </>
-          ) : (
+          ) : isFlow ? (
             <>
               Splitting <Currency>{Number(flow.monthlyOutgoingFlowRate)}</Currency>/mo between
               builders.
+            </>
+          ) : (
+            <>
+              <Currency>{Number(flow.monthlyIncomingBaselineFlowRate)}</Currency>/mo baseline grant.
+              <br />
+              <Currency>{Number(flow.monthlyIncomingBonusFlowRate)}</Currency>/mo as a bonus from
+              voters.
             </>
           )}
         </>
