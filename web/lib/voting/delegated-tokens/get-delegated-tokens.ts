@@ -20,12 +20,12 @@ export async function fetchDelegatedTokens(address: string) {
   }
 
   // For testing - rocketman21.eth
-  if (address === "0x289715ffbb2f4b482e2917d2f183feab564ec84f") {
-    return [
-      { id: 0, owner: "0x289715ffbb2f4b482e2917d2f183feab564ec84f" as const },
-      { id: 2, owner: "0x289715ffbb2f4b482e2917d2f183feab564ec84f" as const },
-    ]
-  }
+  // if (address === "0x289715ffbb2f4b482e2917d2f183feab564ec84f") {
+  //   return [
+  //     { id: 0, owner: "0x289715ffbb2f4b482e2917d2f183feab564ec84f" as const },
+  //     { id: 2, owner: "0x289715ffbb2f4b482e2917d2f183feab564ec84f" as const },
+  //   ]
+  // }
 
   const query = `
     query {
