@@ -6,7 +6,7 @@
     },
     {
       "path": "/crons/balance-flow-rates",
-      "schedule": "*/2 * * * *"
+      "schedule": "*/1 * * * *"
     },
     {
       "path": "/crons/conversion-rates",

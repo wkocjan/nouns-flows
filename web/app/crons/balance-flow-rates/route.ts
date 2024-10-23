@@ -25,7 +25,7 @@ export async function GET() {
     })
 
     // Read the number of child flows that are out of sync
-    const childFlowRatesOutOfSync: bigint = await contract.read.childFlowRatesOutOfSync()
+    const childFlowRatesOutOfSync = await contract.read.childFlowRatesOutOfSync()
 
     if (childFlowRatesOutOfSync > 0) {
       // Limit to max 10 updates
