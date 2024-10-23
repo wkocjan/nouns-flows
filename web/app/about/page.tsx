@@ -65,6 +65,41 @@ export default function AboutPage() {
         />
 
         <Category title="For curators 🚀" />
+
+        <Video
+          url="https://stream.warpcast.com/v1/video/467bb7a5dffa6583bcd7c8c364fa2953.m3u8"
+          title="What does it mean to be a curator"
+        />
+
+        <Video
+          url="https://stream.warpcast.com/v1/video/c44694c683984096eb2cc6e2d64a431f.m3u8"
+          title="A note for curators"
+        />
+
+        <Video
+          url="https://stream.warpcast.com/v1/video/227a7cf3795eae622be082101ece4b92.m3u8"
+          title="How to earn money as a curator 🎯"
+        />
+
+        <Video
+          url="https://stream.warpcast.com/v1/video/3b7ce7b89824d5c96cc986641fb106e1.m3u8"
+          title="How to earn money via challenge rewards (pt. 1)"
+        />
+
+        <Video
+          url="https://stream.warpcast.com/v1/video/c4c3adf88fb08a5614f911cff4ac034a.m3u8"
+          title="How to earn money via challenge rewards (pt. 2)"
+        />
+
+        <Video
+          url="https://stream.warpcast.com/v1/video/91d414606e71311b99793846b766b726.m3u8"
+          title="How to earn money via challenge rewards (pt. 3)"
+        />
+
+        <Video
+          url="https://stream.warpcast.com/v1/video/8caf65635c3e1ffb738d639b1e361d52.m3u8"
+          title="How to earn money from pool rewards"
+        />
       </div>
     </main>
   )
