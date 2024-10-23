@@ -1,4 +1,4 @@
-import { createConfig, rateLimit } from "@ponder/core"
+import { createConfig, mergeAbis, rateLimit } from "@ponder/core"
 import { createPublicClient, http, parseAbiItem } from "viem"
 import { base } from "viem/chains"
 import {
@@ -8,6 +8,8 @@ import {
   nounsFlowImplAbi,
   superfluidPoolAbi,
   tcrFactoryImplAbi,
+  gdav1Address,
+  gdav1ImplAbi,
 } from "./abis"
 import { base as baseContracts } from "./addresses"
 
@@ -145,6 +147,19 @@ export default createConfig({
       },
       network: "base",
       startBlock: START_BLOCK,
+    },
+    GdaV1: {
+      abi: gdav1ImplAbi,
+      address: gdav1Address[8453],
+      network: "base",
+      startBlock: START_BLOCK,
+      filter: {
+        event: "FlowDistributionUpdated",
+        args: {
+          // usdc on base
+          token: "0xd04383398dd2426297da660f9cca3d439af9ce1b",
+        },
+      },
     },
   },
   blocks: {
