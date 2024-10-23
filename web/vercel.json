@@ -5,6 +5,10 @@
       "schedule": "*/2 * * * *"
     },
     {
+      "path": "/crons/balance-flow-rates",
+      "schedule": "*/2 * * * *"
+    },
+    {
       "path": "/crons/conversion-rates",
       "schedule": "*/10 * * * *"
     },
