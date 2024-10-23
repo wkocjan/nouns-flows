@@ -16,13 +16,14 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database"
 import { Status } from "@/lib/enums"
-import { cn, getEthAddress, getIpfsUrl } from "@/lib/utils"
+import { cn, getEthAddress, getIpfsUrl, isGrantApproved } from "@/lib/utils"
 import Link from "next/link"
 import { GrantLogoCell } from "./components/grant-logo-cell"
 import { VotingBar } from "./components/voting-bar"
 import { VotingInput } from "./components/voting-input"
 import { AnimatedSalary } from "@/components/global/animated-salary"
 import { Grant } from "@prisma/client"
+import { MonthlyBudget } from "@/app/components/monthly-budget"
 
 interface Props {
   params: {
@@ -70,6 +71,10 @@ export default async function FlowPage(props: Props) {
             const lastUpdateTime = hasUpdate ? grant.updates[0]?.createdAt.getTime() / 1000 : 0
             const hasRecentUpdate =
               hasUpdate && new Date().getTime() / 1000 - lastUpdateTime < 14 * 24 * 60 * 60
+
+            const isGoingNegative =
+              grant.isFlow == 1 &&
+              Number(grant.monthlyOutgoingFlowRate) > Number(grant.monthlyIncomingFlowRate)
 
             return (
               <TableRow key={grant.id}>
@@ -136,10 +141,11 @@ export default async function FlowPage(props: Props) {
                 </TableCell>
 
                 <TableCell className="text-center">
-                  <Badge>
-                    <Currency>{grant.monthlyIncomingFlowRate}</Currency>
-                    /mo
-                  </Badge>
+                  <MonthlyBudget
+                    display={grant.monthlyIncomingFlowRate}
+                    isGoingNegative={isGoingNegative}
+                    flow={grant}
+                  />
                 </TableCell>
                 <TableCell className="text-center">{grant.votesCount}</TableCell>
 
