@@ -12,6 +12,7 @@ import { getShortEthAddress } from "@/lib/utils"
 import { Grant } from "@prisma/client"
 import { useModal } from "connectkit"
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { useFormStatus } from "react-dom"
 import { toast } from "sonner"
 import { Address } from "viem"
@@ -25,23 +26,25 @@ interface Props {
 
 export function ApplyForm(props: Props) {
   const { flow, isFlow } = props
-
-  const { address } = useAccount()
+  const { isConnected, address } = useAccount()
   const { setOpen } = useModal()
   const router = useRouter()
+  const [isGuest, setIsGuest] = useState(true)
+
+  useEffect(() => {
+    setIsGuest(!isConnected)
+  }, [isConnected])
 
   const { data: recipientExists = false } = useReadContract({
     address: flow.tcr as Address,
     abi: nounsFlowImplAbi,
     functionName: "recipientExists",
     args: [address!],
-    query: {
-      enabled: !!address,
-    },
+    query: { enabled: !!address },
   })
 
   async function handleSubmit(formData: FormData) {
-    if (!address) {
+    if (!isConnected) {
       toast.error("You need to sign in to submit the application")
       return
     }
@@ -76,7 +79,7 @@ export function ApplyForm(props: Props) {
         </Alert>
       )}
 
-      {!address && (
+      {isGuest && (
         <Alert variant="warning" className="flex items-center justify-between space-x-4">
           <div>
             <AlertTitle className="text-base">Connect your wallet</AlertTitle>
@@ -87,6 +90,7 @@ export function ApplyForm(props: Props) {
           </Button>
         </Alert>
       )}
+
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <input type="hidden" name="flowId" value={flow.id} />
         <input type="hidden" name="isFlow" value={isFlow ? "1" : "0"} />
@@ -146,7 +150,7 @@ Include any other details that support your application.`}
           </div>
         </div>
 
-        <SubmitButton disabled={recipientExists || !address} />
+        <SubmitButton disabled={recipientExists || isGuest} />
       </div>
     </form>
   )
