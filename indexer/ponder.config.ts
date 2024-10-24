@@ -1,4 +1,4 @@
-import { createConfig, mergeAbis, rateLimit } from "@ponder/core"
+import { createConfig, rateLimit } from "@ponder/core"
 import { createPublicClient, http, parseAbiItem } from "viem"
 import { base } from "viem/chains"
 import {

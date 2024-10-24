@@ -44,17 +44,27 @@ const reasons = [
     value: "inactive",
     label: (
       <>
-        Inactive -{" "}
-        <span className="text-xs text-muted-foreground">Project without recent updates</span>
+        Inactive - <span className="text-xs text-muted-foreground">Flow without recent impact</span>
       </>
     ),
   },
   {
-    value: "incorrect-flow",
+    value: "values-misalignment",
     label: (
       <>
-        Incorrect Flow -{" "}
-        <span className="text-xs text-muted-foreground">Misaligned with project goals</span>
+        Not Nounish -{" "}
+        <span className="text-xs text-muted-foreground">Does not align with Nounish values</span>
+      </>
+    ),
+  },
+  {
+    value: "captured",
+    label: (
+      <>
+        Captured -{" "}
+        <span className="text-xs text-muted-foreground">
+          Flow has been captured through collusion
+        </span>
       </>
     ),
   },
