@@ -2,6 +2,7 @@ import "server-only"
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Markdown } from "@/components/ui/markdown"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { getFlow } from "@/lib/database/queries/flow"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { Metadata } from "next"
@@ -29,7 +30,7 @@ export default async function ApplyFlowPage(props: Props) {
   const { isTopLevel } = flow
 
   return (
-    <main className="container mt-8 pb-12">
+    <main className="container flex h-[calc(100vh-68px)] flex-col pb-12 pt-8">
       <h3 className="text-pretty font-semibold tracking-tight">
         {isTopLevel ? "Suggest new flow" : `Apply for a grant in "${flow.title}"`}
       </h3>
@@ -38,22 +39,24 @@ export default async function ApplyFlowPage(props: Props) {
           ? "Suggest a new funding flow to help people make impact."
           : "Review guidelines below, outline your project, highlight its impact, and demonstrate how it meets the flow's requirements and objectives."}
       </p>
-      <div className="mt-6 grid grid-cols-1 gap-12 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
-          <CardContent>
+      <div className="mt-6 grid grow grid-cols-1 gap-8 lg:grid-cols-10">
+        <Card className="flex grow flex-col lg:col-span-6">
+          <CardContent className="flex grow flex-col">
             <ApplyForm flow={flow} isFlow={isTopLevel === 1} />
           </CardContent>
         </Card>
 
-        <div className="max-sm:order-first">
-          <div className="rounded-lg border-2 border-dashed border-foreground/75 p-4 lg:p-5">
+        <div className="flex flex-col max-sm:order-first lg:col-span-4">
+          <div className="flex grow flex-col rounded-lg border border-dashed border-primary p-4 lg:p-5">
             <div className="flex items-center justify-between space-x-2">
-              <h4 className="font-medium tracking-tight">Guidelines & requirements</h4>
+              <h4 className="font-medium tracking-tight text-primary">Guidelines & requirements</h4>
               <ExclamationTriangleIcon className="size-6" />
             </div>
-            <div className="mt-6 space-y-2.5 text-sm leading-normal">
-              <Markdown>{flow.description}</Markdown>
-            </div>
+            <ScrollArea className="mt-6 h-[50vh] grow pr-4" type="always">
+              <div className="space-y-4 text-sm leading-relaxed">
+                <Markdown>{flow.description}</Markdown>
+              </div>
+            </ScrollArea>
           </div>
         </div>
       </div>
