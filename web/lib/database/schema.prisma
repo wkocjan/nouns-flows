@@ -87,6 +87,19 @@ model Comment {
   @@schema("web")
 }
 
+model Template {
+  id        String   @id @default(cuid())
+  content   String
+  grantId   String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  grant     Grant    @relation(fields: [grantId], references: [id])
+
+  @@index([grantId])
+  @@map("Template")
+  @@schema("web")
+}
+
 view Grant {
   id                               String  @id
   recipient                        String
@@ -105,7 +118,7 @@ view Grant {
   votesCount                       String
   monthlyIncomingFlowRate          String
   monthlyIncomingBaselineFlowRate  String
-  monthlyIncomingBonusFlowRate    String
+  monthlyIncomingBonusFlowRate     String
   monthlyOutgoingFlowRate          String
   monthlyRewardPoolFlowRate        String
   monthlyBaselinePoolFlowRate      String
@@ -139,6 +152,7 @@ view Grant {
   tokenHolders TokenHolder[]
   updates      Cast[]
   evidences    Evidence[]
+  template     Template?
 
   @@map("Grant")
   @@schema("public")

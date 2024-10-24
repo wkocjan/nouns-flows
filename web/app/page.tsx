@@ -24,7 +24,7 @@ export default async function Home() {
   return (
     <VotingProvider chainId={base.id} contract={getEthAddress(pool.recipient)}>
       <main className="container mt-2.5 pb-24 md:mt-8">
-        <div className="flex flex-row items-center justify-between">
+        <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center space-x-4">
               <h3 className="font-semibold leading-none tracking-tight md:text-lg">
@@ -42,12 +42,8 @@ export default async function Home() {
             </div>
             <p className="mt-1 text-sm text-muted-foreground max-sm:hidden">{pool.tagline}</p>
           </div>
-          <div className="flex items-center space-x-2">
-            <Link href={`/apply/${pool.id}`}>
-              <Button variant="ghost">Suggest flow</Button>
-            </Link>
-            <VotingToggle />
-          </div>
+
+          <VotingToggle />
         </div>
 
         <Card className="mb-12 mt-6">

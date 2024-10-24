@@ -4,15 +4,19 @@
   --bn-border-radius: var(--radius);
 
   h1 {
-    @apply text-xl tracking-tight;
+    @apply text-xl tracking-tight max-sm:text-lg;
   }
 
   h2 {
-    @apply text-lg tracking-tight;
+    @apply text-lg tracking-tight max-sm:text-base;
   }
 
   h3 {
-    @apply text-base tracking-tight;
+    @apply text-base tracking-tight max-sm:text-sm;
+  }
+
+  p {
+    @apply max-sm:text-sm;
   }
 
   .bn-block-outer {

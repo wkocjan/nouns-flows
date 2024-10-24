@@ -22,10 +22,11 @@ import { saveDraft } from "./save-draft"
 interface Props {
   flow: Grant
   isFlow: boolean
+  template: string
 }
 
 export function ApplyForm(props: Props) {
-  const { flow, isFlow } = props
+  const { flow, isFlow, template } = props
   const { isConnected, address } = useAccount()
   const { setOpen } = useModal()
   const router = useRouter()
@@ -66,7 +67,7 @@ export function ApplyForm(props: Props) {
   }
 
   return (
-    <form action={handleSubmit} className="space-y-6">
+    <form action={handleSubmit} className="flex grow flex-col space-y-6">
       {recipientExists && (
         <Alert variant="destructive">
           <AlertTitle className="text-base">You have already applied to this flow</AlertTitle>
@@ -91,6 +92,20 @@ export function ApplyForm(props: Props) {
         </Alert>
       )}
 
+      {isFlow && (
+        <Alert variant="warning" className="flex items-center justify-between space-x-4">
+          <div>
+            <AlertTitle className="text-base">This is not a grant application!</AlertTitle>
+            <AlertDescription>
+              You&apos;re about to suggest new flow (budget category) to add to the platform.
+              You&apos;re not applying for a grant and you won&apos;t earn any salary upon succesful
+              application. Return to the apply page to create a grant that fits within a specific
+              flow.
+            </AlertDescription>
+          </div>
+        </Alert>
+      )}
+
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <input type="hidden" name="flowId" value={flow.id} />
         <input type="hidden" name="isFlow" value={isFlow ? "1" : "0"} />
@@ -112,25 +127,13 @@ export function ApplyForm(props: Props) {
         </div>
       )}
 
-      <div className="space-y-1.5">
+      <div className="flex grow flex-col space-y-1.5">
         <Label>Description</Label>
         <MarkdownInput
           name="description"
-          initialContent={`
-### Overview
-Briefly describe the problem your project aims to solve.
-
-### Impact
-- Describe the impact of your project.
-- Be specific
-- What does the world look like if your project is successful?
-
-### Team
-Introduce the key members of your team and their relevant experience.
-
-### Additional Information
-Include any other details that support your application.`}
-          minHeight={420}
+          initialContent={template}
+          minHeight={320}
+          className="grow"
         />
       </div>
 

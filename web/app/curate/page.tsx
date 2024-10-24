@@ -43,11 +43,11 @@ export default async function CurateAndEarnPage() {
             <p className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Become a Curator
             </p>
-            <p className="mt-6 text-lg leading-8 text-muted-foreground">
+            <p className="mt-6 text-base leading-8 text-muted-foreground lg:text-lg">
               Join our community of curators to manage the flows list and ensure the highest quality
               projects are funded.
             </p>
-            <p className="mt-4 text-lg leading-8 text-muted-foreground">
+            <p className="mt-4 text-base text-muted-foreground lg:text-lg">
               As a Curator you have two jobs that you will be rewarded for:
             </p>
             <dl className="mt-10 space-y-8 text-base leading-7 text-muted-foreground">
@@ -94,7 +94,7 @@ export default async function CurateAndEarnPage() {
               <h2 className="text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                 Curation process
               </h2>
-              <p className="mt-6 text-center leading-8 text-muted-foreground">
+              <p className="mt-6 text-center text-muted-foreground lg:leading-8">
                 Our decentralized & permissionless grants system is based on{" "}
                 <a
                   href="https://medium.com/@ilovebagels/token-curated-registries-1-0-61a232f8dac7"
@@ -190,7 +190,7 @@ export default async function CurateAndEarnPage() {
               <p className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                 How can you earn?
               </p>
-              <p className="mt-6 text-lg leading-8 text-muted-foreground">
+              <p className="mt-6 text-base text-muted-foreground lg:text-lg">
                 As a curator, you have multiple opportunities to earn rewards in USDC and Flow
                 Tokens (ERC 20)
               </p>
