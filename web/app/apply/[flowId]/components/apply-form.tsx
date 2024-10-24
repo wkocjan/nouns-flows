@@ -95,11 +95,12 @@ export function ApplyForm(props: Props) {
       {isFlow && (
         <Alert variant="warning" className="flex items-center justify-between space-x-4">
           <div>
-            <AlertTitle className="text-base">It&apos;s not a grant application!</AlertTitle>
+            <AlertTitle className="text-base">This is not a grant application!</AlertTitle>
             <AlertDescription>
-              You&apos;re about to suggest new flow (category) to add to the platform. You&apos;re
-              not applying for a grant and you won&apos;t earn any salary upon succesful
-              application.
+              You&apos;re about to suggest new flow (budget category) to add to the platform.
+              You&apos;re not applying for a grant and you won&apos;t earn any salary upon succesful
+              application. Return to the apply page to create a grant that fits within a specific
+              flow.
             </AlertDescription>
           </div>
         </Alert>
