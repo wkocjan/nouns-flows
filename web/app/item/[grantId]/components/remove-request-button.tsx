@@ -197,7 +197,7 @@ export function GrantRemoveRequestButton(props: Props) {
               <div>
                 <p>If not challenged, this {type} will be removed and your fee will be returned.</p>
                 <p className="mt-2.5 text-sm text-muted-foreground">
-                  Your ${token.symbol} balance: {formatEther(token.balance)} (
+                  Your {token.symbol} balance: {formatEther(token.balance)} (
                   {formatEther(token.allowance)} approved)
                 </p>
               </div>
