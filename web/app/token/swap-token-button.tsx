@@ -101,7 +101,7 @@ export function SwapTokenButton(props: Props) {
               <a
                 href={
                   flow.isTopLevel
-                    ? "https://www.desmos.com/calculator/19rg0itnvc"
+                    ? "https://www.desmos.com/calculator/qd8zchfxvu"
                     : "https://www.desmos.com/calculator/hizmijfgno"
                 }
                 target="_blank"
