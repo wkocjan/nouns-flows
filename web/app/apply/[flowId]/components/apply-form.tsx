@@ -22,10 +22,11 @@ import { saveDraft } from "./save-draft"
 interface Props {
   flow: Grant
   isFlow: boolean
+  template: string
 }
 
 export function ApplyForm(props: Props) {
-  const { flow, isFlow } = props
+  const { flow, isFlow, template } = props
   const { isConnected, address } = useAccount()
   const { setOpen } = useModal()
   const router = useRouter()
@@ -129,20 +130,7 @@ export function ApplyForm(props: Props) {
         <Label>Description</Label>
         <MarkdownInput
           name="description"
-          initialContent={`
-### Overview
-Briefly describe the problem your project aims to solve.
-
-### Impact
-- Describe the impact of your project.
-- Be specific
-- What does the world look like if your project is successful?
-
-### Team
-Introduce the key members of your team and their relevant experience.
-
-### Additional Information
-Include any other details that support your application.`}
+          initialContent={template}
           minHeight={320}
           className="grow"
         />

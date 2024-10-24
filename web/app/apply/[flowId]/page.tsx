@@ -3,6 +3,7 @@ import "server-only"
 import { Card, CardContent } from "@/components/ui/card"
 import { Markdown } from "@/components/ui/markdown"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import database from "@/lib/database"
 import { getFlow } from "@/lib/database/queries/flow"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { Metadata } from "next"
@@ -26,8 +27,12 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 export default async function ApplyFlowPage(props: Props) {
   const { flowId } = props.params
 
-  const flow = await getFlow(flowId)
+  const flow = await database.grant.findFirstOrThrow({
+    where: { id: flowId, isFlow: 1, isActive: 1 },
+    include: { template: true },
+  })
   const { isTopLevel } = flow
+  const isFlow = isTopLevel === 1
 
   return (
     <main className="container flex h-[calc(100vh-68px)] flex-col pb-12 pt-8">
@@ -42,7 +47,13 @@ export default async function ApplyFlowPage(props: Props) {
       <div className="mt-6 grid grow grid-cols-1 gap-8 lg:grid-cols-10">
         <Card className="flex grow flex-col lg:col-span-6">
           <CardContent className="flex grow flex-col">
-            <ApplyForm flow={flow} isFlow={isTopLevel === 1} />
+            <ApplyForm
+              flow={flow}
+              isFlow={isFlow}
+              template={
+                isFlow ? defaultFlowTemplate : flow.template?.content || defaultGrantTemplate
+              }
+            />
           </CardContent>
         </Card>
 
@@ -63,3 +74,62 @@ export default async function ApplyFlowPage(props: Props) {
     </main>
   )
 }
+
+const defaultGrantTemplate = `
+### Overview
+Briefly describe the problem your project aims to solve.
+
+### Impact
+- Describe the impact of your project.
+- Be specific
+- What does the world look like if your project is successful?
+
+### Team
+Introduce the key members of your team and their relevant experience.
+
+### Additional Information
+Include any other details that support your application.`
+
+const defaultFlowTemplate = `
+One line description of the flow.
+
+### Payment Structure
+- 
+- 
+- 
+
+### How to Apply
+- 
+- 
+- 
+
+### Ongoing Requirements
+- 
+- 
+- 
+
+### How to Post Updates
+- 
+- 
+- 
+
+### How Your Work Gets Verified
+- 
+- 
+- 
+
+### How to Keep Your Funding
+- 
+- 
+- 
+
+### What Gets You Removed
+- 
+- 
+- 
+
+### For Curators
+- 
+- 
+- 
+`
