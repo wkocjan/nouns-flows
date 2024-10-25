@@ -38,6 +38,8 @@ export async function generateTemplate(title: string, description: string) {
         Do not paraphrase too much, just make it very similar to the How to Apply section of the flow description.
         DO NOT include a title section or "Flow name" Application at the top of the template.
         Prefer to wrap areas the application should fill in with [] square brackets so they can easily input what's required and overwrite it.
+        Always use h1 headings for section headers, we use a small font for the editor, so it is necessary to make them large.
+        Don't use words like you or your, instead use the first person eg: "About me" instead of "About you".
 
         The template should be in markdown format, and should be easy to understand and follow. It shouldn't be too long.
         Include mainly what's mentioned in "How to apply" section of the flow description. Keep it very short, and do not paraphrase the flow description. Only include what's absolutely necessary, it's just a structure for applicants to fill in. 
