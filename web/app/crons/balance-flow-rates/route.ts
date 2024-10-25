@@ -27,9 +27,8 @@ export async function GET() {
     const childFlowRatesOutOfSync = await contract.read.childFlowRatesOutOfSync()
 
     if (childFlowRatesOutOfSync > 0) {
-      // Limit to max 10 updates
-      const updateCount =
-        childFlowRatesOutOfSync > BigInt(10) ? BigInt(10) : childFlowRatesOutOfSync
+      // Limit to max 5 updates
+      const updateCount = childFlowRatesOutOfSync > BigInt(5) ? BigInt(5) : childFlowRatesOutOfSync
 
       // Call workOnChildFlowsToUpdate with the count
       const tx = await client.writeContract({
