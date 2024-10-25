@@ -1,7 +1,7 @@
 "use client"
 
-import { HTMLProps, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { HTMLProps, useEffect, useState } from "react"
 
 interface Props extends Omit<HTMLProps<HTMLTimeElement>, "dateTime"> {
   date: Date
@@ -46,7 +46,7 @@ export function DateTime(props: Props) {
 
 function getRelativeTime(date: Date, currentDate: Date, locale: Intl.LocalesArgument = "en-US") {
   const diff = date.getTime() - currentDate.getTime()
-  const formatter = new Intl.RelativeTimeFormat(locale, { numeric: "auto" })
+  const formatter = new Intl.RelativeTimeFormat(locale, { numeric: "auto", style: "narrow" })
 
   const absDiff = Math.abs(diff)
   const seconds = Math.floor(absDiff / 1000)

@@ -5,7 +5,7 @@ interface Props {
 }
 
 export function EmptyState(props: Props) {
-  const { title, description, size = 228 } = props
+  const { title, description, size = 200 } = props
   return (
     <div className="flex flex-col items-center justify-center text-primary">
       <svg
@@ -131,7 +131,7 @@ export function EmptyState(props: Props) {
           transform="translate(-324.64481 -166.00708)"
         />
       </svg>
-      <h2 className="mt-8 text-lg font-semibold md:text-xl">{title}</h2>
+      <h2 className="mt-8 text-base font-semibold md:text-lg">{title}</h2>
       <p className="mt-2 text-sm text-muted-foreground md:text-base">{description}</p>
     </div>
   )

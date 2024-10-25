@@ -34,10 +34,10 @@ export const FlowSubmenu = (props: Props) => {
 
   return (
     <div className="mb-4 mt-10 flex items-center justify-between">
-      <div className="flex min-h-9 items-center space-x-6 md:space-x-7">
+      <div className="flex min-h-9 items-center space-x-5 md:space-x-7">
         <Link
           href={`/flow/${flowId}`}
-          className="group flex items-center space-x-2 text-lg font-medium md:text-xl"
+          className="group flex items-center space-x-2 text-base font-medium md:text-xl"
         >
           <span
             className={cn({
@@ -48,7 +48,7 @@ export const FlowSubmenu = (props: Props) => {
           </span>
         </Link>
         <Link
-          className="group flex items-start space-x-1 text-lg font-medium md:text-xl"
+          className="group flex items-start space-x-1 text-base font-medium md:text-xl"
           href={`/flow/${flowId}/applications`}
         >
           <span
@@ -65,7 +65,7 @@ export const FlowSubmenu = (props: Props) => {
           )}
         </Link>
         <Link
-          className="group flex items-start space-x-1 text-lg font-medium md:text-xl"
+          className="group flex items-start space-x-1 text-base font-medium md:text-xl"
           href={`/flow/${flowId}/drafts`}
         >
           <span

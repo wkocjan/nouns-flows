@@ -114,7 +114,7 @@ export default async function DraftPage({ params }: Props) {
                     ))}
                   </div>
                 </div>
-                <div>
+                <div className="max-sm:text-sm">
                   <h4 className="text-[13px] text-muted-foreground">Created At</h4>
                   <DateTime
                     date={createdAt}
@@ -129,7 +129,7 @@ export default async function DraftPage({ params }: Props) {
 
                 <div>
                   <h4 className="mb-1 text-[13px] text-muted-foreground">Type</h4>
-                  <p>{isFlow ? "Flow" : "Grant"}</p>
+                  <p className="max-sm:text-sm">{isFlow ? "Flow" : "Grant"}</p>
                 </div>
 
                 <div>

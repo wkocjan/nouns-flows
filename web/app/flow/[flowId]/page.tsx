@@ -101,10 +101,17 @@ export default async function FlowPage(props: Props) {
                     <div className="relative inline-flex">
                       <UserProfile address={getEthAddress(grant.recipient)} key={grant.recipient}>
                         {(profile) => (
-                          <Avatar className="size-8 bg-accent text-xs">
-                            <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
-                            <AvatarFallback>{profile.display_name[0].toUpperCase()}</AvatarFallback>
-                          </Avatar>
+                          <div className="flex items-center space-x-1.5">
+                            <Avatar className="size-7 bg-accent text-xs">
+                              <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
+                              <AvatarFallback>
+                                {profile.display_name[0].toUpperCase()}
+                              </AvatarFallback>
+                            </Avatar>
+                            <span className="tracking-tight max-sm:hidden">
+                              {profile.display_name}
+                            </span>
+                          </div>
                         )}
                       </UserProfile>
                       <Tooltip>

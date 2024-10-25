@@ -1,6 +1,6 @@
 import { AnimatedSalary } from "@/components/global/animated-salary"
 import { Badge } from "@/components/ui/badge"
-import { Currency } from "@/components/ui/currency"
+import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
 import {
   Table,
   TableBody,
@@ -15,7 +15,6 @@ import { Grant } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
 import { VotingInput } from "../flow/[flowId]/components/voting-input"
-import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
 import { MonthlyBudget } from "./monthly-budget"
 
 interface Props {
@@ -43,13 +42,13 @@ export const FlowsTable = (props: Props) => {
 
           return (
             <TableRow key={flow.title}>
-              <TableCell className="min-w-[72px] md:w-[96px]">
+              <TableCell className="min-w-12 pr-0 md:w-[86px]">
                 <Image
                   src={getIpfsUrl(flow.image)}
                   alt={flow.title}
                   width={72}
                   height={72}
-                  className="aspect-square size-[48px] rounded-md object-cover md:size-[72px]"
+                  className="aspect-square size-10 rounded-md object-cover md:size-[72px]"
                 />
               </TableCell>
               <TableCell>

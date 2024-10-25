@@ -30,7 +30,7 @@ export const CreatorCard = (props: Props) => {
       <CardHeader>
         <CardTitle className="flex items-center justify-between">Draft Status</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4 text-sm">
+      <CardContent className="space-y-4 text-sm text-muted-foreground">
         <p>
           The draft is publicly accessible. You can share it with others to get feedback or ask for
           sponsorship.

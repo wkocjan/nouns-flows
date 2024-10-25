@@ -69,8 +69,8 @@ export default async function FlowApplicationsPage(props: Props) {
       <TableHeader>
         <TableRow>
           <TableHead colSpan={2}>Name</TableHead>
-          <TableHead>{isTopLevel ? "Proposer" : "Builders"}</TableHead>
-          <TableHead>Type</TableHead>
+          <TableHead className="max-sm:hidden">{isTopLevel ? "Proposer" : "Builders"}</TableHead>
+          <TableHead className="max-sm:hidden">Type</TableHead>
           <TableHead>Status</TableHead>
           <TableHead className="text-right">Action</TableHead>
         </TableRow>
@@ -85,24 +85,27 @@ export default async function FlowApplicationsPage(props: Props) {
             <TableRow key={grant.id}>
               <GrantLogoCell image={getPinataUrl(grant.image)} title={grant.title} />
               <GrantTitleCell title={grant.title} href={`/application/${grant.id}`} />
-              <TableCell>
+              <TableCell className="max-sm:hidden">
                 <div className="flex space-x-0.5">
                   <UserProfile
                     address={getEthAddress(grant.isFlow ? grant.submitter : grant.recipient)}
                   >
                     {(profile) => (
-                      <Avatar className="size-7 bg-accent text-xs">
-                        <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
-                        <AvatarFallback>{profile.display_name[0].toUpperCase()}</AvatarFallback>
-                      </Avatar>
+                      <div className="flex items-center space-x-1.5">
+                        <Avatar className="size-7 bg-accent text-xs">
+                          <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
+                          <AvatarFallback>{profile.display_name[0].toUpperCase()}</AvatarFallback>
+                        </Avatar>
+                        <span className="tracking-tight max-sm:hidden">{profile.display_name}</span>
+                      </div>
                     )}
                   </UserProfile>
                 </div>
               </TableCell>
 
-              <TableCell>{grant.isFlow ? "Flow" : "Grant"}</TableCell>
+              <TableCell className="max-sm:hidden">{grant.isFlow ? "Flow" : "Grant"}</TableCell>
 
-              <TableCell>
+              <TableCell className="max-sm:text-xs">
                 {!grant.isDisputed && canRequestBeExecuted(grant) && (
                   <div className="flex flex-col">
                     <strong className="font-medium text-green-600 dark:text-green-500">
@@ -192,18 +195,20 @@ export default async function FlowApplicationsPage(props: Props) {
               <TableCell className="w-[100px] max-w-[100px]">
                 <div className="flex justify-end">
                   {canRequestBeExecuted(grant) && (
-                    <RequestExecuteButton grant={grant} flow={flow} />
+                    <RequestExecuteButton grant={grant} flow={flow} size="sm" />
                   )}
                   {canBeChallenged(grant) && (
                     <Link href={`/application/${grant.id}`}>
-                      <Button>Review</Button>
+                      <Button type="button" size="sm">
+                        Review
+                      </Button>
                     </Link>
                   )}
                   {dispute && canDisputeBeExecuted(dispute) && (
-                    <DisputeExecuteButton flow={flow} dispute={dispute} />
+                    <DisputeExecuteButton flow={flow} dispute={dispute} size="sm" />
                   )}
                   {dispute && !canDisputeBeExecuted(dispute) && (
-                    <DisputeVoteCta dispute={dispute} grant={grant} />
+                    <DisputeVoteCta dispute={dispute} grant={grant} size="sm" />
                   )}
                 </div>
               </TableCell>
