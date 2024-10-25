@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
 import database from "@/lib/database"
@@ -11,7 +10,7 @@ import { base } from "viem/chains"
 import { FlowsTable } from "./components/flows-table"
 import { FlowsUpdates } from "./components/flows-updates"
 import { VotingBar } from "./flow/[flowId]/components/voting-bar"
-import { VotingToggle } from "./flow/[flowId]/components/voting-toggle"
+import { CTAButtons } from "./flow/[flowId]/components/cta-buttons"
 
 export default async function Home() {
   const pool = await getPool()
@@ -43,7 +42,7 @@ export default async function Home() {
             <p className="mt-1 text-sm text-muted-foreground max-sm:hidden">{pool.tagline}</p>
           </div>
 
-          <VotingToggle />
+          <CTAButtons />
         </div>
 
         <Card className="mb-12 mt-6">
