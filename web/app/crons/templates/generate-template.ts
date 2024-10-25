@@ -33,7 +33,10 @@ export async function generateTemplate(title: string, description: string) {
         The editor applications use have option to upload images or videos. You may mention this in the template whenever it makes sense.
 
         DO NOT include this in the template: "Note: An application fee is required and will be returned if you meet the application requirements."
-        
+        Do not include any reminders about ongoing requirements inside the template itself.
+        Prefer header sections instead of bullet points, so it's easier for the user to read and fill in.
+        Do not paraphrase too much, just make it very similar to the How to Apply section of the flow description.
+
         The template should be in markdown format, and should be easy to understand and follow. It shouldn't be too long.
         Include mainly what's mentioned in "How to apply" section of the flow description. Keep it very short, and do not paraphrase the flow description. Only include what's absolutely necessary, it's just a structure for applicants to fill in. 
         Ideally the template should not be much longer than the How to Apply section of the flow description. Above all else, make it very similar to the How to Apply section of the flow description, make the language incredibly simple, and do not include many words. Ensure you emphasize the important of uploading images or videos if the flow description requires it. Make it very clear.
