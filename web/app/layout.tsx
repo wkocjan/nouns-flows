@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/global/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { getPool } from "@/lib/database/queries/pool"
+import { Analytics } from "@vercel/analytics/react"
 import Wagmi from "@/lib/wagmi/wagmi-provider"
 import Noggles from "@/public/noggles.svg"
 import type { Metadata } from "next"
@@ -61,6 +62,7 @@ export default async function RootLayout(props: Readonly<{ children: React.React
               </nav>
               {children}
               <Toaster />
+              <Analytics />
             </Wagmi>
           </TooltipProvider>
         </ThemeProvider>
