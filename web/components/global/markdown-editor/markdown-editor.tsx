@@ -37,7 +37,7 @@ export default function MarkdownEditor(props: Props) {
     defaultStyles: false,
     uploadFile: async (file) => {
       const isVideo = isVideoFile(file)
-      const maxFileSizeMB = isVideo ? 50 : 5
+      const maxFileSizeMB = isVideo ? 100 : 20
 
       if (file.size > maxFileSizeMB * 1024 * 1024) {
         toast.error(`Max file size is ${maxFileSizeMB}MB`)
