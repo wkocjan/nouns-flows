@@ -36,6 +36,8 @@ export async function generateTemplate(title: string, description: string) {
         Do not include any reminders about ongoing requirements inside the template itself.
         Prefer header sections instead of bullet points, so it's easier for the user to read and fill in.
         Do not paraphrase too much, just make it very similar to the How to Apply section of the flow description.
+        DO NOT include a title section or "Flow name" Application at the top of the template.
+        Prefer to wrap areas the application should fill in with [] square brackets so they can easily input what's required and overwrite it.
 
         The template should be in markdown format, and should be easy to understand and follow. It shouldn't be too long.
         Include mainly what's mentioned in "How to apply" section of the flow description. Keep it very short, and do not paraphrase the flow description. Only include what's absolutely necessary, it's just a structure for applicants to fill in. 
