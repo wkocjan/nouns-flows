@@ -56,7 +56,7 @@ export function ActiveCuratorGrantRow({
           <div className="text-xs text-muted-foreground">
             {grant.status === Status.RegistrationRequested ? "Approved" : "Removed"}{" "}
             <b>
-              <DateTime date={new Date(challengePeriodEndsAt * 1000)} relative />
+              <DateTime date={new Date(challengePeriodEndsAt * 1000)} relative short />
             </b>
           </div>
         )}

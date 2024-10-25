@@ -37,20 +37,20 @@ export default async function CurateAndEarnPage() {
   return (
     <>
       <div className="container">
-        <section className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between space-y-8 pt-16 sm:pb-16 lg:flex-row lg:space-x-4 lg:space-y-0">
+        <section className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between space-y-8 pt-8 sm:pb-16 md:pt-16 lg:flex-row lg:space-x-4 lg:space-y-0">
           <div className="max-w-lg">
-            <h2 className="text-base font-semibold leading-7 text-primary">Curate and Earn</h2>
+            <h2 className="text-base font-semibold text-primary lg:leading-7">Curate and Earn</h2>
             <p className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Become a Curator
             </p>
-            <p className="mt-6 text-base leading-8 text-muted-foreground lg:text-lg">
+            <p className="mt-4 text-base text-muted-foreground lg:mt-6 lg:text-lg lg:leading-8">
               Join our community of curators to manage the flows list and ensure the highest quality
               projects are funded.
             </p>
             <p className="mt-4 text-base text-muted-foreground lg:text-lg">
               As a Curator you have two jobs that you will be rewarded for:
             </p>
-            <dl className="mt-10 space-y-8 text-base leading-7 text-muted-foreground">
+            <dl className="mt-6 space-y-8 text-base text-muted-foreground lg:mt-10 lg:leading-7">
               {[
                 {
                   name: "Review Applications",
@@ -87,7 +87,7 @@ export default async function CurateAndEarnPage() {
         </section>
       </div>
 
-      <div className="bg-white/75 py-16 dark:bg-secondary/25">
+      <div className="bg-white/75 py-8 dark:bg-secondary/25 lg:py-16">
         <section className="container">
           <div className="mx-auto w-full max-w-6xl">
             <div className="mx-auto max-w-3xl">
@@ -107,8 +107,8 @@ export default async function CurateAndEarnPage() {
                 . It&apos;s fully up to the community to curate flow recipients.
               </p>
             </div>
-            <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:max-w-none">
-              <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
+            <div className="mx-auto mt-12 max-w-2xl sm:mt-20 lg:max-w-none">
+              <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-12 lg:max-w-none lg:grid-cols-3 lg:gap-y-16">
                 {[
                   {
                     name: "Open to Everyone",
@@ -162,7 +162,7 @@ export default async function CurateAndEarnPage() {
                   },
                 ].map((feature) => (
                   <div key={feature.name} className="flex flex-col">
-                    <dt className="text-base font-semibold leading-7 text-foreground">
+                    <dt className="text-base font-semibold text-foreground lg:leading-7">
                       <div className="mb-6 flex size-10 items-center justify-center rounded-lg bg-primary">
                         <feature.icon
                           aria-hidden="true"
@@ -171,7 +171,7 @@ export default async function CurateAndEarnPage() {
                       </div>
                       {feature.name}
                     </dt>
-                    <dd className="mt-1 flex flex-auto flex-col text-pretty text-base leading-7 text-muted-foreground">
+                    <dd className="mt-1 flex flex-auto flex-col text-pretty text-base text-muted-foreground lg:leading-7">
                       {feature.description}
                     </dd>
                   </div>
@@ -182,11 +182,13 @@ export default async function CurateAndEarnPage() {
         </section>
       </div>
 
-      <div className="bg-white py-16 dark:bg-secondary/50">
+      <div className="bg-white py-8 dark:bg-secondary/50 lg:py-16">
         <section className="container">
           <div className="mx-auto w-full max-w-5xl">
             <div className="mx-auto max-w-2xl lg:text-center">
-              <h2 className="text-base font-semibold leading-7 text-primary">Curation rewards</h2>
+              <h2 className="text-base font-semibold text-primary lg:leading-7">
+                Curation rewards
+              </h2>
               <p className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                 How can you earn?
               </p>
@@ -228,7 +230,7 @@ export default async function CurateAndEarnPage() {
                   },
                 ].map((feature) => (
                   <div key={feature.name} className="relative pl-16">
-                    <dt className="text-base font-semibold leading-7 text-foreground">
+                    <dt className="text-base font-semibold text-foreground lg:leading-7">
                       <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                         <feature.icon
                           aria-hidden="true"
@@ -237,7 +239,7 @@ export default async function CurateAndEarnPage() {
                       </div>
                       {feature.name}
                     </dt>
-                    <dd className="mt-2 text-base leading-7 text-muted-foreground">
+                    <dd className="mt-2 text-base text-muted-foreground lg:leading-7">
                       {feature.description}
                     </dd>
                   </div>
@@ -246,7 +248,7 @@ export default async function CurateAndEarnPage() {
             </div>
           </div>
 
-          <div className="mx-auto mt-24 w-full max-w-6xl rounded-xl bg-primary/10">
+          <div className="mx-auto mt-16 w-full max-w-6xl rounded-xl bg-primary/10 lg:mt-24">
             <div className="px-6 py-6 lg:flex lg:items-center lg:justify-between lg:px-12 lg:py-16">
               <div className="mb-8 lg:mb-0">
                 <h2 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">

@@ -28,7 +28,7 @@ export default async function ApplyPage() {
   const pool = await getPool()
 
   return (
-    <div className="container relative isolate mt-8 pb-12 pt-12">
+    <div className="container relative isolate mt-8 pb-12 pt-4 md:pt-12">
       <div
         aria-hidden="true"
         className="absolute inset-x-0 -z-10 transform-gpu overflow-hidden blur-3xl"
@@ -47,11 +47,11 @@ export default async function ApplyPage() {
           Apply for a grant
         </p>
       </div>
-      <p className="mx-auto mt-6 max-w-2xl text-pretty text-center text-base text-muted-foreground lg:text-lg">
+      <p className="mx-auto mt-4 max-w-2xl text-pretty text-center text-sm text-muted-foreground md:mt-6 lg:text-lg">
         Start your grant application by selecting the flow that best fits your project. Each flow
         has a specific focus and budget.
       </p>
-      <div className="mx-auto mt-16 max-w-screen-lg">
+      <div className="mx-auto mt-10 max-w-screen-lg md:mt-16">
         {flows.length === 0 && (
           <div className="flex items-center justify-center">
             <Alert variant="destructive">

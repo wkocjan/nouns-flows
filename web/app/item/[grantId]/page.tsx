@@ -1,3 +1,4 @@
+import { Comments } from "@/components/comments/comments"
 import { AnimatedSalary } from "@/components/global/animated-salary"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -23,7 +24,6 @@ import { CurationCard } from "./components/curation-card"
 import { Updates } from "./components/updates"
 import { UserVotes } from "./components/user-votes"
 import { Voters } from "./components/voters"
-import { Comments } from "@/components/comments/comments"
 
 interface Props {
   params: {
@@ -112,7 +112,7 @@ export default async function GrantPage({ params }: Props) {
             </div>
           </div>
 
-          <div className="mb-12 mt-6 space-y-4 text-pretty text-sm md:text-base">
+          <div className="mb-12 mt-6 space-y-5 text-pretty text-sm md:text-base">
             <Markdown>{description}</Markdown>
           </div>
 

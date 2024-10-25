@@ -2,6 +2,8 @@ import "server-only"
 
 import { DraftPublishButton } from "@/app/draft/[draftId]/draft-publish-button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { DateTime } from "@/components/ui/date-time"
+import { EmptyState } from "@/components/ui/empty-state"
 import {
   Table,
   TableBody,
@@ -13,9 +15,8 @@ import {
 import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database"
 import { getPinataUrl } from "@/lib/pinata/get-file-url"
-import { DateTime } from "@/components/ui/date-time"
-import { GrantTitleCell } from "../components/grant-title-cell"
 import { GrantLogoCell } from "../components/grant-logo-cell"
+import { GrantTitleCell } from "../components/grant-title-cell"
 
 interface Props {
   params: {
@@ -40,14 +41,18 @@ export default async function FlowDraftsPage(props: Props) {
 
   const { isTopLevel } = flow
 
+  if (drafts.length === 0) {
+    return <EmptyState title="No drafts found" description="Maybe go and create one?" />
+  }
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead colSpan={2}>Name</TableHead>
-          <TableHead>{isTopLevel ? "Proposer" : "Builders"}</TableHead>
-          <TableHead className="text-center">Type</TableHead>
-          <TableHead className="text-center">Created At</TableHead>
+          <TableHead className="max-sm:hidden">{isTopLevel ? "Proposer" : "Builders"}</TableHead>
+          <TableHead className="text-center max-sm:hidden">Type</TableHead>
+          <TableHead className="text-center">Created</TableHead>
           <TableHead className="text-right">Action</TableHead>
         </TableRow>
       </TableHeader>
@@ -56,40 +61,35 @@ export default async function FlowDraftsPage(props: Props) {
           <TableRow key={draft.id}>
             <GrantLogoCell image={getPinataUrl(draft.image)} title={draft.title} />
             <GrantTitleCell title={draft.title} href={`/draft/${draft.id}`} />
-            <TableCell>
+            <TableCell className="max-sm:hidden">
               <div className="flex space-x-0.5">
                 {draft.users.map((user) => (
                   <UserProfile address={user as `0x${string}`} key={user}>
                     {(profile) => (
-                      <Avatar className="size-7 bg-accent text-xs">
-                        <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
-                        <AvatarFallback>{profile.display_name[0].toUpperCase()}</AvatarFallback>
-                      </Avatar>
+                      <div className="flex items-center space-x-1.5">
+                        <Avatar className="size-7 bg-accent text-xs">
+                          <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
+                          <AvatarFallback>{profile.display_name[0].toUpperCase()}</AvatarFallback>
+                        </Avatar>
+                        <span className="tracking-tight max-sm:hidden">{profile.display_name}</span>
+                      </div>
                     )}
                   </UserProfile>
                 ))}
               </div>
             </TableCell>
 
-            <TableCell className="text-center">
+            <TableCell className="text-center max-sm:hidden">
               <p>{draft.isFlow ? "Flow" : "Grant"}</p>
             </TableCell>
 
-            <TableCell className="text-center">
-              <DateTime
-                date={draft.createdAt}
-                options={{
-                  month: "short",
-                  day: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                }}
-              />
+            <TableCell className="text-center max-sm:text-xs">
+              <DateTime date={draft.createdAt} relative short />
             </TableCell>
 
             <TableCell className="w-[100px] max-w-[100px]">
               <div className="flex justify-end">
-                <DraftPublishButton draft={draft} flow={flow} />
+                <DraftPublishButton draft={draft} flow={flow} size="sm" />
               </div>
             </TableCell>
           </TableRow>

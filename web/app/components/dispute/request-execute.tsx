@@ -14,10 +14,11 @@ interface Props {
   grant: Grant
   flow: Grant
   className?: string
+  size?: "default" | "sm"
 }
 
 export function RequestExecuteButton(props: Props) {
-  const { grant, flow, className } = props
+  const { grant, flow, className, size = "default" } = props
   const router = useRouter()
 
   const { writeContract, prepareWallet } = useContractTransaction({
@@ -33,6 +34,7 @@ export function RequestExecuteButton(props: Props) {
       type="button"
       disabled={!canRequestBeExecuted(grant)}
       className={className}
+      size={size}
       onClick={async () => {
         await prepareWallet()
 

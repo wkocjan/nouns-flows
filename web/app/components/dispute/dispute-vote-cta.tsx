@@ -12,10 +12,11 @@ interface Props {
   dispute: Dispute
   grant: Grant
   className?: string
+  size?: "default" | "sm"
 }
 
 export function DisputeVoteCta(props: Props) {
-  const { dispute, grant } = props
+  const { dispute, grant, size = "default" } = props
   const { address } = useAccount()
 
   const receipt = useVotingReceipt(dispute.arbitrator as Address, dispute.disputeId, address)
@@ -45,6 +46,8 @@ export function DisputeVoteCta(props: Props) {
     <Link href={`/application/${grant.id}`}>
       <Button
         variant={isGrantRejectedOrUnresolved || receipt?.hasCommitted ? "secondary" : "default"}
+        size={size}
+        type="button"
       >
         {text}
       </Button>

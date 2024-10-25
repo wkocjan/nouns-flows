@@ -34,7 +34,12 @@ export const CastCard = (props: Props) => {
           target="_blank"
           className="shrink-0 transition-opacity hover:opacity-80"
         >
-          <DateTime date={cast.createdAt} relative className="text-sm text-muted-foreground" />
+          <DateTime
+            date={cast.createdAt}
+            relative
+            short
+            className="text-sm text-muted-foreground"
+          />
         </a>
       </CardHeader>
       <CardContent>

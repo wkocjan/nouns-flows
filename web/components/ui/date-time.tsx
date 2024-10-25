@@ -1,17 +1,18 @@
 "use client"
 
-import { HTMLProps, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { HTMLProps, useEffect, useState } from "react"
 
 interface Props extends Omit<HTMLProps<HTMLTimeElement>, "dateTime"> {
   date: Date
   locale?: Intl.LocalesArgument
   options?: Intl.DateTimeFormatOptions
   relative?: boolean
+  short?: boolean
 }
 
 export function DateTime(props: Props) {
-  const { date, locale = "en-US", options, relative = false, ...rest } = props
+  const { date, locale = "en-US", options, relative = false, short = false, ...rest } = props
   const [currentDate, setCurrentDate] = useState(new Date())
   const router = useRouter()
 
@@ -39,14 +40,24 @@ export function DateTime(props: Props) {
 
   return (
     <time dateTime={date.toISOString()} title={date.toString()} suppressHydrationWarning {...rest}>
-      {relative ? getRelativeTime(date, currentDate, locale) : date.toLocaleString(locale, options)}
+      {relative
+        ? getRelativeTime(date, currentDate, locale, short)
+        : date.toLocaleString(locale, options)}
     </time>
   )
 }
 
-function getRelativeTime(date: Date, currentDate: Date, locale: Intl.LocalesArgument = "en-US") {
+function getRelativeTime(
+  date: Date,
+  currentDate: Date,
+  locale: Intl.LocalesArgument = "en-US",
+  short = false,
+) {
   const diff = date.getTime() - currentDate.getTime()
-  const formatter = new Intl.RelativeTimeFormat(locale, { numeric: "auto" })
+  const formatter = new Intl.RelativeTimeFormat(locale, {
+    numeric: "auto",
+    style: short ? "narrow" : "long",
+  })
 
   const absDiff = Math.abs(diff)
   const seconds = Math.floor(absDiff / 1000)

@@ -5,6 +5,7 @@ import { AnimatedSalary } from "@/components/global/animated-salary"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { DateTime } from "@/components/ui/date-time"
+import { EmptyState } from "@/components/ui/empty-state"
 import {
   Table,
   TableBody,
@@ -37,6 +38,7 @@ export default async function FlowPage(props: Props) {
     where: { id: flowId, isActive: 1 },
     include: {
       subgrants: {
+        where: { isActive: 1 },
         include: {
           updates: {
             select: { createdAt: true, fid: true },
@@ -48,7 +50,9 @@ export default async function FlowPage(props: Props) {
     },
   })
 
-  const activeSubgrants = flow.subgrants.filter((grant) => grant.isActive === 1)
+  if (flow.subgrants.length === 0) {
+    return <EmptyState title="No grants found" description="There are no approved grants yet" />
+  }
 
   return (
     <>
@@ -64,7 +68,7 @@ export default async function FlowPage(props: Props) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {activeSubgrants.sort(sortGrants).map((grant) => {
+          {flow.subgrants.sort(sortGrants).map((grant) => {
             const isRemovalRequested = grant.status === Status.ClearingRequested
             const hasUpdate = grant.updates.length > 0
             const lastUpdateTime = hasUpdate ? grant.updates[0]?.createdAt.getTime() / 1000 : 0
@@ -97,10 +101,17 @@ export default async function FlowPage(props: Props) {
                     <div className="relative inline-flex">
                       <UserProfile address={getEthAddress(grant.recipient)} key={grant.recipient}>
                         {(profile) => (
-                          <Avatar className="size-8 bg-accent text-xs">
-                            <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
-                            <AvatarFallback>{profile.display_name[0].toUpperCase()}</AvatarFallback>
-                          </Avatar>
+                          <div className="flex items-center space-x-1.5">
+                            <Avatar className="size-7 bg-accent text-xs">
+                              <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
+                              <AvatarFallback>
+                                {profile.display_name[0].toUpperCase()}
+                              </AvatarFallback>
+                            </Avatar>
+                            <span className="tracking-tight max-sm:hidden">
+                              {profile.display_name}
+                            </span>
+                          </div>
                         )}
                       </UserProfile>
                       <Tooltip>

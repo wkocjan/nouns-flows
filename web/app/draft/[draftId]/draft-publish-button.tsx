@@ -28,12 +28,13 @@ import { updateDraft } from "./update-draft"
 interface Props {
   draft: Draft
   flow: Grant
+  size?: "default" | "sm"
 }
 
 const chainId = base.id
 
 export function DraftPublishButton(props: Props) {
-  const { draft, flow } = props
+  const { draft, flow, size = "default" } = props
   const { address } = useAccount()
   const router = useRouter()
   const ref = useRef<HTMLButtonElement>(null)
@@ -76,6 +77,7 @@ export function DraftPublishButton(props: Props) {
             }
           }}
           ref={ref}
+          size={size}
         >
           {action}
         </Button>

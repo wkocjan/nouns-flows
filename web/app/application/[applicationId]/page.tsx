@@ -1,3 +1,4 @@
+import { DisputeUserVote } from "@/app/components/dispute/dispute-user-vote"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Breadcrumb,
@@ -13,12 +14,11 @@ import { Markdown } from "@/components/ui/markdown"
 import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database"
 import { getEthAddress, getIpfsUrl, isProduction } from "@/lib/utils"
+import { Metadata } from "next"
 import Image from "next/image"
 import { redirect } from "next/navigation"
 import { StatusDisputed } from "./components/status-disputed"
 import { StatusNotDisputed } from "./components/status-not-disputed"
-import { Metadata } from "next"
-import { DisputeUserVote } from "@/app/components/dispute/dispute-user-vote"
 
 interface Props {
   params: {
@@ -90,7 +90,7 @@ export default async function ApplicationPage({ params }: Props) {
               <h1 className="text-xl font-bold md:text-3xl">{title}</h1>
             </div>
           </div>
-          <div className="mt-6 space-y-4 text-pretty text-sm md:text-base">
+          <div className="mt-6 space-y-5 text-pretty text-sm md:text-base">
             <Markdown>{description}</Markdown>
           </div>
         </div>

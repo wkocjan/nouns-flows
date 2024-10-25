@@ -1,31 +1,36 @@
 "use server"
 
 import { NOUNS_SUBGRAPH_ID } from "@/lib/config"
-import { getEthAddress } from "@/lib/utils"
+import { getEthAddress, usesTestNounsToken } from "@/lib/utils"
 
 const SUBGRAPH_URL = `https://gateway.thegraph.com/api/${process.env.SUBGRAPH_API_KEY}/subgraphs/id/${NOUNS_SUBGRAPH_ID}`
 
 export async function fetchDelegatedTokens(address: string) {
-  // // For testing - wojciech.eth
-  if (address === "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52") {
-    return [
-      { id: 1, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
-      { id: 3, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
-      { id: 4, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
-      { id: 5, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
-      { id: 6, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
-      // { id: 7, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
-      { id: 8, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
-    ]
-  }
+  // Use TEST mainnet Nouns Token contract instead of real one
+  if (usesTestNounsToken()) {
+    //  wojciech.eth
+    if (address === "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52") {
+      return [
+        { id: 1, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
+        { id: 3, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
+        { id: 4, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
+        { id: 5, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
+        { id: 6, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
+        // { id: 7, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
+        { id: 8, owner: "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52" as const },
+      ]
+    }
 
-  // For testing - rocketman21.eth
-  // if (address === "0x289715ffbb2f4b482e2917d2f183feab564ec84f") {
-  //   return [
-  //     { id: 0, owner: "0x289715ffbb2f4b482e2917d2f183feab564ec84f" as const },
-  //     { id: 2, owner: "0x289715ffbb2f4b482e2917d2f183feab564ec84f" as const },
-  //   ]
-  // }
+    // rocketman21.eth
+    if (address === "0x289715ffbb2f4b482e2917d2f183feab564ec84f") {
+      return [
+        { id: 0, owner: "0x289715ffbb2f4b482e2917d2f183feab564ec84f" as const },
+        { id: 2, owner: "0x289715ffbb2f4b482e2917d2f183feab564ec84f" as const },
+      ]
+    }
+
+    return []
+  }
 
   const query = `
     query {

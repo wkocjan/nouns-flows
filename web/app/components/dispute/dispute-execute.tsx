@@ -18,10 +18,11 @@ interface Props {
   flow: Grant
   dispute: Dispute
   className?: string
+  size?: "default" | "sm"
 }
 
 export function DisputeExecuteButton(props: Props) {
-  const { dispute, flow, className } = props
+  const { dispute, flow, className, size = "default" } = props
   const router = useRouter()
 
   const { writeContract, prepareWallet } = useContractTransaction({
@@ -36,6 +37,7 @@ export function DisputeExecuteButton(props: Props) {
     <Button
       className={className}
       type="button"
+      size={size}
       disabled={!canDisputeBeExecuted(dispute)}
       onClick={async () => {
         await prepareWallet()

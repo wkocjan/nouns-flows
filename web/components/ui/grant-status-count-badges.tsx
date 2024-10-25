@@ -15,9 +15,9 @@ interface Props {
 export const GrantStatusCountBadges = (props: Props) => {
   const { subgrants, alwaysShowAll = false, isTopLevel = false, showLabel = false, id } = props
 
-  const approved = subgrants.filter((g) => isGrantApproved(g)).length
-  const challenged = subgrants.filter((g) => isGrantChallenged(g)).length
-  const awaiting = subgrants.filter((g) => isGrantAwaiting(g)).length
+  const approved = subgrants.filter(isGrantApproved).length
+  const challenged = subgrants.filter(isGrantChallenged).length
+  const awaiting = subgrants.filter(isGrantAwaiting).length
 
   const label = showLabel ? (isTopLevel ? "flows" : "grants") : ""
 
