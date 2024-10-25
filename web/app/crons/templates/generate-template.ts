@@ -31,6 +31,8 @@ export async function generateTemplate(title: string, description: string) {
         Do not ask user for their name, email or any other contact information.
 
         The editor applications use have option to upload images or videos. You may mention this in the template whenever it makes sense.
+
+        DO NOT include this in the template: "Note: An application fee is required and will be returned if you meet the application requirements."
         
         The template should be in markdown format, and should be easy to understand and follow. It shouldn't be too long.
         Include mainly what's mentioned in "How to apply" section of the flow description. Keep it very short, and do not paraphrase the flow description. Only include what's absolutely necessary, it's just a structure for applicants to fill in. 
