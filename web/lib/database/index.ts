@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client"
+import { withAccelerate } from "@prisma/extension-accelerate"
 
-const prismaClientSingleton = () => new PrismaClient()
+const prismaClientSingleton = () => new PrismaClient().$extends(withAccelerate())
 
 declare const globalThis: {
   prisma: ReturnType<typeof prismaClientSingleton>
