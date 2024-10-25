@@ -37,7 +37,7 @@ export const FlowsTable = (props: Props) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {flows.sort(sortGrants).map((flow) => {
+        {flows.map((flow) => {
           const approvedGrants = flow.subgrants.filter((g) => isGrantApproved(g)).length
 
           return (
@@ -101,18 +101,4 @@ export const FlowsTable = (props: Props) => {
       </TableBody>
     </Table>
   )
-}
-
-function sortGrants(a: Grant & { subgrants: Grant[] }, b: Grant & { subgrants: Grant[] }) {
-  const aIsClearingRequested = a.status === Status.ClearingRequested
-  const bIsClearingRequested = b.status === Status.ClearingRequested
-  if (aIsClearingRequested && !bIsClearingRequested) {
-    return -1
-  } else if (!aIsClearingRequested && bIsClearingRequested) {
-    return 1
-  } else {
-    const aApprovedCount = a.subgrants.filter(isGrantApproved).length
-    const bApprovedCount = b.subgrants.filter(isGrantApproved).length
-    return bApprovedCount - aApprovedCount
-  }
 }

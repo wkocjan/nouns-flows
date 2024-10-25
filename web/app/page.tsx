@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
 import database from "@/lib/database"
 import { getPool } from "@/lib/database/queries/pool"
-import { getEthAddress } from "@/lib/utils"
+import { getEthAddress, isGrantApproved } from "@/lib/utils"
 import { VotingProvider } from "@/lib/voting/voting-context"
 import Link from "next/link"
 import { Suspense } from "react"
@@ -11,6 +11,8 @@ import { FlowsTable } from "./components/flows-table"
 import { FlowsUpdates } from "./components/flows-updates"
 import { VotingBar } from "./flow/[flowId]/components/voting-bar"
 import { CTAButtons } from "./flow/[flowId]/components/cta-buttons"
+import { Grant } from "@prisma/client"
+import { Status } from "@/lib/enums"
 
 export default async function Home() {
   const pool = await getPool()
@@ -19,6 +21,9 @@ export default async function Home() {
     where: { isFlow: 1, isActive: 1, isTopLevel: 0 },
     include: { subgrants: true },
   })
+
+  // sort by monthlyIncomingFlowRate
+  activeFlows.sort(sortGrants)
 
   return (
     <VotingProvider chainId={base.id} contract={getEthAddress(pool.recipient)}>
@@ -57,4 +62,18 @@ export default async function Home() {
       <VotingBar />
     </VotingProvider>
   )
+}
+
+function sortGrants(a: Grant & { subgrants: Grant[] }, b: Grant & { subgrants: Grant[] }) {
+  const aIsClearingRequested = a.status === Status.ClearingRequested
+  const bIsClearingRequested = b.status === Status.ClearingRequested
+  if (aIsClearingRequested && !bIsClearingRequested) {
+    return -1
+  } else if (!aIsClearingRequested && bIsClearingRequested) {
+    return 1
+  } else {
+    const aApprovedCount = a.subgrants.filter(isGrantApproved).length
+    const bApprovedCount = b.subgrants.filter(isGrantApproved).length
+    return bApprovedCount - aApprovedCount
+  }
 }
