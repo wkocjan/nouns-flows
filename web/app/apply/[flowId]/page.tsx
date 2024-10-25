@@ -91,7 +91,7 @@ Introduce the key members of your team and their relevant experience.
 Include any other details that support your application.`
 
 const defaultFlowTemplate = `
-One line description of the flow.
+Short description of the flow idea and what is expected of builders.
 
 ### Payment Structure
 - 
