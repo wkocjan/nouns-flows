@@ -2,6 +2,8 @@ import { Grant } from "@prisma/client"
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { base, baseSepolia, mainnet } from "viem/chains"
+import { nounsTokenAddress } from "./abis"
+import { NOUNS_TOKEN } from "./config"
 import { Status } from "./enums"
 import { getPinataUrl } from "./pinata/get-file-url"
 import { SupportedChainId } from "./wagmi/config"
@@ -81,4 +83,8 @@ export function isGrantChallenged(grant: Grant) {
 
 export function isGrantAwaiting(grant: Grant) {
   return grant.status === Status.RegistrationRequested
+}
+
+export function usesTestNounsToken() {
+  return NOUNS_TOKEN.toLowerCase() !== nounsTokenAddress[1].toLowerCase()
 }
