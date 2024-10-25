@@ -74,6 +74,9 @@ function sortGrants(a: Grant & { subgrants: Grant[] }, b: Grant & { subgrants: G
   } else {
     const aApprovedCount = a.subgrants.filter(isGrantApproved).length
     const bApprovedCount = b.subgrants.filter(isGrantApproved).length
-    return bApprovedCount - aApprovedCount
+    if (aApprovedCount !== bApprovedCount) {
+      return bApprovedCount - aApprovedCount
+    }
+    return Number(b.monthlyIncomingFlowRate) - Number(a.monthlyIncomingFlowRate)
   }
 }
