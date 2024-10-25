@@ -14,6 +14,9 @@ import { CTAButtons } from "./flow/[flowId]/components/cta-buttons"
 import { Grant } from "@prisma/client"
 import { Status } from "@/lib/enums"
 
+export const revalidate = 0
+export const dynamic = "force-dynamic"
+
 export default async function Home() {
   const pool = await getPool()
 
