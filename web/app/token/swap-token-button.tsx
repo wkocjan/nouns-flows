@@ -31,7 +31,10 @@ export function SwapTokenButton(props: Props) {
     text = "Swap",
     variant = "default",
     extraInfo,
-    onSuccess = () => {},
+    onSuccess = () => {
+      // close dialog
+      ref.current?.click()
+    },
   } = props
   const ref = useRef<HTMLButtonElement>(null)
 
