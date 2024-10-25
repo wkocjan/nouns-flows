@@ -45,7 +45,7 @@ export function SwapTokenButton(props: Props) {
       <DialogContent className="sm:max-w-screen-xs">
         <DialogHeader>
           <DialogTitle className="text-center text-lg font-medium">
-            Buy and sell TCR tokens
+            Buy and sell {flow.title} tokens
           </DialogTitle>
         </DialogHeader>
         <ul className="my-4 space-y-6 text-sm">

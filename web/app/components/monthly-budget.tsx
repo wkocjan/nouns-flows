@@ -31,6 +31,12 @@ export const MonthlyBudget = ({ flow, approvedGrants, display }: Props) => {
   const isNotStreamingEnough =
     isFlow && Number(flow.monthlyIncomingFlowRate) * 0.99 > Number(flow.monthlyOutgoingFlowRate)
 
+  const absDifference = Math.abs(
+    Number(flow.monthlyOutgoingFlowRate) - Number(flow.monthlyIncomingFlowRate),
+  )
+  const isGoingNegativeSignificant =
+    isGoingNegative && Number(absDifference / Number(flow.monthlyOutgoingFlowRate)) > 0.001
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -46,14 +52,22 @@ export const MonthlyBudget = ({ flow, approvedGrants, display }: Props) => {
               Warning: More outgoing funds than incoming.{" "}
               <Currency>{Number(flow.monthlyOutgoingFlowRate)}</Currency> vs{" "}
               <Currency>{Number(flow.monthlyIncomingFlowRate)}</Currency>.
-              <br /> This will be automatically fixed within 1 minute.
+              {isGoingNegativeSignificant && (
+                <>
+                  <br /> This will be automatically fixed within 1 minute.
+                </>
+              )}
             </>
           ) : isNotStreamingEnough ? (
             <>
               Warning: Not streaming enough funds.{" "}
               <Currency>{Number(flow.monthlyIncomingFlowRate)}</Currency> vs{" "}
               <Currency>{Number(flow.monthlyOutgoingFlowRate)}</Currency>.
-              <br /> This will be automatically fixed within 1 minute.
+              {isGoingNegativeSignificant && (
+                <>
+                  <br /> This will be automatically fixed within 1 minute.
+                </>
+              )}
             </>
           ) : approvedGrants ? (
             <>
