@@ -44,7 +44,7 @@ export const MonthlyBudget = ({ flow, approvedGrants, display, multiplyBy }: Pro
     <Tooltip>
       <TooltipTrigger asChild>
         <Badge variant={isGoingNegative ? "warning" : "default"}>
-          <Currency>{display}</Currency>
+          <Currency>{Number(display) * (multiplyBy || 1)}</Currency>
           /mo
         </Badge>
       </TooltipTrigger>
