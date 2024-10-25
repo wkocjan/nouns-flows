@@ -19,7 +19,7 @@ export async function GET() {
     console.debug("Analyzing casts after", lastAnalyzedDate)
 
     const grants = await database.grant.findMany({
-      where: { isActive: 1, isFlow: 0, isTopLevel: 0 },
+      where: { isFlow: 0, isTopLevel: 0 },
       include: { flow: true },
     })
 
