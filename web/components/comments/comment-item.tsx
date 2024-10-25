@@ -29,7 +29,7 @@ export function CommentItem(props: Props) {
           )}
         </UserProfile>
         <p className="text-xs text-muted-foreground">
-          <DateTime date={new Date(comment.createdAt)} relative />
+          <DateTime date={new Date(comment.createdAt)} relative short />
         </p>
       </div>
       <div className="mt-1.5 pl-9 pr-px">

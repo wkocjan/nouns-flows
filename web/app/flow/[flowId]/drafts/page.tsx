@@ -84,7 +84,7 @@ export default async function FlowDraftsPage(props: Props) {
             </TableCell>
 
             <TableCell className="text-center max-sm:text-xs">
-              <DateTime date={draft.createdAt} relative />
+              <DateTime date={draft.createdAt} relative short />
             </TableCell>
 
             <TableCell className="w-[100px] max-w-[100px]">
