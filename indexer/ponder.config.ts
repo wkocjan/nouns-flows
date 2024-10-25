@@ -20,7 +20,7 @@ const currentBlock = Number(
   }).getBlockNumber()
 )
 
-const START_BLOCK = 21506823
+const START_BLOCK = 21519031
 const SECONDS_PER_BLOCK = 2
 
 export default createConfig({
