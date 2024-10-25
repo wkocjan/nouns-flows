@@ -88,7 +88,7 @@ export default async function ApplyPage() {
                         {flow.tagline}
                       </p>
                       <Badge className="mt-2">
-                        <Currency>{flow.monthlyIncomingFlowRate}</Currency>
+                        <Currency>{Number(flow.monthlyIncomingFlowRate) * 10}</Currency>
                         /mo
                       </Badge>
                     </div>
