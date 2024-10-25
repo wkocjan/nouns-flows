@@ -1,23 +1,25 @@
 "use client"
 
+import { SwapTokenButton } from "@/app/token/swap-token-button"
 import { Button } from "@/components/ui/button"
-import { cn, getEthAddress } from "@/lib/utils"
+import { useERC20Balances } from "@/lib/tcr/use-erc20-balances"
+import { cn, getEthAddress, isGrantApproved, isGrantAwaiting } from "@/lib/utils"
+import { Grant } from "@prisma/client"
 import Link from "next/link"
 import { useSelectedLayoutSegment } from "next/navigation"
-import { VotingToggle } from "./voting-toggle"
-import { SwapTokenButton } from "@/app/token/swap-token-button"
-import { Grant } from "@prisma/client"
 import { useAccount } from "wagmi"
-import { useERC20Balances } from "@/lib/tcr/use-erc20-balances"
+import { VotingToggle } from "./voting-toggle"
 
 interface Props {
   flowId: string
   flow: Grant
+  grants: Grant[]
   isTopLevel: boolean
+  draftsCount: number
 }
 
 export const FlowSubmenu = (props: Props) => {
-  const { flowId, isTopLevel, flow } = props
+  const { flowId, isTopLevel, flow, grants, draftsCount } = props
 
   const segment = useSelectedLayoutSegment()
   const { address } = useAccount()
@@ -26,6 +28,9 @@ export const FlowSubmenu = (props: Props) => {
   const isApproved = segment === null
   const isApplications = segment === "applications"
   const isDrafts = segment === "drafts"
+
+  const approvedCount = grants.filter(isGrantApproved).length
+  const awaitingCount = grants.filter(isGrantAwaiting).length
 
   return (
     <div className="mb-4 mt-10 flex items-center justify-between">
@@ -43,19 +48,24 @@ export const FlowSubmenu = (props: Props) => {
           </span>
         </Link>
         <Link
-          className="group flex items-center space-x-2 text-lg font-medium md:text-xl"
+          className="group flex items-start space-x-1 text-lg font-medium md:text-xl"
           href={`/flow/${flowId}/applications`}
         >
           <span
-            className={cn({
+            className={cn("flex items-start", {
               "opacity-50 duration-100 ease-in-out group-hover:opacity-100": !isApplications,
             })}
           >
             Applications
           </span>
+          {awaitingCount > 0 && (
+            <span className="ml-1 inline-flex size-[18px] items-center justify-center rounded-full bg-secondary text-xs font-medium text-secondary-foreground">
+              {awaitingCount}
+            </span>
+          )}
         </Link>
         <Link
-          className="group flex items-center space-x-2 text-lg font-medium md:text-xl"
+          className="group flex items-start space-x-1 text-lg font-medium md:text-xl"
           href={`/flow/${flowId}/drafts`}
         >
           <span
@@ -65,6 +75,11 @@ export const FlowSubmenu = (props: Props) => {
           >
             Drafts
           </span>
+          {draftsCount > 0 && (
+            <span className="ml-1 inline-flex size-[18px] items-center justify-center rounded-full bg-secondary text-xs font-medium text-secondary-foreground">
+              {draftsCount}
+            </span>
+          )}
         </Link>
       </div>
 
@@ -77,8 +92,8 @@ export const FlowSubmenu = (props: Props) => {
             variant="secondary"
             defaultTokenAmount={BigInt(1e18)}
           />
-          {isApproved && <VotingToggle />}
-          {(isDrafts || isApplications) && (
+          {isApproved && approvedCount > 0 && <VotingToggle />}
+          {(isDrafts || isApplications || (isApproved && approvedCount === 0)) && (
             <Link href={`/apply/${flowId}`}>
               <Button>{isTopLevel ? "Suggest flow" : "Apply for a grant"}</Button>
             </Link>

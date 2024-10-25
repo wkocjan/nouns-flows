@@ -2,6 +2,8 @@ import "server-only"
 
 import { DraftPublishButton } from "@/app/draft/[draftId]/draft-publish-button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { DateTime } from "@/components/ui/date-time"
+import { EmptyState } from "@/components/ui/empty-state"
 import {
   Table,
   TableBody,
@@ -13,9 +15,8 @@ import {
 import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database"
 import { getPinataUrl } from "@/lib/pinata/get-file-url"
-import { DateTime } from "@/components/ui/date-time"
-import { GrantTitleCell } from "../components/grant-title-cell"
 import { GrantLogoCell } from "../components/grant-logo-cell"
+import { GrantTitleCell } from "../components/grant-title-cell"
 
 interface Props {
   params: {
@@ -39,6 +40,10 @@ export default async function FlowDraftsPage(props: Props) {
   })
 
   const { isTopLevel } = flow
+
+  if (drafts.length === 0) {
+    return <EmptyState title="No drafts found" description="Maybe go and create one?" />
+  }
 
   return (
     <Table>

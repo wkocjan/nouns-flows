@@ -8,6 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import database from "@/lib/database"
 import { getFlowWithGrants } from "@/lib/database/queries/flow"
 import { getPool } from "@/lib/database/queries/pool"
 import { getEthAddress } from "@/lib/utils"
@@ -39,6 +40,10 @@ export default async function FlowLayout(props: PropsWithChildren<Props>) {
 
   const flow = await getFlowWithGrants(flowId)
 
+  const draftsCount = await database.draft.count({
+    where: { flowId, isPrivate: false, isOnchain: false },
+  })
+
   return (
     <VotingProvider chainId={base.id} contract={getEthAddress(flow.recipient)}>
       <div className="container mt-2.5 pb-24 md:mt-6">
@@ -58,7 +63,13 @@ export default async function FlowLayout(props: PropsWithChildren<Props>) {
 
         <FlowHeader flow={flow} />
 
-        <FlowSubmenu flowId={flowId} flow={flow} isTopLevel={flow.isTopLevel === 1} />
+        <FlowSubmenu
+          flowId={flowId}
+          flow={flow}
+          isTopLevel={flow.isTopLevel === 1}
+          grants={flow.subgrants}
+          draftsCount={draftsCount}
+        />
 
         {children}
       </div>

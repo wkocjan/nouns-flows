@@ -1,3 +1,4 @@
+import { Comments } from "@/components/comments/comments"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Breadcrumb,
@@ -8,14 +9,17 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { DateTime } from "@/components/ui/date-time"
 import { Markdown } from "@/components/ui/markdown"
 import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database"
+import { getTcrCosts } from "@/lib/tcr/get-tcr-costs"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
-import Image from "next/image"
-import { DraftPublishButton } from "./draft-publish-button"
-import { DateTime } from "@/components/ui/date-time"
 import { Metadata } from "next"
+import Image from "next/image"
+import { Suspense } from "react"
+import { CreatorCard } from "./creator-card"
+import { DraftPublishButton } from "./draft-publish-button"
 
 interface Props {
   params: {
@@ -42,6 +46,8 @@ export default async function DraftPage({ params }: Props) {
   })
 
   const { title, description, flow, image, isOnchain, createdAt, users, isFlow } = draft
+
+  const costs = getTcrCosts(flow)
 
   return (
     <div className="container mt-2.5 pb-24 md:mt-6">
@@ -81,7 +87,7 @@ export default async function DraftPage({ params }: Props) {
               <h1 className="text-xl font-bold md:text-3xl">{title}</h1>
             </div>
           </div>
-          <div className="mt-6 space-y-4 text-pretty text-sm md:text-base">
+          <div className="mt-6 space-y-5 text-pretty text-sm md:text-base">
             <Markdown>{description}</Markdown>
           </div>
         </div>
@@ -132,6 +138,23 @@ export default async function DraftPage({ params }: Props) {
                   {!isOnchain && <DraftPublishButton draft={draft} flow={flow} />}
                 </div>
               </div>
+            </CardContent>
+          </Card>
+
+          <Suspense>
+            <CreatorCard
+              draft={draft}
+              cost={(await costs).addItemCost}
+              symbol={(await costs).symbol}
+            />
+          </Suspense>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Comments</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Comments commentableId={`draft-${flow.id}-${draft.id}`} maxHeight={450} />
             </CardContent>
           </Card>
         </div>

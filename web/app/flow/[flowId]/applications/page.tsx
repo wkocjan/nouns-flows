@@ -16,6 +16,7 @@ import { RequestExecuteButton } from "@/app/components/dispute/request-execute"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { DateTime } from "@/components/ui/date-time"
+import { EmptyState } from "@/components/ui/empty-state"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import {
   Table,
@@ -53,6 +54,15 @@ export default async function FlowApplicationsPage(props: Props) {
   ])
 
   const { isTopLevel } = flow
+
+  if (grants.length === 0) {
+    return (
+      <EmptyState
+        title="No applications found"
+        description="There are no awaiting grant applications"
+      />
+    )
+  }
 
   return (
     <Table>

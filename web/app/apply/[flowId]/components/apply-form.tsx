@@ -59,10 +59,8 @@ export function ApplyForm(props: Props) {
     if (result.error) {
       toast.error(result.error)
     } else {
-      // wait 1 second
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      router.push(`/flow/${flow.id}/drafts`)
-      toast.success("Draft saved! Redirecting...")
+      router.push(`/draft/${result.id}`)
+      toast.success("Draft saved!")
     }
   }
 

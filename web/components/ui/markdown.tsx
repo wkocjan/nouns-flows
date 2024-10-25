@@ -15,7 +15,11 @@ export const Markdown = (props: Props) => {
       options={{
         overrides: {
           a: {
-            props: { target: "_blank", className: "underline break-all" },
+            props: {
+              target: "_blank",
+              className:
+                "underline break-all hover:text-primary transition-colors underline-offset-4",
+            },
             component: (props) => {
               const { href = "" } = props
               if (href.startsWith("https://stream.mux.com/") && href.endsWith(".m3u8")) {
@@ -25,10 +29,11 @@ export const Markdown = (props: Props) => {
             },
           },
           ul: { props: { className: "list-disc list-inside" } },
-          li: { props: { className: "[&>*]:inline-block" } },
-          h1: { props: { className: "text-[1.35em] font-semibold" } },
-          h2: { props: { className: "text-[1.15em] font-semibold" } },
-          h3: { props: { className: "font-semibold" } },
+          li: { props: { className: "[&>*]:inline-block leading-relaxed" } },
+          h1: { props: { className: "text-[1.25em] font-medium tracking-tight" } },
+          h2: { props: { className: "text-[1.15em] font-medium tracking-tight" } },
+          h3: { props: { className: "font-medium tracking-tight" } },
+          p: { props: { className: "leading-relaxed" } },
         },
         wrapper: Fragment,
         ...options,

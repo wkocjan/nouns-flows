@@ -42,10 +42,10 @@ export async function saveDraft(formData: FormData, user?: `0x${string}`) {
 
     const { requirements, ...rest } = validation.data
 
-    await database.draft.create({
+    const draft = await database.draft.create({
       data: { ...rest, isPrivate: false, isOnchain: false },
     })
-    return { error: false }
+    return { error: false, id: draft.id }
   } catch (error) {
     return { error: (error as Error).message || "Failed to save draft" }
   }
