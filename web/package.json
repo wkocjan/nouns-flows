@@ -7,9 +7,9 @@
     "build": "pnpm db:generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "prebuild": "prisma generate",
+    "prebuild": "prisma generate --no-engine",
     "db:push": "prisma db push",
-    "db:generate": "prisma generate",
+    "db:generate": "prisma generate --no-engine",
     "typecheck": "tsc"
   },
   "dependencies": {
@@ -24,7 +24,8 @@
     "@mux/mux-node": "^8.8.0",
     "@neynar/nodejs-sdk": "^1.57.0",
     "@number-flow/react": "^0.2.0",
-    "@prisma/client": "^5.20.0",
+    "@prisma/client": "^5.21.1",
+    "@prisma/extension-accelerate": "^1.2.1",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-checkbox": "^1.1.2",
     "@radix-ui/react-collapsible": "^1.1.1",
