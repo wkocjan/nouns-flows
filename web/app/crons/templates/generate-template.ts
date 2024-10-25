@@ -23,7 +23,7 @@ export async function generateTemplate(title: string, description: string) {
         we need to provide a template for the description. Users then can just fill in the template with their information.
 
         You will be given a title and description of a flow.
-        Your job is to generate a template for the description.
+        Your job is to generate a template for someone applying, in line with the description of the flow they're applying to.
         As a part of application user needs to mark checkbox that they agree with the terms and conditions - so please do not include this part in the template.
         The template should not ask user to describe how they plan to stick to the requirements.
         The main goal of the description field in application process is to learn about the project, not to ensure that recipient knows all the requirements.
@@ -33,25 +33,8 @@ export async function generateTemplate(title: string, description: string) {
         The editor applications use have option to upload images or videos. You may mention this in the template whenever it makes sense.
         
         The template should be in markdown format, and should be easy to understand and follow. It shouldn't be too long.
-        Include mainly what's mentioned in "How to apply" section of the flow description.
-
-        Here is example we used in the past:
-
-        --- START OF EXAMPLE TEMPLATE ---
-        ### Overview
-        Briefly describe the problem your project aims to solve.
-
-        ### Impact
-        - Describe the impact of your project.
-        - Be specific
-        - What does the world look like if your project is successful?
-
-        ### Team
-        Introduce the key members of your team and their relevant experience.
-
-        ### Additional Information
-        Include any other details that support your application.
-        --- END OF EXAMPLE TEMPLATE ---        
+        Include mainly what's mentioned in "How to apply" section of the flow description. Keep it very short, and do not paraphrase the flow description. Only include what's absolutely necessary, it's just a structure for applicants to fill in. 
+        Ideally the template should not be much longer than the How to Apply section of the flow description.
         `,
       },
 
