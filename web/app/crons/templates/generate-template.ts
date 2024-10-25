@@ -34,7 +34,7 @@ export async function generateTemplate(title: string, description: string) {
         
         The template should be in markdown format, and should be easy to understand and follow. It shouldn't be too long.
         Include mainly what's mentioned in "How to apply" section of the flow description. Keep it very short, and do not paraphrase the flow description. Only include what's absolutely necessary, it's just a structure for applicants to fill in. 
-        Ideally the template should not be much longer than the How to Apply section of the flow description. Above all else, make it very similar to the How to Apply section of the flow description, make the language incredibly simple, and do not include many words. 
+        Ideally the template should not be much longer than the How to Apply section of the flow description. Above all else, make it very similar to the How to Apply section of the flow description, make the language incredibly simple, and do not include many words. Ensure you emphasize the important of uploading images or videos if the flow description requires it. Make it very clear.
         `,
       },
 
