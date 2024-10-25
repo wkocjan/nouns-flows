@@ -20,22 +20,25 @@ interface Props {
   >
   approvedGrants?: number
   display: string
+  multiplyBy?: number
 }
 
-export const MonthlyBudget = ({ flow, approvedGrants, display }: Props) => {
+export const MonthlyBudget = ({ flow, approvedGrants, display, multiplyBy }: Props) => {
+  const monthlyOutgoingFlowRate = multiplyBy
+    ? Number(flow.monthlyOutgoingFlowRate) * multiplyBy
+    : Number(flow.monthlyOutgoingFlowRate)
+  const monthlyIncomingFlowRate = multiplyBy
+    ? Number(flow.monthlyIncomingFlowRate) * multiplyBy
+    : Number(flow.monthlyIncomingFlowRate)
   const isFlow = flow.isFlow
 
-  const isGoingNegative =
-    Number(flow.monthlyOutgoingFlowRate) > Number(flow.monthlyIncomingFlowRate)
+  const isGoingNegative = monthlyOutgoingFlowRate > monthlyIncomingFlowRate
 
-  const isNotStreamingEnough =
-    isFlow && Number(flow.monthlyIncomingFlowRate) * 0.99 > Number(flow.monthlyOutgoingFlowRate)
+  const isNotStreamingEnough = isFlow && monthlyIncomingFlowRate * 0.99 > monthlyOutgoingFlowRate
 
-  const absDifference = Math.abs(
-    Number(flow.monthlyOutgoingFlowRate) - Number(flow.monthlyIncomingFlowRate),
-  )
+  const absDifference = Math.abs(monthlyOutgoingFlowRate - monthlyIncomingFlowRate)
   const isGoingNegativeSignificant =
-    isGoingNegative && Number(absDifference / Number(flow.monthlyOutgoingFlowRate)) > 0.001
+    isGoingNegative && absDifference / monthlyOutgoingFlowRate > 0.001
 
   return (
     <Tooltip>
@@ -50,8 +53,8 @@ export const MonthlyBudget = ({ flow, approvedGrants, display }: Props) => {
           {isGoingNegative ? (
             <>
               Warning: More outgoing funds than incoming.{" "}
-              <Currency>{Number(flow.monthlyOutgoingFlowRate)}</Currency> vs{" "}
-              <Currency>{Number(flow.monthlyIncomingFlowRate)}</Currency>.
+              <Currency>{monthlyOutgoingFlowRate}</Currency> vs{" "}
+              <Currency>{monthlyIncomingFlowRate}</Currency>.
               {isGoingNegativeSignificant && (
                 <>
                   <br /> This will be automatically fixed within 1 minute.
@@ -60,9 +63,8 @@ export const MonthlyBudget = ({ flow, approvedGrants, display }: Props) => {
             </>
           ) : isNotStreamingEnough ? (
             <>
-              Warning: Not streaming enough funds.{" "}
-              <Currency>{Number(flow.monthlyIncomingFlowRate)}</Currency> vs{" "}
-              <Currency>{Number(flow.monthlyOutgoingFlowRate)}</Currency>.
+              Warning: Not streaming enough funds. <Currency>{monthlyIncomingFlowRate}</Currency> vs{" "}
+              <Currency>{monthlyOutgoingFlowRate}</Currency>.
               {isGoingNegativeSignificant && (
                 <>
                   <br /> This will be automatically fixed within 1 minute.
@@ -71,12 +73,12 @@ export const MonthlyBudget = ({ flow, approvedGrants, display }: Props) => {
             </>
           ) : approvedGrants ? (
             <>
-              Streaming <Currency>{Number(flow.monthlyOutgoingFlowRate)}</Currency>/mo to{" "}
-              {approvedGrants} {pluralize("builder", approvedGrants)}.
+              Streaming <Currency>{monthlyOutgoingFlowRate}</Currency>/mo to {approvedGrants}{" "}
+              {pluralize("builder", approvedGrants)}.
             </>
           ) : isFlow ? (
             <>
-              Streaming <Currency>{Number(flow.monthlyOutgoingFlowRate)}</Currency>/mo to builders.
+              Streaming <Currency>{monthlyOutgoingFlowRate}</Currency>/mo to builders.
             </>
           ) : (
             <>
