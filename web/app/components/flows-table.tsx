@@ -43,25 +43,25 @@ export const FlowsTable = (props: Props) => {
 
           return (
             <TableRow key={flow.title}>
-              <TableCell className="min-w-[64px] md:w-[92px]">
+              <TableCell className="min-w-[72px] md:w-[96px]">
                 <Image
                   src={getIpfsUrl(flow.image)}
                   alt={flow.title}
-                  width={64}
-                  height={64}
-                  className="aspect-square size-12 rounded-md object-cover md:size-16"
+                  width={72}
+                  height={72}
+                  className="aspect-square size-[48px] rounded-md object-cover md:size-[72px]"
                 />
               </TableCell>
               <TableCell>
                 <Link
                   href={`/flow/${flow.id}`}
-                  className="font-medium duration-100 ease-out hover:text-primary md:text-lg"
+                  className="font-medium duration-100 ease-out hover:text-primary md:text-lg lg:text-xl"
                   tabIndex={-1}
                 >
                   {flow.title}
                 </Link>
 
-                <p className="text-xs tracking-tight text-muted-foreground max-sm:hidden md:text-sm">
+                <p className="mt-0.5 text-xs tracking-tight text-muted-foreground max-sm:hidden md:text-sm">
                   {flow.tagline}
                 </p>
 

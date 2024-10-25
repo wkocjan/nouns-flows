@@ -55,7 +55,7 @@ export const FlowHeader = (props: Props) => {
             "grid-cols-2 md:grid-cols-4": !isTopLevel,
           })}
         >
-          <div className="md:text-center">
+          <div className="max-sm:flex max-sm:flex-col max-sm:items-start md:text-center">
             <p className="mb-1.5 text-muted-foreground">{isTopLevel ? "Flows" : "Grants"}</p>
             <GrantStatusCountBadges id={flow.id} subgrants={flow.subgrants} alwaysShowAll />
           </div>

@@ -1,8 +1,9 @@
 import "server-only"
 
+import { MonthlyBudget } from "@/app/components/monthly-budget"
+import { AnimatedSalary } from "@/components/global/animated-salary"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Currency } from "@/components/ui/currency"
 import { DateTime } from "@/components/ui/date-time"
 import {
   Table,
@@ -16,14 +17,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database"
 import { Status } from "@/lib/enums"
-import { cn, getEthAddress, getIpfsUrl, isGrantApproved } from "@/lib/utils"
+import { cn, getEthAddress, getIpfsUrl } from "@/lib/utils"
+import { Grant } from "@prisma/client"
 import Link from "next/link"
 import { GrantLogoCell } from "./components/grant-logo-cell"
 import { VotingBar } from "./components/voting-bar"
 import { VotingInput } from "./components/voting-input"
-import { AnimatedSalary } from "@/components/global/animated-salary"
-import { Grant } from "@prisma/client"
-import { MonthlyBudget } from "@/app/components/monthly-budget"
 
 interface Props {
   params: {

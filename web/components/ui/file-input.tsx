@@ -51,7 +51,7 @@ export function FileInput({ name, accept, onSuccess, maxFileSizeMB = 5 }: Props)
             alt=" "
             width={32}
             height={32}
-            className="mr-0.5 aspect-square h-full rounded-lg object-cover"
+            className="aspect-square size-[32px] h-full rounded-lg object-cover"
           />
         )}
         {isUploading && <UpdateIcon className="mr-3 size-4 animate-spin text-muted-foreground" />}

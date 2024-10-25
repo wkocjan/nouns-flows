@@ -99,7 +99,11 @@ export function SwapTokenButton(props: Props) {
               </a>
               . View a visualization{" "}
               <a
-                href="https://www.desmos.com/calculator/tnhqeskyi3"
+                href={
+                  flow.isTopLevel
+                    ? "https://www.desmos.com/calculator/qd8zchfxvu"
+                    : "https://www.desmos.com/calculator/hizmijfgno"
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary underline transition-colors hover:text-primary/80"

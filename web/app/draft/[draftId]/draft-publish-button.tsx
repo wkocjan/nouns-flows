@@ -1,5 +1,6 @@
 "use client"
 
+import { SwapTokenButton } from "@/app/token/swap-token-button"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -15,6 +16,7 @@ import { useTcrToken } from "@/lib/tcr/use-tcr-token"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { Draft, Grant } from "@prisma/client"
+import { useModal } from "connectkit"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
@@ -22,7 +24,6 @@ import { encodeAbiParameters, formatEther, zeroAddress } from "viem"
 import { base } from "viem/chains"
 import { useAccount } from "wagmi"
 import { updateDraft } from "./update-draft"
-import { SwapTokenButton } from "@/app/token/swap-token-button"
 
 interface Props {
   draft: Draft
@@ -36,6 +37,7 @@ export function DraftPublishButton(props: Props) {
   const { address } = useAccount()
   const router = useRouter()
   const ref = useRef<HTMLButtonElement>(null)
+  const { setOpen } = useModal()
 
   const { addItemCost, challengePeriodFormatted } = useTcrData(getEthAddress(flow.tcr), chainId)
   const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr), chainId)
@@ -65,7 +67,16 @@ export function DraftPublishButton(props: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button type="button" ref={ref}>
+        <Button
+          type="button"
+          onClick={(e) => {
+            if (!address) {
+              e.preventDefault()
+              setOpen(true)
+            }
+          }}
+          ref={ref}
+        >
           {action}
         </Button>
       </DialogTrigger>
@@ -105,7 +116,7 @@ export function DraftPublishButton(props: Props) {
                 be returned.
               </p>
               <p className="mt-2.5 text-sm text-muted-foreground">
-                Your ${token.symbol} balance: {formatEther(token.balance)} (
+                Your {token.symbol} balance: {formatEther(token.balance)} (
                 {formatEther(token.allowance)} approved)
               </p>
             </div>
