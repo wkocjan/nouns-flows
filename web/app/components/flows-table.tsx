@@ -92,7 +92,9 @@ export const FlowsTable = (props: Props) => {
               </TableCell>
               <TableCell className="text-center">{flow.votesCount}</TableCell>
               <TableCell className="w-[100px] max-w-[100px] text-center">
-                <VotingInput recipientId={flow.id} />
+                <div className="px-0.5">
+                  <VotingInput recipientId={flow.id} />
+                </div>
               </TableCell>
             </TableRow>
           )
