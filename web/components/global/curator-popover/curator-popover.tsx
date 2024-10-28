@@ -86,7 +86,7 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
             {tokens.length || "no"} {`flow${tokens.length !== 1 ? "s" : ""}`}.
           </p>
 
-          <SwapTokenButton size="xs" flow={flow} />
+          {tokens.length > 0 && <SwapTokenButton size="xs" flow={flow} />}
         </div>
         {tokens.length > 0 ? (
           <>
@@ -128,8 +128,9 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
           </>
         ) : (
           <>
-            <div className="mt-8 flex flex-col items-center justify-center rounded-xl border border-border bg-gray-200/30 py-6 text-sm text-muted-foreground dark:bg-gray-800">
-              <p className="px-2"> Buy TCR tokens to curate grants and earn rewards.</p>
+            <div className="mt-8 flex flex-col items-center justify-center space-x-2 space-y-4 rounded-xl border border-border bg-gray-200/30 py-6 text-sm text-muted-foreground dark:bg-gray-800">
+              <SwapTokenButton text="Become a curator" size="lg" flow={flow} />
+              <p className="px-2">Buy TCR tokens to curate grants and earn rewards.</p>
             </div>
           </>
         )}
