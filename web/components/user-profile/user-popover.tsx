@@ -19,7 +19,7 @@ export const UserProfilePopover = (props: PropsWithChildren<Props>) => {
     <HoverCard openDelay={100}>
       <HoverCardTrigger asChild>{children}</HoverCardTrigger>
       <HoverCardPortal>
-        <HoverCardContent className="w-72">
+        <HoverCardContent className="w-96">
           <div className="flex items-center space-x-2.5 whitespace-normal">
             <Avatar className="size-10">
               <AvatarImage src={pfp_url} alt={display_name} />
