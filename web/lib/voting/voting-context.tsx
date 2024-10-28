@@ -93,7 +93,9 @@ export const VotingProvider = (
         votes: votes || [],
         saveVotes: async () => {
           if (!votes) return
-          if (!tokens.length || !address) return toast.error("No delegated tokens found")
+          if (!address)
+            return toast.error("Please connect your wallet again. (Try logging out and back in)")
+          if (!tokens.length) return toast.error("No delegated tokens found")
 
           const toastId = toast.loading("Preparing vote...")
           const tokenIds = tokens.map(({ id }) => id)
