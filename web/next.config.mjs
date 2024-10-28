@@ -1,6 +1,17 @@
 /** @type {import('next').NextConfig} */
+import { withHighlightConfig } from "@highlight-run/next/config"
 
 const nextConfig = {
+  webpack(config, options) {
+    if (options.isServer) {
+      config.ignoreWarnings = [{ module: /highlight-(run\/)?node/ }]
+    }
+
+    return config
+  },
+  experimental: {
+    instrumentationHook: true,
+  },
   images: {
     remotePatterns: [
       {
@@ -30,4 +41,4 @@ const nextConfig = {
   },
 }
 
-export default nextConfig
+export default withHighlightConfig(nextConfig)
