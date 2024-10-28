@@ -23,7 +23,20 @@ export const Markdown = (props: Props) => {
             component: (props) => {
               const { href = "" } = props
               if (href.startsWith("https://stream.mux.com/") && href.endsWith(".m3u8")) {
-                return <VideoPlayer url={href} controls width="auto" height="auto" />
+                return (
+                  <VideoPlayer
+                    url={href}
+                    controls
+                    width="auto"
+                    height="auto"
+                    style={{
+                      maxHeight: "90vh",
+                      minWidth: "320px",
+                      minHeight: "240px",
+                      maxWidth: "100%",
+                    }}
+                  />
+                )
               }
               return <a {...props} />
             },

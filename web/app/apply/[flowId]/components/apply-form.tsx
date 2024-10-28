@@ -129,7 +129,7 @@ export function ApplyForm(props: Props) {
         <Label>Description</Label>
         <MarkdownInput
           name="description"
-          initialContent={template}
+          initialMarkdown={template}
           minHeight={320}
           className="grow"
         />

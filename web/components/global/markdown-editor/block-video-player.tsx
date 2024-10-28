@@ -38,8 +38,7 @@ const VideoPreview = (
     >
       <h3 className="text-base font-medium">Your Video</h3>
       <p className="text-pretty text-center text-sm text-muted-foreground">
-        The file has been uploaded and is currently processing. You can safely save draft once
-        you&apos;re ready.
+        Video Player is not available in the editor. Save changes to see the video.
       </p>
     </div>
   )

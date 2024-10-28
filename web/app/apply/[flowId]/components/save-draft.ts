@@ -6,7 +6,8 @@ import { z } from "zod"
 const schema = z
   .object({
     title: z.string().trim().min(1, "Title is required"),
-    description: z.string().trim().min(1, "Description is required"),
+    descriptionMarkdown: z.string().trim().min(1, "Description is required"),
+    descriptionBlocks: z.string().trim().min(1, "Description is required"),
     image: z.string().trim().min(1, "Image is required"),
     flowId: z.string().trim().min(1, "Flow is required"),
     tagline: z.string().trim().max(100).optional(),
@@ -40,10 +41,16 @@ export async function saveDraft(formData: FormData, user?: `0x${string}`) {
       throw new Error(Object.values(errors).flat().join(", "))
     }
 
-    const { requirements, ...rest } = validation.data
+    const { requirements, descriptionBlocks, descriptionMarkdown, ...rest } = validation.data
 
     const draft = await database.draft.create({
-      data: { ...rest, isPrivate: false, isOnchain: false },
+      data: {
+        ...rest,
+        isPrivate: false,
+        isOnchain: false,
+        blocks: descriptionBlocks,
+        description: descriptionMarkdown,
+      },
     })
     return { error: false, id: draft.id }
   } catch (error) {

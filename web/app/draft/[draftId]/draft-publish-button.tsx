@@ -23,7 +23,7 @@ import { toast } from "sonner"
 import { encodeAbiParameters, formatEther, zeroAddress } from "viem"
 import { base } from "viem/chains"
 import { useAccount } from "wagmi"
-import { updateDraft } from "./update-draft"
+import { publishDraft } from "./publish-draft"
 
 interface Props {
   draft: Draft
@@ -47,7 +47,7 @@ export function DraftPublishButton(props: Props) {
     chainId,
     success: "Draft published!",
     onSuccess: async (hash) => {
-      await updateDraft(draft.id, hash)
+      await publishDraft(draft.id, hash)
       ref.current?.click() // close dialog
       // wait 1 second
       await new Promise((resolve) => setTimeout(resolve, 1000))
