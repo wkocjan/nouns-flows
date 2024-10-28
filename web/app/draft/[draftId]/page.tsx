@@ -55,7 +55,7 @@ export default async function DraftPage({ params, searchParams }: Props) {
 
   return (
     <div className="container mt-2.5 pb-24 md:mt-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col max-md:space-y-4 md:flex-row md:items-center md:justify-between">
         <Breadcrumb className="mb-4">
           <BreadcrumbList>
             <BreadcrumbItem>
