@@ -79,8 +79,14 @@ export const MonthlyBudget = ({ flow, approvedGrants, display }: Props) => {
             <>
               <Currency>{Number(flow.monthlyIncomingBaselineFlowRate)}</Currency>/mo baseline grant.
               <br />
-              <Currency>{Number(flow.monthlyIncomingBonusFlowRate)}</Currency>/mo as a bonus from
-              voters.
+              {Number(flow.monthlyIncomingBonusFlowRate) < 1 ? (
+                "No bonus from voters."
+              ) : (
+                <>
+                  <Currency>{Number(flow.monthlyIncomingBonusFlowRate)}</Currency>/mo as a bonus
+                  from voters.
+                </>
+              )}
             </>
           )}
         </>
