@@ -1,12 +1,14 @@
 "use client"
 
 import { cn } from "@/lib/utils"
+import { Block } from "@blocknote/core"
 import dynamic from "next/dynamic"
 import { CSSProperties, useState } from "react"
 
 interface Props {
   name: string
-  initialContent?: string
+  initialBlocks?: Block[]
+  initialMarkdown?: string
   minHeight?: CSSProperties["minHeight"]
   editable?: boolean
   className?: string
@@ -20,8 +22,16 @@ const MarkdownEditor = dynamic(
 )
 
 export const MarkdownInput = (props: Props) => {
-  const { name, initialContent, editable = true, minHeight = 320, className = "" } = props
-  const [markdown, setMarkdown] = useState(initialContent)
+  const {
+    name,
+    initialBlocks,
+    initialMarkdown,
+    editable = true,
+    minHeight = 320,
+    className = "",
+  } = props
+  const [blocks, setBlocks] = useState(initialBlocks)
+  const [markdown, setMarkdown] = useState(initialMarkdown)
 
   return (
     <div
@@ -31,8 +41,17 @@ export const MarkdownInput = (props: Props) => {
       )}
       style={{ minHeight }}
     >
-      <MarkdownEditor initialContent={initialContent} onUpdate={setMarkdown} editable={editable} />
-      <input type="hidden" name={name} value={markdown} />
+      <MarkdownEditor
+        initialBlocks={initialBlocks}
+        initialMarkdown={initialMarkdown}
+        onUpdate={(blocks, markdown) => {
+          setBlocks(blocks)
+          setMarkdown(markdown)
+        }}
+        editable={editable}
+      />
+      <input type="hidden" name={`${name}Blocks`} value={JSON.stringify(blocks)} />
+      <input type="hidden" name={`${name}Markdown`} value={markdown} />
     </div>
   )
 }

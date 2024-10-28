@@ -4,7 +4,7 @@ import { uploadFile } from "@/lib/pinata/upload-file"
 import { getIpfsUrl } from "@/lib/utils"
 import { isVideoFile } from "@/lib/video/is-video-file"
 import { uploadVideo } from "@/lib/video/upload-video"
-import { BlockNoteSchema, defaultBlockSpecs } from "@blocknote/core"
+import { Block, BlockNoteSchema, defaultBlockSpecs } from "@blocknote/core"
 import { BlockNoteView } from "@blocknote/mantine"
 import "@blocknote/mantine/style.css"
 import { useCreateBlockNote } from "@blocknote/react"
@@ -15,15 +15,16 @@ import { BlockVideoPlayer } from "./block-video-player"
 import "./markdown-editor.css"
 
 type Props = {
-  initialContent?: string
-  onUpdate?: (markdown: string) => void
+  initialMarkdown?: string
+  initialBlocks?: Block[]
+  onUpdate?: (blocks: Block[], markdown: string) => void
   editable?: boolean
 }
 
 export default function MarkdownEditor(props: Props) {
-  const { onUpdate, editable, initialContent } = props
-  const [isInitialized, setIsInitialized] = useState(!initialContent)
+  const { onUpdate, editable, initialBlocks, initialMarkdown } = props
   const { resolvedTheme } = useTheme()
+  const [isInitialized, setIsInitialized] = useState(initialBlocks || !initialMarkdown)
 
   const editor = useCreateBlockNote({
     schema: BlockNoteSchema.create({
@@ -34,6 +35,7 @@ export default function MarkdownEditor(props: Props) {
         video: BlockVideoPlayer,
       },
     }),
+    initialContent: initialBlocks,
     defaultStyles: false,
     uploadFile: async (file) => {
       const isVideo = isVideoFile(file)
@@ -50,21 +52,21 @@ export default function MarkdownEditor(props: Props) {
   })
 
   useEffect(() => {
-    if (!editor || !initialContent) return
-    editor.tryParseMarkdownToBlocks(initialContent).then((blocks) => {
+    if (!editor || !initialMarkdown || initialBlocks) return
+    editor.tryParseMarkdownToBlocks(initialMarkdown).then((blocks) => {
       editor.replaceBlocks(editor.document, blocks)
       setIsInitialized(true)
     })
-  }, [editor, initialContent])
+  }, [editor, initialMarkdown, initialBlocks])
 
   return (
     <BlockNoteView
       editor={editor}
       editable={editable}
       theme={resolvedTheme === "dark" ? "dark" : "light"}
-      onChange={() => {
+      onChange={async () => {
         if (!isInitialized) return
-        onUpdate && editor.blocksToMarkdownLossy(editor.document).then(onUpdate)
+        onUpdate?.(editor.document, await editor.blocksToMarkdownLossy(editor.document))
       }}
       data-markdown-editor
       sideMenu={false}
