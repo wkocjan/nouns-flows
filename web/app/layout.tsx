@@ -16,6 +16,7 @@ import { Roboto_Mono } from "next/font/google"
 import Image from "next/image"
 import Link from "next/link"
 import "./globals.css"
+import { HighlightErrorBoundary } from "@/components/global/HighlightErrorBoundary"
 
 const mono = Roboto_Mono({ subsets: ["latin"], variable: "--font-mono" })
 
@@ -42,36 +43,38 @@ export default async function RootLayout(props: Readonly<{ children: React.React
             enableSystem
             disableTransitionOnChange
           >
-            <TooltipProvider delayDuration={350}>
-              <Wagmi>
-                <nav className="container flex items-center py-4 max-lg:justify-between md:py-5">
-                  <div className="lg:w-1/5">
-                    <h2>
-                      <Link
-                        href="/"
-                        className="flex items-center font-medium text-card-foreground max-sm:text-sm"
-                      >
-                        <Image
-                          src={Noggles}
-                          alt={pool.title}
-                          className="mr-2.5 h-5 w-auto md:h-7"
-                        />
-                      </Link>
-                    </h2>
-                  </div>
-                  <MenuDesktop />
-                  <div className="flex items-center justify-end space-x-2.5 lg:w-1/5">
-                    <RecipientPopover />
-                    <CuratorPopover flow={pool} />
-                    <MenuAvatar />
-                    <MenuMobile />
-                  </div>
-                </nav>
-                {children}
-                <Toaster />
-                <Analytics />
-              </Wagmi>
-            </TooltipProvider>
+            <HighlightErrorBoundary>
+              <TooltipProvider delayDuration={350}>
+                <Wagmi>
+                  <nav className="container flex items-center py-4 max-lg:justify-between md:py-5">
+                    <div className="lg:w-1/5">
+                      <h2>
+                        <Link
+                          href="/"
+                          className="flex items-center font-medium text-card-foreground max-sm:text-sm"
+                        >
+                          <Image
+                            src={Noggles}
+                            alt={pool.title}
+                            className="mr-2.5 h-5 w-auto md:h-7"
+                          />
+                        </Link>
+                      </h2>
+                    </div>
+                    <MenuDesktop />
+                    <div className="flex items-center justify-end space-x-2.5 lg:w-1/5">
+                      <RecipientPopover />
+                      <CuratorPopover flow={pool} />
+                      <MenuAvatar />
+                      <MenuMobile />
+                    </div>
+                  </nav>
+                  {children}
+                  <Toaster />
+                  <Analytics />
+                </Wagmi>
+              </TooltipProvider>
+            </HighlightErrorBoundary>
           </ThemeProvider>
         </body>
       </html>
