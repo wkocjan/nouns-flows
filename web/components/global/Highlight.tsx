@@ -6,6 +6,7 @@ export default function Highlight() {
       projectId={process.env.NEXT_PUBLIC_HIGHLIGHT_PROJECT_ID}
       serviceName="nouns-flows"
       tracingOrigins
+      excludedHostnames={["localhost"]}
       networkRecording={{
         enabled: true,
         recordHeadersAndBody: true,
