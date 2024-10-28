@@ -3,6 +3,10 @@
 import { Button } from "@/components/ui/button"
 import { Draft } from "@prisma/client"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
+import { useAccount } from "wagmi"
+import { deleteDraft } from "./delete-draft"
 import { useCanManageDraft } from "./use-can-manage-draft"
 
 interface Props {
@@ -13,6 +17,9 @@ interface Props {
 export function DraftEditButton(props: Props) {
   const { draft, edit } = props
   const canEdit = useCanManageDraft(draft)
+  const { address } = useAccount()
+  const router = useRouter()
+
   if (!canEdit) return null
 
   if (edit) {
@@ -31,10 +38,27 @@ export function DraftEditButton(props: Props) {
   }
 
   return (
-    <Link href={`/draft/${draft.id}?edit=true`}>
-      <Button type="button" variant="secondary">
-        Edit
+    <>
+      <Button
+        type="button"
+        variant="destructive"
+        onClick={async () => {
+          if (window.confirm("Are you sure you want to delete this draft?")) {
+            const result = await deleteDraft(draft.id, address)
+            if (result.error) {
+              toast.error(result.error)
+            } else {
+              toast.success("Draft deleted")
+              router.push(`/flow/${draft.flowId}/drafts`)
+            }
+          }
+        }}
+      >
+        Delete
       </Button>
-    </Link>
+      <Link href={`/draft/${draft.id}?edit=true`}>
+        <Button type="button">Edit</Button>
+      </Link>
+    </>
   )
 }
