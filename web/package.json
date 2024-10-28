@@ -20,6 +20,7 @@
     "@chainsafe/persistent-merkle-tree": "^0.8.0",
     "@chainsafe/ssz": "^0.17.1",
     "@dagrejs/dagre": "^1.1.4",
+    "@highlight-run/next": "^7.6.1",
     "@lodestar/types": "^1.22.0",
     "@mux/mux-node": "^8.8.0",
     "@neynar/nodejs-sdk": "^1.57.0",
