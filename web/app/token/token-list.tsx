@@ -20,11 +20,10 @@ interface TokenData {
 
 interface TokenListProps {
   tokens: TokenData[] | undefined
-  currentTokenEmitter: Address | undefined
   switchToken: (token: Address, tokenEmitter: Address) => void
 }
 
-export const TokenList = ({ tokens, currentTokenEmitter, switchToken }: TokenListProps) => {
+export const TokenList = ({ tokens, switchToken }: TokenListProps) => {
   const { address: owner } = useAccount()
   const { balances } = useERC20Balances(
     tokens?.map((token) => getEthAddress(token.address as Address)) || [],
@@ -54,7 +53,9 @@ export const TokenList = ({ tokens, currentTokenEmitter, switchToken }: TokenLis
               getEthAddress(token.tokenEmitter as Address),
             )
           }
-          currentTokenEmitter={currentTokenEmitter}
+          currentTokenEmitter={
+            tokens?.find((t) => t.address === token.address)?.tokenEmitter as Address | undefined
+          }
           balance={balance}
           ethPrice={ethPrice || 0}
         />
