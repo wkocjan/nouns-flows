@@ -45,7 +45,7 @@ export function SwapTokenButton(props: Props) {
           {text}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-screen-xs">
+      <DialogContent className="sm:max-w-screen-xs px-3 py-8 md:p-6">
         <DialogHeader>
           <DialogTitle className="text-center text-lg font-medium">
             Buy and sell {flow.title} tokens
