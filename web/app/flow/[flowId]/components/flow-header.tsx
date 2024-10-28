@@ -66,10 +66,9 @@ export const FlowHeader = (props: Props) => {
                 <Badge className="cursor-help">
                   <Currency>
                     {/* If flow is paying grants, show payment amount. If no grants, flow hasn't been spent, and should show incoming flow rate. */}
-                    {(
-                      flow.subgrants.length > 0
-                        ? flow.monthlyOutgoingFlowRate
-                        : flow.monthlyIncomingFlowRate,
+                    {(flow.subgrants.length > 0
+                      ? flow.monthlyOutgoingFlowRate
+                      : flow.monthlyIncomingFlowRate
                     ).toString()}
                   </Currency>{" "}
                   /mo
