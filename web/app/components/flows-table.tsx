@@ -83,7 +83,6 @@ export const FlowsTable = (props: Props) => {
               </TableCell>
               <TableCell className="text-center">
                 <MonthlyBudget
-                  multiplyBy={10}
                   display={
                     flow.isFlow ? flow.monthlyOutgoingFlowRate : flow.monthlyIncomingFlowRate
                   }

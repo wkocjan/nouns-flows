@@ -20,16 +20,11 @@ interface Props {
   >
   approvedGrants?: number
   display: string
-  multiplyBy?: number
 }
 
-export const MonthlyBudget = ({ flow, approvedGrants, display, multiplyBy }: Props) => {
-  const monthlyOutgoingFlowRate = multiplyBy
-    ? Number(flow.monthlyOutgoingFlowRate) * multiplyBy
-    : Number(flow.monthlyOutgoingFlowRate)
-  const monthlyIncomingFlowRate = multiplyBy
-    ? Number(flow.monthlyIncomingFlowRate) * multiplyBy
-    : Number(flow.monthlyIncomingFlowRate)
+export const MonthlyBudget = ({ flow, approvedGrants, display }: Props) => {
+  const monthlyOutgoingFlowRate = Number(flow.monthlyOutgoingFlowRate)
+  const monthlyIncomingFlowRate = Number(flow.monthlyIncomingFlowRate)
   const isFlow = flow.isFlow
 
   const isGoingNegative = monthlyOutgoingFlowRate > monthlyIncomingFlowRate
@@ -44,7 +39,7 @@ export const MonthlyBudget = ({ flow, approvedGrants, display, multiplyBy }: Pro
     <Tooltip>
       <TooltipTrigger asChild>
         <Badge variant={isGoingNegative ? "warning" : "default"}>
-          <Currency>{Number(display) * (multiplyBy || 1)}</Currency>
+          <Currency>{Number(display)}</Currency>
           /mo
         </Badge>
       </TooltipTrigger>

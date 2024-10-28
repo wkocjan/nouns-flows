@@ -147,11 +147,7 @@ export default async function FlowPage(props: Props) {
                 </TableCell>
 
                 <TableCell className="text-center">
-                  <MonthlyBudget
-                    multiplyBy={10}
-                    display={grant.monthlyIncomingFlowRate}
-                    flow={grant}
-                  />
+                  <MonthlyBudget display={grant.monthlyIncomingFlowRate} flow={grant} />
                 </TableCell>
                 <TableCell className="text-center">{grant.votesCount}</TableCell>
 

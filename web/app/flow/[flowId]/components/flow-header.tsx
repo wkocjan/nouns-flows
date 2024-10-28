@@ -67,11 +67,9 @@ export const FlowHeader = (props: Props) => {
                   <Currency>
                     {/* If flow is paying grants, show payment amount. If no grants, flow hasn't been spent, and should show incoming flow rate. */}
                     {(
-                      Number(
-                        flow.subgrants.length > 0
-                          ? flow.monthlyOutgoingFlowRate
-                          : flow.monthlyIncomingFlowRate,
-                      ) * 10
+                      flow.subgrants.length > 0
+                        ? flow.monthlyOutgoingFlowRate
+                        : flow.monthlyIncomingFlowRate,
                     ).toString()}
                   </Currency>{" "}
                   /mo
