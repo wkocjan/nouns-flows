@@ -73,7 +73,7 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
         <PopoverClose ref={closeRef} className="hidden" />
         {/* <ScrollArea className="max-h-[70vh] w-full grow" type="hover"> */}
         <div className="flex flex-row items-center justify-between">
-          <p className="text-xs text-muted-foreground md:text-sm">
+          <p className="pr-2 text-xs text-muted-foreground md:text-sm">
             You&apos;re earning <Currency>{earnings.yearly}</Currency> per year
             {tokens.length > 0 ? " by" : ","}{" "}
             <Link
@@ -128,8 +128,8 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
           </>
         ) : (
           <>
-            <div className="mt-8 flex flex-col items-center justify-center rounded-xl border-t border-border bg-gray-200/30 py-6 text-sm text-muted-foreground dark:bg-gray-800">
-              <p> Buy TCR tokens to curate grants and earn rewards.</p>
+            <div className="mt-8 flex flex-col items-center justify-center rounded-xl border border-border bg-gray-200/30 py-6 text-sm text-muted-foreground dark:bg-gray-800">
+              <p className="px-2"> Buy TCR tokens to curate grants and earn rewards.</p>
             </div>
           </>
         )}
