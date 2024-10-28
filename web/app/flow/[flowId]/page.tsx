@@ -118,7 +118,7 @@ export default async function FlowPage(props: Props) {
                         <TooltipTrigger asChild>
                           <span
                             className={cn(
-                              "absolute right-0 top-0 mx-2 inline-block size-2.5 translate-x-full cursor-help rounded-full",
+                              "absolute left-5 top-0 inline-block size-2.5 cursor-help rounded-full",
                               {
                                 "bg-red-500": !hasRecentUpdate,
                                 "bg-green-500": hasRecentUpdate,
