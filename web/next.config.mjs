@@ -16,6 +16,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "media.giphy.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "*.mypinata.cloud",
         pathname: "/**",
       },
