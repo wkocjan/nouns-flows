@@ -22,7 +22,7 @@ export function CuratorGrants(props: ActiveCuratorGrantsProps) {
   return (
     <div className="flex flex-col divide-y divide-border">
       {grants
-        .sort((a, b) => b.challengePeriodEndsAt - a.challengePeriodEndsAt)
+        .sort((a, b) => a.challengePeriodEndsAt - b.challengePeriodEndsAt)
         .map((grant) => (
           <ActiveCuratorGrantRow closePopover={closePopover} key={grant.title} grant={grant} />
         ))}

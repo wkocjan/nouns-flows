@@ -69,7 +69,7 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
           </Badge>
         </div>
       </PopoverTrigger>
-      <PopoverContent className="relative flex h-[95vh] w-full max-w-[100vw] flex-col overflow-hidden md:mr-8 md:h-[70vh] md:w-[600px]">
+      <PopoverContent className="relative flex h-[95vh] w-full max-w-[100vw] flex-col overflow-hidden md:mr-8 md:h-[80vh] md:w-[600px]">
         <PopoverClose ref={closeRef} className="hidden" />
         <ScrollArea className="w-full p-2.5 pb-4 md:pb-0">
           <div className="flex flex-row items-center justify-between">
