@@ -15,6 +15,7 @@ import { AnimatedSalary } from "../animated-salary"
 import { CuratorGrants } from "./curator-grants"
 import { useUserTcrTokens } from "./hooks/use-user-tcr-tokens"
 import { TokenRow } from "./token-row"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 export const CuratorPopover = ({ flow }: { flow: Grant }) => {
   const [isVisible, setIsVisible] = useState(false)
@@ -69,68 +70,70 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
         </div>
       </PopoverTrigger>
       <PopoverContent className="w-full max-w-[100vw] md:mr-8 md:w-[600px]">
-        <PopoverClose ref={closeRef} className="hidden" />
-        <div className="flex flex-row items-center justify-between">
-          <p className="text-xs text-muted-foreground md:text-sm">
-            You&apos;re earning <Currency>{earnings.yearly}</Currency> per year
-            {tokens.length > 0 ? " by" : ","}{" "}
-            <Link
-              href="/curate"
-              className="text-primary underline transition-colors hover:text-primary/80"
-              onClick={closePopover}
-            >
-              curating
-            </Link>{" "}
-            {tokens.length || "no"} {`flow${tokens.length !== 1 ? "s" : ""}`}.
-          </p>
-
-          <SwapTokenButton size="xs" flow={flow} />
-        </div>
-        {tokens.length > 0 ? (
-          <>
-            <div className="mt-8">
-              <div className="mb-2 grid grid-cols-5 gap-2 text-xs font-medium text-muted-foreground">
-                <div className="col-start-3 text-center">Balance</div>
-                <div className="text-center max-sm:break-all">Grants</div>
-                <div className="text-center max-sm:break-all">Rewards</div>
-              </div>
-              {tokens
-                .sort((a, b) => Number(b.amount) - Number(a.amount))
-                .map(({ id, flow, amount }) => (
-                  <TokenRow
-                    key={id}
-                    flow={flow}
-                    balance={amount}
-                    subgrants={flow.subgrants}
-                    closePopover={closePopover}
-                  />
-                ))}
-            </div>
-
-            <p className="mt-8 border-t border-border pt-4 text-xs text-muted-foreground md:text-sm">
-              Curate incoming grants to continue earning rewards.
+        <ScrollArea className="max-h-[50vh] w-full" type="always">
+          <PopoverClose ref={closeRef} className="hidden" />
+          <div className="flex flex-row items-center justify-between">
+            <p className="text-xs text-muted-foreground md:text-sm">
+              You&apos;re earning <Currency>{earnings.yearly}</Currency> per year
+              {tokens.length > 0 ? " by" : ","}{" "}
+              <Link
+                href="/curate"
+                className="text-primary underline transition-colors hover:text-primary/80"
+                onClick={closePopover}
+              >
+                curating
+              </Link>{" "}
+              {tokens.length || "no"} {`flow${tokens.length !== 1 ? "s" : ""}`}.
             </p>
 
-            <Tabs defaultValue="active" className="mt-4 w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="active">Active</TabsTrigger>
-                <TabsTrigger value="voted">Voted</TabsTrigger>
-              </TabsList>
-              <TabsContent value="active">
-                <CuratorGrants closePopover={closePopover} grants={activeSubgrants} />
-              </TabsContent>
-              <TabsContent value="voted">
-                <CuratorGrants closePopover={closePopover} grants={votedSubgrants} />
-              </TabsContent>
-            </Tabs>
-          </>
-        ) : (
-          <>
-            <div className="mt-8 flex flex-col items-center justify-center rounded-xl border-t border-border bg-gray-200/30 py-6 text-sm text-muted-foreground dark:bg-gray-800">
-              <p> Buy TCR tokens to curate grants and earn rewards.</p>
-            </div>
-          </>
-        )}
+            <SwapTokenButton size="xs" flow={flow} />
+          </div>
+          {tokens.length > 0 ? (
+            <>
+              <div className="mt-8">
+                <div className="mb-2 grid grid-cols-5 gap-2 text-xs font-medium text-muted-foreground">
+                  <div className="col-start-3 text-center">Balance</div>
+                  <div className="text-center max-sm:break-all">Grants</div>
+                  <div className="text-center max-sm:break-all">Rewards</div>
+                </div>
+                {tokens
+                  .sort((a, b) => Number(b.amount) - Number(a.amount))
+                  .map(({ id, flow, amount }) => (
+                    <TokenRow
+                      key={id}
+                      flow={flow}
+                      balance={amount}
+                      subgrants={flow.subgrants}
+                      closePopover={closePopover}
+                    />
+                  ))}
+              </div>
+
+              <p className="mt-8 border-t border-border pt-4 text-xs text-muted-foreground md:text-sm">
+                Curate incoming grants to continue earning rewards.
+              </p>
+
+              <Tabs defaultValue="active" className="mt-4 w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="active">Active</TabsTrigger>
+                  <TabsTrigger value="voted">Voted</TabsTrigger>
+                </TabsList>
+                <TabsContent value="active">
+                  <CuratorGrants closePopover={closePopover} grants={activeSubgrants} />
+                </TabsContent>
+                <TabsContent value="voted">
+                  <CuratorGrants closePopover={closePopover} grants={votedSubgrants} />
+                </TabsContent>
+              </Tabs>
+            </>
+          ) : (
+            <>
+              <div className="mt-8 flex flex-col items-center justify-center rounded-xl border-t border-border bg-gray-200/30 py-6 text-sm text-muted-foreground dark:bg-gray-800">
+                <p> Buy TCR tokens to curate grants and earn rewards.</p>
+              </div>
+            </>
+          )}
+        </ScrollArea>
       </PopoverContent>
     </Popover>
   )
