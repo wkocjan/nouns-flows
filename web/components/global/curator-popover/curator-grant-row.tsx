@@ -51,7 +51,7 @@ export function ActiveCuratorGrantRow({
           {title}
         </Link>
       </div>
-      <div className="col-span-2 flex items-center justify-end space-x-2 overflow-hidden text-ellipsis">
+      <div className="col-span-2 mr-2.5 flex items-center justify-end space-x-2 overflow-hidden text-ellipsis">
         {canBeChallenged(grant) && (
           <div className="text-xs text-muted-foreground">
             {grant.status === Status.RegistrationRequested ? "Approved" : "Removed"}{" "}
