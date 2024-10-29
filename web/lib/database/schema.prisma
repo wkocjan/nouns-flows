@@ -127,10 +127,10 @@ view Grant {
   monthlyBonusPoolFlowRate         String
   bonusMemberUnits                 String
   baselineMemberUnits              String
+  totalEarned                      String
   activeRecipientCount             Int
   awaitingRecipientCount           Int
   challengedRecipientCount         Int
-  totalEarned                      String
   tcr                              String  @unique
   erc20                            String  @unique
   arbitrator                       String  @unique
