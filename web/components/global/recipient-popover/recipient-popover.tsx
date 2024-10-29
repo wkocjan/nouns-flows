@@ -37,7 +37,7 @@ export const RecipientPopover = () => {
 
   const canPostUpdates = !isLoading && (isNounsMember || isFlowsMember)
   const needsVerify = !isLoading && !hasFarcasterAccount
-  const shouldJoinFlowsChannel = !isLoading && !isNounsMember && !isFlowsMember
+  const shouldJoinFlowsChannel = !isLoading && !isFlowsMember
 
   return (
     <Popover>
