@@ -11,6 +11,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { base } from "viem/chains"
 import { FlowHeaderUserVotes } from "./flow-header-user-votes"
+import { ManageFlow } from "./manage-flow"
 
 interface Props {
   flow: FlowWithGrants
@@ -79,7 +80,7 @@ export const FlowHeader = (props: Props) => {
                   /mo
                 </Badge>
               </PopoverTrigger>
-              <PopoverContent className="flex w-auto flex-col space-y-2">
+              <PopoverContent className="flex w-auto flex-col space-y-3">
                 {!flow.isTopLevel && (
                   <p className="text-sm">
                     <Currency>{flow.monthlyIncomingFlowRate || 0}</Currency>/month incoming flow.
@@ -99,6 +100,7 @@ export const FlowHeader = (props: Props) => {
                 >
                   View on Explorer
                 </Link>
+                <ManageFlow flow={flow} />
               </PopoverContent>
             </Popover>
           </div>

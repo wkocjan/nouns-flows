@@ -13,6 +13,7 @@ import {
   type BaseError,
 } from "wagmi"
 import { explorerUrl } from "../utils"
+import { useRouter } from "next/navigation"
 
 export const useContractTransaction = (args?: {
   chainId?: Chain["id"]
@@ -20,11 +21,12 @@ export const useContractTransaction = (args?: {
   loading?: string
   success?: string
 }) => {
+  const router = useRouter()
   const {
     chainId = base.id,
     loading = "Transaction in progress...",
     success,
-    onSuccess,
+    onSuccess = () => router.refresh(),
   } = args || {}
   const [toastId, setToastId] = useState<number | string>()
   const [callbackHandled, setCallbackHandled] = useState(false)

@@ -39,13 +39,8 @@ async function handleFlowRecipientCreated(params: {
     },
   })
 
-  await context.db.Grant.update({
-    id: parentFlow.id,
-    data: {
-      awaitingRecipientCount: parentFlow.awaitingRecipientCount - 1,
-      activeRecipientCount: parentFlow.activeRecipientCount + 1,
-    },
-  })
+  // don't update recipient counts here because it's already done in the recipient created event
+  // eg: the recipient created event is emitted when a flow recipient is created anyway
 }
 
 async function handleRecipientCreated(params: {
