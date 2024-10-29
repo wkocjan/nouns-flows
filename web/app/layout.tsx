@@ -26,6 +26,10 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: pool.title, description: pool.tagline }
 }
 
+export const viewport = {
+  maximumScale: 1, // Disable auto-zoom on mobile Safari
+}
+
 export default async function RootLayout(props: Readonly<{ children: React.ReactNode }>) {
   const { children } = props
 
