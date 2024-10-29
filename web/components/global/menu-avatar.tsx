@@ -8,11 +8,13 @@ import { useDelegatedTokens } from "@/lib/voting/delegated-tokens/use-delegated-
 import { useVotingPower } from "@/lib/voting/use-voting-power"
 import { Avatar, ConnectKitButton } from "connectkit"
 import Image from "next/image"
-import { useCallback, useRef } from "react"
+import { useRef } from "react"
 import { mainnet } from "viem/chains"
-import { useAccount, useConnect, useDisconnect } from "wagmi"
+import { useAccount, useDisconnect } from "wagmi"
 import { Alert, AlertDescription } from "../ui/alert"
 import { ModeToggle } from "./mode-toggle"
+import { SignupButton } from "./signup-button"
+import { LoginButton } from "./login-button"
 
 export const MenuAvatar = () => {
   const { address } = useAccount()
@@ -20,21 +22,11 @@ export const MenuAvatar = () => {
   const closeRef = useRef<HTMLButtonElement>(null)
   const { tokens } = useDelegatedTokens(address)
   const { disconnect } = useDisconnect()
-  const { connectors, connect, data } = useConnect()
-
-  const createWallet = useCallback(() => {
-    const coinbaseWalletConnector = connectors.find(
-      (connector) => connector.id === "coinbaseWalletSDK",
-    )
-    if (coinbaseWalletConnector) {
-      connect({ connector: coinbaseWalletConnector })
-    }
-  }, [connectors, connect])
 
   return (
     <div className="inline-flex">
       <ConnectKitButton.Custom>
-        {({ isConnected, show, truncatedAddress, ensName, address }) => {
+        {({ isConnected, truncatedAddress, ensName, address }) => {
           return (
             <>
               {isConnected && (
@@ -87,12 +79,8 @@ export const MenuAvatar = () => {
               )}
               {!isConnected && (
                 <div className="flex items-center space-x-2.5">
-                  <Button variant="ghost" onClick={createWallet}>
-                    Sign up
-                  </Button>
-                  <Button variant="outline" onClick={show}>
-                    Log in
-                  </Button>
+                  <SignupButton />
+                  <LoginButton />
                 </div>
               )}
             </>

@@ -9,6 +9,9 @@ import { Message } from "./message"
 import { MultimodalInput } from "./multimodal-input"
 import { useChatHistory } from "./use-chat-history"
 import { useAccount } from "wagmi"
+import { Button } from "@/components/ui/button"
+import { SignupButton } from "@/components/global/signup-button"
+import { LoginButton } from "@/components/global/login-button"
 
 interface Props {
   flow: Grant
@@ -20,6 +23,7 @@ export function Chat(props: Props) {
 
   const { readChatHistory, storeChatHistory, chatId } = useChatHistory({ id: flow.id })
   const { address } = useAccount()
+  const isAuthenticated = !!address
 
   const initialMessages = props.initialMessages || readChatHistory()
 
@@ -47,18 +51,25 @@ export function Chat(props: Props) {
         ref={messagesContainerRef}
         className="flex min-w-0 flex-1 flex-col gap-6 overflow-y-scroll md:pt-6"
       >
-        {messages.map((message) => (
-          <Message
-            key={message.id}
-            role={message.role}
-            content={message.content}
-            attachments={message.experimental_attachments}
-            toolInvocations={message.toolInvocations}
-          />
-        ))}
+        {isAuthenticated ? (
+          <>
+            {messages.map((message) => (
+              <Message
+                key={message.id}
+                role={message.role}
+                content={message.content}
+                attachments={message.experimental_attachments}
+                toolInvocations={message.toolInvocations}
+              />
+            ))}
 
-        <div ref={messagesEndRef} className="min-h-[24px] min-w-[24px] shrink-0" />
+            <div ref={messagesEndRef} className="min-h-[24px] min-w-[24px] shrink-0" />
+          </>
+        ) : (
+          <ConnectWallet />
+        )}
       </div>
+
       <form
         className="mx-auto flex w-full gap-2 bg-background px-4 pb-4 md:max-w-3xl md:pb-6"
         onSubmit={handleSubmit}
@@ -69,11 +80,25 @@ export function Chat(props: Props) {
           handleSubmit={handleSubmit}
           isLoading={isLoading}
           stop={stop}
-          disabled={!address}
+          disabled={!isAuthenticated}
           attachments={attachments}
           setAttachments={setAttachments}
         />
       </form>
+    </div>
+  )
+}
+
+const ConnectWallet = () => {
+  return (
+    <div className="flex h-full items-center justify-center">
+      <div className="flex flex-col items-center space-y-4">
+        <div className="flex items-center space-x-2.5">
+          <SignupButton size="lg" variant="default" />
+          <LoginButton size="lg" variant="outline" />
+        </div>
+        <p className="text-sm text-muted-foreground">Please log in to continue</p>
+      </div>
     </div>
   )
 }

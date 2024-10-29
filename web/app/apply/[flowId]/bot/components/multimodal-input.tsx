@@ -151,7 +151,7 @@ export function MultimodalInput(props: Props) {
           fileInputRef.current?.click()
         }}
         variant="outline"
-        disabled={isLoading}
+        disabled={isLoading || disabled}
         type="button"
       >
         <Paperclip size={14} />
