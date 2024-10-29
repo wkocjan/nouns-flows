@@ -26,7 +26,7 @@ export function useTcrData(contract: Address, chainId = base.id) {
     challengePeriod: Number(challengePeriod?.result),
     challengePeriodFormatted: challengePeriod?.result
       ? challengePeriod.result >= 86400
-        ? `${(Number(challengePeriod.result) / (60 * 60 * 24)).toFixed(2)} days`
+        ? `${Math.round(Number(challengePeriod.result) / (60 * 60 * 24))} days`
         : `${(Number(challengePeriod.result) / 3600).toFixed(2)} hours`
       : "0 hours",
   }
