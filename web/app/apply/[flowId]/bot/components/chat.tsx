@@ -31,10 +31,6 @@ export function Chat(props: Props) {
     // onFinish: () => {},
   })
 
-  useEffect(() => {
-    if (initialMessages.length > 0) setInput("")
-  }, [initialMessages])
-
   const [messagesContainerRef, messagesEndRef] = useScrollToBottom<HTMLDivElement>()
   const [attachments, setAttachments] = useState<Array<Attachment>>([])
 
