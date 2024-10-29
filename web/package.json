@@ -9,7 +9,7 @@
     "lint": "next lint",
     "prebuild": "prisma generate --no-engine",
     "db:push": "prisma db push",
-    "db:generate": "prisma generate",
+    "db:generate": "prisma generate --no-engine",
     "typecheck": "tsc"
   },
   "dependencies": {
