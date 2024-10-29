@@ -22,8 +22,8 @@ export function Chat(props: Props) {
   const { flow } = props
 
   const { readChatHistory, storeChatHistory, chatId } = useChatHistory({ id: flow.id })
-  const { address } = useAccount()
-  const isAuthenticated = !!address
+  const { address, isConnecting } = useAccount()
+  const isAuthenticated = !!address && !isConnecting
 
   const initialMessages = props.initialMessages || readChatHistory()
 
