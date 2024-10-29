@@ -15,6 +15,7 @@ interface Props {
   input: string
   setInput: (value: string) => void
   isLoading: boolean
+  disabled: boolean
   stop: () => void
   attachments: Array<Attachment>
   setAttachments: Dispatch<SetStateAction<Array<Attachment>>>
@@ -25,7 +26,8 @@ interface Props {
 }
 
 export function MultimodalInput(props: Props) {
-  const { input, setInput, isLoading, stop, attachments, setAttachments, handleSubmit } = props
+  const { input, setInput, isLoading, disabled, stop, attachments, setAttachments, handleSubmit } =
+    props
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const { width } = useWindowSize()
 
@@ -64,6 +66,7 @@ export function MultimodalInput(props: Props) {
     <div className="relative flex w-full flex-col gap-4">
       <input
         type="file"
+        disabled={disabled}
         className="pointer-events-none fixed -left-4 -top-4 size-0.5 opacity-0"
         ref={fileInputRef}
         multiple
@@ -98,6 +101,7 @@ export function MultimodalInput(props: Props) {
         ref={textareaRef}
         placeholder="Send a message..."
         value={input}
+        disabled={disabled}
         onChange={handleInput}
         className="max-h-48 min-h-6 resize-none overflow-hidden rounded-xl border-none bg-card p-4 text-base focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-secondary max-sm:text-sm"
         rows={3}
@@ -118,6 +122,7 @@ export function MultimodalInput(props: Props) {
         <Button
           className="absolute bottom-2 right-2 m-0.5 h-fit rounded-full p-1.5"
           type="button"
+          disabled={disabled}
           onClick={(event) => {
             event.preventDefault()
             stop()
@@ -132,7 +137,7 @@ export function MultimodalInput(props: Props) {
             event.preventDefault()
             submitForm()
           }}
-          disabled={input.length === 0 || uploadQueue.length > 0}
+          disabled={input.length === 0 || uploadQueue.length > 0 || disabled}
           type="submit"
         >
           <ArrowUp size={14} />

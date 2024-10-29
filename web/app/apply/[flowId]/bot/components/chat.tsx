@@ -8,6 +8,7 @@ import { useEffect, useState } from "react"
 import { Message } from "./message"
 import { MultimodalInput } from "./multimodal-input"
 import { useChatHistory } from "./use-chat-history"
+import { useAccount } from "wagmi"
 
 interface Props {
   flow: Grant
@@ -18,6 +19,7 @@ export function Chat(props: Props) {
   const { flow } = props
 
   const { readChatHistory, storeChatHistory, chatId } = useChatHistory({ id: flow.id })
+  const { address } = useAccount()
 
   const initialMessages = props.initialMessages || readChatHistory()
 
@@ -26,7 +28,7 @@ export function Chat(props: Props) {
     api: `/apply/${flow.id}/bot/chat`,
     body: { flowId: flow.id },
     initialMessages,
-    initialInput: `Hi, I want to apply for grant in ${flow.title}... Can we start the application?`,
+    initialInput: `Hi, I want to apply for a grant in ${flow.title}... Can we start the application?`,
     keepLastMessageOnError: true,
     // onFinish: () => {},
   })
@@ -67,6 +69,7 @@ export function Chat(props: Props) {
           handleSubmit={handleSubmit}
           isLoading={isLoading}
           stop={stop}
+          disabled={!address}
           attachments={attachments}
           setAttachments={setAttachments}
         />
