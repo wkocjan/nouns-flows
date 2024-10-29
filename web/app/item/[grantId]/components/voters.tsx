@@ -27,7 +27,7 @@ export const Voters = async (props: Props) => {
         <CardTitle>Voters</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {(await votes).map((v) => (
             <UserProfile address={getEthAddress(v.voter)} key={v.voter}>
               {(profile) => (
