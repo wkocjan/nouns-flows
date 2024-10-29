@@ -12,6 +12,18 @@ async function handleDisputeExecute(params: {
 
   const arbitrator = event.log.address.toLowerCase()
 
+  const { items } = await context.db.Grant.findMany({
+    where: { isFlow: true, arbitrator },
+  })
+
+  const parent = items?.[0]
+  if (!parent) throw new Error("Parent grant not found")
+
+  await context.db.Grant.update({
+    id: parent.id,
+    data: { challengedRecipientCount: parent.challengedRecipientCount - 1 },
+  })
+
   await context.db.Dispute.updateMany({
     where: { disputeId: disputeId.toString(), arbitrator },
     data: { ruling, isExecuted: true },

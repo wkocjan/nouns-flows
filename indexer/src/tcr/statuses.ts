@@ -12,6 +12,12 @@ async function handleItemStatusChange(params: {
   const { event, context } = params
   const { _itemID, _itemStatus, _disputed, _resolved } = event.args
 
+  const tcr = event.log.address.toLowerCase()
+
+  const { items } = await context.db.Grant.findMany({ where: { tcr, isFlow: true } })
+  const flow = items?.[0]
+  if (!flow) throw new Error("Flow not found for TCR item")
+
   const grant = await context.db.Grant.findUnique({ id: _itemID })
   if (!grant) throw new Error(`Grant not found: ${_itemID}`)
 
@@ -40,4 +46,11 @@ async function handleItemStatusChange(params: {
       challengePeriodEndsAt,
     },
   })
+
+  if (_itemStatus === Status.ClearingRequested) {
+    await context.db.Grant.update({
+      id: _itemID,
+      data: { challengedRecipientCount: flow.challengedRecipientCount + 1 },
+    })
+  }
 }

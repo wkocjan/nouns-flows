@@ -71,7 +71,12 @@ export const FlowsTable = (props: Props) => {
                 )}
               </TableCell>
               <TableCell>
-                <GrantStatusCountBadges id={flow.id} subgrants={flow.subgrants} alwaysShowAll />
+                <GrantStatusCountBadges
+                  subgrants={flow.subgrants}
+                  id={flow.id}
+                  flow={flow}
+                  alwaysShowAll
+                />
               </TableCell>
               <TableCell className="text-center">
                 <AnimatedSalary

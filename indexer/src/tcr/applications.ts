@@ -67,6 +67,9 @@ async function handleItemSubmitted(params: {
       bonusMemberUnits: "0",
       baselineMemberUnits: "0",
       totalEarned: "0",
+      activeRecipientCount: 0,
+      awaitingRecipientCount: 0,
+      challengedRecipientCount: 0,
       tcr: "",
       erc20: "",
       arbitrator: "",
@@ -85,5 +88,10 @@ async function handleItemSubmitted(params: {
       createdAt: Number(event.block.timestamp),
       updatedAt: Number(event.block.timestamp),
     },
+  })
+
+  await context.db.Grant.update({
+    id: flow.id,
+    data: { awaitingRecipientCount: flow.awaitingRecipientCount + 1 },
   })
 }

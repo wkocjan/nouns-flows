@@ -17,6 +17,9 @@ interface Props {
     | "managerRewardSuperfluidPool"
     | "erc20"
     | "monthlyRewardPoolFlowRate"
+    | "activeRecipientCount"
+    | "awaitingRecipientCount"
+    | "challengedRecipientCount"
   >
   subgrants: Grant[]
   closePopover: () => void
@@ -51,7 +54,7 @@ export function TokenRow(props: Props) {
         monthlyRewardPoolRate={flow.monthlyRewardPoolFlowRate}
       />
 
-      <GrantStatusCountBadges id={flow.id} subgrants={subgrants} />
+      <GrantStatusCountBadges subgrants={subgrants} id={flow.id} flow={flow} />
 
       <div className="text-center text-sm font-medium">
         <WithdrawCuratorSalaryButton pool={getEthAddress(flow.managerRewardSuperfluidPool)} />

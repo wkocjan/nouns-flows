@@ -23,6 +23,9 @@ async function handleFlowRecipientCreated(params: {
     baselinePoolFlowRatePercent,
   } = event.args
 
+  const flowAddress = event.log.address.toLowerCase()
+  const parentFlow = await getParentFlow(context.db, flowAddress)
+
   await context.db.Grant.update({
     id: recipientId.toString(),
     data: {
@@ -33,6 +36,14 @@ async function handleFlowRecipientCreated(params: {
       recipient: recipient.toLowerCase(),
       updatedAt: Number(event.block.timestamp),
       isActive: true,
+    },
+  })
+
+  await context.db.Grant.update({
+    id: parentFlow.id,
+    data: {
+      awaitingRecipientCount: parentFlow.awaitingRecipientCount - 1,
+      activeRecipientCount: parentFlow.activeRecipientCount + 1,
     },
   })
 }
@@ -47,6 +58,9 @@ async function handleRecipientCreated(params: {
     recipientId,
   } = event.args
 
+  const flowAddress = event.log.address.toLowerCase()
+  const parentFlow = await getParentFlow(context.db, flowAddress)
+
   await context.db.Grant.update({
     id: recipientId.toString(),
     data: {
@@ -54,6 +68,14 @@ async function handleRecipientCreated(params: {
       recipient: recipient.toLowerCase(),
       updatedAt: Number(event.block.timestamp),
       isActive: true,
+    },
+  })
+
+  await context.db.Grant.update({
+    id: parentFlow.id,
+    data: {
+      awaitingRecipientCount: parentFlow.awaitingRecipientCount - 1,
+      activeRecipientCount: parentFlow.activeRecipientCount + 1,
     },
   })
 }
@@ -65,8 +87,25 @@ async function handleRecipientRemoved(params: {
   const { event, context } = params
   const { recipientId } = event.args
 
+  const flowAddress = event.log.address.toLowerCase()
+  const parentFlow = await getParentFlow(context.db, flowAddress)
+
   await context.db.Grant.update({
     id: recipientId.toString(),
     data: { isRemoved: true, isActive: false, monthlyIncomingFlowRate: "0" },
   })
+
+  await context.db.Grant.update({
+    id: parentFlow.id,
+    data: { activeRecipientCount: parentFlow.activeRecipientCount - 1 },
+  })
+}
+
+async function getParentFlow(db: Context["db"], parentFlow: string) {
+  const { items } = await db.Grant.findMany({
+    where: { recipient: parentFlow, isFlow: true },
+  })
+  const flow = items?.[0]
+  if (!flow) throw new Error("Flow not found for recipient")
+  return flow
 }

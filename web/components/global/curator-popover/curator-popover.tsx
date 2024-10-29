@@ -102,8 +102,8 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
                     <TokenRow
                       key={id}
                       flow={flow}
-                      balance={amount}
                       subgrants={flow.subgrants}
+                      balance={amount}
                       closePopover={closePopover}
                     />
                   ))}

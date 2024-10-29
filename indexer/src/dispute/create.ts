@@ -65,6 +65,18 @@ async function handleDispute(params: {
     data: { isDisputed: true },
   })
 
+  const { items } = await context.db.Grant.findMany({
+    where: { arbitrator, isFlow: true },
+  })
+
+  const parent = items?.[0]
+  if (!parent) throw new Error("Parent grant not found")
+
+  await context.db.Grant.update({
+    id: parent.id,
+    data: { challengedRecipientCount: parent.challengedRecipientCount + 1 },
+  })
+
   await context.db.Dispute.updateMany({
     where: { disputeId, arbitrator },
     data: { grantId: _itemID.toString(), evidenceGroupID: _evidenceGroupID.toString() },

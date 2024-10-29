@@ -6,7 +6,7 @@ import { getEthAddress, isGrantApproved } from "@/lib/utils"
 import { VotingProvider } from "@/lib/voting/voting-context"
 import Link from "next/link"
 import { Suspense } from "react"
-import { base } from "viem/chains"
+import { base, flowMainnet } from "viem/chains"
 import { FlowsTable } from "./components/flows-table"
 import { FlowsUpdates } from "./components/flows-updates"
 import { VotingBar } from "./flow/[flowId]/components/voting-bar"
@@ -40,8 +40,9 @@ export default async function Home() {
                 </Link>
               </h3>
               <GrantStatusCountBadges
-                id={pool.id}
                 subgrants={pool.subgrants}
+                id={pool.id}
+                flow={pool}
                 alwaysShowAll
                 isTopLevel
                 showLabel

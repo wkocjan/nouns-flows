@@ -57,7 +57,12 @@ export const FlowHeader = (props: Props) => {
         >
           <div className="max-sm:flex max-sm:flex-col max-sm:items-start md:text-center">
             <p className="mb-1.5 text-muted-foreground">{isTopLevel ? "Flows" : "Grants"}</p>
-            <GrantStatusCountBadges id={flow.id} subgrants={flow.subgrants} alwaysShowAll />
+            <GrantStatusCountBadges
+              subgrants={flow.subgrants}
+              id={flow.id}
+              flow={flow}
+              alwaysShowAll
+            />
           </div>
           <div className="md:text-center">
             <p className="mb-1.5 text-muted-foreground">Budget</p>

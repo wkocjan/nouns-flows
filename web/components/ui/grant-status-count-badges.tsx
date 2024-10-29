@@ -1,25 +1,38 @@
 import { Badge } from "@/components/ui/badge"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { isGrantApproved, isGrantAwaiting, isGrantChallenged } from "@/lib/utils"
 import { Grant } from "@prisma/client"
 import Link from "next/link"
 
 interface Props {
   id: string
   subgrants: Grant[]
+  flow: Pick<Grant, "activeRecipientCount" | "awaitingRecipientCount" | "challengedRecipientCount">
   alwaysShowAll?: boolean
   isTopLevel?: boolean
   showLabel?: boolean
 }
 
 export const GrantStatusCountBadges = (props: Props) => {
-  const { subgrants, alwaysShowAll = false, isTopLevel = false, showLabel = false, id } = props
+  const {
+    alwaysShowAll = false,
+    isTopLevel = false,
+    showLabel = false,
+    id,
+    flow,
+    subgrants,
+  } = props
 
-  const approved = subgrants.filter(isGrantApproved).length
-  const challenged = subgrants.filter(isGrantChallenged).length
-  const awaiting = subgrants.filter(isGrantAwaiting).length
+  const approved = isTopLevel
+    ? subgrants?.reduce((acc, grant) => acc + grant.activeRecipientCount, 0) || 0
+    : flow.activeRecipientCount
+  const challenged = isTopLevel
+    ? subgrants?.reduce((acc, grant) => acc + grant.challengedRecipientCount, 0) || 0
+    : flow.challengedRecipientCount
+  const awaiting = isTopLevel
+    ? subgrants?.reduce((acc, grant) => acc + grant.awaitingRecipientCount, 0) || 0
+    : flow.awaitingRecipientCount
 
-  const label = showLabel ? (isTopLevel ? "flows" : "grants") : ""
+  const label = showLabel ? "grants" : ""
 
   return (
     <div className="flex items-center justify-center space-x-1">
