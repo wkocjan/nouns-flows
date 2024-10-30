@@ -31,6 +31,9 @@ export async function POST(request: Request) {
 
   const userAgent = request.headers.get("user-agent")
 
+  // get general location of user
+  const location = request.headers.get("x-forwarded-for")
+
   const flow = await unstable_cache(
     async () => {
       return database.grant.findFirstOrThrow({
@@ -100,6 +103,7 @@ export async function POST(request: Request) {
     When asking the user questions, do not give the reasons for asking them. Just ask the questions, and be brief and concise in your wording.
 
     Here is the user agent: ${userAgent}. If the user is on mobile, you should be incredibly concise and to the point. They do not have a lot of time or space to read, so you must be incredibly concise and keep your questions and responses to them short in as few words as possible, unless they ask for clarification or it's otherwise necessary.
+    Here is the x-forwarded-for: ${location}. If the user is not in the US, feel free to ask questions in their language, but make sure the final application you output and submit is in English.
 
     Do not ask user more than 12-15 questions. Be precise and concise. Most of our users use mobile phones to apply, so keep your questions short. 
 
