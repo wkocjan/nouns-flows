@@ -55,8 +55,10 @@ export default function MarkdownEditor(props: Props) {
     if (!editor || !initialMarkdown || initialBlocks) return
     editor.tryParseMarkdownToBlocks(initialMarkdown).then((blocks) => {
       editor.replaceBlocks(editor.document, blocks)
+      onUpdate?.(editor.document, initialMarkdown)
       setIsInitialized(true)
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor, initialMarkdown, initialBlocks])
 
   return (

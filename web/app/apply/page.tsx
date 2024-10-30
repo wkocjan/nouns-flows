@@ -66,7 +66,7 @@ export default async function ApplyPage() {
           <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-3 lg:gap-5">
             {flows.map((flow) => (
               <Link
-                href={`/apply/${flow.id}`}
+                href={`/apply/${flow.id}/bot`}
                 key={flow.id}
                 className="group h-full transition-transform md:hover:-translate-y-2"
               >

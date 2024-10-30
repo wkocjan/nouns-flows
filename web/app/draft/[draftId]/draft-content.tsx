@@ -49,7 +49,7 @@ export default function DraftContent(props: Props) {
     <form action={handleSubmit} id="draft-edit">
       <div className="flex items-center space-x-4">
         <Image
-          src={getIpfsUrl(image)}
+          src={getIpfsUrl(image, "pinata")}
           alt={title}
           width={64}
           height={64}

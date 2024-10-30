@@ -18,7 +18,7 @@ export const Markdown = (props: Props) => {
             props: {
               target: "_blank",
               className:
-                "underline break-all hover:text-primary transition-colors underline-offset-4",
+                "underline break-words hover:text-primary transition-colors underline-offset-4",
             },
             component: (props) => {
               const { href = "" } = props

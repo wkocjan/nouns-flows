@@ -1,12 +1,11 @@
 "use client"
 
 import Noggles from "@/public/noggles.svg"
-import { Attachment, ToolInvocation, ToolResultPart } from "ai"
+import { Attachment, ToolInvocation } from "ai"
 import Image from "next/image"
 import { ReactNode } from "react"
 import { PreviewAttachment } from "./preview-attachment"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { SubmitApplicationResult } from "./tools/submit-application"
 
 interface Props {
   role: string
@@ -17,8 +16,6 @@ interface Props {
 
 export const Message = (props: Props) => {
   const { role, content, toolInvocations, attachments } = props
-
-  console.log({ toolInvocations, content })
 
   return (
     <div
@@ -34,7 +31,7 @@ export const Message = (props: Props) => {
 
         <div className="flex w-full flex-col gap-2 rounded-xl p-3 shadow group-data-[role=assistant]/message:bg-primary/10 group-data-[role=user]/message:bg-card dark:group-data-[role=user]/message:border md:px-5 md:py-3.5">
           {content && (
-            <div className="flex flex-col gap-4 whitespace-pre-wrap text-sm leading-6">
+            <div className="flex flex-col gap-4 whitespace-pre-wrap break-words text-sm leading-6">
               {(content as string).replace(/^(\n\n)+/, "")}
             </div>
           )}
@@ -51,17 +48,22 @@ export const Message = (props: Props) => {
       {toolInvocations && (
         <div className="mt-4 flex flex-col items-center gap-2 py-3">
           {toolInvocations.map((tool) => {
-            const draftId = Number((tool as unknown as ToolResultPart).result)
+            const { toolName, toolCallId, state } = tool
 
-            if (isNaN(draftId)) return null
-
-            return (
-              <Link key={tool.toolCallId} target="_blank" href={`/draft/${draftId}`}>
-                <Button size="lg" variant="default" className="w-fit">
-                  View your application →
-                </Button>
-              </Link>
-            )
+            if (state === "result") {
+              switch (toolName) {
+                case "submitApplication":
+                  return <SubmitApplicationResult key={toolCallId} draftId={Number(tool.result)} />
+                default:
+                  return null
+              }
+            } else {
+              return (
+                <div key={toolCallId} className="animate-pulse text-xs text-muted-foreground">
+                  Please wait...
+                </div>
+              )
+            }
           })}
         </div>
       )}

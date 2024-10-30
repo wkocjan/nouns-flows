@@ -7,6 +7,7 @@ import database from "@/lib/database"
 import { getFlow } from "@/lib/database/queries/flow"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { Metadata } from "next"
+import { redirect } from "next/navigation"
 import { ApplyForm } from "./components/apply-form"
 
 interface Props {
@@ -33,6 +34,8 @@ export default async function ApplyFlowPage(props: Props) {
   })
   const { isTopLevel } = flow
   const isFlow = isTopLevel === 1
+
+  if (!isFlow) redirect(`/apply/${flowId}/bot`)
 
   return (
     <main className="container flex h-[calc(100vh-68px)] flex-col pb-12 pt-8">

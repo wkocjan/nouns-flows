@@ -5,6 +5,6 @@ export const SkeletonLoader = ({ count, height }: { count: number; height: numbe
     ))}
   </div>
 )
-const Skeleton = ({ height, width = "100%" }: { height: number; width: string }) => (
+export const Skeleton = ({ height, width = "100%" }: { height: number; width: string }) => (
   <div style={{ width, height }} className="w-full animate-pulse rounded-xl bg-gray-200" />
 )

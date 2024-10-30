@@ -50,7 +50,7 @@ export function MultimodalInput(props: Props) {
   }
 
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const { isUploading, uploadQueue, uploadFiles } = useFileUploads()
+  const { uploadQueue, uploadFiles } = useFileUploads()
 
   const submitForm = useCallback(() => {
     handleSubmit(undefined, { experimental_attachments: attachments })
@@ -78,7 +78,7 @@ export function MultimodalInput(props: Props) {
           ])
         }}
         tabIndex={-1}
-        accept="image/*,video/*"
+        accept="image/*"
       />
 
       {(attachments.length > 0 || uploadQueue.length > 0) && (
@@ -103,7 +103,7 @@ export function MultimodalInput(props: Props) {
         value={input}
         disabled={disabled}
         onChange={handleInput}
-        className="max-h-48 min-h-6 resize-none overflow-hidden rounded-xl border-none bg-card p-4 text-base focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-secondary max-sm:text-sm"
+        className="max-h-48 min-h-6 resize-none overflow-hidden rounded-xl border-none bg-card p-4 text-sm focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-secondary"
         rows={3}
         onKeyDown={(event) => {
           if (event.key === "Enter" && !event.shiftKey) {

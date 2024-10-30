@@ -11,7 +11,7 @@ export function useChatHistory(props: Props) {
   const { id } = props
   const { address } = useAccount()
 
-  const chatId = `chat-${id}-${address}`
+  const chatId = `chat-${id}-${address?.toLowerCase()}`
 
   function readChatHistory(): Message[] {
     if (typeof window === "undefined") return []
@@ -34,9 +34,15 @@ export function useChatHistory(props: Props) {
     }
   }
 
+  function resetChatHistory() {
+    if (typeof window === "undefined") return
+    localStorage.removeItem(chatId)
+  }
+
   return {
     readChatHistory,
     storeChatHistory,
+    resetChatHistory,
     chatId,
   }
 }
