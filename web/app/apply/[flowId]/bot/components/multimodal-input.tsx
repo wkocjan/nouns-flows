@@ -25,6 +25,8 @@ interface Props {
   ) => void
 }
 
+const maxFileSize = 15 * 1024 * 1024 // 10MB
+
 export function MultimodalInput(props: Props) {
   const { input, setInput, isLoading, disabled, stop, attachments, setAttachments, handleSubmit } =
     props
@@ -71,7 +73,16 @@ export function MultimodalInput(props: Props) {
         ref={fileInputRef}
         multiple
         onChange={async (event: ChangeEvent<HTMLInputElement>) => {
+          const files = Array.from(event.target.files || [])
+          for (const file of files) {
+            if (file.size > maxFileSize) {
+              toast.error(`Max file size is ${maxFileSize / 1024 / 1024}MB`, { duration: 3000 })
+              return
+            }
+          }
+
           const uploadedAttachments = await uploadFiles(Array.from(event.target.files || []))
+
           setAttachments((c) => [
             ...c,
             ...uploadedAttachments.map((a) => ({ ...a, url: getIpfsUrl(a.url, "pinata") })),
