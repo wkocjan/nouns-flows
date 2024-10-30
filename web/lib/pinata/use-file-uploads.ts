@@ -44,7 +44,7 @@ export function useFileUploads() {
       }
 
       if (uploadedFiles.length > 0) {
-        toast.success(`Uploaded ${uploadedFiles.length} file(s)`)
+        toast.success(`Uploaded ${uploadedFiles.length} file(s)`, { duration: 500 })
       }
 
       return uploadedFiles

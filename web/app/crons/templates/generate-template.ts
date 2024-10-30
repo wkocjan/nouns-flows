@@ -6,7 +6,7 @@ const anthropic = createAnthropic({ apiKey: `${process.env.ANTHROPIC_API_KEY}` }
 
 export async function generateTemplate(title: string, description: string) {
   const { object } = await generateObject({
-    model: anthropic("claude-3-5-sonnet-20240620"),
+    model: anthropic("claude-3-5-sonnet-20241022"),
     schema: z.object({
       template: z.string().describe("Markdown content of the template"),
     }),

@@ -9,7 +9,6 @@ import { Message } from "./message"
 import { MultimodalInput } from "./multimodal-input"
 import { useChatHistory } from "./use-chat-history"
 import { useAccount } from "wagmi"
-import { Button } from "@/components/ui/button"
 import { SignupButton } from "@/components/global/signup-button"
 import { LoginButton } from "@/components/global/login-button"
 
@@ -30,10 +29,13 @@ export function Chat(props: Props) {
   const { messages, handleSubmit, input, setInput, isLoading, stop } = useChat({
     id: chatId,
     api: `/apply/${flow.id}/bot/chat`,
-    body: { flowId: flow.id },
+    body: { flowId: flow.id, address },
     initialMessages,
     initialInput: `Hi, I want to apply for a grant in ${flow.title}... Can we start the application?`,
     keepLastMessageOnError: true,
+    onToolCall({ toolCall }) {
+      console.debug({ toolCall })
+    },
     // onFinish: () => {},
   })
 

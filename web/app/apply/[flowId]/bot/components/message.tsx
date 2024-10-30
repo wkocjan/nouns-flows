@@ -29,7 +29,9 @@ export const Message = (props: Props) => {
         )}
         <div className="flex w-full flex-col gap-2 rounded-xl p-3 shadow group-data-[role=assistant]/message:bg-primary/10 group-data-[role=user]/message:bg-card dark:group-data-[role=user]/message:border md:px-5 md:py-3.5">
           {content && (
-            <div className="flex flex-col gap-4 text-sm leading-6">{content as string}</div>
+            <div className="flex flex-col gap-4 whitespace-pre-wrap text-sm leading-6">
+              {content as string}
+            </div>
           )}
 
           {attachments && (
