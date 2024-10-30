@@ -1,43 +1,10 @@
+import { getResizedImage } from "@/lib/image/sharp-resize"
 import { createAnthropic } from "@ai-sdk/anthropic"
 import { Cast, Grant } from "@prisma/client"
 import { generateObject } from "ai"
 import { z } from "zod"
-import sharp from "sharp"
-
-const maxImageSize = 4 * 1024 * 1024 // 4 MB
 
 const anthropic = createAnthropic({ apiKey: `${process.env.ANTHROPIC_API_KEY}` })
-
-// Function to fetch and resize image
-async function getResizedImage(url: string): Promise<{ type: "image"; image: string } | null> {
-  try {
-    const response = await fetch(url)
-    const buffer = await response.arrayBuffer()
-
-    // Resize image if it's larger than 5 MB
-    if (buffer.byteLength > maxImageSize) {
-      const resizedBuffer = await sharp(buffer)
-        .resize({ width: 700 }) // Adjust width as needed
-        .jpeg({ quality: 70 })
-        .toBuffer()
-
-      if (resizedBuffer.byteLength <= maxImageSize) {
-        return {
-          type: "image" as const,
-          image: `data:image/jpeg;base64,${resizedBuffer.toString("base64")}`,
-        }
-      } else {
-        console.warn(`Resized image ${url} still exceeds 5 MB and was skipped.`)
-        return null
-      }
-    } else {
-      return { type: "image" as const, image: url }
-    }
-  } catch (error) {
-    console.error(`Failed to process image ${url}:`, error)
-    return null
-  }
-}
 
 export async function analyzeCast(cast: Cast, grants: Array<Grant & { flow: Grant }>) {
   try {

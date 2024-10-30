@@ -58,6 +58,13 @@ export function Chat(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages])
 
+  // Scroll to bottom on initial load and when messages change
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+    }
+  }, [messages, messagesEndRef])
+
   return (
     <div className="flex h-[calc(100dvh-68px)] min-w-0 flex-col">
       {messages.length > 0 && (
