@@ -3,11 +3,24 @@
 import { useState } from "react"
 import { toast } from "sonner"
 import { uploadFile } from "./upload-file"
+import Compressor from "compressorjs"
 
 interface UploadedFile {
   url: string
   name: string
   contentType: string
+}
+
+const compressImage = (file: File): Promise<File> => {
+  return new Promise((resolve, reject) => {
+    new Compressor(file, {
+      quality: 0.6,
+      maxWidth: 2000,
+      maxHeight: 2000,
+      success: (result) => resolve(result as File),
+      error: reject,
+    })
+  })
 }
 
 export function useFileUploads() {
@@ -24,7 +37,10 @@ export function useFileUploads() {
       const uploads = await Promise.all(
         files.map(async (file) => {
           try {
-            const result = await uploadFile(file)
+            // Compress only image files
+            const fileToUpload = file.type.startsWith("image/") ? await compressImage(file) : file
+
+            const result = await uploadFile(fileToUpload)
             return { url: result, name: file.name, contentType: file.type }
           } catch (error) {
             return { error }
