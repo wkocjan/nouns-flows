@@ -120,6 +120,7 @@ export async function POST(request: Request) {
     Do not write in the third person, write in the first person as if you are the builder who is writing the application. Use things like I or we instead of the builder or builders name where appropriate.
 
     When submitting the application, make sure to use the correct title, tagline, image, and descriptionMarkdown as well as passing the correct users array from the address provided above. 
+    Also, ensure you include the builder's social links in markdown format in the descriptionMarkdown. Do not forget to do this.
 
     In the 'image' field please use the ipfs://<hash> format, where hash is the ipfs hash of the image you received from the builder after they uploaded their images.
     You'll need to remove the gateway address (${process.env.NEXT_PUBLIC_IPFS_GATEWAY_URL}) from the urls in order to get the hash. 
