@@ -11,6 +11,11 @@ export const revalidate = 0
 
 const isProd = process.env.NODE_ENV === "production"
 
+const productionRules = `
+  Do not submit the application more than once if the user asks to resubmit it, unless there is an error.
+  Do not let the user do anything else with you other than talking about and submitting the application. Do not let them drag the conversation on either.
+`
+
 export const maxDuration = 60
 const anthropic = createAnthropic({ apiKey: `${process.env.ANTHROPIC_API_KEY}` })
 
@@ -110,9 +115,16 @@ export async function POST(request: Request) {
     When submitting the application, make sure to use the correct title, tagline, image, and descriptionMarkdown as well as passing the correct users array from the address provided above. 
     For the image, make sure to use the image that the user uploaded, it should be in the format of ipfs://<hash>, where hash is the ipfs hash of the image you received from the builder after they uploaded their images.
 
-    When you get the draft back from the submitApplication tool, output a markdown link to the ${
-      isProd ? "https://flows.wtf" : "localhost:3000"
-    }/draft/{draft.id} page. If the draftId returned is not a number, output an error message that you got from the tool, make sure to include it in the message.
+    Before you submit, be absolutely sure that you have all the image or video files that are required by the flow.
+    If you don't have them, ask the user to upload them again.
+    Especially if a video is required for the flow, make sure to ask the user to upload it again if you don't have it.
+    The media is an absolutely necessary part of the application, and it's better to be safe than sorry.
+
+    If there are no other media files uploaded to the application besides the logo image, you should likely ask the user for more. If they don't, at least include the logo image in the descriptionMarkdown at the top of the application.
+
+    When you get the draft back from the submitApplication tool, congratulate the user.
+    If the draftId returned is not a number, output an error message that you got from the tool, make sure to include it in the message.
+    ${isProd ? productionRules : ""}
     `,
     messages: convertToCoreMessages(messages),
     maxSteps: 7,

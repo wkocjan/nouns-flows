@@ -49,7 +49,7 @@ export async function createDraft({
         image,
         flowId,
         tagline,
-        users,
+        users: users.map((user) => user.toLowerCase()),
         isFlow: false,
         isPrivate: false,
         isOnchain: false,
