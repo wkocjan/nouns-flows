@@ -122,6 +122,9 @@ export async function POST(request: Request) {
 
     If there are no other media files uploaded to the application besides the logo image, you should likely ask the user for more. If they don't, at least include the logo image in the descriptionMarkdown at the top of the application.
 
+    If the users answers to your questions are incomplete or not satisfactory, please follow up with questions.
+    Do not submit the application if the information is not complete or satisfactory. Ask for more information if needed.
+
     When you get the draft back from the submitApplication tool, congratulate the user.
     If the draftId returned is not a number, output an error message that you got from the tool, make sure to include it in the message.
     ${isProd ? productionRules : ""}
