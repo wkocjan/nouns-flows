@@ -4,12 +4,10 @@ import { convertToCoreMessages, CoreMessage, Message, streamText, tool } from "a
 import { unstable_cache } from "next/cache"
 import { z } from "zod"
 import { createDraft } from "./create-draft"
-import sharp from "sharp"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
 
-const maxImageSize = 4 * 1024 * 1024 // 4 MB
 const isProd = process.env.NODE_ENV === "production"
 
 const productionRules = `
@@ -21,34 +19,6 @@ const productionRules = `
 
 export const maxDuration = 60
 const anthropic = createAnthropic({ apiKey: `${process.env.ANTHROPIC_API_KEY}` })
-
-// Function to fetch and resize image
-async function getResizedImage(url: string): Promise<string | null> {
-  try {
-    const response = await fetch(url)
-    const buffer = await response.arrayBuffer()
-
-    // Resize image if it's larger than maxImageSize
-    if (buffer.byteLength > maxImageSize) {
-      const resizedBuffer = await sharp(buffer)
-        .resize({ width: 700 }) // Adjust width as needed
-        .jpeg({ quality: 70 })
-        .toBuffer()
-
-      if (resizedBuffer.byteLength <= maxImageSize) {
-        return `data:image/jpeg;base64,${resizedBuffer.toString("base64")}`
-      } else {
-        console.warn(`Resized image ${url} still exceeds ${maxImageSize} bytes and was skipped.`)
-        return null
-      }
-    } else {
-      return url
-    }
-  } catch (error) {
-    console.error(`Failed to process image ${url}:`, error)
-    return null
-  }
-}
 
 export async function POST(request: Request) {
   const {
@@ -217,21 +187,10 @@ export async function POST(request: Request) {
 
       const attachments = extractAttachments(allMessages)
 
-      // Process and resize attachments
-      const processedAttachments = await Promise.all(
-        attachments.map(async (url) => {
-          const resized = await getResizedImage(url)
-          return resized || url
-        }),
-      )
-
       const application = await database.application.upsert({
         where: { id: chatId },
         create: { id: chatId, flowId, messages: JSON.stringify(allMessages), user: address },
-        update: {
-          messages: JSON.stringify(allMessages),
-          attachments: JSON.stringify(processedAttachments),
-        },
+        update: { messages: JSON.stringify(allMessages), attachments: JSON.stringify(attachments) },
       })
 
       console.debug(`Stored ${allMessages.length} messages in ${application.id}`)
