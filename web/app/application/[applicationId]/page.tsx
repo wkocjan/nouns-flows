@@ -123,7 +123,7 @@ export default async function ApplicationPage({ params }: Props) {
                   <h4 className="text-[13px] text-muted-foreground">Created At</h4>
                   <DateTime
                     className="text-sm"
-                    date={new Date(createdAt)}
+                    date={new Date(createdAt * 1000)}
                     options={{
                       month: "short",
                       day: "numeric",
