@@ -9,7 +9,9 @@ export function useCanManageDraft(draft: Draft) {
   const [canManage, setCanManage] = useState(false)
 
   useEffect(() => {
-    setCanManage(!!address && draft.users.some((user) => user === address.toLowerCase()))
+    setCanManage(
+      !!address && draft.users.some((user) => user.toLowerCase() === address.toLowerCase()),
+    )
   }, [address, draft.users])
 
   return canManage

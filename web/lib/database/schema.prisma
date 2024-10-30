@@ -102,6 +102,21 @@ model Template {
   @@schema("web")
 }
 
+model Application {
+  id          String   @id
+  flowId      String
+  messages    Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        String
+  attachments Json?
+
+  @@index([user])
+  @@index([flowId])
+  @@map("Application")
+  @@schema("web")
+}
+
 view Grant {
   id                               String  @id
   recipient                        String

@@ -6,7 +6,7 @@ import { z } from "zod"
 
 const schema = z.object({
   title: z.string().trim().min(1, "Title is required"),
-  descriptionMarkdown: z.string().trim().min(1, "Description is required"),
+  descriptionMarkdown: z.string().trim().min(1, "Description (Markdown) is required"),
   descriptionBlocks: z.string().trim().min(1, "Description is required"),
   // image: z.string().trim().min(1, "Image is required"),
 })
