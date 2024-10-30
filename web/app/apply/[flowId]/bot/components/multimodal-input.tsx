@@ -117,45 +117,46 @@ export function MultimodalInput(props: Props) {
           }
         }}
       />
-
-      {isLoading ? (
+      <div className="absolute bottom-2 right-2 flex items-center gap-2">
         <Button
-          className="absolute bottom-2 right-2 m-0.5 h-fit rounded-full p-1.5"
+          className="h-fit rounded-full p-1.5"
+          onClick={(event) => {
+            event.preventDefault()
+            fileInputRef.current?.click()
+          }}
+          variant="outline"
+          disabled={isLoading || disabled}
           type="button"
-          disabled={disabled}
-          onClick={(event) => {
-            event.preventDefault()
-            stop()
-          }}
         >
-          <StopCircle size={14} />
+          <Paperclip size={14} />
         </Button>
-      ) : (
-        <Button
-          className="absolute bottom-2 right-2 m-0.5 h-fit rounded-full p-1.5"
-          onClick={(event) => {
-            event.preventDefault()
-            submitForm()
-          }}
-          disabled={input.length === 0 || uploadQueue.length > 0 || disabled}
-          type="submit"
-        >
-          <ArrowUp size={14} />
-        </Button>
-      )}
 
-      <Button
-        className="absolute bottom-2 right-10 m-0.5 h-fit rounded-full p-1.5"
-        onClick={(event) => {
-          event.preventDefault()
-          fileInputRef.current?.click()
-        }}
-        variant="outline"
-        disabled={isLoading || disabled}
-        type="button"
-      >
-        <Paperclip size={14} />
-      </Button>
+        {isLoading ? (
+          <Button
+            className="h-fit rounded-full p-1.5"
+            type="button"
+            disabled={disabled}
+            onClick={(event) => {
+              event.preventDefault()
+              stop()
+            }}
+          >
+            <StopCircle size={14} />
+          </Button>
+        ) : (
+          <Button
+            className="h-fit rounded-full p-1.5"
+            onClick={(event) => {
+              event.preventDefault()
+              submitForm()
+            }}
+            disabled={input.length === 0 || uploadQueue.length > 0 || disabled}
+            type="submit"
+          >
+            <ArrowUp size={14} />
+          </Button>
+        )}
+      </div>
     </div>
   )
 }

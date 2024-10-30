@@ -29,6 +29,8 @@ export async function POST(request: Request) {
   }: { chatId: string; flowId: string; messages: Array<Message>; address: string } =
     await request.json()
 
+  const userAgent = request.headers.get("user-agent")
+
   const flow = await unstable_cache(
     async () => {
       return database.grant.findFirstOrThrow({
@@ -94,6 +96,10 @@ export async function POST(request: Request) {
     Do not forget to ask for a logo image for the application, always ask for this, every application requires one.
     It's fine if the application asks for more images or videos than the flow requires, as long as it makes sense for the application.
     It is also fine for images to include people's faces, as long as it makes sense for the application.
+
+    When asking the user questions, do not give the reasons for asking them. Just ask the questions, and be brief and concise in your wording.
+
+    Here is the user agent: ${userAgent}. If the user is on mobile, you should be incredibly concise and to the point. They do not have a lot of time or space to read, so you must be incredibly concise and keep your questions and responses to them short in as few words as possible, unless they ask for clarification or it's otherwise necessary.
 
     Do not ask user more than 12-15 questions. Be precise and concise. Most of our users use mobile phones to apply, so keep your questions short. 
 
