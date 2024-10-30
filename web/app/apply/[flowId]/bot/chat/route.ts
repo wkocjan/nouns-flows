@@ -65,6 +65,8 @@ export async function POST(request: Request) {
 
     Always assume the best in the user and builder and their intentions.
 
+    Next, you should ask the builder a bit more about their background, what they've worked on before, and what they're interested in working on and their experience and motivations, especially as it relates to the flow they're applying to. Keep these questions simple and concise. 
+
     Next, you should ask the user what they are interested in working on. If they have multiple ideas, ask them to pick one. 
     If they don't have any ideas, you can ask them to describe the problem they are trying to solve. 
     If they still don't know, you can offer ideas, but don't push any ideas on them.
