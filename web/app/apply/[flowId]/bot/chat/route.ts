@@ -1,5 +1,8 @@
 import database from "@/lib/database"
+import { getFarcasterUsersByEthAddress } from "@/lib/farcaster/get-user"
+import { getEthAddress } from "@/lib/utils"
 import { createAnthropic } from "@ai-sdk/anthropic"
+import { geolocation } from "@vercel/functions"
 import { convertToCoreMessages, CoreMessage, Message, streamText, tool } from "ai"
 import { unstable_cache } from "next/cache"
 import { z } from "zod"
@@ -32,8 +35,7 @@ export async function POST(request: Request) {
 
   const userAgent = request.headers.get("user-agent")
 
-  // get general location of user
-  const location = request.headers.get("x-forwarded-for")
+  const { city, country, countryRegion } = geolocation(request)
 
   const flow = await unstable_cache(
     async () => {
@@ -69,6 +71,9 @@ export async function POST(request: Request) {
     The address of the user is ${address}.
 
     To start, you should ask the user for their name and social links (like Twitter, Farcaster, Instagram, Github, etc).
+
+    ${await getFarcasterInfo(address)}
+
     Ensure the user provides you with a link to some sort of social profile or personal website, and ask for one that relates to their work if possible.
     Ideally they should have a link to their Twitter, Farcaster, or Instagram. If they don't supply one, you can ask them for one.
 
@@ -104,7 +109,8 @@ export async function POST(request: Request) {
     When asking the user questions, do not give the reasons for asking them. Just ask the questions, and be brief and concise in your wording.
 
     Here is the user agent: ${userAgent}. If the user is on mobile, you should be incredibly concise and to the point. They do not have a lot of time or space to read, so you must be incredibly concise and keep your questions and responses to them short in as few words as possible, unless they ask for clarification or it's otherwise necessary.
-    Here is the x-forwarded-for: ${location}. If the user is not in the US, feel free to ask questions in their language, but make sure the final application you output and submit is in English.
+
+    Here is the user's location: ${city}, ${country}, ${countryRegion} from geolocation. If the user is not in the US or English speaking country, feel free to ask questions in their language, but make sure the final application you output and submit is in English. At the start, you may want to ask user which language they prefer in conversation with you. In the same message do not ask more questions - let the user first pick the language. Do not mention you know the city - it may be not accurate. 
 
     Do not ask user more than 12-15 questions. Be precise and concise. Most of our users use mobile phones to apply, so keep your questions short. 
 
@@ -221,4 +227,22 @@ function extractAttachments(messages: Array<CoreMessage>): string[] {
   }
 
   return attachments
+}
+
+async function getFarcasterInfo(address: string) {
+  const farcasterUsers = (await getFarcasterUsersByEthAddress(getEthAddress(address))).map((u) => ({
+    username: u.username,
+    displayName: u.display_name,
+    bio: u.profile.bio,
+    followerCount: u.follower_count,
+    followingCount: u.following_count,
+  }))
+
+  if (farcasterUsers.length === 0) return ""
+
+  return `Here is the list of Farcaster users that are connected to the ${address}: ${JSON.stringify(farcasterUsers)}. You may learn something about the user from this information.
+
+  If the user has exactly one Farcaster account connected to the address, you can use it for the application. Inform briefly the user that their Farcaster account will be used for the application. If user has more Farcaster accounts, you can ask them to pick one.
+  
+  In context of Farcaster account please refer to the 'username' field (@username), not 'displayName'.`
 }
