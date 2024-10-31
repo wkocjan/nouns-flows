@@ -15,6 +15,8 @@ import { useSetFlowImpl } from "../hooks/useSetFlowImpl"
 import { useVerifier } from "../hooks/useVerifier"
 import { useChangeChallengeDuration } from "../hooks/useChangeChallengeDuration"
 import { useChallengeTimeDuration } from "../hooks/useChallengeTimeDuration"
+import { useSetFlowRate } from "../hooks/useSetFlowRate"
+import { useFlowRate } from "../hooks/useFlowRate"
 
 interface Props {
   flow: FlowWithGrants
@@ -40,6 +42,8 @@ export const ManageFlow = ({ flow }: Props) => {
   const { update } = useUpdateVerifier(flowAddress)
   const { changeDuration } = useChangeChallengeDuration(tcrAddress)
   const duration = useChallengeTimeDuration(tcrAddress)
+  const { setFlowRate } = useSetFlowRate(flowAddress)
+  const flowRate = useFlowRate(flowAddress)
 
   if (!isFlowOwner) return null
 
@@ -79,6 +83,16 @@ export const ManageFlow = ({ flow }: Props) => {
             prefill={base.TokenVerifier}
           />
         )}
+
+        {/* Flow Rate */}
+        <NumberForm
+          title="Flow Rate"
+          functionName="setFlowRate"
+          placeholder="New flow rate"
+          buttonText="Update Flow Rate"
+          onSubmit={setFlowRate}
+          prefill={flowRate ? Number(flowRate) : undefined}
+        />
 
         {/* Future sections for other contract interactions can be added here */}
       </div>
