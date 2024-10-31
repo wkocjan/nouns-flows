@@ -43,6 +43,22 @@ async function handleFlowDistributionUpdated(params: {
     await handleIncomingFlowRates(context.db, recipient)
   }
 
+  if (pool === grant.managerRewardSuperfluidPool) {
+    const monthlyOutgoingFlowRate =
+      Number(grant.monthlyBaselinePoolFlowRate) +
+      Number(grant.monthlyBonusPoolFlowRate) +
+      newMonthlyRate
+
+    await context.db.Grant.update({
+      id: grant.id,
+      data: {
+        monthlyRewardPoolFlowRate: newMonthlyRate.toString(),
+        monthlyOutgoingFlowRate: monthlyOutgoingFlowRate.toString(),
+        updatedAt: Number(event.block.timestamp),
+      },
+    })
+  }
+
   if (pool === grant.bonusPool) {
     const monthlyOutgoingFlowRate =
       Number(grant.monthlyBaselinePoolFlowRate) +
@@ -58,22 +74,6 @@ async function handleFlowDistributionUpdated(params: {
       },
     })
     await handleIncomingFlowRates(context.db, recipient)
-  }
-
-  if (pool === grant.managerRewardSuperfluidPool) {
-    const monthlyOutgoingFlowRate =
-      Number(grant.monthlyBaselinePoolFlowRate) +
-      Number(grant.monthlyBonusPoolFlowRate) +
-      newMonthlyRate
-
-    await context.db.Grant.update({
-      id: grant.id,
-      data: {
-        monthlyRewardPoolFlowRate: newMonthlyRate.toString(),
-        monthlyOutgoingFlowRate: monthlyOutgoingFlowRate.toString(),
-        updatedAt: Number(event.block.timestamp),
-      },
-    })
   }
 }
 
