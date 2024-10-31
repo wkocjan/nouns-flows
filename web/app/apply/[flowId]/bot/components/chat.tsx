@@ -18,6 +18,8 @@ import { MultimodalInput } from "./multimodal-input"
 import StartImage from "./start.svg"
 import { useChatHistory } from "./use-chat-history"
 import { ErrorMessage } from "./error-message"
+import { toast } from "sonner"
+import { useRecipientExists } from "../../components/useRecipientExists"
 
 interface Props {
   flow: Grant
@@ -63,6 +65,7 @@ export function Chat(props: Props) {
 
   const [messagesContainerRef, messagesEndRef] = useScrollToBottom<HTMLDivElement>()
   const [attachments, setAttachments] = useState<Array<Attachment>>([])
+  const recipientExists = useRecipientExists(flow.recipient, address)
 
   useEffect(() => {
     storeChatHistory(messages)
@@ -116,6 +119,11 @@ export function Chat(props: Props) {
                 <p className="mb-4 mt-8 text-center">Application for {flow.title} grant</p>
                 <Button
                   onClick={() => {
+                    if (recipientExists) {
+                      toast.error("You have already applied to this flow")
+                      return
+                    }
+
                     append({
                       role: "user",
                       content: `Hi, I want to apply for a grant in ${flow.title}... Can we start the application?`,

@@ -7,7 +7,6 @@ import { FileInput } from "@/components/ui/file-input"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { MarkdownInput } from "@/components/ui/markdown-input"
-import { nounsFlowImplAbi } from "@/lib/abis"
 import { getShortEthAddress } from "@/lib/utils"
 import { Grant } from "@prisma/client"
 import { useModal } from "connectkit"
@@ -15,9 +14,9 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useFormStatus } from "react-dom"
 import { toast } from "sonner"
-import { Address } from "viem"
-import { useAccount, useReadContract } from "wagmi"
+import { useAccount } from "wagmi"
 import { saveDraft } from "./save-draft"
+import { useRecipientExists } from "./useRecipientExists"
 
 interface Props {
   flow: Grant
@@ -36,13 +35,7 @@ export function ApplyForm(props: Props) {
     setIsGuest(!isConnected)
   }, [isConnected])
 
-  const { data: recipientExists = false } = useReadContract({
-    address: flow.tcr as Address,
-    abi: nounsFlowImplAbi,
-    functionName: "recipientExists",
-    args: [address!],
-    query: { enabled: !!address },
-  })
+  const recipientExists = useRecipientExists(flow.recipient, address)
 
   async function handleSubmit(formData: FormData) {
     if (!isConnected) {
