@@ -1,6 +1,6 @@
 "use client"
 
-import Noggles from "@/public/noggles.svg"
+import Flo from "@/public/flo.png"
 import { Attachment, ToolInvocation } from "ai"
 import Image from "next/image"
 import { ReactNode } from "react"
@@ -24,8 +24,14 @@ export const Message = (props: Props) => {
     >
       <div className="flex w-full max-w-full gap-4 group-data-[role=user]/message:ml-auto group-data-[role=user]/message:w-fit md:group-data-[role=user]/message:max-w-xl">
         {role === "assistant" && (
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-full p-2 ring-1 ring-border md:size-10">
-            <Image src={Noggles} alt="Noggles" width={32} height={32} className="h-full w-full" />
+          <div className="flex size-[40px] shrink-0 items-center justify-center overflow-hidden rounded-full ring-1 ring-border md:size-10">
+            <Image
+              src={Flo}
+              alt="Noggles"
+              width={64}
+              height={64}
+              className="h-full w-full object-cover"
+            />
           </div>
         )}
 
