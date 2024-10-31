@@ -13,6 +13,8 @@ import { base } from "@/addresses"
 import { useImplementation } from "../hooks/useImplementation"
 import { useSetFlowImpl } from "../hooks/useSetFlowImpl"
 import { useVerifier } from "../hooks/useVerifier"
+import { useChangeChallengeDuration } from "../hooks/useChangeChallengeDuration"
+import { useChallengeTimeDuration } from "../hooks/useChallengeTimeDuration"
 
 interface Props {
   flow: FlowWithGrants
@@ -28,13 +30,16 @@ interface AddressFormProps {
 }
 
 export const ManageFlow = ({ flow }: Props) => {
-  const contract = getEthAddress(flow.recipient)
-  const isFlowOwner = useIsFlowOwner(contract)
-  const implementation = useImplementation(contract)
-  const verifier = useVerifier(contract)
-  const { upgrade } = useUpgradeTo(contract)
-  const { setFlowImpl } = useSetFlowImpl(contract)
-  const { update } = useUpdateVerifier(contract)
+  const flowAddress = getEthAddress(flow.recipient)
+  const tcrAddress = getEthAddress(flow.tcr)
+  const isFlowOwner = useIsFlowOwner(flowAddress)
+  const implementation = useImplementation(flowAddress)
+  const verifier = useVerifier(flowAddress)
+  const { upgrade } = useUpgradeTo(flowAddress)
+  const { setFlowImpl } = useSetFlowImpl(flowAddress)
+  const { update } = useUpdateVerifier(flowAddress)
+  const { changeDuration } = useChangeChallengeDuration(tcrAddress)
+  const duration = useChallengeTimeDuration(tcrAddress)
 
   if (!isFlowOwner) return null
 
@@ -77,7 +82,104 @@ export const ManageFlow = ({ flow }: Props) => {
 
         {/* Future sections for other contract interactions can be added here */}
       </div>
+
+      <p className="mb-2 mt-4 text-sm font-medium">Manage TCR</p>
+      <div className="space-y-4">
+        <NumberForm
+          title="Change Challenge Duration"
+          functionName="challengePeriodDuration"
+          placeholder="New challenge period duration in seconds"
+          buttonText="Update Challenge Duration"
+          onSubmit={changeDuration}
+          prefill={duration ? Number(duration) : undefined}
+        />
+      </div>
     </div>
+  )
+}
+const FormField = ({
+  title,
+  functionName,
+  buttonText,
+  onSubmit,
+  isSubmitting,
+  children,
+}: {
+  title: string
+  functionName: string
+  buttonText: string
+  onSubmit: (e: React.FormEvent) => Promise<void>
+  isSubmitting: boolean
+  children: React.ReactNode
+}) => {
+  return (
+    <div>
+      <p className="mb-2 text-xs font-medium text-muted-foreground">
+        <code>{functionName}</code>
+      </p>
+      <form className="space-y-2" onSubmit={onSubmit}>
+        {children}
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full"
+          type="submit"
+          disabled={isSubmitting}
+          loading={isSubmitting}
+        >
+          {isSubmitting ? `${title}...` : buttonText}
+        </Button>
+      </form>
+    </div>
+  )
+}
+
+const NumberForm = ({
+  title,
+  functionName,
+  placeholder,
+  buttonText,
+  onSubmit,
+  prefill,
+}: {
+  title: string
+  functionName: string
+  placeholder: string
+  buttonText: string
+  onSubmit: (value: number) => Promise<void>
+  prefill?: number
+}) => {
+  const [number, setNumber] = useState<string>(prefill?.toString() || "")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    try {
+      await onSubmit(Number(number))
+    } catch (error) {
+      console.error(error)
+    }
+    setIsSubmitting(false)
+  }
+
+  return (
+    <FormField
+      title={title}
+      functionName={functionName}
+      buttonText={buttonText}
+      onSubmit={handleSubmit}
+      isSubmitting={isSubmitting}
+    >
+      <Input
+        type="number"
+        value={number}
+        onChange={(e) => setNumber(e.target.value)}
+        placeholder={placeholder}
+        className="text-sm"
+        disabled={isSubmitting}
+      />
+    </FormField>
   )
 }
 
@@ -92,41 +194,32 @@ const AddressForm = ({
   const [address, setAddress] = useState<string>(prefill || "")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    try {
+      await onSubmit(address as `0x${string}`)
+    } catch (error) {
+      console.error(error)
+    }
+    setIsSubmitting(false)
+  }
+
   return (
-    <div>
-      <p className="mb-2 text-xs font-medium text-muted-foreground">
-        <code>{functionName}</code>
-      </p>
-      <form
-        className="space-y-2"
-        onSubmit={async (e) => {
-          e.preventDefault()
-          setIsSubmitting(true)
-          try {
-            await onSubmit(address as `0x${string}`)
-          } catch (error) {
-            console.error(error)
-          }
-          setIsSubmitting(false)
-        }}
-      >
-        <Input
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          placeholder={placeholder}
-          className="text-sm"
-        />
-        <Button
-          variant="outline"
-          size="sm"
-          className="w-full"
-          type="submit"
-          disabled={!address || isSubmitting}
-          loading={isSubmitting}
-        >
-          {isSubmitting ? `${title}...` : buttonText}
-        </Button>
-      </form>
-    </div>
+    <FormField
+      title={title}
+      functionName={functionName}
+      buttonText={buttonText}
+      onSubmit={handleSubmit}
+      isSubmitting={isSubmitting}
+    >
+      <Input
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+        placeholder={placeholder}
+        className="text-sm"
+        disabled={isSubmitting}
+      />
+    </FormField>
   )
 }

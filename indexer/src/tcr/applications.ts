@@ -41,7 +41,7 @@ async function handleItemSubmitted(params: {
     address: getAddress(tcr),
     abi: context.contracts.NounsFlowTcr.abi,
     functionName: "challengePeriodDuration",
-    blockNumber: BigInt(21690491), // hacky fix to get up to date challenge period duration
+    blockNumber: BigInt(21772590), // hacky fix to get up to date challenge period duration
   })
 
   await context.db.Grant.create({

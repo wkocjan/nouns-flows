@@ -60,7 +60,7 @@ export const FlowsTable = (props: Props) => {
                   {flow.title}
                 </Link>
 
-                <p className="mt-0.5 text-xs tracking-tight text-muted-foreground max-sm:hidden md:text-sm">
+                <p className="mt-0.5 max-w-[300px] truncate text-xs tracking-tight text-muted-foreground max-sm:hidden md:text-sm">
                   {flow.tagline}
                 </p>
 
