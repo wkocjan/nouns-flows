@@ -13,6 +13,8 @@ import {
 } from "./abis"
 import { base as baseContracts } from "./addresses"
 
+const isDev = process.env.NODE_ENV === "development"
+
 const currentBlock = Number(
   await createPublicClient({
     chain: base,
@@ -29,7 +31,7 @@ export default createConfig({
     base: {
       chainId: base.id,
       transport: rateLimit(http(process.env.PONDER_RPC_URL_8453), {
-        requestsPerSecond: 10,
+        requestsPerSecond: isDev ? 10 : 25,
       }),
     },
   },
