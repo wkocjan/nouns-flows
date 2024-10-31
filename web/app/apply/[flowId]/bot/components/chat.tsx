@@ -17,6 +17,7 @@ import { Message } from "./message"
 import { MultimodalInput } from "./multimodal-input"
 import StartImage from "./start.svg"
 import { useChatHistory } from "./use-chat-history"
+import { ErrorMessage } from "./error-message"
 
 interface Props {
   flow: Grant
@@ -31,14 +32,24 @@ export function Chat(props: Props) {
     id: flow.id,
   })
 
-  const { messages, handleSubmit, input, setInput, isLoading, stop, reload, setMessages, append } =
-    useChat({
-      id: chatId,
-      api: `/apply/${flow.id}/bot/chat`,
-      body: { flowId: flow.id, address, chatId },
-      initialMessages: readChatHistory(),
-      keepLastMessageOnError: true,
-    })
+  const {
+    messages,
+    handleSubmit,
+    input,
+    setInput,
+    isLoading,
+    stop,
+    reload,
+    setMessages,
+    append,
+    error,
+  } = useChat({
+    id: chatId,
+    api: `/apply/${flow.id}/bot/chat`,
+    body: { flowId: flow.id, address, chatId },
+    initialMessages: readChatHistory(),
+    keepLastMessageOnError: true,
+  })
 
   const restartApplication = () => {
     const confirmed = window.confirm(
@@ -127,6 +138,16 @@ export function Chat(props: Props) {
                 toolInvocations={message.toolInvocations}
               />
             ))}
+            {error && (
+              <ErrorMessage
+                buttonText="Retry Application"
+                error={error}
+                onRetry={() => {
+                  resetChatHistory()
+                  window.location.reload()
+                }}
+              />
+            )}
 
             <div ref={messagesEndRef} className="min-h-[24px] min-w-[24px] shrink-0" />
           </>
