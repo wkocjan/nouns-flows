@@ -97,8 +97,8 @@ model DerivedData {
   grant     Grant    @relation(fields: [grantId], references: [id])
 
   // derived data here (generated from ai etc.)
-  template      String?
   minimumSalary Int?
+  template      String?
 
   @@index([grantId])
   @@map("DerivedData")
