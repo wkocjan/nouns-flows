@@ -90,12 +90,7 @@ export function DraftPublishButton(props: Props) {
               {action}
             </Button>
           </TooltipTrigger>
-          {!canPublish && (
-            <CantPublishTooltip
-              currentMinimumSalary={currentMinimumSalary}
-              minimumSalary={flow.derivedData?.minimumSalary || 0}
-            />
-          )}
+          {!canPublish && <CantPublishTooltip />}
         </Tooltip>
       </DialogTrigger>
       <DialogContent className="sm:max-w-screen-sm">
@@ -216,19 +211,13 @@ export function DraftPublishButton(props: Props) {
   )
 }
 
-const CantPublishTooltip = ({
-  currentMinimumSalary,
-  minimumSalary,
-}: {
-  currentMinimumSalary: number
-  minimumSalary: number
-}) => {
+const CantPublishTooltip = () => {
   return (
     <TooltipContent className="text-center">
-      This flow is full.
+      This flow is not accepting new grants.
       <br />
-      Min. salary: <Currency>{currentMinimumSalary}</Currency> vs cutoff{" "}
-      <Currency>{minimumSalary}</Currency>
+      Please check back soon.
+      <br />
     </TooltipContent>
   )
 }
