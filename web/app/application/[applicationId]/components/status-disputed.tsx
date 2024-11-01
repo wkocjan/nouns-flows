@@ -74,9 +74,9 @@ export async function StatusDisputed(props: Props) {
   async function Challenger() {
     return (
       <li>
-        <span>Challenged by</span>{" "}
+        <span className="text-yellow-500">Challenged by</span>{" "}
         <UserProfile address={getEthAddress(dispute.challenger)}>
-          {(profile) => <span className="font-medium">{profile.display_name}</span>}
+          {(profile) => <span className="font-medium text-primary">{profile.display_name}</span>}
         </UserProfile>
       </li>
     )
