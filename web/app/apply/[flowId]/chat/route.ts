@@ -159,6 +159,7 @@ export async function POST(request: Request) {
 
     If the users answers to your questions are incomplete or not satisfactory, please follow up with questions.
     Do not submit the application if the information is not complete or satisfactory. Ask for more information if needed.
+    When you generate the sections or text that include their social links, make sure to include them in the markdown format, with the links in the markdown format.
 
     Make sure when you draft the application to submit, to always do it in English, even if the user initially picked another language.
     Ideally try to mimic the tone and style of the user's answers in the application, but only if it makes sense to do that and you have enough text to work with.
