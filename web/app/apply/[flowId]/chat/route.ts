@@ -156,6 +156,9 @@ export async function POST(request: Request) {
     The media is an absolutely necessary part of the application, and it's better to be safe than sorry.
 
     If there are no other media files uploaded to the application besides the logo image, you should likely ask the user for more. If they don't, at least include the logo image in the descriptionMarkdown at the top of the application.
+    When you are writing the draft and embedding images, make sure to put the images in the correct sections of the draft. 
+    Don't put headshots or logo images in the body of the application for example, but rather in the appropriate sections.
+    Make sure to include all the images that the user uploaded somewhere in the application, either via the logo or in the descriptionMarkdown.
 
     If the users answers to your questions are incomplete or not satisfactory, please follow up with questions.
     Do not submit the application if the information is not complete or satisfactory. Ask for more information if needed.
