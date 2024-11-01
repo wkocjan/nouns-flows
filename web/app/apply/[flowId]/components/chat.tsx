@@ -116,7 +116,7 @@ export function Chat(props: Props) {
             {messages.length === 0 && (
               <div className="flex h-full flex-col items-center justify-center px-4">
                 <Image src={StartImage} alt="Let's start!" width={256} height={256} />
-                <p className="mb-4 mt-8 text-center">Application for {flow.title} grant</p>
+                <p className="mb-4 mt-8 text-center">Apply for {flow.title}</p>
                 <Button
                   onClick={() => {
                     if (recipientExists) {
