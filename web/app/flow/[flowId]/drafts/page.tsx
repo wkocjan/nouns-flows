@@ -32,6 +32,7 @@ export default async function FlowDraftsPage(props: Props) {
 
   const flow = await database.grant.findFirstOrThrow({
     where: { id: flowId, isFlow: 1, isRemoved: 0 },
+    include: { derivedData: true },
   })
 
   const drafts = await database.draft.findMany({

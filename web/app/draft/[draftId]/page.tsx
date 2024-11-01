@@ -45,7 +45,7 @@ export default async function DraftPage({ params, searchParams }: Props) {
 
   const draft = await database.draft.findUniqueOrThrow({
     where: { id: Number(draftId), isPrivate: false },
-    include: { flow: true },
+    include: { flow: { include: { derivedData: true } } },
   })
 
   const { title, flow, isOnchain, createdAt, users, isFlow, description, blocks } = draft
