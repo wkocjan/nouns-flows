@@ -41,7 +41,7 @@ export async function POST(request: Request) {
     async () => {
       return database.grant.findFirstOrThrow({
         where: { id: flowId, isFlow: 1, isActive: 1 },
-        include: { template: true },
+        include: { derivedData: true },
       })
     },
     [`flow-${flowId}-apply-bot`],
@@ -66,7 +66,7 @@ export async function POST(request: Request) {
 
     Here is the template for the application - we were using it in the past, but now we want to achieve something similar from conversation with user.
     
-    The template: ${flow.template?.content}
+    The template: ${flow.derivedData?.template}
 
     The address of the user is ${address}.
 

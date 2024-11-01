@@ -15,7 +15,7 @@ import { useTcrData } from "@/lib/tcr/use-tcr-data"
 import { useTcrToken } from "@/lib/tcr/use-tcr-token"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
-import { Draft, Grant } from "@prisma/client"
+import { DerivedData, Draft, Grant } from "@prisma/client"
 import { useModal } from "connectkit"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
@@ -24,10 +24,12 @@ import { encodeAbiParameters, formatEther, zeroAddress } from "viem"
 import { base } from "viem/chains"
 import { useAccount } from "wagmi"
 import { publishDraft } from "./publish-draft"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { Currency } from "@/components/ui/currency"
 
 interface Props {
   draft: Draft
-  flow: Grant
+  flow: Grant & { derivedData: DerivedData | null }
   size?: "default" | "sm"
 }
 
@@ -64,23 +66,32 @@ export function DraftPublishButton(props: Props) {
 
   const hasEnoughBalance = token.balance >= addItemCost
   const hasEnoughAllowance = token.allowance >= addItemCost
+  const currentMinimumSalary =
+    Number(flow.monthlyBaselinePoolFlowRate) / Number(flow.activeRecipientCount)
+  const canPublish = Number(flow.derivedData?.minimumSalary || "0") <= currentMinimumSalary
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          type="button"
-          onClick={(e) => {
-            if (!address) {
-              e.preventDefault()
-              setOpen(true)
-            }
-          }}
-          ref={ref}
-          size={size}
-        >
-          {action}
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              type="button"
+              onClick={(e) => {
+                if (!address) {
+                  e.preventDefault()
+                  setOpen(true)
+                }
+              }}
+              disabled={!canPublish}
+              ref={ref}
+              size={size}
+            >
+              {action}
+            </Button>
+          </TooltipTrigger>
+          {!canPublish && <CantPublishTooltip />}
+        </Tooltip>
       </DialogTrigger>
       <DialogContent className="sm:max-w-screen-sm">
         <DialogHeader>
@@ -197,5 +208,16 @@ export function DraftPublishButton(props: Props) {
         </div>
       </DialogContent>
     </Dialog>
+  )
+}
+
+const CantPublishTooltip = () => {
+  return (
+    <TooltipContent className="text-center">
+      This flow is not accepting new grants.
+      <br />
+      Please check back soon.
+      <br />
+    </TooltipContent>
   )
 }

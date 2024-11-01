@@ -89,19 +89,6 @@ model Comment {
   @@schema("web")
 }
 
-model Template {
-  id        String   @id @default(cuid())
-  content   String
-  grantId   String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  grant     Grant    @relation(fields: [grantId], references: [id])
-
-  @@index([grantId])
-  @@map("Template")
-  @@schema("web")
-}
-
 model DerivedData {
   id        String   @id @default(cuid())
   grantId   String   @unique
@@ -114,7 +101,8 @@ model DerivedData {
   @@schema("web")
 
   // derived data here (generated from ai etc.)
-  minimumSalary String
+  minimumSalary Int?
+  template      String?
 }
 
 
@@ -188,7 +176,6 @@ view Grant {
   tokenHolders TokenHolder[]
   updates      Cast[]
   evidences    Evidence[]
-  template     Template?
   derivedData  DerivedData?
 
   @@map("Grant")

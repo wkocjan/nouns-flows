@@ -30,7 +30,7 @@ export default async function ApplyFlowPage(props: Props) {
 
   const flow = await database.grant.findFirstOrThrow({
     where: { id: flowId, isFlow: 1, isActive: 1 },
-    include: { template: true },
+    include: { derivedData: true },
   })
   const { isTopLevel } = flow
   const isFlow = isTopLevel === 1
@@ -52,7 +52,7 @@ export default async function ApplyFlowPage(props: Props) {
               flow={flow}
               isFlow={isFlow}
               template={
-                isFlow ? defaultFlowTemplate : flow.template?.content || defaultGrantTemplate
+                isFlow ? defaultFlowTemplate : flow.derivedData?.template || defaultGrantTemplate
               }
             />
           </CardContent>
