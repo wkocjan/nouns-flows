@@ -14,6 +14,12 @@ async function handleItemSubmitted(params: {
 
   const tcr = event.log.address.toLowerCase()
 
+  if (event.block.number === BigInt(21826311)) {
+    console.log({ _data, _itemID })
+
+    // throw new Error("Block 21826311")
+  }
+
   const { items } = await context.db.Grant.findMany({ where: { tcr, isFlow: true } })
   const flow = items?.[0]
   if (!flow) throw new Error("Flow not found for TCR item")
