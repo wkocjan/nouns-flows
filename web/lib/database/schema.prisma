@@ -102,6 +102,22 @@ model Template {
   @@schema("web")
 }
 
+model DerivedData {
+  id        String   @id @default(cuid())
+  grantId   String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  grant     Grant    @relation(fields: [grantId], references: [id])
+
+  @@index([grantId])
+  @@map("DerivedData")
+  @@schema("web")
+
+  // derived data here (generated from ai etc.)
+  minimumSalary String
+}
+
+
 model Application {
   id          String   @id
   flowId      String
@@ -173,6 +189,7 @@ view Grant {
   updates      Cast[]
   evidences    Evidence[]
   template     Template?
+  derivedData  DerivedData?
 
   @@map("Grant")
   @@schema("public")
