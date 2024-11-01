@@ -88,6 +88,24 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
 
             {tokens.length > 0 && <SwapTokenButton size="xs" flow={flow} />}
           </div>
+
+          <Tabs defaultValue="active" className="mt-4 w-full pt-4">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="active">Active</TabsTrigger>
+              <TabsTrigger value="voted">Voted</TabsTrigger>
+            </TabsList>
+            <TabsContent value="active">
+              <CuratorGrants closePopover={closePopover} grants={activeSubgrants} />
+            </TabsContent>
+            <TabsContent value="voted">
+              <CuratorGrants closePopover={closePopover} grants={votedSubgrants} />
+            </TabsContent>
+          </Tabs>
+
+          <p className="mt-8 border-t border-border pt-4 text-xs text-muted-foreground md:text-sm">
+            Curate incoming grants to continue earning rewards.
+          </p>
+
           {tokens.length > 0 ? (
             <>
               <div className="mt-8">
@@ -108,23 +126,6 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
                     />
                   ))}
               </div>
-
-              <p className="mt-8 border-t border-border pt-4 text-xs text-muted-foreground md:text-sm">
-                Curate incoming grants to continue earning rewards.
-              </p>
-
-              <Tabs defaultValue="active" className="mt-4 w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="active">Active</TabsTrigger>
-                  <TabsTrigger value="voted">Voted</TabsTrigger>
-                </TabsList>
-                <TabsContent value="active">
-                  <CuratorGrants closePopover={closePopover} grants={activeSubgrants} />
-                </TabsContent>
-                <TabsContent value="voted">
-                  <CuratorGrants closePopover={closePopover} grants={votedSubgrants} />
-                </TabsContent>
-              </Tabs>
             </>
           ) : (
             <>
