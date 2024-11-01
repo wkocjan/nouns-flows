@@ -93,7 +93,23 @@ export async function StatusDisputed(props: Props) {
     return (
       <li>
         Reason provided:
-        <div className="mt-1 pl-5 text-muted-foreground">{evidence.evidence}</div>
+        <div className="mt-1 whitespace-pre-wrap break-words pl-5 text-muted-foreground">
+          {evidence.evidence.split(/\b(https?:\/\/[^\s]+)\b/).map((part, i) =>
+            /^https?:\/\//.test(part) ? (
+              <a
+                key={i}
+                href={part}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                {part}
+              </a>
+            ) : (
+              part
+            ),
+          )}
+        </div>
       </li>
     )
   }

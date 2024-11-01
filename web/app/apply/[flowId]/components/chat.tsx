@@ -19,7 +19,7 @@ import StartImage from "./start.svg"
 import { useChatHistory } from "./use-chat-history"
 import { ErrorMessage } from "./error-message"
 import { toast } from "sonner"
-import { useRecipientExists } from "../../components/useRecipientExists"
+import { useRecipientExists } from "./useRecipientExists"
 
 interface Props {
   flow: Grant
@@ -47,7 +47,7 @@ export function Chat(props: Props) {
     error,
   } = useChat({
     id: chatId,
-    api: `/apply/${flow.id}/bot/chat`,
+    api: `/apply/${flow.id}/chat`,
     body: { flowId: flow.id, address, chatId },
     initialMessages: readChatHistory(),
     keepLastMessageOnError: true,
@@ -129,11 +129,19 @@ export function Chat(props: Props) {
                       content: `Hi, I want to apply for a grant in ${flow.title}... Can we start the application?`,
                     })
                   }}
-                  size="lg"
+                  size="xl"
                   loading={isLoading}
                 >
                   Let&apos;s start!
                 </Button>
+                <div className="mt-2 text-center">
+                  <Link
+                    href={`/apply/${flow.id}/manual`}
+                    className="text-xs text-muted-foreground hover:underline"
+                  >
+                    Apply manually
+                  </Link>
+                </div>
               </div>
             )}
 
