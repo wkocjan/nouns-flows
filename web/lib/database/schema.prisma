@@ -96,13 +96,13 @@ model DerivedData {
   updatedAt DateTime @updatedAt
   grant     Grant    @relation(fields: [grantId], references: [id])
 
-  @@index([grantId])
-  @@map("DerivedData")
-  @@schema("web")
-
   // derived data here (generated from ai etc.)
   template      String?
   minimumSalary Int?
+
+  @@index([grantId])
+  @@map("DerivedData")
+  @@schema("web")
 }
 
 
