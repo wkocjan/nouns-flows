@@ -101,8 +101,8 @@ model DerivedData {
   @@schema("web")
 
   // derived data here (generated from ai etc.)
-  minimumSalary Int?
   template      String?
+  minimumSalary Int?
 }
 
 
