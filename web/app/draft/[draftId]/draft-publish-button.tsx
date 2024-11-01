@@ -73,25 +73,24 @@ export function DraftPublishButton(props: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              type="button"
-              onClick={(e) => {
-                if (!address) {
-                  e.preventDefault()
-                  setOpen(true)
-                }
-              }}
-              disabled={!canPublish}
-              ref={ref}
-              size={size}
-            >
-              {action}
-            </Button>
-          </TooltipTrigger>
-          {!canPublish && <CantPublishTooltip />}
-        </Tooltip>
+        {!canPublish ? (
+          <DisabledPublishButton action={action} size={size} />
+        ) : (
+          <Button
+            type="button"
+            onClick={(e) => {
+              if (!address) {
+                e.preventDefault()
+                setOpen(true)
+              }
+            }}
+            disabled={!canPublish}
+            ref={ref}
+            size={size}
+          >
+            {action}
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-screen-sm">
         <DialogHeader>
@@ -219,5 +218,18 @@ const CantPublishTooltip = () => {
       Please check back soon.
       <br />
     </TooltipContent>
+  )
+}
+
+const DisabledPublishButton = ({ action, size }: { action: string; size?: "default" | "sm" }) => {
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button disabled size={size}>
+          {action}
+        </Button>
+      </TooltipTrigger>
+      <CantPublishTooltip />
+    </Tooltip>
   )
 }
