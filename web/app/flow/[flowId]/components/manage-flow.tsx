@@ -17,6 +17,8 @@ import { useChangeChallengeDuration } from "../hooks/useChangeChallengeDuration"
 import { useChallengeTimeDuration } from "../hooks/useChallengeTimeDuration"
 import { useSetFlowRate } from "../hooks/useSetFlowRate"
 import { useFlowRate } from "../hooks/useFlowRate"
+import { useSetBaselinePoolPercent } from "../hooks/useSetBaselinePoolPercent"
+import { useBaselinePoolFlowRatePercent } from "../hooks/useBaselinePoolFlowRatePercent"
 
 interface Props {
   flow: FlowWithGrants
@@ -44,6 +46,8 @@ export const ManageFlow = ({ flow }: Props) => {
   const duration = useChallengeTimeDuration(tcrAddress)
   const { setFlowRate } = useSetFlowRate(flowAddress)
   const flowRate = useFlowRate(flowAddress)
+  const { setBaselinePoolPercent } = useSetBaselinePoolPercent(flowAddress)
+  const baselinePoolFlowRatePercent = useBaselinePoolFlowRatePercent(flowAddress)
 
   if (!isFlowOwner) return null
 
@@ -92,6 +96,15 @@ export const ManageFlow = ({ flow }: Props) => {
           buttonText="Update Flow Rate"
           onSubmit={setFlowRate}
           prefill={flowRate ? Number(flowRate) : undefined}
+        />
+
+        <NumberForm
+          title="Baseline Pool Flow Rate Percent"
+          functionName="setBaselinePoolPercent"
+          placeholder="New baseline pool flow rate percent"
+          buttonText="Update Baseline Pool Flow Rate Percent"
+          onSubmit={setBaselinePoolPercent}
+          prefill={baselinePoolFlowRatePercent ? Number(baselinePoolFlowRatePercent) : undefined}
         />
 
         {/* Future sections for other contract interactions can be added here */}
