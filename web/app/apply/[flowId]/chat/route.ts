@@ -160,6 +160,9 @@ export async function POST(request: Request) {
     If the users answers to your questions are incomplete or not satisfactory, please follow up with questions.
     Do not submit the application if the information is not complete or satisfactory. Ask for more information if needed.
 
+    Make sure when you draft the application to submit, to always do it in English, even if the user initially picked another language.
+    Ideally try to mimic the tone and style of the user's answers in the application, but only if it makes sense to do that and you have enough text to work with.
+
     When you get the draft back from the submitApplication tool, congratulate the user.
     If the draftId returned is not a number, output an error message that you got from the tool, make sure to include it in the message.
 
