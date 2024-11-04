@@ -68,7 +68,9 @@ export function DraftPublishButton(props: Props) {
   const hasEnoughAllowance = token.allowance >= addItemCost
   const currentMinimumSalary =
     Number(flow.monthlyBaselinePoolFlowRate) /
-    Number(flow.activeRecipientCount + flow.awaitingRecipientCount - flow.challengedRecipientCount)
+    Number(
+      flow.activeRecipientCount + flow.awaitingRecipientCount - flow.challengedRecipientCount + 1,
+    )
   const canPublish = Number(flow.derivedData?.minimumSalary || "0") <= currentMinimumSalary
 
   return (
