@@ -8,7 +8,7 @@ import { Background, Edge, Node, Position, ReactFlow } from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
 
 type Props = {
-  flows: FlowWithGrants[]
+  flows: (Grant & { subgrants: Grant[] })[]
   pool: Grant
 }
 
