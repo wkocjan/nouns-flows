@@ -49,6 +49,19 @@ export async function GET() {
           address: client.account.address,
         })
 
+        // Check if vote is already revealed
+        const receipt = await l2Client.readContract({
+          address: arbitrator as `0x${string}`,
+          abi: erc20VotesArbitratorImplAbi,
+          functionName: "getReceipt",
+          args: [BigInt(disputeId), vote.voter],
+        })
+
+        if (receipt.hasRevealed) {
+          console.log(`Vote already revealed for dispute ${disputeId} by ${vote.voter}`)
+          continue
+        }
+
         const tx = await client.writeContract({
           address: arbitrator as `0x${string}`,
           abi: erc20VotesArbitratorImplAbi,
