@@ -13,9 +13,9 @@ export const WithdrawCuratorSalaryButton = ({
   pool: `0x${string}`
   size?: ButtonProps["size"]
 }) => {
-  const { withdraw } = useBulkPoolWithdrawMacro([pool])
+  const { balance, isLoading, refetch } = useClaimablePoolBalance(pool)
 
-  const { balance, isLoading } = useClaimablePoolBalance(pool)
+  const { withdraw } = useBulkPoolWithdrawMacro([pool], () => refetch())
 
   return (
     <Tooltip>

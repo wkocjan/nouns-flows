@@ -171,6 +171,8 @@ export async function POST(request: Request) {
     If the draftId returned is not a number, output an error message that you got from the tool, make sure to include it in the message.
 
     ${isProd ? productionRules : ""}
+
+    Ensure the final draft is in English, even if the user initially picked another language. Do not forget to do this, the final draft that you submit must be in English.
     `,
     messages: coreMessages,
     maxSteps: 7,

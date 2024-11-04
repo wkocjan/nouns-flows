@@ -6,7 +6,11 @@ export const useClaimablePoolBalance = (pool: `0x${string}`) => {
   const { address } = useAccount()
   const chainId = base.id
 
-  const { data: balance, isLoading } = useReadContract({
+  const {
+    data: balance,
+    isLoading,
+    refetch,
+  } = useReadContract({
     address: pool,
     abi: superfluidPoolAbi,
     chainId,
@@ -17,5 +21,6 @@ export const useClaimablePoolBalance = (pool: `0x${string}`) => {
   return {
     balance: balance?.length ? balance[0] : BigInt(0),
     isLoading,
+    refetch,
   }
 }
