@@ -74,7 +74,10 @@ async function handleDispute(params: {
 
   await context.db.Grant.update({
     id: parent.id,
-    data: { challengedRecipientCount: parent.challengedRecipientCount + 1 },
+    data: {
+      challengedRecipientCount: parent.challengedRecipientCount + 1,
+      awaitingRecipientCount: parent.awaitingRecipientCount - 1,
+    },
   })
 
   await context.db.Dispute.updateMany({

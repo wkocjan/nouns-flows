@@ -50,7 +50,10 @@ async function handleItemStatusChange(params: {
   if (_itemStatus === Status.ClearingRequested) {
     await context.db.Grant.update({
       id: _itemID,
-      data: { challengedRecipientCount: flow.challengedRecipientCount + 1 },
+      data: {
+        challengedRecipientCount: flow.challengedRecipientCount + 1,
+        awaitingRecipientCount: flow.awaitingRecipientCount - 1,
+      },
     })
   }
 }
