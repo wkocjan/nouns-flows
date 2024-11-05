@@ -89,7 +89,8 @@ export async function POST(request: Request) {
 
     When you receive results from the queryEmbeddings tool, you should use the externalId field to add a markdown link to the specific application, flow, or grant you mention.
     For flows, you can link to https://flows.wtf/flow/[externalId].
-    For grants, applications you can link to https://flows.wtf/item/[externalId].
+    For grants, you can link to https://flows.wtf/item/[externalId].
+    For applications, you can link to https://flows.wtf/application/[externalId].
     For drafts, you can link to https://flows.wtf/draft/[externalId].
     Add the markdown link at the end of the part of the message where you mention the application, flow, or grant.
     We will display the links in the chat as sources that are clickable links. 

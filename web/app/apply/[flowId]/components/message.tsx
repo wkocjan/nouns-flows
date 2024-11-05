@@ -37,7 +37,7 @@ export const Message = (props: Props) => {
           href={match[2]}
           target="_blank"
           rel="noopener noreferrer"
-          className="items-center rounded-full bg-muted p-1 px-2 text-[10px] uppercase hover:bg-muted/80"
+          className="items-center rounded-full bg-gray-300/80 bg-muted p-1 px-2 text-[9px] uppercase text-gray-600 hover:bg-black/80 hover:text-white dark:text-gray-700 dark:hover:bg-white/80 dark:hover:text-black"
         >
           {match[1]}
         </a>,
