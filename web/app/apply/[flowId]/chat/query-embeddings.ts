@@ -5,7 +5,7 @@ import { z } from "zod"
 import { generateEmbedding } from "./generate-embeddings"
 import { embeddingsDb } from "@/lib/embedding/db"
 import { embeddings } from "@/lib/embedding/schema"
-import { sql, desc, cosineDistance, gt, and, arrayOverlaps, inArray } from "drizzle-orm"
+import { sql, desc, cosineDistance, gt, and, arrayOverlaps, inArray, or } from "drizzle-orm"
 
 const embeddingQuerySchema = z.object({
   types: z.array(z.enum(validTypes)),
@@ -64,8 +64,7 @@ export async function queryEmbeddings({
       .where(
         and(
           gt(similarity, 0.25),
-          inArray(embeddings.type, types),
-          arrayOverlaps(embeddings.tags, tags),
+          or(inArray(embeddings.type, types), arrayOverlaps(embeddings.tags, tags)),
         ),
       )
       .orderBy((t) => desc(t.similarity))
