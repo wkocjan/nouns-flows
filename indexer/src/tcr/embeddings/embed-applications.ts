@@ -4,6 +4,7 @@ import { JobBody } from "../../queue/job"
 import { getNonzeroLowercasedAddresses } from "../../queue/helpers"
 import { deleteEmbeddingRequest } from "../../queue/client"
 import { getContentHash } from "../../hash"
+import { cleanTextForEmbedding } from "../../clean"
 
 export async function addApplicationEmbedding(grant: Schema["Grant"]) {
   const users = getNonzeroLowercasedAddresses([grant.recipient, grant.submitter])
@@ -28,7 +29,6 @@ export async function removeApplicationEmbedding(grant: Schema["Grant"]) {
 }
 
 const getApplicationContent = (grant: Schema["Grant"]) => {
-  return `This is a grant application submitted by ${grant.submitter} for ${
-    grant.recipient
-  }. Here is the grant application data: ${JSON.stringify(grant)}`
+  const cleanedGrant = cleanTextForEmbedding(JSON.stringify(grant))
+  return `this is a grant application submitted by ${grant.submitter.toLowerCase()} for ${grant.recipient.toLowerCase()}. here is the grant application data: ${cleanedGrant}`
 }

@@ -5,6 +5,7 @@ import { RecipientType } from "../../enums"
 import { getNonzeroLowercasedAddresses } from "../../queue/helpers"
 import { deleteEmbeddingRequest } from "../../queue/client"
 import { getContentHash } from "../../hash"
+import { cleanTextForEmbedding } from "../../clean"
 
 export async function addGrantEmbedding(grant: Schema["Grant"], recipientType: RecipientType) {
   if (recipientType === RecipientType.ExternalAccount) {
@@ -47,9 +48,8 @@ async function embedGrant(grant: Schema["Grant"]) {
 }
 
 const getFlowContractContent = (grant: Schema["Grant"]) => {
-  return `This is a flow contract budget that people can apply for. Here is the flow data: ${JSON.stringify(
-    grant
-  )}`
+  const cleanedGrant = cleanTextForEmbedding(JSON.stringify(grant))
+  return `this is a flow contract budget that people can apply for. here is the flow data: ${cleanedGrant}`
 }
 
 async function embedFlowContract(grant: Schema["Grant"]) {
