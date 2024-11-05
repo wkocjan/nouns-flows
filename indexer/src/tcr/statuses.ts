@@ -1,6 +1,7 @@
 import { ponder, type Context, type Event } from "@/generated"
 import { Status } from "../enums"
 import { getAddress } from "viem"
+import { removeApplicationEmbedding } from "./embeddings/embed-applications"
 
 ponder.on("NounsFlowTcr:ItemStatusChange", handleItemStatusChange)
 ponder.on("NounsFlowTcrChildren:ItemStatusChange", handleItemStatusChange)
@@ -35,6 +36,10 @@ async function handleItemStatusChange(params: {
     })
 
     challengePeriodEndsAt = Number(event.block.timestamp + challengePeriodDuration)
+  }
+
+  if (grant.status === Status.RegistrationRequested && _itemStatus === Status.Absent) {
+    await removeApplicationEmbedding(grant)
   }
 
   await context.db.Grant.update({

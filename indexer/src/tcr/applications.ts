@@ -1,8 +1,7 @@
-import { ponder, Schema, type Context, type Event } from "@/generated"
-import { decodeAbiParameters, getAddress, zeroAddress } from "viem"
+import { ponder, type Context, type Event } from "@/generated"
+import { decodeAbiParameters, getAddress } from "viem"
 import { RecipientType, Status } from "../enums"
-import { JobBody } from "../queue/job"
-import { postToEmbeddingsQueueRequest } from "../queue/client"
+import { addApplicationEmbedding } from "./embeddings/embed-applications"
 
 ponder.on("NounsFlowTcr:ItemSubmitted", handleItemSubmitted)
 ponder.on("NounsFlowTcrChildren:ItemSubmitted", handleItemSubmitted)
@@ -101,25 +100,5 @@ async function handleItemSubmitted(params: {
     data: { awaitingRecipientCount: flow.awaitingRecipientCount + 1 },
   })
 
-  await embedGrantApplication(grant)
-}
-
-async function embedGrantApplication(grant: Schema["Grant"]) {
-  const users = [
-    ...new Set([grant.recipient, grant.submitter].map((address) => address.toLowerCase())),
-  ].filter((address) => address !== zeroAddress)
-
-  const content = `This is a grant application submitted by ${grant.submitter} for ${
-    grant.recipient
-  }. Here is the grant application data: ${JSON.stringify(grant)}`
-
-  const payload: JobBody = {
-    type: "grant-application",
-    content,
-    groups: ["nouns"],
-    users,
-    tags: ["flows"],
-  }
-
-  await postToEmbeddingsQueueRequest(payload)
+  await addApplicationEmbedding(grant)
 }
