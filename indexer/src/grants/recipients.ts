@@ -1,4 +1,5 @@
 import { ponder, type Context, type Event } from "@/generated"
+import { addGrantEmbedding, removeGrantEmbedding } from "./embeddings/embed-grants"
 
 ponder.on("NounsFlowChildren:RecipientCreated", handleRecipientCreated)
 ponder.on("NounsFlow:RecipientCreated", handleRecipientCreated)
@@ -23,9 +24,6 @@ async function handleFlowRecipientCreated(params: {
     baselinePoolFlowRatePercent,
   } = event.args
 
-  const flowAddress = event.log.address.toLowerCase()
-  const parentFlow = await getParentFlow(context.db, flowAddress)
-
   await context.db.Grant.update({
     id: recipientId.toString(),
     data: {
@@ -49,14 +47,14 @@ async function handleRecipientCreated(params: {
 }) {
   const { event, context } = params
   const {
-    recipient: { recipient, metadata },
+    recipient: { recipient, metadata, recipientType },
     recipientId,
   } = event.args
 
   const flowAddress = event.log.address.toLowerCase()
   const parentFlow = await getParentFlow(context.db, flowAddress)
 
-  await context.db.Grant.update({
+  const grant = await context.db.Grant.update({
     id: recipientId.toString(),
     data: {
       ...metadata,
@@ -73,6 +71,8 @@ async function handleRecipientCreated(params: {
       activeRecipientCount: parentFlow.activeRecipientCount + 1,
     },
   })
+
+  await addGrantEmbedding(grant, recipientType, parentFlow.id)
 }
 
 async function handleRecipientRemoved(params: {
@@ -85,7 +85,7 @@ async function handleRecipientRemoved(params: {
   const flowAddress = event.log.address.toLowerCase()
   const parentFlow = await getParentFlow(context.db, flowAddress)
 
-  await context.db.Grant.update({
+  const removedGrant = await context.db.Grant.update({
     id: recipientId.toString(),
     data: { isRemoved: true, isActive: false, monthlyIncomingFlowRate: "0" },
   })
@@ -94,6 +94,8 @@ async function handleRecipientRemoved(params: {
     id: parentFlow.id,
     data: { activeRecipientCount: parentFlow.activeRecipientCount - 1 },
   })
+
+  await removeGrantEmbedding(removedGrant)
 }
 
 async function getParentFlow(db: Context["db"], parentFlow: string) {

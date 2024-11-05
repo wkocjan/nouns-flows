@@ -17,6 +17,44 @@ interface Props {
 export const Message = (props: Props) => {
   const { role, content, toolInvocations, attachments } = props
 
+  // Function to render content with inline links
+  const renderContentWithLinks = (text: string) => {
+    const regex = /\[([^\]]+)\]\(([^)]+)\)/g
+    const parts = []
+    let lastIndex = 0
+    let match
+    let key = 0
+
+    let index = 0
+    while ((match = regex.exec(text)) !== null) {
+      index++
+      if (match.index > lastIndex) {
+        parts.push(<span key={key++}>{text.substring(lastIndex, match.index)}</span>)
+      }
+      parts.push(
+        <a
+          key={key++}
+          href={match[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="items-center rounded-full bg-gray-300/80 p-1 px-2 text-[9px] uppercase text-gray-600 hover:bg-black/80 hover:text-white dark:text-gray-700 dark:hover:bg-white/80 dark:hover:text-black"
+        >
+          {match[1]}
+        </a>,
+      )
+      lastIndex = regex.lastIndex
+    }
+
+    if (lastIndex < text.length) {
+      // Clean any partial markdown links from the remaining text
+      const remainingText = text.substring(lastIndex)
+      const cleanText = remainingText.replace(/\[([^\]]+)\]\(https?:\/\/[^)]*$/g, "")
+      parts.push(<span key={key++}>{cleanText}</span>)
+    }
+
+    return parts
+  }
+
   return (
     <div
       className="group/message mx-auto w-full max-w-full px-4 animate-in fade-in slide-in-from-bottom-1 md:max-w-3xl"
@@ -38,7 +76,11 @@ export const Message = (props: Props) => {
         <div className="flex w-full flex-col gap-2 rounded-xl p-3 shadow group-data-[role=assistant]/message:bg-primary/10 group-data-[role=user]/message:bg-card dark:group-data-[role=user]/message:border md:px-5 md:py-3.5">
           {content && (
             <div className="flex flex-col gap-4 whitespace-pre-wrap break-words text-sm leading-6">
-              {(content as string).replace(/^(\n\n)+/, "")}
+              {typeof content === "string" ? (
+                <div>{renderContentWithLinks(content.replace(/^(\n\n)+/, ""))}</div>
+              ) : (
+                content
+              )}
             </div>
           )}
 

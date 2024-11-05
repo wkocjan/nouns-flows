@@ -1,6 +1,7 @@
 "use server"
 
 import database from "@/lib/database"
+import { addDraftEmbedding } from "@/lib/embedding/embed-drafts"
 import { z } from "zod"
 
 const draftSchema = z.object({
@@ -57,6 +58,8 @@ export async function createDraft({
         description: descriptionMarkdown,
       },
     })
+
+    await addDraftEmbedding(draft, flowId)
 
     return draft
   } catch (error) {

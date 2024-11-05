@@ -1,6 +1,7 @@
 import { ponder, type Context, type Event } from "@/generated"
 import { decodeAbiParameters, getAddress } from "viem"
 import { RecipientType, Status } from "../enums"
+import { addApplicationEmbedding } from "./embeddings/embed-applications"
 
 ponder.on("NounsFlowTcr:ItemSubmitted", handleItemSubmitted)
 ponder.on("NounsFlowTcrChildren:ItemSubmitted", handleItemSubmitted)
@@ -16,8 +17,6 @@ async function handleItemSubmitted(params: {
 
   if (event.block.number === BigInt(21826311)) {
     console.log({ _data, _itemID })
-
-    // throw new Error("Block 21826311")
   }
 
   const { items } = await context.db.Grant.findMany({ where: { tcr, isFlow: true } })
@@ -49,7 +48,7 @@ async function handleItemSubmitted(params: {
     functionName: "challengePeriodDuration",
   })
 
-  await context.db.Grant.create({
+  const grant = await context.db.Grant.create({
     id: _itemID,
     data: {
       ...metadata,
@@ -100,4 +99,6 @@ async function handleItemSubmitted(params: {
     id: flow.id,
     data: { awaitingRecipientCount: flow.awaitingRecipientCount + 1 },
   })
+
+  await addApplicationEmbedding(grant, flow.id)
 }

@@ -1,6 +1,7 @@
 "use server"
 
 import database from "@/lib/database"
+import { removeDraftEmbedding, updateDraftEmbedding } from "@/lib/embedding/embed-drafts"
 import { revalidatePath } from "next/cache"
 import { z } from "zod"
 
@@ -31,7 +32,7 @@ export async function updateDraft(id: number, formData: FormData, user?: `0x${st
 
     const { descriptionMarkdown, descriptionBlocks, ...rest } = validation.data
 
-    await database.draft.update({
+    const newDraft = await database.draft.update({
       where: { id, isOnchain: false },
       data: {
         ...rest,
@@ -39,6 +40,8 @@ export async function updateDraft(id: number, formData: FormData, user?: `0x${st
         blocks: descriptionBlocks,
       },
     })
+
+    await updateDraftEmbedding(draft, newDraft, draft.flowId)
 
     revalidatePath(`/draft/${id}`)
 
