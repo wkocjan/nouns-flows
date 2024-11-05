@@ -37,7 +37,7 @@ export const Message = (props: Props) => {
           href={match[2]}
           target="_blank"
           rel="noopener noreferrer"
-          className="items-center rounded-full bg-gray-300/80 bg-muted p-1 px-2 text-[9px] uppercase text-gray-600 hover:bg-black/80 hover:text-white dark:text-gray-700 dark:hover:bg-white/80 dark:hover:text-black"
+          className="items-center rounded-full bg-gray-300/80 p-1 px-2 text-[9px] uppercase text-gray-600 hover:bg-black/80 hover:text-white dark:text-gray-700 dark:hover:bg-white/80 dark:hover:text-black"
         >
           {match[1]}
         </a>,
@@ -46,7 +46,10 @@ export const Message = (props: Props) => {
     }
 
     if (lastIndex < text.length) {
-      parts.push(<span key={key++}>{text.substring(lastIndex)}</span>)
+      // Clean any partial markdown links from the remaining text
+      const remainingText = text.substring(lastIndex)
+      const cleanText = remainingText.replace(/\[([^\]]+)\]\(https?:\/\/[^)]*$/g, "")
+      parts.push(<span key={key++}>{cleanText}</span>)
     }
 
     return parts
