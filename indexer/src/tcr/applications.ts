@@ -1,6 +1,7 @@
 import { ponder, type Context, type Event } from "@/generated"
-import { decodeAbiParameters, getAddress } from "viem"
+import { decodeAbiParameters, getAddress, zeroAddress } from "viem"
 import { RecipientType, Status } from "../enums"
+import { JobBody } from "../queue/job"
 
 ponder.on("NounsFlowTcr:ItemSubmitted", handleItemSubmitted)
 ponder.on("NounsFlowTcrChildren:ItemSubmitted", handleItemSubmitted)
@@ -16,8 +17,6 @@ async function handleItemSubmitted(params: {
 
   if (event.block.number === BigInt(21826311)) {
     console.log({ _data, _itemID })
-
-    // throw new Error("Block 21826311")
   }
 
   const { items } = await context.db.Grant.findMany({ where: { tcr, isFlow: true } })
@@ -49,7 +48,7 @@ async function handleItemSubmitted(params: {
     functionName: "challengePeriodDuration",
   })
 
-  await context.db.Grant.create({
+  const grant = await context.db.Grant.create({
     id: _itemID,
     data: {
       ...metadata,
@@ -100,4 +99,36 @@ async function handleItemSubmitted(params: {
     id: flow.id,
     data: { awaitingRecipientCount: flow.awaitingRecipientCount + 1 },
   })
+
+  await postToEmbeddingsQueue(grant)
+}
+
+async function postToEmbeddingsQueue(grant: any) {
+  const users = [
+    ...new Set([grant.recipient, grant.submitter].map((address) => address.toLowerCase())),
+  ].filter((address) => address !== zeroAddress)
+
+  const content = `This is a grant application submitted by ${grant.submitter} for ${
+    grant.recipient
+  }. Here is the grant data: ${JSON.stringify(grant)}`
+
+  const payload: JobBody = {
+    type: "grant-application",
+    content,
+    groups: ["nouns"],
+    users,
+    tags: ["flows"],
+  }
+
+  const response = await fetch(process.env.EMBEDDINGS_QUEUE_URL + "/add-job", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+
+  if (!response.ok) {
+    console.error("Failed to post to embeddings queue:", await response.text())
+  }
 }

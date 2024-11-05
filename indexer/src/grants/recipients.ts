@@ -24,7 +24,6 @@ async function handleFlowRecipientCreated(params: {
   } = event.args
 
   const flowAddress = event.log.address.toLowerCase()
-  const parentFlow = await getParentFlow(context.db, flowAddress)
 
   await context.db.Grant.update({
     id: recipientId.toString(),
