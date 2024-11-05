@@ -7,7 +7,7 @@ import { getContentHash } from "../../hash"
 import { cleanTextForEmbedding } from "../../clean"
 
 export async function addApplicationEmbedding(grant: Schema["Grant"], parentId: string) {
-  const users = getNonzeroLowercasedAddresses([grant.recipient, grant.submitter])
+  const users = getNonzeroLowercasedAddresses([grant.recipient])
 
   const content = getApplicationContent(grant)
 

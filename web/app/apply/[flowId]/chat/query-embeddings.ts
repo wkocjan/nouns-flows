@@ -59,12 +59,17 @@ export async function queryEmbeddings({
         groups: embeddings.groups,
         users: embeddings.users,
         tags: embeddings.tags,
+        externalId: embeddings.externalId,
       })
       .from(embeddings)
       .where(
         and(
           gt(similarity, 0.25),
-          or(inArray(embeddings.type, types), arrayOverlaps(embeddings.tags, tags)),
+          or(
+            types.length > 0 ? inArray(embeddings.type, types) : undefined,
+            tags.length > 0 ? arrayOverlaps(embeddings.tags, tags) : undefined,
+            users.length > 0 ? arrayOverlaps(embeddings.users, users) : undefined,
+          ),
         ),
       )
       .orderBy((t) => desc(t.similarity))

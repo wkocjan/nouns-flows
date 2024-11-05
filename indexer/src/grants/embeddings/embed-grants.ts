@@ -43,7 +43,7 @@ const getGrantContent = (grant: Schema["Grant"]) => {
 }
 
 async function embedGrant(grant: Schema["Grant"], parentId: string) {
-  const users = getNonzeroLowercasedAddresses([grant.recipient, grant.submitter])
+  const users = getNonzeroLowercasedAddresses([grant.recipient])
 
   const content = getGrantContent(grant)
 
@@ -72,7 +72,7 @@ const getFlowContractContent = (grant: Schema["Grant"]) => {
 }
 
 async function embedFlowContract(grant: Schema["Grant"], parentId: string) {
-  const users = getNonzeroLowercasedAddresses([grant.recipient, grant.submitter])
+  const users = getNonzeroLowercasedAddresses([grant.recipient])
 
   const content = getFlowContractContent(grant)
 
