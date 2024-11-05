@@ -1,6 +1,7 @@
 "use server"
 
 import database from "@/lib/database"
+import { addDraftEmbedding } from "@/lib/embedding/embed-drafts"
 import { z } from "zod"
 
 const schema = z
@@ -52,6 +53,9 @@ export async function saveDraft(formData: FormData, user?: `0x${string}`) {
         description: descriptionMarkdown,
       },
     })
+
+    await addDraftEmbedding(draft)
+
     return { error: false, id: draft.id }
   } catch (error) {
     return { error: (error as Error).message || "Failed to save draft" }

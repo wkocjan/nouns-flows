@@ -15,6 +15,10 @@ export async function removeDraftEmbedding(draft: Draft) {
   await deleteEmbeddingRequest(contentHash, type)
 }
 
+export async function updateDraftEmbedding(oldDraft: Draft, newDraft: Draft) {
+  await Promise.all([removeDraftEmbedding(oldDraft), addDraftEmbedding(newDraft)])
+}
+
 const getDraftContent = (draft: Draft) => {
   const cleanedDraft = cleanTextForEmbedding(
     JSON.stringify({
