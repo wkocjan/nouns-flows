@@ -81,7 +81,7 @@ export async function POST(request: Request) {
     If you need more information from the user to construct a relevant query, you can ask them for more.
     When constructing the query, it might be helpful to think about what flow the query is about, and use a summary or keywords from the flow description to help with the query.
     You can query to get a relevant flow first, by calling the queryEmbeddings tool with the type "flow" and the query including a summary of the flow.
-    When constructing the query, make sure to include as much information or keywords as possible to help with the vector search. Use context you know about flows to populate the query keywords.
+    When constructing the query, make sure to include as much information or keywords as possible to help with the vector search. Use context you know about flows to populate the query keywords. Make sure to make it extensive.
     You can also use the numResults parameter to get more results. Ideally default to 5-10 results, but you can go up to 100.
     The id for the flow you are applying to is ${flow.id}. You can pass this to the tags parameter if someone is asking for details about this specific flow to help with the vector search.
 

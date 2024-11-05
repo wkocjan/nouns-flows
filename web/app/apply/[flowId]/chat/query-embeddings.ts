@@ -63,7 +63,7 @@ export async function queryEmbeddings({
       .from(embeddings)
       .where(
         and(
-          gt(similarity, 0.3),
+          gt(similarity, 0.25),
           inArray(embeddings.type, types),
           arrayOverlaps(embeddings.tags, tags),
         ),
