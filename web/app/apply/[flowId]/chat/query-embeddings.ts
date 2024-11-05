@@ -47,6 +47,7 @@ export async function queryEmbeddings({
 
     const similarity = sql<number>`1 - (${cosineDistance(embeddings.embedding, vectorQuery)})`
 
+    console.debug(`Here we go: ${type}, query: ${query}, users: ${users}`)
     const results = await embeddingsDb
       .select({
         id: embeddings.id,
@@ -54,15 +55,11 @@ export async function queryEmbeddings({
         similarity,
       })
       .from(embeddings)
-      .where(
-        sql`${embeddings.type} = ${type} AND
-        ${embeddings.groups} @> ${groups}::text[] AND
-        ${embeddings.users} @> ${users}::text[] AND
-        ${embeddings.tags} @> ${tags}::text[] AND
-        ${gt(similarity, 0.5)}`,
-      )
-      .orderBy(desc(similarity))
+      .where(gt(similarity, 0.3))
+      .orderBy((t) => desc(t.similarity))
       .limit(5)
+
+    console.log({ results })
 
     return results
   } catch (error) {

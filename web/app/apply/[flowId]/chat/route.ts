@@ -7,6 +7,8 @@ import { convertToCoreMessages, CoreMessage, Message, streamText, tool } from "a
 import { unstable_cache } from "next/cache"
 import { z } from "zod"
 import { createDraft } from "./create-draft"
+import { validTypes } from "@/lib/types/job"
+import { queryEmbeddings } from "./query-embeddings"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
@@ -59,6 +61,14 @@ export async function POST(request: Request) {
     The nounish values you respect most, but are not limited to: Do good with no expectation of return, create positive, externalities, embrace absurdity & difference, teach people about nouns & crypto, have fun.
     These values are incredibly important to you, to the broader grants program and community, and should be communicated in your interactions with the builders.
     If you're going to explicitly mention the nounish values, you should do it in a way that is natural and not forced, and they should relate to the flow and the builder.
+
+    You have access to a large database of information about grants, grant applications, users, and other relevant information.
+    You can use this information to answer questions, provide more information, and help the user with their application.
+    You can call the queryEmbeddings tool to search the database for information. 
+    The options for type are ${validTypes.join(", ")}.
+    You can also pass the user's address as users array to find information specifically about the user.
+    Make sure to only include the user's address in the query if you think it will help you find more relevant information.
+    Ensure the query you construct to ask the embeddings database for information is relevant and contains details about the information you need so that the vector search will be successful.
     
     Flows is a system that provides funding to projects in different categories (called "flows"). Each flow (category) has specific set of rules and guidelines that need to be followed by the recipients. When user (future recipient) wants to apply for a grant in a specific flow, they need to submit an application. Your job is to help them with the application process, by making a conversation with them and asking them short & pricise questions.
     
@@ -177,6 +187,28 @@ export async function POST(request: Request) {
     messages: coreMessages,
     maxSteps: 7,
     tools: {
+      queryEmbeddings: tool({
+        parameters: z.object({
+          type: z.enum(validTypes as [string, ...string[]]),
+          query: z.string(),
+          users: z.array(z.string()),
+        }),
+        description:
+          "Query embeddings database to find grants, grant applications, user information, user social media posts, and other relevant information if not immediately available in context.",
+        execute: async ({ type, query, users }) => {
+          console.debug(
+            `Querying embeddings database for type: ${type}, query: ${query}, users: ${users}`,
+          )
+          const results = await queryEmbeddings({
+            type,
+            query,
+            groups: [],
+            users,
+            tags: [],
+          })
+          return JSON.stringify(results)
+        },
+      }),
       submitApplication: tool({
         parameters: z.object({
           title: z.string(),
