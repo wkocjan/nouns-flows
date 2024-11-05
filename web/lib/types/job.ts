@@ -17,3 +17,11 @@ export const validTypes = [
   "dispute",
   "draft-application",
 ] as const
+
+export enum EmbeddingTag {
+  Flows = "flows",
+  Drafts = "drafts",
+  Grants = "grants",
+}
+
+export const validTags = [EmbeddingTag.Flows, EmbeddingTag.Drafts, EmbeddingTag.Grants] as const

@@ -1,6 +1,6 @@
 import { Schema } from "@/generated"
 import { postToEmbeddingsQueueRequest } from "../../queue/queue"
-import { JobBody } from "../../queue/job"
+import { EmbeddingTag, JobBody } from "../../queue/job"
 import { RecipientType } from "../../enums"
 import { getNonzeroLowercasedAddresses } from "../../queue/helpers"
 import { deleteEmbeddingRequest } from "../../queue/queue"
@@ -52,7 +52,7 @@ async function embedGrant(grant: Schema["Grant"], parentId: string) {
     content,
     groups: ["nouns"],
     users,
-    tags: ["flows", parentId],
+    tags: [EmbeddingTag.Grants, parentId],
     externalId: grant.id.toString(),
   }
 
@@ -81,7 +81,7 @@ async function embedFlowContract(grant: Schema["Grant"], parentId: string) {
     content,
     groups: ["nouns"],
     users,
-    tags: ["flows", parentId],
+    tags: [EmbeddingTag.Flows, parentId],
     externalId: grant.id.toString(),
   }
 

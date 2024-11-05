@@ -1,6 +1,6 @@
 import { Schema } from "@/generated"
 import { postToEmbeddingsQueueRequest } from "../../queue/queue"
-import { JobBody } from "../../queue/job"
+import { EmbeddingTag, JobBody } from "../../queue/job"
 import { getNonzeroLowercasedAddresses } from "../../queue/helpers"
 import { deleteEmbeddingRequest } from "../../queue/queue"
 import { getContentHash } from "../../hash"
@@ -16,7 +16,7 @@ export async function addApplicationEmbedding(grant: Schema["Grant"], parentId: 
     content,
     groups: ["nouns"],
     users,
-    tags: ["flows", parentId],
+    tags: [EmbeddingTag.Flows, parentId],
     externalId: grant.id.toString(),
   }
 

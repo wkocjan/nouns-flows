@@ -1,7 +1,7 @@
 import { Draft } from "@prisma/client"
 import { cleanTextForEmbedding } from "./utils"
 import { getContentHash } from "./utils"
-import { EmbeddingType, JobBody } from "../types/job"
+import { EmbeddingTag, EmbeddingType, JobBody } from "../types/job"
 import { deleteEmbeddingRequest, postToEmbeddingsQueueRequest } from "./queue"
 
 export async function addDraftEmbedding(draft: Draft, parentId: string) {
@@ -40,7 +40,7 @@ async function embedDraft(draft: Draft, parentId: string) {
     content,
     groups: ["nouns"],
     users,
-    tags: ["drafts", parentId],
+    tags: [EmbeddingTag.Drafts, parentId],
     externalId: draft.id.toString(),
   }
 

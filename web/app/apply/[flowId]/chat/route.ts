@@ -7,7 +7,7 @@ import { convertToCoreMessages, CoreMessage, Message, streamText, tool } from "a
 import { unstable_cache } from "next/cache"
 import { z } from "zod"
 import { createDraft } from "./create-draft"
-import { validTypes } from "@/lib/types/job"
+import { validTags, validTypes } from "@/lib/types/job"
 import { queryEmbeddings } from "./query-embeddings"
 
 export const dynamic = "force-dynamic"
@@ -84,6 +84,7 @@ export async function POST(request: Request) {
     When constructing the query, make sure to include as much information or keywords as possible to help with the vector search. Use context you know about flows to populate the query keywords. Make sure to make it extensive.
     You can also use the numResults parameter to get more results. Ideally default to 5-10 results, but you can go up to 100.
     The id for the flow you are applying to is ${flow.id}. You can pass this to the tags parameter if someone is asking for details about this specific flow to help with the vector search.
+    Tags can be ${validTags.join(", ")}.
 
     ## Flows
     Flows is a system that provides funding to projects in different categories (called "flows"). Each flow (category) has specific set of rules and guidelines that need to be followed by the recipients. When user (future recipient) wants to apply for a grant in a specific flow, they need to submit an application. Your job is to help them with the application process, by making a conversation with them and asking them short & pricise questions.
