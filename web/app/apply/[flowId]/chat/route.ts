@@ -70,6 +70,7 @@ export async function POST(request: Request) {
     You can also pass the user's address as users array to find information specifically about the user.
     Make sure to only include the user's address in the query if you think it will help you find more relevant information.
     Ensure the query you construct to ask the embeddings database for information is relevant and contains details about the information you need so that the vector search will be successful.
+    If you need more information from the user to construct a relevant query, you can ask them for more.
     
     Flows is a system that provides funding to projects in different categories (called "flows"). Each flow (category) has specific set of rules and guidelines that need to be followed by the recipients. When user (future recipient) wants to apply for a grant in a specific flow, they need to submit an application. Your job is to help them with the application process, by making a conversation with them and asking them short & pricise questions.
     

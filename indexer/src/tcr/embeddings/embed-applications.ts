@@ -29,6 +29,13 @@ export async function removeApplicationEmbedding(grant: Schema["Grant"]) {
 }
 
 const getApplicationContent = (grant: Schema["Grant"]) => {
-  const cleanedGrant = cleanTextForEmbedding(JSON.stringify(grant))
+  const cleanedGrant = cleanTextForEmbedding(
+    JSON.stringify({
+      title: grant.title,
+      description: grant.description,
+      tagline: grant.tagline,
+      isFlow: grant.isFlow,
+    })
+  )
   return `this is a grant application submitted by ${grant.submitter.toLowerCase()} for ${grant.recipient.toLowerCase()}. here is the grant application data: ${cleanedGrant}`
 }

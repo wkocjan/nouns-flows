@@ -28,7 +28,12 @@ export async function removeGrantEmbedding(grant: Schema["Grant"]) {
 const getGrantContent = (grant: Schema["Grant"]) => {
   return `This is an approved grant submitted by ${grant.submitter} for ${
     grant.recipient
-  }. Here is the grant data: ${JSON.stringify(grant)}`
+  }. Here is the grant data: ${JSON.stringify({
+    title: grant.title,
+    description: grant.description,
+    tagline: grant.tagline,
+    isFlow: grant.isFlow,
+  })}`
 }
 
 async function embedGrant(grant: Schema["Grant"]) {
@@ -48,7 +53,14 @@ async function embedGrant(grant: Schema["Grant"]) {
 }
 
 const getFlowContractContent = (grant: Schema["Grant"]) => {
-  const cleanedGrant = cleanTextForEmbedding(JSON.stringify(grant))
+  const cleanedGrant = cleanTextForEmbedding(
+    JSON.stringify({
+      title: grant.title,
+      description: grant.description,
+      tagline: grant.tagline,
+      isFlow: grant.isFlow,
+    })
+  )
   return `this is a flow contract budget that people can apply for. here is the flow data: ${cleanedGrant}`
 }
 
