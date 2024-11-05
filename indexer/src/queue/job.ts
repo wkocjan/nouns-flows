@@ -6,4 +6,11 @@ export interface JobBody {
   tags: string[]
 }
 
-export const validTypes = ["grant", "cast", "grant-application", "flow", "dispute", "draft"]
+export const validTypes = [
+  "grant",
+  "cast",
+  "grant-application",
+  "flow",
+  "dispute",
+  "draft-application",
+] as const

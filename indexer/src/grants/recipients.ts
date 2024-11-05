@@ -1,4 +1,8 @@
-import { ponder, type Context, type Event } from "@/generated"
+import { ponder, Schema, type Context, type Event } from "@/generated"
+import { postToEmbeddingsQueueRequest } from "../queue/client"
+import { JobBody } from "../queue/job"
+import { RecipientType } from "../enums"
+import { getNonzeroLowercasedAddresses } from "../queue/helpers"
 
 ponder.on("NounsFlowChildren:RecipientCreated", handleRecipientCreated)
 ponder.on("NounsFlow:RecipientCreated", handleRecipientCreated)
@@ -23,8 +27,6 @@ async function handleFlowRecipientCreated(params: {
     baselinePoolFlowRatePercent,
   } = event.args
 
-  const flowAddress = event.log.address.toLowerCase()
-
   await context.db.Grant.update({
     id: recipientId.toString(),
     data: {
@@ -48,14 +50,14 @@ async function handleRecipientCreated(params: {
 }) {
   const { event, context } = params
   const {
-    recipient: { recipient, metadata },
+    recipient: { recipient, metadata, recipientType },
     recipientId,
   } = event.args
 
   const flowAddress = event.log.address.toLowerCase()
   const parentFlow = await getParentFlow(context.db, flowAddress)
 
-  await context.db.Grant.update({
+  const grant = await context.db.Grant.update({
     id: recipientId.toString(),
     data: {
       ...metadata,
@@ -72,6 +74,8 @@ async function handleRecipientCreated(params: {
       activeRecipientCount: parentFlow.activeRecipientCount + 1,
     },
   })
+
+  await embed(grant, recipientType)
 }
 
 async function handleRecipientRemoved(params: {
@@ -102,4 +106,51 @@ async function getParentFlow(db: Context["db"], parentFlow: string) {
   const flow = items?.[0]
   if (!flow) throw new Error("Flow not found for recipient")
   return flow
+}
+
+async function embed(grant: Schema["Grant"], recipientType: RecipientType) {
+  if (recipientType === RecipientType.ExternalAccount) {
+    return embedGrant(grant)
+  }
+  if (recipientType === RecipientType.FlowContract) {
+    return embedFlowContract(grant)
+  }
+
+  throw new Error("Invalid recipient type")
+}
+
+async function embedGrant(grant: Schema["Grant"]) {
+  const users = getNonzeroLowercasedAddresses([grant.recipient, grant.submitter])
+
+  const content = `This is an approved grant submitted by ${grant.submitter} for ${
+    grant.recipient
+  }. Here is the grant data: ${JSON.stringify(grant)}`
+
+  const payload: JobBody = {
+    type: "grant",
+    content,
+    groups: ["nouns"],
+    users,
+    tags: ["flows"],
+  }
+
+  await postToEmbeddingsQueueRequest(payload)
+}
+
+async function embedFlowContract(grant: Schema["Grant"]) {
+  const users = getNonzeroLowercasedAddresses([grant.recipient, grant.submitter])
+
+  const content = `This is a flow contract budget that people can apply for. Here is the flow data: ${JSON.stringify(
+    grant
+  )}`
+
+  const payload: JobBody = {
+    type: "flow",
+    content,
+    groups: ["nouns"],
+    users,
+    tags: ["flows"],
+  }
+
+  await postToEmbeddingsQueueRequest(payload)
 }

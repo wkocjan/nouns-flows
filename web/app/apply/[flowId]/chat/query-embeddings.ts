@@ -5,10 +5,10 @@ import { z } from "zod"
 import { generateEmbedding } from "./generate-embeddings"
 import { embeddingsDb } from "@/lib/embedding-db/db"
 import { embeddings } from "@/lib/embedding-db/schema"
-import { sql, desc, cosineDistance, gt } from "drizzle-orm"
+import { sql, desc, cosineDistance, gt, and, eq } from "drizzle-orm"
 
 const embeddingQuerySchema = z.object({
-  type: z.enum(validTypes as [string, ...string[]]),
+  type: z.enum(validTypes),
   query: z.string().trim().min(10, "Substantial query is required"),
   groups: z.array(z.string().trim()),
   users: z.array(
@@ -53,13 +53,15 @@ export async function queryEmbeddings({
         id: embeddings.id,
         content: embeddings.content,
         similarity,
+        type: embeddings.type,
+        groups: embeddings.groups,
+        users: embeddings.users,
+        tags: embeddings.tags,
       })
       .from(embeddings)
-      .where(gt(similarity, 0.3))
+      .where(and(gt(similarity, 0.3), eq(embeddings.type, type)))
       .orderBy((t) => desc(t.similarity))
       .limit(5)
-
-    console.log({ results })
 
     return results
   } catch (error) {

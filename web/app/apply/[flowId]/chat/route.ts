@@ -189,7 +189,7 @@ export async function POST(request: Request) {
     tools: {
       queryEmbeddings: tool({
         parameters: z.object({
-          type: z.enum(validTypes as [string, ...string[]]),
+          type: z.enum(validTypes),
           query: z.string(),
           users: z.array(z.string()),
         }),

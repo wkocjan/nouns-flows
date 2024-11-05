@@ -1,7 +1,8 @@
-import { ponder, type Context, type Event } from "@/generated"
+import { ponder, Schema, type Context, type Event } from "@/generated"
 import { decodeAbiParameters, getAddress, zeroAddress } from "viem"
 import { RecipientType, Status } from "../enums"
 import { JobBody } from "../queue/job"
+import { postToEmbeddingsQueueRequest } from "../queue/client"
 
 ponder.on("NounsFlowTcr:ItemSubmitted", handleItemSubmitted)
 ponder.on("NounsFlowTcrChildren:ItemSubmitted", handleItemSubmitted)
@@ -100,17 +101,17 @@ async function handleItemSubmitted(params: {
     data: { awaitingRecipientCount: flow.awaitingRecipientCount + 1 },
   })
 
-  await postToEmbeddingsQueue(grant)
+  await embedGrantApplication(grant)
 }
 
-async function postToEmbeddingsQueue(grant: any) {
+async function embedGrantApplication(grant: Schema["Grant"]) {
   const users = [
     ...new Set([grant.recipient, grant.submitter].map((address) => address.toLowerCase())),
   ].filter((address) => address !== zeroAddress)
 
   const content = `This is a grant application submitted by ${grant.submitter} for ${
     grant.recipient
-  }. Here is the grant data: ${JSON.stringify(grant)}`
+  }. Here is the grant application data: ${JSON.stringify(grant)}`
 
   const payload: JobBody = {
     type: "grant-application",
@@ -120,15 +121,5 @@ async function postToEmbeddingsQueue(grant: any) {
     tags: ["flows"],
   }
 
-  const response = await fetch(process.env.EMBEDDINGS_QUEUE_URL + "/add-job", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  })
-
-  if (!response.ok) {
-    console.error("Failed to post to embeddings queue:", await response.text())
-  }
+  await postToEmbeddingsQueueRequest(payload)
 }
