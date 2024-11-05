@@ -100,5 +100,5 @@ async function handleItemSubmitted(params: {
     data: { awaitingRecipientCount: flow.awaitingRecipientCount + 1 },
   })
 
-  await addApplicationEmbedding(grant)
+  await addApplicationEmbedding(grant, flow.id)
 }

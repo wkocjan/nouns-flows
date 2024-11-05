@@ -63,15 +63,29 @@ export async function POST(request: Request) {
     If you're going to explicitly mention the nounish values, you should do it in a way that is natural and not forced, and they should relate to the flow and the builder.
     Inform the user at the start that you are helping them with creating a draft application, and they'll be able to view and edit it before submitting on the draft page after you're done together.
 
+    ## Embeddings database tool
+    This tool is called queryEmbeddings.
     You have access to a large database of information about grants, grant applications, users, and other relevant information.
     You can use this information to answer questions, provide more information, and help the user with their application.
     You can call the queryEmbeddings tool to search the database for information. 
     The options for type are ${validTypes.join(", ")}.
+    You want to use the type that is most relevant to the flow they are applying to.
+    Asking about receiving a grant, or budgets or categories, use the "flow" type.
+    Asking about existing grants who are approved or receiving money, use the "grant" type.
+    Asking about grant applications, use the "grant-application" type.
+    Asking about drafts, use the "draft-application" type.
+    Feel free to use multiple types in the same query if needed.
     You can also pass the user's address as users array to find information specifically about the user.
     Make sure to only include the user's address in the query if you think it will help you find more relevant information.
     Ensure the query you construct to ask the embeddings database for information is relevant and contains details about the information you need so that the vector search will be successful.
     If you need more information from the user to construct a relevant query, you can ask them for more.
-    
+    When constructing the query, it might be helpful to think about what flow the query is about, and use a summary or keywords from the flow description to help with the query.
+    You can query to get a relevant flow first, by calling the queryEmbeddings tool with the type "flow" and the query including a summary of the flow.
+    When constructing the query, make sure to include as much information or keywords as possible to help with the vector search. Use context you know about flows to populate the query keywords.
+    You can also use the numResults parameter to get more results. Ideally default to 5-10 results, but you can go up to 100.
+    The id for the flow you are applying to is ${flow.id}. You can pass this to the tags parameter if someone is asking for details about this specific flow to help with the vector search.
+
+    ## Flows
     Flows is a system that provides funding to projects in different categories (called "flows"). Each flow (category) has specific set of rules and guidelines that need to be followed by the recipients. When user (future recipient) wants to apply for a grant in a specific flow, they need to submit an application. Your job is to help them with the application process, by making a conversation with them and asking them short & pricise questions.
     
     You're assistant in ${flow.title} flow. Here is more about this flow: ${flow.description}
@@ -140,6 +154,8 @@ export async function POST(request: Request) {
     Confirm with them that all of the information is correct, and that there is nothing else they would like to add.
     Then, you can use the submit application tool to submit the application, and inform the user that their application is being submitted. Once submitted, user will see a link to the draft page, where they can make final changes before it's submitted.
 
+    ## Submitting the application
+    You have access to the submitApplication tool.
     When submitting the application, come up with an extremely short tagline for the application, that ideally is not longer than 10 words and also does not duplicate the title.
     When using the submit application tool, make sure to use the tagline you came up with.
     Finally, construct a markdown description for the application to submit as the descriptionMarkdown field for the submitApplication tool you have access to.
@@ -191,22 +207,25 @@ export async function POST(request: Request) {
     tools: {
       queryEmbeddings: tool({
         parameters: z.object({
-          type: z.enum(validTypes),
+          types: z.array(z.enum(validTypes)),
           query: z.string(),
+          tags: z.array(z.string()),
           users: z.array(z.string()),
+          numResults: z.number().min(1).max(100),
         }),
         description:
           "Query embeddings database to find grants, grant applications, user information, user social media posts, and other relevant information if not immediately available in context.",
-        execute: async ({ type, query, users }) => {
+        execute: async ({ types, query, users, tags, numResults }) => {
           console.debug(
-            `Querying embeddings database for type: ${type}, query: ${query}, users: ${users}`,
+            `Querying embeddings database for types: ${types}, query: ${query}, users: ${users}, tags: ${tags}, numResults: ${numResults}`,
           )
           const results = await queryEmbeddings({
-            type,
+            types,
             query,
             groups: [],
             users,
-            tags: [],
+            tags,
+            numResults,
           })
           return JSON.stringify(results)
         },

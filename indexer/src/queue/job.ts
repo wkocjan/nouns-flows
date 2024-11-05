@@ -6,6 +6,7 @@ export interface JobBody {
   groups: string[]
   users: string[]
   tags: string[]
+  externalId: string
 }
 
 export const validTypes = [

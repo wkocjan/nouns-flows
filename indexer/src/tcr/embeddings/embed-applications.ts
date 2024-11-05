@@ -6,7 +6,7 @@ import { deleteEmbeddingRequest } from "../../queue/queue"
 import { getContentHash } from "../../hash"
 import { cleanTextForEmbedding } from "../../clean"
 
-export async function addApplicationEmbedding(grant: Schema["Grant"]) {
+export async function addApplicationEmbedding(grant: Schema["Grant"], parentId: string) {
   const users = getNonzeroLowercasedAddresses([grant.recipient, grant.submitter])
 
   const content = getApplicationContent(grant)
@@ -16,7 +16,8 @@ export async function addApplicationEmbedding(grant: Schema["Grant"]) {
     content,
     groups: ["nouns"],
     users,
-    tags: ["flows"],
+    tags: ["flows", parentId],
+    externalId: grant.id.toString(),
   }
 
   await postToEmbeddingsQueueRequest(payload)

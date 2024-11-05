@@ -72,7 +72,7 @@ async function handleRecipientCreated(params: {
     },
   })
 
-  await addGrantEmbedding(grant, recipientType)
+  await addGrantEmbedding(grant, recipientType, parentFlow.id)
 }
 
 async function handleRecipientRemoved(params: {

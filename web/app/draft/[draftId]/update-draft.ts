@@ -41,7 +41,7 @@ export async function updateDraft(id: number, formData: FormData, user?: `0x${st
       },
     })
 
-    await updateDraftEmbedding(draft, newDraft)
+    await updateDraftEmbedding(draft, newDraft, draft.flowId)
 
     revalidatePath(`/draft/${id}`)
 

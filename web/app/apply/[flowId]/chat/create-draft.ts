@@ -59,7 +59,7 @@ export async function createDraft({
       },
     })
 
-    await addDraftEmbedding(draft)
+    await addDraftEmbedding(draft, flowId)
 
     return draft
   } catch (error) {

@@ -4,8 +4,8 @@ import { getContentHash } from "./utils"
 import { EmbeddingType, JobBody } from "../types/job"
 import { deleteEmbeddingRequest, postToEmbeddingsQueueRequest } from "./queue"
 
-export async function addDraftEmbedding(draft: Draft) {
-  return embedDraft(draft)
+export async function addDraftEmbedding(draft: Draft, parentId: string) {
+  return embedDraft(draft, parentId)
 }
 
 export async function removeDraftEmbedding(draft: Draft) {
@@ -15,8 +15,8 @@ export async function removeDraftEmbedding(draft: Draft) {
   await deleteEmbeddingRequest(contentHash, type)
 }
 
-export async function updateDraftEmbedding(oldDraft: Draft, newDraft: Draft) {
-  await Promise.all([removeDraftEmbedding(oldDraft), addDraftEmbedding(newDraft)])
+export async function updateDraftEmbedding(oldDraft: Draft, newDraft: Draft, parentId: string) {
+  await Promise.all([removeDraftEmbedding(oldDraft), addDraftEmbedding(newDraft, parentId)])
 }
 
 const getDraftContent = (draft: Draft) => {
@@ -30,7 +30,7 @@ const getDraftContent = (draft: Draft) => {
   return `This is a draft proposal. Here is the draft data: ${cleanedDraft}`
 }
 
-async function embedDraft(draft: Draft) {
+async function embedDraft(draft: Draft, parentId: string) {
   const users = draft.users.map((user) => user.toLowerCase())
 
   const content = getDraftContent(draft)
@@ -40,7 +40,8 @@ async function embedDraft(draft: Draft) {
     content,
     groups: ["nouns"],
     users,
-    tags: ["drafts"],
+    tags: ["drafts", parentId],
+    externalId: draft.id.toString(),
   }
 
   await postToEmbeddingsQueueRequest(payload)

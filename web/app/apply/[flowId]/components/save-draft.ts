@@ -54,7 +54,7 @@ export async function saveDraft(formData: FormData, user?: `0x${string}`) {
       },
     })
 
-    await addDraftEmbedding(draft)
+    await addDraftEmbedding(draft, rest.flowId)
 
     return { error: false, id: draft.id }
   } catch (error) {

@@ -5,10 +5,10 @@ import { z } from "zod"
 import { generateEmbedding } from "./generate-embeddings"
 import { embeddingsDb } from "@/lib/embedding/db"
 import { embeddings } from "@/lib/embedding/schema"
-import { sql, desc, cosineDistance, gt, and, eq } from "drizzle-orm"
+import { sql, desc, cosineDistance, gt, and, arrayOverlaps, inArray } from "drizzle-orm"
 
 const embeddingQuerySchema = z.object({
-  type: z.enum(validTypes),
+  types: z.array(z.enum(validTypes)),
   query: z.string().trim().min(10, "Substantial query is required"),
   groups: z.array(z.string().trim()),
   users: z.array(
@@ -19,22 +19,25 @@ const embeddingQuerySchema = z.object({
       .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid user address"),
   ),
   tags: z.array(z.string().trim()),
+  numResults: z.number().min(1).max(100),
 })
 
 export async function queryEmbeddings({
-  type,
+  types,
   query,
   groups,
   users,
   tags,
+  numResults,
 }: z.infer<typeof embeddingQuerySchema>) {
   try {
     const validation = embeddingQuerySchema.safeParse({
-      type,
+      types,
       query,
       groups,
       users,
       tags,
+      numResults,
     })
 
     if (!validation.success) {
@@ -47,7 +50,6 @@ export async function queryEmbeddings({
 
     const similarity = sql<number>`1 - (${cosineDistance(embeddings.embedding, vectorQuery)})`
 
-    console.debug(`Here we go: ${type}, query: ${query}, users: ${users}`)
     const results = await embeddingsDb
       .select({
         id: embeddings.id,
@@ -59,9 +61,15 @@ export async function queryEmbeddings({
         tags: embeddings.tags,
       })
       .from(embeddings)
-      .where(and(gt(similarity, 0.3), eq(embeddings.type, type)))
+      .where(
+        and(
+          gt(similarity, 0.3),
+          inArray(embeddings.type, types),
+          arrayOverlaps(embeddings.tags, tags),
+        ),
+      )
       .orderBy((t) => desc(t.similarity))
-      .limit(5)
+      .limit(numResults)
 
     return results
   } catch (error) {

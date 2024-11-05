@@ -7,12 +7,16 @@ import { deleteEmbeddingRequest } from "../../queue/queue"
 import { getContentHash } from "../../hash"
 import { cleanTextForEmbedding } from "../../clean"
 
-export async function addGrantEmbedding(grant: Schema["Grant"], recipientType: RecipientType) {
+export async function addGrantEmbedding(
+  grant: Schema["Grant"],
+  recipientType: RecipientType,
+  parentId: string
+) {
   if (recipientType === RecipientType.ExternalAccount) {
-    return embedGrant(grant)
+    return embedGrant(grant, parentId)
   }
   if (recipientType === RecipientType.FlowContract) {
-    return embedFlowContract(grant)
+    return embedFlowContract(grant, parentId)
   }
 
   throw new Error("Invalid recipient type")
@@ -26,17 +30,19 @@ export async function removeGrantEmbedding(grant: Schema["Grant"]) {
 }
 
 const getGrantContent = (grant: Schema["Grant"]) => {
-  return `This is an approved grant submitted by ${grant.submitter} for ${
-    grant.recipient
-  }. Here is the grant data: ${JSON.stringify({
-    title: grant.title,
-    description: grant.description,
-    tagline: grant.tagline,
-    isFlow: grant.isFlow,
-  })}`
+  return cleanTextForEmbedding(
+    `This is an approved grant submitted by ${grant.submitter} for ${
+      grant.recipient
+    }. Here is the grant data: ${JSON.stringify({
+      title: grant.title,
+      description: grant.description,
+      tagline: grant.tagline,
+      isFlow: grant.isFlow,
+    })}`
+  )
 }
 
-async function embedGrant(grant: Schema["Grant"]) {
+async function embedGrant(grant: Schema["Grant"], parentId: string) {
   const users = getNonzeroLowercasedAddresses([grant.recipient, grant.submitter])
 
   const content = getGrantContent(grant)
@@ -46,7 +52,8 @@ async function embedGrant(grant: Schema["Grant"]) {
     content,
     groups: ["nouns"],
     users,
-    tags: ["flows"],
+    tags: ["flows", parentId],
+    externalId: grant.id.toString(),
   }
 
   await postToEmbeddingsQueueRequest(payload)
@@ -64,7 +71,7 @@ const getFlowContractContent = (grant: Schema["Grant"]) => {
   return `this is a flow contract budget that people can apply for. here is the flow data: ${cleanedGrant}`
 }
 
-async function embedFlowContract(grant: Schema["Grant"]) {
+async function embedFlowContract(grant: Schema["Grant"], parentId: string) {
   const users = getNonzeroLowercasedAddresses([grant.recipient, grant.submitter])
 
   const content = getFlowContractContent(grant)
@@ -74,7 +81,8 @@ async function embedFlowContract(grant: Schema["Grant"]) {
     content,
     groups: ["nouns"],
     users,
-    tags: ["flows"],
+    tags: ["flows", parentId],
+    externalId: grant.id.toString(),
   }
 
   await postToEmbeddingsQueueRequest(payload)
