@@ -117,7 +117,9 @@ export function ActiveCuratorGrantRow({
                     variant="ghost"
                     disabled={Number(voterRewardsBalance) <= 0}
                   >
-                    <div className="text-center text-sm">{formatEther(voterRewardsBalance)}</div>
+                    <div className="text-center text-sm">
+                      {Number(formatEther(voterRewardsBalance)).toFixed(2)}
+                    </div>
                     <DownloadIcon className="ml-1 size-3.5" />
                   </Button>
                 </TooltipTrigger>

@@ -37,7 +37,7 @@ const TcrTokenBalanceWithTooltip = ({
 }) => {
   return (
     <Tooltip>
-      <TooltipTrigger>{balance}</TooltipTrigger>
+      <TooltipTrigger>{Math.round(Number(balance))}</TooltipTrigger>
       <TooltipContent>
         Earning {formatPercentage(balance, totalSupply)}% of the{" "}
         <Currency>{monthlyRewardPoolRate}</Currency>/mo reward pool
