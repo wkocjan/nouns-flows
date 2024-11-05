@@ -1,8 +1,8 @@
 import { Schema } from "@/generated"
-import { postToEmbeddingsQueueRequest } from "../../queue/client"
+import { postToEmbeddingsQueueRequest } from "../../queue/queue"
 import { JobBody } from "../../queue/job"
 import { getNonzeroLowercasedAddresses } from "../../queue/helpers"
-import { deleteEmbeddingRequest } from "../../queue/client"
+import { deleteEmbeddingRequest } from "../../queue/queue"
 import { getContentHash } from "../../hash"
 import { cleanTextForEmbedding } from "../../clean"
 

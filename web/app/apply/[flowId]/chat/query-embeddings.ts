@@ -3,8 +3,8 @@
 import { validTypes } from "@/lib/types/job"
 import { z } from "zod"
 import { generateEmbedding } from "./generate-embeddings"
-import { embeddingsDb } from "@/lib/embedding-db/db"
-import { embeddings } from "@/lib/embedding-db/schema"
+import { embeddingsDb } from "@/lib/embedding/db"
+import { embeddings } from "@/lib/embedding/schema"
 import { sql, desc, cosineDistance, gt, and, eq } from "drizzle-orm"
 
 const embeddingQuerySchema = z.object({

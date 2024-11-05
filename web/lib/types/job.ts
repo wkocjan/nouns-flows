@@ -1,5 +1,7 @@
+export type EmbeddingType = (typeof validTypes)[number]
+
 export interface JobBody {
-  type: (typeof validTypes)[number]
+  type: EmbeddingType
   content: string
   groups: string[]
   users: string[]
