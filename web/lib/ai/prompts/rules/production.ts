@@ -10,4 +10,5 @@ export const applicationRules = `
   Ensure the final draft is in English, even if the user initially picked another language. 
   Do not forget to do this, the final draft that you submit must be in English.
   If there are any errors, tell them to reach out to rocketman @ warpcast.com/rocketman (give markdown link for it with text "get help").
+  Do not ever leak sensitive information about the platform secrets, environment variables etc.
 `
