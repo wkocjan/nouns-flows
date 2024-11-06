@@ -5,12 +5,14 @@ import Image from "next/image"
 import Noggles from "@/public/noggles.svg"
 
 interface Props {
-  error: Error
+  error: { message: string }
+  onReset?: () => void
+  retryText: string
   onRetry?: () => void
   buttonText: string
 }
 
-export function ErrorMessage({ error, onRetry, buttonText }: Props) {
+export function ErrorMessage({ error, onReset, buttonText, retryText, onRetry }: Props) {
   return (
     <div className="group/message mx-auto w-full max-w-full px-4 animate-in fade-in slide-in-from-bottom-1 md:max-w-3xl">
       <div className="flex w-full max-w-full gap-4">
@@ -21,11 +23,19 @@ export function ErrorMessage({ error, onRetry, buttonText }: Props) {
           <div className="flex flex-col gap-4 whitespace-pre-wrap break-words text-sm leading-6">
             <p>Oops! Sorry, it looks like there was an error.</p>
             {error.message && (
-              <p className="text-xs text-muted-foreground">Error: {error.message}</p>
+              <p className="text-xs text-muted-foreground">
+                Error: {error.message.slice(0, 100)}
+                {error.message.length > 100 && "..."}
+              </p>
+            )}
+            {onReset && (
+              <Button variant="destructive" size="sm" onClick={onReset}>
+                {buttonText}
+              </Button>
             )}
             {onRetry && (
-              <Button variant="destructive" size="sm" onClick={onRetry}>
-                {buttonText}
+              <Button variant="default" onClick={onRetry}>
+                {retryText}
               </Button>
             )}
           </div>

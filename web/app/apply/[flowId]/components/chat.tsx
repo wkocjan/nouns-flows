@@ -156,9 +156,16 @@ export function Chat(props: Props) {
             ))}
             {error && (
               <ErrorMessage
-                buttonText="Retry Application"
-                error={error}
+                buttonText="Reset Application"
+                retryText="Retry"
                 onRetry={() => {
+                  append({
+                    role: "user",
+                    content: "Please continue where we left off.",
+                  })
+                }}
+                error={error}
+                onReset={() => {
                   resetChatHistory()
                   window.location.reload()
                 }}
