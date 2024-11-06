@@ -1,4 +1,3 @@
-import { searchEmbeddings } from "@/lib/ai/tools/embeddings/query"
 import { getLocationPrompt } from "@/lib/ai/prompts/user-data/location"
 import { getUserAgentPrompt } from "@/lib/ai/prompts/user-data/user-agent"
 import { applicationRules, isProd } from "@/lib/ai/prompts/rules/production"
@@ -9,6 +8,9 @@ import { floSystemPrompt } from "@/lib/ai/agents/flo/personality"
 import { queryEmbeddings } from "@/lib/ai/tools/embeddings/tool"
 import { embeddingToolPrompt } from "@/lib/ai/tools/embeddings/prompt"
 import { getFarcasterPrompt } from "@/lib/ai/prompts/user-data/farcaster"
+import { submitApplication } from "@/lib/ai/tools/applications/submit-application"
+import { applicationPrompt } from "@/lib/ai/tools/applications/prompt"
+import { applicationToolPrompt } from "@/lib/ai/tools/applications/tool-prompt"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
@@ -34,31 +36,37 @@ export async function POST(request: Request) {
 
   const result = await streamText({
     model: anthropic("claude-3-5-sonnet-20241022"),
-    system: `${floSystemPrompt}
+    system: `
+    # Your personality as a helpful assistant
+    ${floSystemPrompt}
+
+    # User data
+    ${getUserAgentPrompt(request)}
+    ${getLocationPrompt(request)} Make sure the final application you output and submit is in English.
+    The address of the user is ${address}.
+    ${farcasterPrompt}
+
+    To start, you should ask the user for their name and social links (like Twitter, Farcaster, Instagram, Github, etc).
 
     Inform the user at the start that you are helping them with creating a draft application, 
     and they'll be able to view and edit it before submitting on the draft page after you're done together.
     
     ${flowContextPrompt}
     
-    ${getUserAgentPrompt(request)}
-    ${getLocationPrompt(request)} Make sure the final application you output and submit is in English.
-   
-    ${isProd ? applicationRules : ""}
+    # How to help the user
+    ${applicationPrompt()}
 
     # Tools
     ${embeddingToolPrompt(flowId)}
+    ${applicationToolPrompt(flowId, coreMessages)}
 
-    The address of the user is ${address}.
-
-    To start, you should ask the user for their name and social links (like Twitter, Farcaster, Instagram, Github, etc).
-
-    ${farcasterPrompt}
-
+    # Final checks
+    ${isProd ? applicationRules : ""}
     Ensure the final draft is in English, even if the user initially picked another language. Do not forget to do this, the final draft that you submit must be in English.
     `,
     messages: coreMessages,
-    tools: { queryEmbeddings },
+    tools: { queryEmbeddings, submitApplication: submitApplication(flowId) },
+    maxSteps: 7,
   })
 
   return result.toDataStreamResponse({})
