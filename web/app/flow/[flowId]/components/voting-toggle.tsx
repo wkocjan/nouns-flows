@@ -1,16 +1,16 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { useLogin } from "@/lib/auth/use-login"
 import { useDelegatedTokens } from "@/lib/voting/delegated-tokens/use-delegated-tokens"
 import { useVoting } from "@/lib/voting/voting-context"
-import { usePrivy } from "@privy-io/react-auth"
 import { toast } from "sonner"
 import { useAccount } from "wagmi"
 
 export const VotingToggle = () => {
   const { isLoading, isActive, activate } = useVoting()
   const { address } = useAccount()
-  const { login } = usePrivy()
+  const { login } = useLogin()
   const { tokens } = useDelegatedTokens(address)
 
   return (

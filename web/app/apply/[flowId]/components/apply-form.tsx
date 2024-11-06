@@ -7,9 +7,9 @@ import { FileInput } from "@/components/ui/file-input"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { MarkdownInput } from "@/components/ui/markdown-input"
+import { useLogin } from "@/lib/auth/use-login"
 import { getShortEthAddress } from "@/lib/utils"
 import { Grant } from "@prisma/client"
-import { usePrivy } from "@privy-io/react-auth"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useFormStatus } from "react-dom"
@@ -27,7 +27,7 @@ interface Props {
 export function ApplyForm(props: Props) {
   const { flow, isFlow, template } = props
   const { isConnected, address } = useAccount()
-  const { login } = usePrivy()
+  const { login } = useLogin()
 
   const router = useRouter()
   const [isGuest, setIsGuest] = useState(true)

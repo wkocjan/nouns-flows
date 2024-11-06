@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { usePrivy } from "@privy-io/react-auth"
+import { useLogin } from "@/lib/auth/use-login"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -21,7 +21,7 @@ export function CommentForm(props: Props) {
   const [content, setContent] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { address } = useAccount()
-  const { login } = usePrivy()
+  const { login } = useLogin()
   const router = useRouter()
 
   return (

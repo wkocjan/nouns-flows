@@ -1,5 +1,5 @@
 import { Button, ButtonProps } from "@/components/ui/button"
-import { usePrivy } from "@privy-io/react-auth"
+import { useLogin } from "@/lib/auth/use-login"
 
 export const LoginButton = ({
   variant = "outline",
@@ -8,11 +8,11 @@ export const LoginButton = ({
   variant?: ButtonProps["variant"]
   size?: ButtonProps["size"]
 }) => {
-  const { login } = usePrivy()
+  const { login } = useLogin()
 
   return (
     <Button variant={variant} size={size} onClick={login}>
-      Log in
+      Connect
     </Button>
   )
 }

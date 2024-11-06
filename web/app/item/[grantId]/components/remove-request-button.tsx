@@ -19,12 +19,12 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { flowTcrImplAbi } from "@/lib/abis"
+import { useLogin } from "@/lib/auth/use-login"
 import { useTcrData } from "@/lib/tcr/use-tcr-data"
 import { useTcrToken } from "@/lib/tcr/use-tcr-token"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { Grant } from "@prisma/client"
-import { usePrivy } from "@privy-io/react-auth"
 import { useRouter } from "next/navigation"
 import { PropsWithChildren, useRef, useState } from "react"
 import { toast } from "sonner"
@@ -94,7 +94,7 @@ export function GrantRemoveRequestButton(props: Props) {
   const router = useRouter()
   const [reason, setReason] = useState<string | null>(null)
   const [comment, setComment] = useState<string>("")
-  const { login } = usePrivy()
+  const { login } = useLogin()
 
   const ref = useRef<HTMLButtonElement>(null)
 

@@ -1,6 +1,6 @@
 "use client"
 
-import { usePrivy } from "@privy-io/react-auth"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { Chain } from "viem"
@@ -12,8 +12,8 @@ import {
   useWriteContract,
   type BaseError,
 } from "wagmi"
+import { useLogin } from "../auth/use-login"
 import { explorerUrl } from "../utils"
-import { useRouter } from "next/navigation"
 
 export const useContractTransaction = (args?: {
   chainId?: Chain["id"]
@@ -35,7 +35,7 @@ export const useContractTransaction = (args?: {
 
   const { chainId: connectedChainId, isConnected } = useAccount()
   const { switchChainAsync } = useSwitchChain()
-  const { login } = usePrivy()
+  const { login } = useLogin()
 
   useEffect(() => {
     if (callbackHandled || !toastId) return

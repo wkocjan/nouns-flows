@@ -2,12 +2,12 @@
 
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { useLogin } from "@/lib/auth/use-login"
 import { User } from "@/lib/auth/user"
 import { MAX_VOTING_POWER, NOUNS_TOKEN } from "@/lib/config"
 import { openseaNftUrl } from "@/lib/utils"
 import { useDelegatedTokens } from "@/lib/voting/delegated-tokens/use-delegated-tokens"
 import { useVotingPower } from "@/lib/voting/use-voting-power"
-import { usePrivy } from "@privy-io/react-auth"
 import Image from "next/image"
 import { useRef } from "react"
 import { mainnet } from "viem/chains"
@@ -15,7 +15,6 @@ import { Alert, AlertDescription } from "../ui/alert"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { LoginButton } from "./login-button"
 import { ModeToggle } from "./mode-toggle"
-import { SignupButton } from "./signup-button"
 
 interface Props {
   user?: User
@@ -26,7 +25,7 @@ export const MenuAvatar = (props: Props) => {
   const { votingPower } = useVotingPower()
   const closeRef = useRef<HTMLButtonElement>(null)
   const { tokens } = useDelegatedTokens(user?.address)
-  const { logout } = usePrivy()
+  const { logout } = useLogin()
 
   return (
     <div className="inline-flex">
@@ -80,12 +79,7 @@ export const MenuAvatar = (props: Props) => {
           </PopoverContent>
         </Popover>
       )}
-      {!user && (
-        <div className="flex items-center space-x-2.5">
-          <SignupButton />
-          <LoginButton />
-        </div>
-      )}
+      {!user && <LoginButton />}
     </div>
   )
 }
