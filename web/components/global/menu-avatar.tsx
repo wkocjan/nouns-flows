@@ -35,7 +35,6 @@ export const MenuAvatar = (props: Props) => {
             <div className="flex h-[26px] items-center space-x-1.5 rounded-full bg-secondary pr-2.5 transition-opacity hover:bg-accent">
               <Avatar className="size-[26px] bg-accent text-xs">
                 <AvatarImage src={user.avatar} alt={user.username} />
-                <AvatarFallback>{user.username?.[0].toUpperCase()}</AvatarFallback>
               </Avatar>
               <span className="min-w-2 py-0.5 text-xs font-semibold text-secondary-foreground">
                 {votingPower?.toString()}
