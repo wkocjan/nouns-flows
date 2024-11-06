@@ -4,11 +4,15 @@ export async function postToEmbeddingsQueueRequest(payload: JobBody) {
   if (!process.env.EMBEDDINGS_QUEUE_URL) {
     throw new Error("EMBEDDINGS_QUEUE_URL is not defined")
   }
+  if (!process.env.EMBEDDINGS_QUEUE_API_KEY) {
+    throw new Error("EMBEDDINGS_QUEUE_API_KEY is not defined")
+  }
 
   const response = await fetch(process.env.EMBEDDINGS_QUEUE_URL + "/add-job", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "x-api-key": process.env.EMBEDDINGS_QUEUE_API_KEY,
     },
     body: JSON.stringify(payload),
     cache: "no-store",
@@ -26,11 +30,15 @@ export async function deleteEmbeddingRequest(contentHash: string, type: Embeddin
   if (!process.env.EMBEDDINGS_QUEUE_URL) {
     throw new Error("EMBEDDINGS_QUEUE_URL is not defined")
   }
+  if (!process.env.EMBEDDINGS_QUEUE_API_KEY) {
+    throw new Error("EMBEDDINGS_QUEUE_API_KEY is not defined")
+  }
 
   const response = await fetch(process.env.EMBEDDINGS_QUEUE_URL + "/delete-embedding", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "x-api-key": process.env.EMBEDDINGS_QUEUE_API_KEY,
     },
     body: JSON.stringify({
       contentHash,
