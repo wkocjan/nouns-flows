@@ -13,12 +13,12 @@ import { getPool } from "@/lib/database/queries/pool"
 import Wagmi from "@/lib/wagmi/wagmi-provider"
 import Noggles from "@/public/noggles.svg"
 import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import type { Metadata } from "next"
 import { Roboto_Mono } from "next/font/google"
 import Image from "next/image"
 import Link from "next/link"
 import "./globals.css"
-import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const mono = Roboto_Mono({ subsets: ["latin"], variable: "--font-mono" })
 
@@ -44,7 +44,6 @@ export default async function RootLayout(props: Readonly<{ children: React.React
       <Highlight />
       <html lang="en" suppressHydrationWarning className="h-full">
         <body className={`${mono.variable} flex h-full flex-col`}>
-          <SpeedInsights />
           <RefreshOnFocus />
           <ThemeProvider
             attribute="class"
@@ -85,6 +84,7 @@ export default async function RootLayout(props: Readonly<{ children: React.React
               </TooltipProvider>
             </HighlightErrorBoundary>
           </ThemeProvider>
+          <SpeedInsights />
         </body>
       </html>
     </>
