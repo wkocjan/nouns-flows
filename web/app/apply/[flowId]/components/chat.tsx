@@ -47,7 +47,7 @@ export function Chat(props: Props) {
     error,
   } = useChat({
     id: chatId,
-    api: `/apply/${flow.id}/chat`,
+    api: `/apply/${flow.id}/chat/edge`,
     body: { flowId: flow.id, address, chatId },
     initialMessages: readChatHistory(),
     keepLastMessageOnError: true,
