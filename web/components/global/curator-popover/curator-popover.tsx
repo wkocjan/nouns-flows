@@ -16,6 +16,7 @@ import { CuratorGrants } from "./curator-grants"
 import { useUserTcrTokens } from "./hooks/use-user-tcr-tokens"
 import { TokenRow } from "./token-row"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Button } from "@/components/ui/button"
 
 export const CuratorPopover = ({ flow }: { flow: Grant }) => {
   const [isVisible, setIsVisible] = useState(false)
@@ -89,22 +90,26 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
             {tokens.length > 0 && <SwapTokenButton size="xs" flow={flow} />}
           </div>
 
-          <Tabs defaultValue="active" className="mt-4 w-full pt-4">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="active">Active</TabsTrigger>
-              <TabsTrigger value="voted">Voted</TabsTrigger>
-            </TabsList>
-            <TabsContent value="active">
-              <CuratorGrants closePopover={closePopover} grants={activeSubgrants} />
-            </TabsContent>
-            <TabsContent value="voted">
-              <CuratorGrants closePopover={closePopover} grants={votedSubgrants} />
-            </TabsContent>
-          </Tabs>
+          {tokens.length > 0 && (
+            <>
+              <Tabs defaultValue="active" className="mt-4 w-full pt-4">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="active">Active</TabsTrigger>
+                  <TabsTrigger value="voted">Voted</TabsTrigger>
+                </TabsList>
+                <TabsContent value="active">
+                  <CuratorGrants closePopover={closePopover} grants={activeSubgrants} />
+                </TabsContent>
+                <TabsContent value="voted">
+                  <CuratorGrants closePopover={closePopover} grants={votedSubgrants} />
+                </TabsContent>
+              </Tabs>
 
-          <p className="mt-8 border-t border-border pt-4 text-xs text-muted-foreground md:text-sm">
-            Curate incoming grants to continue earning rewards.
-          </p>
+              <p className="mt-8 border-t border-border pt-4 text-xs text-muted-foreground md:text-sm">
+                Curate incoming grants to continue earning rewards.
+              </p>
+            </>
+          )}
 
           {tokens.length > 0 ? (
             <>
@@ -130,7 +135,9 @@ export const CuratorPopover = ({ flow }: { flow: Grant }) => {
           ) : (
             <>
               <div className="mt-8 flex flex-col items-center justify-center space-x-2 space-y-4 rounded-xl border border-border bg-gray-200/30 py-6 text-sm text-muted-foreground dark:bg-gray-800">
-                <SwapTokenButton text="Become a curator" size="lg" flow={flow} />
+                <Link href={`/curate`} onClick={closePopover}>
+                  <Button size="lg">Become a curator</Button>
+                </Link>
                 <p className="px-2">Buy TCR tokens to curate grants and earn rewards.</p>
               </div>
             </>
