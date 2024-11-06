@@ -2,7 +2,7 @@
 
 import { validTypes } from "@/lib/types/job"
 import { z } from "zod"
-import { generateEmbedding } from "./generate-embeddings"
+import { generateEmbedding } from "./generate"
 import { embeddingsDb } from "@/lib/embedding/db"
 import { embeddings } from "@/lib/embedding/schema"
 import { sql, desc, cosineDistance, gt, and, arrayOverlaps, inArray, or } from "drizzle-orm"
@@ -22,7 +22,7 @@ const embeddingQuerySchema = z.object({
   numResults: z.number().min(1).max(100),
 })
 
-export async function queryEmbeddings({
+export async function searchEmbeddings({
   types,
   query,
   groups,
@@ -74,6 +74,8 @@ export async function queryEmbeddings({
       )
       .orderBy((t) => desc(t.similarity))
       .limit(numResults)
+
+    console.log({ results })
 
     return results
   } catch (error) {

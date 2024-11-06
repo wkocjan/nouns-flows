@@ -1,8 +1,10 @@
-import { createHash } from "crypto"
-
-export const getContentHash = (content: string, type: string) => {
-  const contentHash = createHash("sha256").update(`${type}-${content}`).digest("hex")
-  return contentHash
+export const getContentHash = async (content: string, type: string): Promise<string> => {
+  const encoder = new TextEncoder()
+  const data = encoder.encode(`${type}-${content}`)
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data)
+  const hashArray = Array.from(new Uint8Array(hashBuffer))
+  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("")
+  return hashHex
 }
 
 export const cleanTextForEmbedding = (text: string) => {
