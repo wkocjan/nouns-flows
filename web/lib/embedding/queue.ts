@@ -11,6 +11,7 @@ export async function postToEmbeddingsQueueRequest(payload: JobBody) {
 
   if (!response.ok) {
     console.error("Failed to post to embeddings queue:", await response.text())
+    throw new Error("Failed to post to embeddings queue")
   }
 }
 
@@ -28,5 +29,6 @@ export async function deleteEmbeddingRequest(contentHash: string, type: Embeddin
 
   if (!response.ok) {
     console.error("Failed to delete embedding:", await response.text())
+    throw new Error("Failed to delete embedding")
   }
 }
