@@ -1,4 +1,4 @@
-import { CoreMessage, Message } from "ai"
+import { CoreMessage } from "ai"
 import { extractAttachments } from "@/lib/ai/utils/attachments"
 import database from "@/lib/database/edge"
 
