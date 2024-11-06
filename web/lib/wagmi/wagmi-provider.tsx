@@ -1,11 +1,12 @@
 "use client"
 
+import { PrivyProvider } from "@privy-io/react-auth"
+import { WagmiProvider } from "@privy-io/wagmi"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { ConnectKitProvider } from "connectkit"
 import { useTheme } from "next-themes"
 import { PropsWithChildren } from "react"
-import { WagmiProvider } from "wagmi"
-import { config } from "./config"
+import { base } from "viem/chains"
+import { chains, config } from "./config"
 
 const queryClient = new QueryClient()
 
@@ -13,18 +14,25 @@ export default function Wagmi({ children }: PropsWithChildren) {
   const { resolvedTheme } = useTheme()
 
   return (
-    <WagmiProvider config={config}>
+    <PrivyProvider
+      appId={`${process.env.NEXT_PUBLIC_PRIVY_APP_ID}`}
+      clientId={`${process.env.NEXT_PUBLIC_PRIVY_CLIENT_ID}`}
+      config={{
+        appearance: {
+          theme: resolvedTheme === "dark" ? "dark" : "light",
+          logo: "https://flows.wtf/noggles.svg",
+          showWalletLoginFirst: true,
+        },
+        defaultChain: base,
+        supportedChains: chains,
+        embeddedWallets: {
+          createOnLogin: "users-without-wallets",
+        },
+      }}
+    >
       <QueryClientProvider client={queryClient}>
-        <ConnectKitProvider
-          mode={resolvedTheme === "dark" ? "dark" : "light"}
-          customTheme={{
-            "--ck-font-family": "var(--font-mono)",
-            "--ck-border-radius": "var(--radius)",
-          }}
-        >
-          {children}
-        </ConnectKitProvider>
+        <WagmiProvider config={config}>{children}</WagmiProvider>
       </QueryClientProvider>
-    </WagmiProvider>
+    </PrivyProvider>
   )
 }

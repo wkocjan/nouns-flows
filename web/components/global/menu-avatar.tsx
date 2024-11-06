@@ -2,91 +2,83 @@
 
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { useLogin } from "@/lib/auth/use-login"
+import { User } from "@/lib/auth/user"
 import { MAX_VOTING_POWER, NOUNS_TOKEN } from "@/lib/config"
 import { openseaNftUrl } from "@/lib/utils"
 import { useDelegatedTokens } from "@/lib/voting/delegated-tokens/use-delegated-tokens"
 import { useVotingPower } from "@/lib/voting/use-voting-power"
-import { Avatar, ConnectKitButton } from "connectkit"
 import Image from "next/image"
 import { useRef } from "react"
 import { mainnet } from "viem/chains"
-import { useAccount, useDisconnect } from "wagmi"
 import { Alert, AlertDescription } from "../ui/alert"
-import { ModeToggle } from "./mode-toggle"
-import { SignupButton } from "./signup-button"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { LoginButton } from "./login-button"
+import { ModeToggle } from "./mode-toggle"
 
-export const MenuAvatar = () => {
-  const { address } = useAccount()
+interface Props {
+  user?: User
+}
+
+export const MenuAvatar = (props: Props) => {
+  const { user } = props
   const { votingPower } = useVotingPower()
   const closeRef = useRef<HTMLButtonElement>(null)
-  const { tokens } = useDelegatedTokens(address)
-  const { disconnect } = useDisconnect()
+  const { tokens } = useDelegatedTokens(user?.address)
+  const { logout } = useLogin()
 
   return (
     <div className="inline-flex">
-      <ConnectKitButton.Custom>
-        {({ isConnected, truncatedAddress, ensName, address }) => {
-          return (
-            <>
-              {isConnected && (
-                <Popover>
-                  <PopoverTrigger>
-                    <div className="flex h-[26px] items-center space-x-1.5 rounded-full bg-secondary pr-2.5 transition-opacity hover:bg-accent">
-                      <Avatar address={address} size={26} name={ensName || truncatedAddress} />
-                      <span className="min-w-2 py-0.5 text-xs font-semibold text-secondary-foreground">
-                        {votingPower?.toString()}
-                      </span>
-                    </div>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-full max-w-[100vw] md:mr-8 md:w-[380px]">
-                    {" "}
-                    <PopoverClose ref={closeRef} className="hidden" />
-                    <div className="mb-4 flex items-center justify-between">
-                      <span className="text-sm font-medium">{ensName || truncatedAddress}</span>
-                      <div className="flex items-center space-x-2.5">
-                        <span className="max-sm:hidden">
-                          <ModeToggle />
-                        </span>
-                        <Button onClick={() => disconnect()} size="sm" variant="outline">
-                          Logout
-                        </Button>
-                      </div>
-                    </div>
-                    {tokens.length > 0 ? (
-                      <Voter votingPower={votingPower} tokenIds={tokens.map((token) => token.id)} />
-                    ) : (
-                      <div className="space-y-4">
-                        <p className="text-sm text-muted-foreground">
-                          You don&apos;t have any delegated Nouns, which means you can&apos;t vote
-                          for grant budget allocations.
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          You may like to get involved in the following ways:
-                        </p>
-                        <div className="flex space-x-2.5">
-                          <Button asChild size="sm" className="w-full">
-                            <a href="/apply">Apply for a grant</a>
-                          </Button>
-                          <Button asChild size="sm" className="w-full">
-                            <a href="/curate">Become a curator</a>
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                  </PopoverContent>
-                </Popover>
-              )}
-              {!isConnected && (
-                <div className="flex items-center space-x-2.5">
-                  <SignupButton />
-                  <LoginButton />
+      {user && (
+        <Popover>
+          <PopoverTrigger>
+            <div className="flex h-[26px] items-center space-x-1.5 rounded-full bg-secondary pr-2.5 transition-opacity hover:bg-accent">
+              <Avatar className="size-[26px] bg-accent text-xs">
+                <AvatarImage src={user.avatar} alt={user.username} />
+              </Avatar>
+              <span className="min-w-2 py-0.5 text-xs font-semibold text-secondary-foreground">
+                {votingPower?.toString()}
+              </span>
+            </div>
+          </PopoverTrigger>
+          <PopoverContent className="w-full max-w-[100vw] md:mr-8 md:w-[380px]">
+            <PopoverClose ref={closeRef} className="hidden" />
+            <div className="mb-4 flex items-center justify-between">
+              <span className="text-sm font-medium">{user.username}</span>
+              <div className="flex items-center space-x-2.5">
+                <span className="max-sm:hidden">
+                  <ModeToggle />
+                </span>
+                <Button onClick={logout} size="sm" variant="outline">
+                  Logout
+                </Button>
+              </div>
+            </div>
+            {tokens.length > 0 ? (
+              <Voter votingPower={votingPower} tokenIds={tokens.map((token) => token.id)} />
+            ) : (
+              <div className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  You don&apos;t have any delegated Nouns, which means you can&apos;t vote for grant
+                  budget allocations.
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  You may like to get involved in the following ways:
+                </p>
+                <div className="flex space-x-2.5">
+                  <Button asChild size="sm" className="w-full">
+                    <a href="/apply">Apply for a grant</a>
+                  </Button>
+                  <Button asChild size="sm" className="w-full">
+                    <a href="/curate">Become a curator</a>
+                  </Button>
                 </div>
-              )}
-            </>
-          )
-        }}
-      </ConnectKitButton.Custom>
+              </div>
+            )}
+          </PopoverContent>
+        </Popover>
+      )}
+      {!user && <LoginButton />}
     </div>
   )
 }

@@ -7,9 +7,9 @@ import { FileInput } from "@/components/ui/file-input"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { MarkdownInput } from "@/components/ui/markdown-input"
+import { useLogin } from "@/lib/auth/use-login"
 import { getShortEthAddress } from "@/lib/utils"
 import { Grant } from "@prisma/client"
-import { useModal } from "connectkit"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useFormStatus } from "react-dom"
@@ -27,7 +27,8 @@ interface Props {
 export function ApplyForm(props: Props) {
   const { flow, isFlow, template } = props
   const { isConnected, address } = useAccount()
-  const { setOpen } = useModal()
+  const { login } = useLogin()
+
   const router = useRouter()
   const [isGuest, setIsGuest] = useState(true)
 
@@ -77,7 +78,7 @@ export function ApplyForm(props: Props) {
             <AlertTitle className="text-base">Connect your wallet</AlertTitle>
             <AlertDescription>You need to sign in to submit the application.</AlertDescription>
           </div>
-          <Button onClick={() => setOpen(true)} type="button">
+          <Button onClick={() => login()} type="button">
             Connect Wallet
           </Button>
         </Alert>

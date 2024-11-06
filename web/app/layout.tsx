@@ -1,4 +1,6 @@
 import { CuratorPopover } from "@/components/global/curator-popover/curator-popover"
+import Highlight from "@/components/global/Highlight"
+import { HighlightErrorBoundary } from "@/components/global/HighlightErrorBoundary"
 import { MenuDesktop, MenuMobile } from "@/components/global/menu"
 import { MenuAvatar } from "@/components/global/menu-avatar"
 import { RecipientPopover } from "@/components/global/recipient-popover/recipient-popover"
@@ -6,17 +8,16 @@ import { RefreshOnFocus } from "@/components/global/refresh-on-focus"
 import { ThemeProvider } from "@/components/global/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import Highlight from "@/components/global/Highlight"
+import { getUser } from "@/lib/auth/user"
 import { getPool } from "@/lib/database/queries/pool"
-import { Analytics } from "@vercel/analytics/react"
 import Wagmi from "@/lib/wagmi/wagmi-provider"
 import Noggles from "@/public/noggles.svg"
+import { Analytics } from "@vercel/analytics/react"
 import type { Metadata } from "next"
 import { Roboto_Mono } from "next/font/google"
 import Image from "next/image"
 import Link from "next/link"
 import "./globals.css"
-import { HighlightErrorBoundary } from "@/components/global/HighlightErrorBoundary"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const mono = Roboto_Mono({ subsets: ["latin"], variable: "--font-mono" })
@@ -35,6 +36,8 @@ export default async function RootLayout(props: Readonly<{ children: React.React
   const { children } = props
 
   const pool = await getPool()
+
+  const user = await getUser()
 
   return (
     <>
@@ -71,7 +74,7 @@ export default async function RootLayout(props: Readonly<{ children: React.React
                     <div className="flex items-center justify-end space-x-2.5 lg:w-1/5">
                       <RecipientPopover />
                       <CuratorPopover flow={pool} />
-                      <MenuAvatar />
+                      <MenuAvatar user={user} />
                       <MenuMobile />
                     </div>
                   </nav>

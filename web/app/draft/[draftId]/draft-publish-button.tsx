@@ -9,14 +9,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { flowTcrImplAbi } from "@/lib/abis"
+import { useLogin } from "@/lib/auth/use-login"
 import { RecipientType } from "@/lib/enums"
 import { useTcrData } from "@/lib/tcr/use-tcr-data"
 import { useTcrToken } from "@/lib/tcr/use-tcr-token"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { DerivedData, Draft, Grant } from "@prisma/client"
-import { useModal } from "connectkit"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
@@ -24,8 +25,6 @@ import { encodeAbiParameters, formatEther, zeroAddress } from "viem"
 import { base } from "viem/chains"
 import { useAccount } from "wagmi"
 import { publishDraft } from "./publish-draft"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { Currency } from "@/components/ui/currency"
 
 interface Props {
   draft: Draft
@@ -40,7 +39,7 @@ export function DraftPublishButton(props: Props) {
   const { address } = useAccount()
   const router = useRouter()
   const ref = useRef<HTMLButtonElement>(null)
-  const { setOpen } = useModal()
+  const { login } = useLogin()
 
   const { addItemCost, challengePeriodFormatted } = useTcrData(getEthAddress(flow.tcr), chainId)
   const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr), chainId)
@@ -84,7 +83,7 @@ export function DraftPublishButton(props: Props) {
             onClick={(e) => {
               if (!address) {
                 e.preventDefault()
-                setOpen(true)
+                login()
               }
             }}
             disabled={!canPublish}

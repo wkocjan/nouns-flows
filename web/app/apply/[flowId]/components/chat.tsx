@@ -1,7 +1,6 @@
 "use client"
 
 import { LoginButton } from "@/components/global/login-button"
-import { SignupButton } from "@/components/global/signup-button"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { useScrollToBottom } from "@/lib/hooks/use-scroll-to-bottom"
@@ -12,13 +11,13 @@ import { RotateCcw } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { toast } from "sonner"
 import { useAccount } from "wagmi"
+import { ErrorMessage } from "./error-message"
 import { Message } from "./message"
 import { MultimodalInput } from "./multimodal-input"
 import StartImage from "./start.svg"
 import { useChatHistory } from "./use-chat-history"
-import { ErrorMessage } from "./error-message"
-import { toast } from "sonner"
 import { useRecipientExists } from "./useRecipientExists"
 
 interface Props {
@@ -205,8 +204,7 @@ const ConnectWallet = () => {
     <div className="flex h-full items-center justify-center">
       <div className="flex flex-col items-center space-y-4">
         <div className="flex items-center space-x-2.5">
-          <SignupButton size="lg" variant="default" />
-          <LoginButton size="lg" variant="outline" />
+          <LoginButton size="lg" />
         </div>
         <p className="text-sm text-muted-foreground">Please log in to continue</p>
       </div>

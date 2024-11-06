@@ -1,18 +1,16 @@
-import { Card, CardContent } from "@/components/ui/card"
 import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
+import { getUser } from "@/lib/auth/user"
 import database from "@/lib/database"
 import { getPool } from "@/lib/database/queries/pool"
+import { Status } from "@/lib/enums"
 import { getEthAddress, isGrantApproved } from "@/lib/utils"
 import { VotingProvider } from "@/lib/voting/voting-context"
-import Link from "next/link"
-import { Suspense } from "react"
-import { base, flowMainnet } from "viem/chains"
-import { FlowsTable } from "./components/flows-table"
-import { FlowsUpdates } from "./components/flows-updates"
-import { VotingBar } from "./flow/[flowId]/components/voting-bar"
-import { CTAButtons } from "./flow/[flowId]/components/cta-buttons"
 import { Grant } from "@prisma/client"
-import { Status } from "@/lib/enums"
+import Link from "next/link"
+import { base } from "viem/chains"
+import FlowsList from "./components/flows-list"
+import { CTAButtons } from "./flow/[flowId]/components/cta-buttons"
+import { VotingBar } from "./flow/[flowId]/components/voting-bar"
 
 export const revalidate = 0
 export const dynamic = "force-dynamic"
@@ -24,6 +22,8 @@ export default async function Home() {
     where: { isFlow: 1, isActive: 1, isTopLevel: 0 },
     include: { subgrants: true },
   })
+
+  const user = await getUser()
 
   // sort by monthlyIncomingFlowRate
   activeFlows.sort(sortGrants)
@@ -54,20 +54,14 @@ export default async function Home() {
           <CTAButtons />
         </div>
 
-        <Card className="mb-12 mt-6">
-          <CardContent>
-            <FlowsTable flows={activeFlows} />
-          </CardContent>
-        </Card>
-        <Suspense>
-          <FlowsUpdates />
-        </Suspense>
+        <div className="mt-6">
+          <FlowsList user={user} flows={activeFlows} />
+        </div>
       </main>
       <VotingBar />
     </VotingProvider>
   )
 }
-
 function sortGrants(a: Grant & { subgrants: Grant[] }, b: Grant & { subgrants: Grant[] }) {
   const aIsClearingRequested = a.status === Status.ClearingRequested
   const bIsClearingRequested = b.status === Status.ClearingRequested

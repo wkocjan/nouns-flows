@@ -1,25 +1,29 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { useLogin } from "@/lib/auth/use-login"
 import { useDelegatedTokens } from "@/lib/voting/delegated-tokens/use-delegated-tokens"
 import { useVoting } from "@/lib/voting/voting-context"
-import { useModal } from "connectkit"
 import { toast } from "sonner"
 import { useAccount } from "wagmi"
 
 export const VotingToggle = () => {
   const { isLoading, isActive, activate } = useVoting()
   const { address } = useAccount()
-  const { setOpen } = useModal()
+  const { login } = useLogin()
   const { tokens } = useDelegatedTokens(address)
 
   return (
     <Button
       onClick={() => {
-        if (!address) return setOpen(true)
+        if (!address) {
+          login()
+          return
+        }
 
-        if (tokens.length === 0)
-          return toast.error("You don't have any Nouns delegated to vote with")
+        if (tokens.length === 0) {
+          return toast.error("You don't have any Nouns delegated to vote with", { duration: 450 })
+        }
 
         activate()
       }}
