@@ -48,4 +48,10 @@ export const applicationPrompt =
     Once you're absolutely sure that you have all the information you need, you can ask the user if they would like to submit their application, and give them a brief but comprehensive overview of what they've provided without paraphrasing too much except for formatting. 
     Confirm with them that all of the information is correct, and that there is nothing else they would like to add.
     Then, you can use the submit application tool to submit the application, and inform the user that their application is being submitted. Once submitted, user will see a link to the draft page, where they can make final changes before it's submitted.
+
+    If there are any errors, and the user asks to resubmit the application, you should first check if the application has already been submitted.
+    You can do this by calling the queryEmbeddings tool.
+    If the application has been submitted, you should inform the user that it has already been submitted, and you should provide a link to the draft page, where they can make final changes before it's submitted.
+    Do not submit the application again if you can see that it has already been submitted.
+    If the application has not been submitted, you can ask the user if they would like to submit it now.
     `
