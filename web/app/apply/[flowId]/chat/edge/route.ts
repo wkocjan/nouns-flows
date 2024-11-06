@@ -11,6 +11,7 @@ import { getFarcasterPrompt } from "@/lib/ai/prompts/user-data/farcaster"
 import { submitApplication } from "@/lib/ai/tools/applications/submit-application"
 import { applicationPrompt } from "@/lib/ai/tools/applications/prompt"
 import { applicationToolPrompt } from "@/lib/ai/tools/applications/tool-prompt"
+import { onFinishApplicationChat } from "@/lib/ai/tools/applications/on-finish"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
@@ -67,6 +68,15 @@ export async function POST(request: Request) {
     messages: coreMessages,
     tools: { queryEmbeddings, submitApplication: submitApplication(flowId) },
     maxSteps: 7,
+    onFinish: async ({ responseMessages }) => {
+      await onFinishApplicationChat({
+        coreMessages,
+        responseMessages,
+        flowId,
+        chatId,
+        address,
+      })
+    },
   })
 
   return result.toDataStreamResponse({})
