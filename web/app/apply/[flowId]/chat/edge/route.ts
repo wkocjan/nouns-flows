@@ -1,8 +1,10 @@
-import database from "@/lib/database/edge"
+import { getLocationPrompt } from "@/lib/ai/prompts/user-data/location"
+import { getUserAgentPrompt } from "@/lib/ai/prompts/user-data/user-agent"
+import { applicationRules, isProd } from "@/lib/ai/prompts/rules/production"
 import { createAnthropic } from "@ai-sdk/anthropic"
-import { geolocation } from "@vercel/functions"
 import { convertToCoreMessages, Message, streamText } from "ai"
-import { unstable_cache } from "next/cache"
+import { getFlowContextPrompt } from "@/lib/ai/prompts/flow/flow-context"
+import { floSystemPrompt } from "@/lib/ai/agents/flo/personality"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
@@ -11,40 +13,34 @@ export const runtime = "edge"
 const anthropic = createAnthropic({ apiKey: `${process.env.ANTHROPIC_API_KEY}` })
 
 export async function POST(request: Request) {
-  const { messages, flowId }: { messages: Array<Message>; flowId: string } = await request.json()
+  const {
+    chatId,
+    flowId,
+    messages,
+    address,
+  }: { chatId: string; flowId: string; messages: Array<Message>; address: string } =
+    await request.json()
 
-  const userAgent = request.headers.get("user-agent")
-  const { city, country, countryRegion } = geolocation(request)
-
-  const flow = await unstable_cache(
-    async () => {
-      return database.grant.findFirstOrThrow({
-        where: { id: flowId, isFlow: 1, isActive: 1 },
-        include: { derivedData: true },
-      })
-    },
-    [`flow-${flowId}-apply-bot`],
-    { revalidate: 300 },
-  )()
-
-  if (!flow) throw new Error("Flow not found")
+  const flowContextPrompt = await getFlowContextPrompt(flowId)
 
   const coreMessages = convertToCoreMessages(messages)
 
   const result = await streamText({
     model: anthropic("claude-3-5-sonnet-20241022"),
-    system: `You are a helpful assistant named Flo. You help users by having friendly conversations with them.
-    
-    You're assistant in ${flow.title} flow. Here is more about this flow: ${flow.description}
+    system: `${floSystemPrompt}
 
-    Here is the template for the application:
-    ${flow.derivedData?.template}
+    Inform the user at the start that you are helping them with creating a draft application, 
+    and they'll be able to view and edit it before submitting on the draft page after you're done together.
     
-    Here is the user agent: ${userAgent}. If the user is on mobile, be very concise.
+    ${flowContextPrompt}
+    
+    ${getUserAgentPrompt(request)}
+    ${getLocationPrompt(request)} Make sure the final application you output and submit is in English.
+   
+    ${isProd ? applicationRules : ""}
 
-    Here is the user's location: ${city}, ${country}, ${countryRegion}. You can use this to personalize the conversation.
-    
-    Be supportive and helpful in your interactions.`,
+    Ensure the final draft is in English, even if the user initially picked another language. Do not forget to do this, the final draft that you submit must be in English.
+    `,
     messages: coreMessages,
   })
 

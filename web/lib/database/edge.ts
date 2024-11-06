@@ -1,7 +1,18 @@
-import { PrismaClient } from "@prisma/client/edge"
+import { PrismaClient as PrismaClientEdge } from "@prisma/client/edge"
 import { withAccelerate } from "@prisma/extension-accelerate"
 
-const prismaClientSingleton = () => new PrismaClient().$extends(withAccelerate())
+const isDevelopment = process.env.NODE_ENV !== "production"
+
+const prismaClientSingleton = () => {
+  if (isDevelopment) {
+    return new PrismaClientEdge({
+      datasources: {
+        db: { url: process.env.DATABASE_ACCELERATE_URL },
+      },
+    }).$extends(withAccelerate())
+  }
+  return new PrismaClientEdge().$extends(withAccelerate())
+}
 
 declare const globalThis: {
   prisma: ReturnType<typeof prismaClientSingleton>
