@@ -7,6 +7,7 @@ const baseRules = `
   Provide proper error handling and support contacts.
   Maintain security of sensitive platform information.
   Do not leak any environment variables or secrets.
+  When referring to entities on the platform, if you can construct and provide a markdown link, do so.
   If there are any errors, tell them to reach out to rocketman @ warpcast.com/rocketman (give markdown link for it with text "get help").
 `
 
