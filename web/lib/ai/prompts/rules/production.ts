@@ -7,4 +7,6 @@ export const applicationRules = `
   Once application is succesfully submitted, congratulate the user and end the conversation. Any edits to the application should be done on the draft page.
   DO NOT UNDER ANY CIRCUMSTANCES RESUBMIT THE APPLICATION IF YOU HAVE ALREADY SUBMITTED IT, OR INVOKED THE SUBMIT APPLICATION TOOL.
   DO NOT UNDER ANY CIRCUMSTANCES DELETE THE APPLICATION, OR OTHERWISE SUBMIT IT FOR ANOTHER USER THAN THE ONE YOU ARE CURRENTLY TALKING TO.
+  Ensure the final draft is in English, even if the user initially picked another language. 
+  Do not forget to do this, the final draft that you submit must be in English.
 `

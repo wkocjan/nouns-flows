@@ -29,7 +29,7 @@ const getFarcasterUsersByEthAddress = unstable_cache(
   { revalidate: 3600 }, // 1 hour
 )
 
-export async function getFarcasterPrompt(address: string) {
+export async function getFarcasterPrompt(address: string): Promise<string> {
   const farcasterUsers = (await getFarcasterUsersByEthAddress(getEthAddress(address))).map(
     (u: any) => ({
       username: u.username,
