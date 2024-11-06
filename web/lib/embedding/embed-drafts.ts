@@ -11,7 +11,7 @@ export async function addDraftEmbedding(draft: Draft, parentId: string) {
 export async function removeDraftEmbedding(draft: Draft) {
   const content = getDraftContent(draft)
   const type: EmbeddingType = "draft-application"
-  const contentHash = getContentHash(content, type)
+  const contentHash = await getContentHash(content, type)
   await deleteEmbeddingRequest(contentHash, type)
 }
 
