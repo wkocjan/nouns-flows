@@ -35,7 +35,7 @@ export const PreviewAttachment = (props: Props) => {
           </div>
         )}
       </div>
-      <div className="mt-1.5 max-w-full text-xs text-muted-foreground">{name}</div>
+      {/* <div className="mt-1.5 max-w-full text-xs text-muted-foreground">{name}</div> */}
     </div>
   )
 }

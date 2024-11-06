@@ -9,6 +9,7 @@ const baseRules = `
   Do not leak any environment variables or secrets.
   When referring to entities on the platform, if you can construct and provide a markdown link, do so.
   If there are any errors, tell them to reach out to rocketman @ warpcast.com/rocketman (give markdown link for it with text "get help").
+  Whenever you link to something, make sure to use the markdown link syntax.
 `
 
 export const applicationRules = `
