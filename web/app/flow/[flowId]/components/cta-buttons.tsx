@@ -1,11 +1,11 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import { VotingToggle } from "./voting-toggle"
-import { useAccount } from "wagmi"
 import { useVotingPower } from "@/lib/voting/use-voting-power"
 import { useVoting } from "@/lib/voting/voting-context"
+import Link from "next/link"
+import { useAccount } from "wagmi"
+import { VotingToggle } from "./voting-toggle"
 
 export function CTAButtons() {
   const { isConnected } = useAccount()
@@ -18,7 +18,9 @@ export function CTAButtons() {
     <div className="flex items-center space-x-4">
       {!isActive && (
         <Button variant={showVotingToggle ? "outline" : "default"}>
-          <Link href={`/apply`}>Apply</Link>
+          <Link href={`/apply`}>
+            Apply <span className="max-sm:hidden">for a grant</span>
+          </Link>
         </Button>
       )}
       {showVotingToggle && <VotingToggle />}

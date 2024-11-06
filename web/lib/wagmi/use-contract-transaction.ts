@@ -1,6 +1,6 @@
 "use client"
 
-import { useModal } from "connectkit"
+import { usePrivy } from "@privy-io/react-auth"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { Chain } from "viem"
@@ -35,7 +35,7 @@ export const useContractTransaction = (args?: {
 
   const { chainId: connectedChainId, isConnected } = useAccount()
   const { switchChainAsync } = useSwitchChain()
-  const { setOpen } = useModal()
+  const { login } = usePrivy()
 
   useEffect(() => {
     if (callbackHandled || !toastId) return
@@ -82,7 +82,7 @@ export const useContractTransaction = (args?: {
     prepareWallet: async (toastId?: number | string) => {
       setCallbackHandled(false)
 
-      if (!isConnected) return setOpen(true)
+      if (!isConnected) return login()
 
       if (chainId !== connectedChainId) {
         try {

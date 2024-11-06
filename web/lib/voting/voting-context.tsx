@@ -62,7 +62,9 @@ export const VotingProvider = (
     },
   })
 
-  const { tokens } = useDelegatedTokens(address?.toLocaleLowerCase())
+  const { tokens } = useDelegatedTokens(
+    address ? (address?.toLocaleLowerCase() as `0x${string}`) : undefined,
+  )
 
   useEffect(() => {
     if (typeof votes !== "undefined") return

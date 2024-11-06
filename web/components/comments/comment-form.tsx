@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { useModal } from "connectkit"
+import { usePrivy } from "@privy-io/react-auth"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -21,14 +21,14 @@ export function CommentForm(props: Props) {
   const [content, setContent] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { address } = useAccount()
-  const { setOpen } = useModal()
+  const { login } = usePrivy()
   const router = useRouter()
 
   return (
     <form
       action={async () => {
         if (!address) {
-          setOpen(true)
+          login()
           return
         }
 

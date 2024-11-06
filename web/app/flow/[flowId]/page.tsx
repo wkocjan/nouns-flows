@@ -24,6 +24,7 @@ import Link from "next/link"
 import { GrantLogoCell } from "./components/grant-logo-cell"
 import { VotingBar } from "./components/voting-bar"
 import { VotingInput } from "./components/voting-input"
+import { GrantCard } from "./components/grant-card"
 
 interface Props {
   params: {
@@ -162,6 +163,11 @@ export default async function FlowPage(props: Props) {
         </TableBody>
       </Table>
       <VotingBar />
+      {/* <div className="mt-10 grid grid-cols-1 gap-4 lg:grid-cols-3 xl:grid-cols-5">
+        {flow.subgrants.map((grant) => (
+          <GrantCard key={grant.id} grant={grant} />
+        ))}
+      </div> */}
     </>
   )
 }

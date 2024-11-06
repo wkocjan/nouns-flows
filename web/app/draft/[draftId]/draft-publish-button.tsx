@@ -16,7 +16,7 @@ import { useTcrToken } from "@/lib/tcr/use-tcr-token"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { DerivedData, Draft, Grant } from "@prisma/client"
-import { useModal } from "connectkit"
+import { usePrivy } from "@privy-io/react-auth"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
@@ -40,7 +40,7 @@ export function DraftPublishButton(props: Props) {
   const { address } = useAccount()
   const router = useRouter()
   const ref = useRef<HTMLButtonElement>(null)
-  const { setOpen } = useModal()
+  const { login } = usePrivy()
 
   const { addItemCost, challengePeriodFormatted } = useTcrData(getEthAddress(flow.tcr), chainId)
   const token = useTcrToken(getEthAddress(flow.erc20), getEthAddress(flow.tcr), chainId)
@@ -84,7 +84,7 @@ export function DraftPublishButton(props: Props) {
             onClick={(e) => {
               if (!address) {
                 e.preventDefault()
-                setOpen(true)
+                login()
               }
             }}
             disabled={!canPublish}

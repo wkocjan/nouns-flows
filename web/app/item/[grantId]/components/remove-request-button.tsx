@@ -24,7 +24,7 @@ import { useTcrToken } from "@/lib/tcr/use-tcr-token"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { Grant } from "@prisma/client"
-import { useModal } from "connectkit"
+import { usePrivy } from "@privy-io/react-auth"
 import { useRouter } from "next/navigation"
 import { PropsWithChildren, useRef, useState } from "react"
 import { toast } from "sonner"
@@ -94,7 +94,7 @@ export function GrantRemoveRequestButton(props: Props) {
   const router = useRouter()
   const [reason, setReason] = useState<string | null>(null)
   const [comment, setComment] = useState<string>("")
-  const { setOpen } = useModal()
+  const { login } = usePrivy()
 
   const ref = useRef<HTMLButtonElement>(null)
 
@@ -127,7 +127,7 @@ export function GrantRemoveRequestButton(props: Props) {
           variant="outline"
           onClick={(e) => {
             if (!address) {
-              setOpen(true)
+              login()
               e.preventDefault()
             }
           }}

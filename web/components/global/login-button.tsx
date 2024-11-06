@@ -1,5 +1,5 @@
 import { Button, ButtonProps } from "@/components/ui/button"
-import { useModal } from "connectkit"
+import { usePrivy } from "@privy-io/react-auth"
 
 export const LoginButton = ({
   variant = "outline",
@@ -8,10 +8,10 @@ export const LoginButton = ({
   variant?: ButtonProps["variant"]
   size?: ButtonProps["size"]
 }) => {
-  const { setOpen } = useModal()
+  const { login } = usePrivy()
 
   return (
-    <Button variant={variant} size={size} onClick={() => setOpen(true)}>
+    <Button variant={variant} size={size} onClick={login}>
       Log in
     </Button>
   )
