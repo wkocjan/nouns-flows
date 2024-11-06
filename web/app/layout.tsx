@@ -17,6 +17,7 @@ import Image from "next/image"
 import Link from "next/link"
 import "./globals.css"
 import { HighlightErrorBoundary } from "@/components/global/HighlightErrorBoundary"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const mono = Roboto_Mono({ subsets: ["latin"], variable: "--font-mono" })
 
@@ -40,6 +41,7 @@ export default async function RootLayout(props: Readonly<{ children: React.React
       <Highlight />
       <html lang="en" suppressHydrationWarning className="h-full">
         <body className={`${mono.variable} flex h-full flex-col`}>
+          <SpeedInsights />
           <RefreshOnFocus />
           <ThemeProvider
             attribute="class"
