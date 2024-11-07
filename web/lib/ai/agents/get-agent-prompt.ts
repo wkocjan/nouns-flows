@@ -1,20 +1,17 @@
-import { getFarcasterPrompt } from "../prompts/user-data/farcaster"
-import { floApplicationHelperPrompt } from "./flo/application-helper"
+import { FloDomain, getFloPrompt } from "./flo/flo"
 
 type AgentType = "flo"
-type AgentDomain = "application"
+type AgentDomain = FloDomain
 
 export async function getAgentPrompt(
-  agentType: AgentType,
+  type: AgentType,
   domain: AgentDomain,
-  request: Request,
-  address: string,
+  address?: string,
 ): Promise<string> {
-  const farcasterPrompt = await getFarcasterPrompt(address)
-
-  if (agentType === "flo" && domain === "application") {
-    return floApplicationHelperPrompt(request, address, farcasterPrompt)
+  switch (type) {
+    case "flo":
+      return getFloPrompt(domain satisfies FloDomain, address)
+    default:
+      throw new Error(`Unsupported agent "${type}"`)
   }
-
-  throw new Error(`Unsupported agent type "${agentType}" or domain "${domain}"`)
 }

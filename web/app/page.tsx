@@ -8,6 +8,7 @@ import { VotingProvider } from "@/lib/voting/voting-context"
 import { Grant } from "@prisma/client"
 import Link from "next/link"
 import { base } from "viem/chains"
+import { ActionCard } from "./components/action-card/action-card"
 import FlowsList from "./components/flows-list"
 import { CTAButtons } from "./flow/[flowId]/components/cta-buttons"
 import { VotingBar } from "./flow/[flowId]/components/voting-bar"
@@ -55,7 +56,7 @@ export default async function Home() {
         </div>
 
         <div className="mt-6">
-          <FlowsList user={user} flows={activeFlows} />
+          <FlowsList actionCard={<ActionCard user={user} />} flows={activeFlows} />
         </div>
       </main>
       <VotingBar />
