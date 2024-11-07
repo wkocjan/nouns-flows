@@ -6,15 +6,14 @@ import {
   VideoToExternalHTML,
 } from "@blocknote/react"
 import { useState } from "react"
-// @ts-ignore
-import { RiVideoFill } from "react-icons/ri"
+import { VideoIcon } from "@radix-ui/react-icons"
 
 const VideoBlock = (props: ReactCustomBlockRenderProps<typeof videoBlockConfig, any, any>) => {
   return (
     <FileBlockWrapper
       {...(props as any)}
       buttonText={props.editor.dictionary.file_blocks.video.add_button_text}
-      buttonIcon={<RiVideoFill size={24} />}
+      buttonIcon={<VideoIcon scale={1.5} />}
     >
       <VideoPreview block={props.block} editor={props.editor as any} />
     </FileBlockWrapper>
