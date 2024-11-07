@@ -1,14 +1,13 @@
 import { unstable_cache } from "next/cache"
-import { farcaster } from "./client"
+import { farcasterDb } from "@/lib/database/farcaster"
 
 export const getFarcasterUserByEthAddress = unstable_cache(
   async (address: `0x${string}`) => {
     try {
       const users = await getFarcasterUsersByEthAddress(address)
-      if (users.length === 0) return null
+      if (!users || users.length === 0) return null
 
-      const user = users.sort((a, b) => a.follower_count - b.follower_count)[0]
-      return user
+      return users[0]
     } catch (e: any) {
       console.error(e?.message)
       return null
@@ -23,10 +22,16 @@ export const getFarcasterUsersByEthAddress = unstable_cache(
     try {
       const address = rawAddress.toLowerCase()
 
-      const users = await farcaster.fetchBulkUsersByEthereumAddress([address])
-      if (Object.keys(users).length === 0 || !users[address]) return []
+      const users = await farcasterDb.farcasterProfile.findMany({
+        where: {
+          verified_addresses: {
+            has: address,
+          },
+        },
+        cacheStrategy: { ttl: 600 },
+      })
 
-      return users[address]
+      return users
     } catch (e: any) {
       console.error(e?.message)
       return []
