@@ -15,7 +15,7 @@ export const getFarcasterUserByEthAddress = unstable_cache(
     }
   },
   undefined,
-  { revalidate: 3600 }, // 1 hour
+  { revalidate: 600 }, // 10 minutes
 )
 
 export const getFarcasterUsersByEthAddress = unstable_cache(
