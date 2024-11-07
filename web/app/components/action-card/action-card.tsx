@@ -3,6 +3,7 @@ import "server-only"
 import { Button } from "@/components/ui/button"
 import { Markdown } from "@/components/ui/markdown"
 import { User } from "@/lib/auth/user"
+import { unstable_cache } from "next/dist/server/web/spec-extension/unstable-cache"
 import Link from "next/link"
 import { getGuidance } from "./get-guidance"
 
@@ -13,7 +14,11 @@ interface Props {
 export async function ActionCard(props: Props) {
   const { user } = props
 
-  const { text, actions } = await getGuidance(user?.address)
+  const { text, actions } = await unstable_cache(
+    async () => getGuidance(user?.address),
+    [`guidance_${user?.address ?? "guest"}`],
+    { revalidate: 1800 },
+  )()
 
   return (
     <div className="relative isolate row-span-2 overflow-hidden rounded-2xl bg-gradient-to-b from-secondary to-secondary/80 p-4">

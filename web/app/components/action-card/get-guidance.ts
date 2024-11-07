@@ -17,7 +17,7 @@ export async function getGuidance(address: string | undefined) {
         query: `What flows (categories), grants, and grant applications are available? What we know about user ${address}?`,
         users: address ? [address] : undefined,
         tags: [],
-        numResults: 100,
+        numResults: 50,
         groups: [],
       })
     },
@@ -41,7 +41,7 @@ export async function getGuidance(address: string | undefined) {
 
     Write a short message to the user explaining what they should do next on the platform.
 
-    Do not introduce yourself. Do not say you have access to some data or know about user. Just write a message to the user. No need to inform them about your context awareness.
+    Do not introduce yourself. Do not say you have access to data about user. Just write a message to the user. No need to inform them about your context awareness or why you say what you say.
 
     When deciding what to say, think about what the user is likely to be interested.
 

@@ -1,5 +1,4 @@
 import { getFarcasterPrompt } from "./farcaster"
-import { getUserAgentPrompt } from "./user-agent"
 import { cache } from "react"
 
 export const getUserDataPrompt = cache(async (address: string) => {
@@ -8,7 +7,5 @@ export const getUserDataPrompt = cache(async (address: string) => {
   The address of the user is ${address}. 
   
   ${await getFarcasterPrompt(address)}
-
-  ${getUserAgentPrompt()}
   `
 })
