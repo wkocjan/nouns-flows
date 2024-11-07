@@ -1,6 +1,6 @@
 export const isProd = process.env.NODE_ENV === "production"
 
-const baseRules = `
+export const baseRules = `
   Stay focused on the assigned task without side conversations.
   End conversations properly after task completion.
   Never perform duplicate or unauthorized actions.
