@@ -1,6 +1,6 @@
 import { getResizedImage } from "@/lib/image/sharp-resize"
 import { createAnthropic } from "@ai-sdk/anthropic"
-import { Cast, Grant } from "@prisma/client"
+import { Cast, Grant } from "@prisma/flows"
 import { generateObject } from "ai"
 import { z } from "zod"
 

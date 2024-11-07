@@ -6,7 +6,7 @@ import { Cast as RawCast } from "@/lib/farcaster/client"
 import { getCastImages } from "@/lib/farcaster/get-cast-images"
 import { getCastVideos } from "@/lib/farcaster/get-cast-videos"
 import { getFarcasterChannelCasts } from "@/lib/farcaster/get-channel-casts"
-import { Cast, FarcasterUser } from "@prisma/client"
+import { Cast, FarcasterUser } from "@prisma/flows"
 import { NextResponse } from "next/server"
 
 export const dynamic = "force-dynamic"

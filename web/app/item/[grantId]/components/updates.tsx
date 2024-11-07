@@ -1,7 +1,7 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { CastCard } from "@/components/ui/cast-card"
 import { FLOWS_CHANNEL_ID, NOUNS_CHANNEL_ID } from "@/lib/config"
-import { Cast, FarcasterUser } from "@prisma/client"
+import { Cast, FarcasterUser } from "@prisma/flows"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { PostUpdate } from "./post-update"
 

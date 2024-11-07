@@ -3,7 +3,7 @@
 import { useDelegatedTokens } from "@/lib/voting/delegated-tokens/use-delegated-tokens"
 import { generateOwnerProofs } from "@/lib/voting/owner-proofs/proofs"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
-import { Vote } from "@prisma/client"
+import { Vote } from "@prisma/flows"
 import { useRouter } from "next/navigation"
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react"
 import { toast } from "sonner"

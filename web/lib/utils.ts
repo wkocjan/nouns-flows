@@ -1,4 +1,4 @@
-import { Grant } from "@prisma/client"
+import { Grant } from "@prisma/flows"
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { base, baseSepolia, mainnet } from "viem/chains"

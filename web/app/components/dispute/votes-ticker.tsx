@@ -1,4 +1,4 @@
-import { Dispute } from "@prisma/client"
+import { Dispute } from "@prisma/flows"
 
 interface Props {
   dispute: Dispute

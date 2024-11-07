@@ -35,9 +35,7 @@ export const viewport = {
 export default async function RootLayout(props: Readonly<{ children: React.ReactNode }>) {
   const { children } = props
 
-  const pool = await getPool()
-
-  const user = await getUser()
+  const [pool, user] = await Promise.all([getPool(), getUser()])
 
   return (
     <>

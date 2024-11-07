@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table"
 import { Status } from "@/lib/enums"
 import { getIpfsUrl, isGrantApproved } from "@/lib/utils"
-import { Grant } from "@prisma/client"
+import { Grant } from "@prisma/flows"
 import Image from "next/image"
 import Link from "next/link"
 import { VotingInput } from "../flow/[flowId]/components/voting-input"
