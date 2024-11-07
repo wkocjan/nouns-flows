@@ -10,33 +10,34 @@ import { unstable_cache } from "next/dist/server/web/spec-extension/unstable-cac
 import { z } from "zod"
 
 export async function getGuidance(address: string | undefined) {
-  const initialContext = await unstable_cache(
-    async () => {
-      return searchEmbeddings({
-        types: ["grant", "grant-application", "flow", "cast"],
-        query: `What flows (categories), grants, and grant applications are available? What we know about user ${address}?`,
-        users: address ? [address] : undefined,
-        tags: [],
-        numResults: 50,
-        groups: [],
-      })
-    },
-    [`initial-context-${address ?? "guest"}`],
-    { revalidate: 3600 * 3 }, // 3 hours
-  )()
+  try {
+    const initialContext = await unstable_cache(
+      async () => {
+        return searchEmbeddings({
+          types: ["grant", "grant-application", "flow"],
+          query: `What flows (categories), grants, and grant applications are available? What we know about user ${address}?`,
+          users: address ? [address] : undefined,
+          tags: [],
+          numResults: 10,
+          groups: [],
+        })
+      },
+      [`initial-context-${address ?? "guest"}`],
+      { revalidate: 3600 * 3 }, // 3 hours
+    )()
 
-  const agentPrompt = await getAgentPrompt("flo", "guidance", address)
+    const agentPrompt = await getAgentPrompt("flo", "guidance", address)
 
-  const { object } = await generateObject({
-    model: anthropic("claude-3-5-sonnet-latest"),
-    schema: z.object({
-      text: z.string().describe("The guidance message to the user."),
-      actions: z
-        .array(z.object({ text: z.string().max(12), link: z.string() }))
-        .describe("Actions the user can take."),
-    }),
-    system: `${agentPrompt}\n\nInitial context from the database using the queryEmbeddings tool:\n${JSON.stringify(initialContext)}. Info about the tool: ${embeddingToolPrompt()}`,
-    prompt: `
+    const { object } = await generateObject({
+      model: anthropic("claude-3-5-sonnet-latest"),
+      schema: z.object({
+        text: z.string().describe("The guidance message to the user."),
+        actions: z
+          .array(z.object({ text: z.string().max(12), link: z.string() }))
+          .describe("Actions the user can take."),
+      }),
+      system: `${agentPrompt}\n\nInitial context from the database using the queryEmbeddings tool:\n${JSON.stringify(initialContext)}. Info about the tool: ${embeddingToolPrompt()}`,
+      prompt: `
     ${address ? `User ${address}` : "Guest"} just visited the home page.
 
     Write a short message to the user explaining what they should do next on the platform.
@@ -63,7 +64,19 @@ export async function getGuidance(address: string | undefined) {
     # Final checks
     ${isProd ? baseRules : ""}    
     `,
-  })
+    })
 
-  return object
+    return object
+  } catch (error) {
+    console.error(error)
+    return {
+      text: "Welcome to Flows! This is were builders get paid for making positive impact in their communities.\n\n Whether you clean beaches, organize meetups, or create content - there's a place for you here.",
+      actions: [
+        {
+          text: "Apply for a grant",
+          link: "/apply",
+        },
+      ],
+    }
+  }
 }

@@ -20,6 +20,8 @@ export async function ActionCard(props: Props) {
     { revalidate: 1800 },
   )()
 
+  if (!text) return null
+
   return (
     <div className="relative isolate row-span-2 overflow-hidden rounded-2xl bg-gradient-to-b from-secondary to-secondary/80 p-4">
       <h2 className="text-lg font-semibold text-secondary-foreground">gm {user?.username}</h2>
