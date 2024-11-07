@@ -15,8 +15,8 @@ export async function getUserProfile(address: `0x${string}`): Promise<Profile> {
   return {
     address,
     display_name: user?.display_name || getShortEthAddress(address),
-    username: user?.username,
-    pfp_url: user?.pfp_url,
-    bio: user?.profile?.bio.text,
+    username: user?.fname || undefined,
+    pfp_url: user?.avatar_url || undefined,
+    bio: user?.bio || undefined,
   }
 }
