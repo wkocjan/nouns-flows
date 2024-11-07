@@ -15,7 +15,7 @@ export async function getGuidance(address: string | undefined) {
       async () => {
         return searchEmbeddings({
           types: ["grant", "grant-application", "flow"],
-          query: `What flows (categories), grants, and grant applications are available? What we know about user ${address}?`,
+          query: `What flows (categories), grants, and grant applications are available? What do we know about the user ${address}?`,
           users: address ? [address] : undefined,
           tags: [],
           numResults: 10,
