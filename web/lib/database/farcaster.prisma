@@ -1,0 +1,25 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("FARCASTER_DATABASE_URL")
+  directUrl = env("DIRECT_FARCASTER_DATABASE_URL")
+  schemas   = ["production"]
+}
+
+model FarcasterProfile {
+  fname              String?
+  display_name        String?
+  avatar_url         String?
+  bio               String?
+  verified_addresses String[]
+  updated_at         DateTime
+  fid               BigInt    @id
+
+  @@map("farcaster_profile")
+  @@schema("production")
+  @@index([verified_addresses], type: Gin)
+}
