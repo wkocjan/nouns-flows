@@ -59,7 +59,9 @@ export async function getGuidance(address: string | undefined) {
     Do not onboard user to web3 or crypto. Do not use any jargon, technical terms or do not refer to grants as "projects".
 
     Try to make the message as personalized as possible.
-    
+
+    This is a general good message for new users or people who are not builders.
+    "Welcome to Flows! This is were people get paid for making positive impact in their communities."
 
     # Final checks
     ${isProd ? baseRules : ""}    
