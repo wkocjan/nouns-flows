@@ -50,7 +50,7 @@ export async function getGuidance(address: string | undefined) {
     - If the user is not logged in (guest), you may just briefly introduce the platform.
     - If the user is a builder without recent activity, you may suggest posting update on Farcaster.
 
-    Use 2-3 paragraphs and no more than 180 characters.
+    Use 2-3 paragraphs and no more than 160 characters.
 
     Always provide at least one action the user can take, with text and link. Do not provide more than 2 actions.
     Action texts should be short
