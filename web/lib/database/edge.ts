@@ -1,4 +1,4 @@
-import { PrismaClient as PrismaClientEdge } from "@prisma/client/edge"
+import { PrismaClient as PrismaClientEdge } from "@prisma/flows/edge"
 import { withAccelerate } from "@prisma/extension-accelerate"
 
 const isDevelopment = process.env.NODE_ENV !== "production"

@@ -19,7 +19,9 @@ export const getUserUpdatesChannel = cache(async (address: `0x${string}` | undef
     const user = await getFarcasterUserByEthAddress(address)
     if (!user) return emptyResponse
 
-    const channelIds = (await getFarcasterUserChannels(user.fid)).map((channel) => channel.id)
+    const channelIds = (await getFarcasterUserChannels(Number(user.fid))).map(
+      (channel) => channel.id,
+    )
     const isNounsMember = channelIds.includes(NOUNS_CHANNEL_ID)
     const isFlowsMember = channelIds.includes(FLOWS_CHANNEL_ID)
 
