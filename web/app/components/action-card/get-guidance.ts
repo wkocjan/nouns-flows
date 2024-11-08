@@ -59,7 +59,11 @@ export async function getGuidance(address: string | undefined) {
     Try to make the message as personalized as possible.
 
     This is a general good message for new users or people who are not builders.
-    "Welcome to Flows! This is were people get paid for making positive impact in their communities."    
+        
+    "Welcome to Flows! This is were people get paid for making positive impact in their communities."
+
+    For guests, don't be too specific about the type of builders we support. Just say it's a place for people to get paid for making positive impact in their communities.
+    
     `,
     })
 

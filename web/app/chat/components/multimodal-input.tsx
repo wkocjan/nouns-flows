@@ -55,6 +55,8 @@ export function MultimodalInput(props: Props) {
   const { uploadQueue, uploadFiles } = useFileUploads()
 
   const submitForm = useCallback(() => {
+    if (!input.trim()) return
+
     handleSubmit(undefined, { experimental_attachments: attachments })
 
     setAttachments([])
@@ -62,7 +64,7 @@ export function MultimodalInput(props: Props) {
     if (width && width > 768) {
       textareaRef.current?.focus()
     }
-  }, [attachments, handleSubmit, setAttachments, width])
+  }, [attachments, handleSubmit, setAttachments, width, input])
 
   return (
     <div className="relative flex w-full flex-col gap-4">
@@ -122,6 +124,8 @@ export function MultimodalInput(props: Props) {
 
             if (isLoading) {
               toast.error("Please wait for the model to finish its response!")
+            } else if (!input.trim()) {
+              return
             } else {
               submitForm()
             }
@@ -161,7 +165,7 @@ export function MultimodalInput(props: Props) {
               event.preventDefault()
               submitForm()
             }}
-            disabled={input.length === 0 || uploadQueue.length > 0 || disabled}
+            disabled={!input.trim() || uploadQueue.length > 0 || disabled}
             type="submit"
           >
             <ArrowUp size={14} />
