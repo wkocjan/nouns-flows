@@ -1,9 +1,9 @@
-import { createKey } from "./create-key"
-import { pinFile } from "./pin-file"
+import { upload } from "@vercel/blob/client"
 
 export async function uploadFile(file: File) {
-  const key = await createKey()
-  if (!key) throw new Error("Failed to create API key")
-
-  return await pinFile(file, key.JWT)
+  const blob = await upload(file.name, file, {
+    access: "public",
+    handleUploadUrl: "/api/upload-image",
+  })
+  return blob.url
 }

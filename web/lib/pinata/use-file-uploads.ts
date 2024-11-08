@@ -43,6 +43,7 @@ export function useFileUploads() {
             const result = await uploadFile(fileToUpload)
             return { url: result, name: file.name, contentType: file.type }
           } catch (error) {
+            console.error("Upload error:", error)
             return { error }
           }
         }),
