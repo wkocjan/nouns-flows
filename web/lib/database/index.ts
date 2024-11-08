@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient } from "@prisma/flows"
 import { withAccelerate } from "@prisma/extension-accelerate"
 
 const prismaClientSingleton = () => new PrismaClient().$extends(withAccelerate())

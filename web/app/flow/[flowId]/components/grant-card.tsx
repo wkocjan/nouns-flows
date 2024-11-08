@@ -1,7 +1,7 @@
 import { MonthlyBudget } from "@/app/components/monthly-budget"
 import { AnimatedSalary } from "@/components/global/animated-salary"
 import { getIpfsUrl } from "@/lib/utils"
-import { Grant } from "@prisma/client"
+import { Grant } from "@prisma/flows"
 import Image from "next/image"
 
 interface Props {

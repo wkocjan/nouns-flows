@@ -2,7 +2,7 @@
 
 import { Badge } from "@/components/ui/badge"
 import { Currency } from "@/components/ui/currency"
-import { Grant } from "@prisma/client"
+import { Grant } from "@prisma/flows"
 import { Handle, Node, NodeProps, Position } from "@xyflow/react"
 import Link from "next/link"
 import { memo } from "react"

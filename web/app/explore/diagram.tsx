@@ -3,7 +3,7 @@ import FlowNode from "@/components/diagram/flow-node"
 import grantNode from "@/components/diagram/grant-node"
 import PoolNode, { IPoolNode } from "@/components/diagram/pool-node"
 import { FlowWithGrants } from "@/lib/database/queries/flow"
-import { Grant } from "@prisma/client"
+import { Grant } from "@prisma/flows"
 import { Background, Edge, Node, Position, ReactFlow } from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
 

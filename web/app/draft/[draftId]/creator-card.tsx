@@ -1,7 +1,7 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Draft } from "@prisma/client"
+import { Draft } from "@prisma/flows"
 import { useEffect, useState } from "react"
 import { formatEther } from "viem"
 import { useAccount } from "wagmi"

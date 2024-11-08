@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { Grant } from "@prisma/client"
+import { Grant } from "@prisma/flows"
 import Link from "next/link"
 
 interface Props {

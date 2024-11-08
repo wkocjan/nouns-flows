@@ -1,6 +1,7 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["views", "multiSchema"]
+  output          = "../../node_modules/@prisma/flows"
 }
 
 datasource db {

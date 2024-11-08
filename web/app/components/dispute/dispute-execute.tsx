@@ -10,7 +10,7 @@ import {
 import { canDisputeBeExecuted } from "@/app/components/dispute/helpers"
 import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
-import { Dispute, Grant } from "@prisma/client"
+import { Dispute, Grant } from "@prisma/flows"
 import { useRouter } from "next/navigation"
 import { base } from "viem/chains"
 

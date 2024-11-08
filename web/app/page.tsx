@@ -5,7 +5,7 @@ import { getPool } from "@/lib/database/queries/pool"
 import { Status } from "@/lib/enums"
 import { getEthAddress, isGrantApproved } from "@/lib/utils"
 import { VotingProvider } from "@/lib/voting/voting-context"
-import { Grant } from "@prisma/client"
+import { Grant } from "@prisma/flows"
 import Link from "next/link"
 import { base } from "viem/chains"
 import { ActionCard } from "./components/action-card/action-card"
@@ -17,14 +17,14 @@ export const revalidate = 0
 export const dynamic = "force-dynamic"
 
 export default async function Home() {
-  const pool = await getPool()
-
-  const activeFlows = await database.grant.findMany({
-    where: { isFlow: 1, isActive: 1, isTopLevel: 0 },
-    include: { subgrants: true },
-  })
-
-  const user = await getUser()
+  const [pool, activeFlows, user] = await Promise.all([
+    getPool(),
+    database.grant.findMany({
+      where: { isFlow: 1, isActive: 1, isTopLevel: 0 },
+      include: { subgrants: true },
+    }),
+    getUser(),
+  ])
 
   // sort by monthlyIncomingFlowRate
   activeFlows.sort(sortGrants)
