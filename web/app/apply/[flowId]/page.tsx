@@ -1,5 +1,6 @@
+import { getUser } from "@/lib/auth/user"
 import { getFlow } from "@/lib/database/queries/flow"
-import { Chat } from "./components/chat"
+import { ApplicationChat } from "./components/application-chat"
 
 interface Props {
   params: {
@@ -9,7 +10,9 @@ interface Props {
 
 export default async function ApplyPage(props: Props) {
   const { flowId } = props.params
-  const flow = await getFlow(flowId)
 
-  return <Chat flow={flow} />
+  const flow = await getFlow(flowId)
+  const user = await getUser()
+
+  return <ApplicationChat flow={flow} user={user} />
 }

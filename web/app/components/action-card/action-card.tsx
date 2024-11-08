@@ -29,11 +29,13 @@ export async function ActionCard(props: Props) {
         <Markdown>{text}</Markdown>
       </div>
 
-      {actions.map((action) => (
-        <Button key={action.link} className="mt-5" asChild>
-          <Link href={action.link}>{action.text}</Link>
-        </Button>
-      ))}
+      <div className="mt-5 space-x-2.5">
+        {actions.map((action) => (
+          <Button key={action.link} asChild>
+            <Link href={action.link}>{action.text}</Link>
+          </Button>
+        ))}
+      </div>
     </div>
   )
 }

@@ -106,19 +106,21 @@ model DerivedData {
   @@schema("web")
 }
 
-
-model Application {
+model Conversation {
   id          String   @id
-  flowId      String
+  type        String
+  domain      String
   messages    Json
+  data        Json
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   user        String
   attachments Json?
 
   @@index([user])
-  @@index([flowId])
-  @@map("Application")
+  @@index([type])
+  @@index([domain])
+  @@map("Conversation")
   @@schema("web")
 }
 

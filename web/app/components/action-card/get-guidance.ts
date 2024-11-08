@@ -1,10 +1,8 @@
 import "server-only"
 
-import { getAgentPrompt } from "@/lib/ai/agents/get-agent-prompt"
-import { baseRules, isProd } from "@/lib/ai/prompts/rules/production"
+import { getAgent } from "@/lib/ai/agents/agent"
 import { anthropic } from "@/lib/ai/providers/anthropic"
-import { embeddingToolPrompt } from "@/lib/ai/tools/embeddings/prompt"
-import { searchEmbeddings } from "@/lib/ai/tools/embeddings/query"
+import { searchEmbeddings } from "@/lib/ai/tools/embeddings/search-embeddings"
 import { generateObject } from "ai"
 import { unstable_cache } from "next/dist/server/web/spec-extension/unstable-cache"
 import { z } from "zod"
@@ -26,7 +24,7 @@ export async function getGuidance(address: string | undefined) {
       { revalidate: 3600 * 3 }, // 3 hours
     )()
 
-    const agentPrompt = await getAgentPrompt("flo", "guidance", address)
+    const agent = await getAgent("flo", "guidance", { address })
 
     const { object } = await generateObject({
       model: anthropic("claude-3-5-sonnet-latest"),
@@ -36,7 +34,7 @@ export async function getGuidance(address: string | undefined) {
           .array(z.object({ text: z.string().max(12), link: z.string() }))
           .describe("Actions the user can take."),
       }),
-      system: `${agentPrompt}\n\nInitial context from the database using the queryEmbeddings tool:\n${JSON.stringify(initialContext)}. Info about the tool: ${embeddingToolPrompt()}`,
+      system: `${agent.prompt}\n\nInitial context from the database using the queryEmbeddings tool:\n${JSON.stringify(initialContext)}.`,
       prompt: `
     ${address ? `User ${address}` : "Guest"} just visited the home page.
 
@@ -61,11 +59,11 @@ export async function getGuidance(address: string | undefined) {
     Try to make the message as personalized as possible.
 
     This is a general good message for new users or people who are not builders.
+        
     "Welcome to Flows! This is were people get paid for making positive impact in their communities."
-    For guests, don't be too specific about the type of builders we support. Just say it's a place for people to get paid for making positive impact in their communities.
 
-    # Final checks
-    ${isProd ? baseRules : ""}    
+    For guests, don't be too specific about the type of builders we support. Just say it's a place for people to get paid for making positive impact in their communities.
+    
     `,
     })
 
