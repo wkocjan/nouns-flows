@@ -31,7 +31,7 @@ export default createConfig({
     base: {
       chainId: base.id,
       transport: rateLimit(http(process.env.PONDER_RPC_URL_8453), {
-        requestsPerSecond: isDev ? 40 : 25,
+        requestsPerSecond: isDev ? 10 : 25,
       }),
     },
   },
