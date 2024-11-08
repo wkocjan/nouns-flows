@@ -1,10 +1,6 @@
 "use server"
 
-import OpenAI from "openai"
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY as string,
-})
+import { openai } from "@/lib/ai/providers/openai"
 
 export async function generateEmbedding(content: string): Promise<number[]> {
   try {

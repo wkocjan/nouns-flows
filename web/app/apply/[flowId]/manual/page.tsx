@@ -7,7 +7,6 @@ import database from "@/lib/database"
 import { getFlow } from "@/lib/database/queries/flow"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { Metadata } from "next"
-import { redirect } from "next/navigation"
 import { ApplyForm } from "../components/apply-form"
 
 interface Props {

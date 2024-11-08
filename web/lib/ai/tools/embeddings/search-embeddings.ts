@@ -1,11 +1,11 @@
 "use server"
 
-import { validTypes } from "@/lib/types/job"
-import { z } from "zod"
-import { generateEmbedding } from "./generate"
 import { embeddingsDb } from "@/lib/embedding/db"
 import { embeddings } from "@/lib/embedding/schema"
-import { sql, desc, cosineDistance, gt, and, arrayOverlaps, inArray, or } from "drizzle-orm"
+import { validTypes } from "@/lib/types/job"
+import { and, arrayOverlaps, cosineDistance, desc, gt, inArray, or, sql } from "drizzle-orm"
+import { z } from "zod"
+import { generateEmbedding } from "./generate-embedding"
 
 const embeddingQuerySchema = z.object({
   types: z.array(z.enum(validTypes)),

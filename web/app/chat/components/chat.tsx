@@ -3,34 +3,42 @@
 import { LoginButton } from "@/components/global/login-button"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { AgentDomain, AgentType } from "@/lib/ai/agents/agent"
+import { User } from "@/lib/auth/user"
 import { useScrollToBottom } from "@/lib/hooks/use-scroll-to-bottom"
-import { Grant } from "@prisma/flows"
 import { Attachment } from "ai"
-import { useChat } from "ai/react"
+import { useChat, UseChatHelpers } from "ai/react"
 import { RotateCcw } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
 import { useEffect, useState } from "react"
-import { toast } from "sonner"
-import { useAccount } from "wagmi"
 import { ErrorMessage } from "./error-message"
 import { Message } from "./message"
 import { MultimodalInput } from "./multimodal-input"
-import StartImage from "./start.svg"
 import { useChatHistory } from "./use-chat-history"
-import { useRecipientExists } from "./useRecipientExists"
 
 interface Props {
-  flow: Grant
+  type: AgentType
+  domain: AgentDomain
+  id: string
+  title: string
+  subtitle: string
+  user?: User
+  data?: {
+    flowId?: string
+  }
+  children: (chat: UseChatHelpers) => React.ReactNode
 }
 
 export function Chat(props: Props) {
-  const { flow } = props
-  const { address, isConnecting } = useAccount()
-  const isAuthenticated = !!address && !isConnecting
+  const { id, title, subtitle, data, children, type, domain, user } = props
 
-  const { readChatHistory, storeChatHistory, resetChatHistory, chatId } = useChatHistory({
-    id: flow.id,
+  const { readChatHistory, storeChatHistory, resetChatHistory } = useChatHistory({ id })
+
+  const chat = useChat({
+    id,
+    api: `/chat`,
+    body: { type, domain, id, data: { ...data, address: user?.address } },
+    initialMessages: readChatHistory(),
+    keepLastMessageOnError: true,
   })
 
   const {
@@ -44,17 +52,11 @@ export function Chat(props: Props) {
     setMessages,
     append,
     error,
-  } = useChat({
-    id: chatId,
-    api: `/apply/${flow.id}/chat`,
-    body: { flowId: flow.id, address, chatId },
-    initialMessages: readChatHistory(),
-    keepLastMessageOnError: true,
-  })
+  } = chat
 
-  const restartApplication = () => {
+  const restart = () => {
     const confirmed = window.confirm(
-      "Are you sure you want to reset the application? This will clear the entire chat history.",
+      "Are you sure you want to reset the conversation? This will clear the entire chat history.",
     )
     if (!confirmed) return
     resetChatHistory()
@@ -64,7 +66,6 @@ export function Chat(props: Props) {
 
   const [messagesContainerRef, messagesEndRef] = useScrollToBottom<HTMLDivElement>()
   const [attachments, setAttachments] = useState<Array<Attachment>>([])
-  const recipientExists = useRecipientExists(flow.recipient, address)
 
   useEffect(() => {
     storeChatHistory(messages)
@@ -83,12 +84,8 @@ export function Chat(props: Props) {
       {messages.length > 0 && (
         <div className="flex items-center justify-between px-4 py-2.5 max-sm:pr-2 max-sm:pt-0 md:ml-4">
           <div className="md:flex md:grow md:flex-col md:items-center md:justify-center">
-            <h1 className="text-sm font-medium">
-              <Link href={`/flow/${flow.id}`} className="transition-colors hover:text-primary">
-                {flow.title}
-              </Link>
-            </h1>
-            <h3 className="text-xs text-muted-foreground">Grant application</h3>
+            {title && <h1 className="text-sm font-medium">{title}</h1>}
+            {subtitle && <h3 className="text-xs text-muted-foreground">{subtitle}</h3>}
           </div>
 
           <Tooltip>
@@ -96,13 +93,13 @@ export function Chat(props: Props) {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={restartApplication}
+                onClick={restart}
                 className="text-muted-foreground hover:text-destructive"
               >
                 <RotateCcw className="size-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Restart the application</TooltipContent>
+            <TooltipContent>Restart the conversation</TooltipContent>
           </Tooltip>
         </div>
       )}
@@ -110,39 +107,9 @@ export function Chat(props: Props) {
         ref={messagesContainerRef}
         className="flex min-w-0 flex-1 flex-col gap-6 overflow-y-scroll md:pt-6"
       >
-        {isAuthenticated ? (
+        {user ? (
           <>
-            {messages.length === 0 && (
-              <div className="flex h-full flex-col items-center justify-center px-4">
-                <Image src={StartImage} alt="Let's start!" width={256} height={256} />
-                <p className="mb-4 mt-8 text-center">Apply for {flow.title}</p>
-                <Button
-                  onClick={() => {
-                    if (recipientExists) {
-                      toast.error("You have already applied to this flow")
-                      return
-                    }
-
-                    append({
-                      role: "user",
-                      content: `Hi, I want to apply for a grant in ${flow.title}... Can we start the application?`,
-                    })
-                  }}
-                  size="xl"
-                  loading={isLoading}
-                >
-                  Let&apos;s start!
-                </Button>
-                <div className="mt-2 text-center">
-                  <Link
-                    href={`/apply/${flow.id}/manual`}
-                    className="text-xs text-muted-foreground hover:underline"
-                  >
-                    Apply manually
-                  </Link>
-                </div>
-              </div>
-            )}
+            {messages.length === 0 && <>{children(chat)}</>}
 
             {messages.map((message) => (
               <Message
@@ -153,15 +120,13 @@ export function Chat(props: Props) {
                 toolInvocations={message.toolInvocations}
               />
             ))}
+
             {error && (
               <ErrorMessage
-                buttonText="Reset Application"
+                buttonText="Reset"
                 retryText="Retry"
                 onRetry={() => {
-                  append({
-                    role: "user",
-                    content: "Please continue where we left off.",
-                  })
+                  append({ role: "user", content: "Please continue where we left off." })
                 }}
                 error={error}
                 onReset={() => {
@@ -189,7 +154,7 @@ export function Chat(props: Props) {
             handleSubmit={handleSubmit}
             isLoading={isLoading}
             stop={stop}
-            disabled={!isAuthenticated}
+            disabled={!user}
             attachments={attachments}
             setAttachments={setAttachments}
           />

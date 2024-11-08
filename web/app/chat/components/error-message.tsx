@@ -1,8 +1,8 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import Image from "next/image"
 import Noggles from "@/public/noggles.svg"
+import Image from "next/image"
 
 interface Props {
   error: { message: string }
