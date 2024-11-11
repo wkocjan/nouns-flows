@@ -24,7 +24,8 @@ import Link from "next/link"
 import { GrantLogoCell } from "./components/grant-logo-cell"
 import { VotingBar } from "./components/voting-bar"
 import { VotingInput } from "./components/voting-input"
-import { GrantCard } from "./components/grant-card"
+import { getGrantCasts } from "@/lib/embedding/get-grant-casts"
+import { Suspense } from "react"
 
 interface Props {
   params: {
@@ -40,13 +41,6 @@ export default async function FlowPage(props: Props) {
     include: {
       subgrants: {
         where: { isActive: 1 },
-        include: {
-          updates: {
-            select: { createdAt: true, fid: true },
-            take: 1,
-            orderBy: { createdAt: "desc" },
-          },
-        },
       },
     },
   })
@@ -68,99 +62,108 @@ export default async function FlowPage(props: Props) {
             <TableHead className="text-center">Your Vote</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {flow.subgrants.sort(sortGrants).map((grant) => {
-            const isRemovalRequested = grant.status === Status.ClearingRequested
-            const hasUpdate = grant.updates.length > 0
-            const lastUpdateTime = hasUpdate ? grant.updates[0]?.createdAt.getTime() / 1000 : 0
-            const hasRecentUpdate =
-              hasUpdate && new Date().getTime() / 1000 - lastUpdateTime < 14 * 24 * 60 * 60
+        <Suspense>
+          <TableBody>
+            {flow.subgrants.sort(sortGrants).map(async (grant) => {
+              const isRemovalRequested = grant.status === Status.ClearingRequested
+              const updates = grant.isFlow
+                ? null
+                : await getGrantCasts({
+                    grantId: grant.id,
+                    content: grant.description,
+                    team: [getEthAddress(grant.recipient)],
+                  })
+              const hasUpdate = updates && updates.length > 0
+              const lastUpdateTime = hasUpdate ? updates[0]?.created_at.getTime() / 1000 : 0
+              const hasRecentUpdate =
+                hasUpdate && new Date().getTime() / 1000 - lastUpdateTime < 10 * 24 * 60 * 60
 
-            return (
-              <TableRow key={grant.id}>
-                <GrantLogoCell image={getIpfsUrl(grant.image)} title={grant.title} />
+              return (
+                <TableRow key={grant.id}>
+                  <GrantLogoCell image={getIpfsUrl(grant.image)} title={grant.title} />
 
-                <TableCell className="space-y-1">
-                  <div className="max-w-[250px] overflow-hidden truncate text-ellipsis">
-                    <Link
-                      href={
-                        flow.isTopLevel && grant.isFlow && !isRemovalRequested
-                          ? `/flow/${grant.id}`
-                          : `/item/${grant.id}`
-                      }
-                      className="text-sm font-medium duration-100 ease-out hover:text-primary md:text-lg"
-                      tabIndex={-1}
-                    >
-                      {grant.title}
-                    </Link>
-                  </div>
+                  <TableCell className="space-y-1">
+                    <div className="max-w-[250px] overflow-hidden truncate text-ellipsis">
+                      <Link
+                        href={
+                          flow.isTopLevel && grant.isFlow && !isRemovalRequested
+                            ? `/flow/${grant.id}`
+                            : `/item/${grant.id}`
+                        }
+                        className="text-sm font-medium duration-100 ease-out hover:text-primary md:text-lg"
+                        tabIndex={-1}
+                      >
+                        {grant.title}
+                      </Link>
+                    </div>
 
-                  {isRemovalRequested && <Badge variant="destructive">Removal Requested</Badge>}
-                </TableCell>
-                {!flow.isTopLevel && (
-                  <TableCell>
-                    <div className="relative inline-flex">
-                      <UserProfile address={getEthAddress(grant.recipient)} key={grant.recipient}>
-                        {(profile) => (
-                          <div className="flex items-center space-x-1.5">
-                            <Avatar className="size-7 bg-accent text-xs">
-                              <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
-                              <AvatarFallback>
-                                {profile.display_name[0].toUpperCase()}
-                              </AvatarFallback>
-                            </Avatar>
-                            <span className="tracking-tight max-sm:hidden">
-                              {profile.display_name}
-                            </span>
-                          </div>
-                        )}
-                      </UserProfile>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <span
-                            className={cn(
-                              "absolute left-5 top-0 inline-block size-2.5 cursor-help rounded-full",
-                              {
-                                "bg-red-500": !hasRecentUpdate,
-                                "bg-green-500": hasRecentUpdate,
-                              },
-                            )}
-                          />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          {hasUpdate && (
-                            <p>
-                              Posted update <DateTime date={grant.updates[0]?.createdAt} relative />
-                            </p>
+                    {isRemovalRequested && <Badge variant="destructive">Removal Requested</Badge>}
+                  </TableCell>
+                  {!flow.isTopLevel && (
+                    <TableCell>
+                      <div className="relative inline-flex">
+                        <UserProfile address={getEthAddress(grant.recipient)} key={grant.recipient}>
+                          {(profile) => (
+                            <div className="flex items-center space-x-1.5">
+                              <Avatar className="size-7 bg-accent text-xs">
+                                <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
+                                <AvatarFallback>
+                                  {profile.display_name[0].toUpperCase()}
+                                </AvatarFallback>
+                              </Avatar>
+                              <span className="tracking-tight max-sm:hidden">
+                                {profile.display_name}
+                              </span>
+                            </div>
                           )}
-                          {!hasUpdate && <p>Builder hasn&apos;t posted any updates yet</p>}
-                        </TooltipContent>
-                      </Tooltip>
+                        </UserProfile>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span
+                              className={cn(
+                                "absolute left-5 top-0 inline-block size-2.5 cursor-help rounded-full",
+                                {
+                                  "bg-red-500": !hasRecentUpdate,
+                                  "bg-green-500": hasRecentUpdate,
+                                },
+                              )}
+                            />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {hasUpdate && (
+                              <p>
+                                Posted update <DateTime date={updates[0]?.created_at} relative />
+                              </p>
+                            )}
+                            {!hasUpdate && <p>Builder hasn&apos;t posted any updates yet</p>}
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                    </TableCell>
+                  )}
+
+                  <TableCell className="text-center">
+                    <AnimatedSalary
+                      value={grant.totalEarned}
+                      monthlyRate={grant.monthlyIncomingFlowRate}
+                    />
+                  </TableCell>
+
+                  <TableCell className="text-center">
+                    <MonthlyBudget display={grant.monthlyIncomingFlowRate} flow={grant} />
+                  </TableCell>
+                  <TableCell className="text-center">{grant.votesCount}</TableCell>
+
+                  <TableCell className="w-[100px] max-w-[100px] text-center">
+                    <div className="px-0.5">
+                      <VotingInput recipientId={grant.id} />
                     </div>
                   </TableCell>
-                )}
-
-                <TableCell className="text-center">
-                  <AnimatedSalary
-                    value={grant.totalEarned}
-                    monthlyRate={grant.monthlyIncomingFlowRate}
-                  />
-                </TableCell>
-
-                <TableCell className="text-center">
-                  <MonthlyBudget display={grant.monthlyIncomingFlowRate} flow={grant} />
-                </TableCell>
-                <TableCell className="text-center">{grant.votesCount}</TableCell>
-
-                <TableCell className="w-[100px] max-w-[100px] text-center">
-                  <div className="px-0.5">
-                    <VotingInput recipientId={grant.id} />
-                  </div>
-                </TableCell>
-              </TableRow>
-            )
-          })}
-        </TableBody>
+                </TableRow>
+              )
+            })}
+          </TableBody>
+        </Suspense>
       </Table>
       <VotingBar />
       {/* <div className="mt-10 grid grid-cols-1 gap-4 lg:grid-cols-3 xl:grid-cols-5">
