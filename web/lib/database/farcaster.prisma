@@ -11,7 +11,7 @@ datasource db {
   schemas   = ["production"]
 }
 
-model FarcasterProfile {
+model Profile {
   fname              String?
   display_name        String?
   avatar_url         String?
@@ -24,3 +24,26 @@ model FarcasterProfile {
   @@schema("production")
   @@index([verified_addresses], type: Gin)
 }
+
+model Cast {
+  id                BigInt    @id
+  created_at        DateTime
+  updated_at        DateTime
+  deleted_at        DateTime?
+  timestamp         DateTime
+  fid              BigInt
+  hash             Bytes
+  parent_hash      Bytes?
+  parent_fid       BigInt?
+  parent_url       String?
+  text             String?
+  embeds           String?
+  mentions         String?
+  mentions_positions String?
+  root_parent_hash Bytes?
+  root_parent_url  String?
+
+  @@map("farcaster_casts") 
+  @@schema("production")
+}
+

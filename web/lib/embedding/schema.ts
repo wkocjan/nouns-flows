@@ -14,4 +14,6 @@ export const embeddings = pgTable("embeddings", {
   users: text("users").array(), // Array of user addresses
   tags: text("tags").array(), // Array of tags for future use maybe
   externalId: text("external_id"), // id helpful for linking to other tables / documents
+  urls: text("urls").array(), // Array of urls
+  urlSummaries: text("url_summaries").array(), // Array of url summaries
 })

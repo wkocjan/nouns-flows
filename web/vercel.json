@@ -19,14 +19,6 @@
     {
       "path": "/crons/derived-data/minimum-salary",
       "schedule": "*/5 * * * *"
-    },
-    {
-      "path": "/crons/casts",
-      "schedule": "*/4 * * * *"
-    },
-    {
-      "path": "/crons/updates",
-      "schedule": "*/5 * * * *"
     }
   ]
 }

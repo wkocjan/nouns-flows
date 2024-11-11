@@ -16,7 +16,7 @@ export const getFarcasterUsersByEthAddress = async (rawAddress: `0x${string}`) =
   try {
     const address = rawAddress.toLowerCase()
 
-    const users = await farcasterDb.farcasterProfile.findMany({
+    const users = await farcasterDb.profile.findMany({
       where: {
         verified_addresses: {
           has: address,
