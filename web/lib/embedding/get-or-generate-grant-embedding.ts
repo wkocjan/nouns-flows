@@ -35,11 +35,20 @@ const getEnhancedContent = async (content: string) => {
 
 export const generateGrantEmbeddingForUpdates = async (content: string, grantId: string) => {
   try {
-    // Enhance content with additional context for better embedding matching
+    // Try to get existing derived data first
+    const existingData = await database.derivedData.findUnique({
+      where: { grantId },
+    })
+
+    if (existingData?.updatesEmbeddingText) {
+      // If we have existing text, generate embedding from that
+      return await generateEmbedding(existingData.updatesEmbeddingText)
+    }
+
+    // If no existing data, enhance content and generate new embedding
     const enhancedText = await getEnhancedContent(content)
     console.log({ content, enhancedText })
 
-    // Generate new embedding if not found
     const embedding = await generateEmbedding(enhancedText)
 
     // Save the enhanced text to DerivedData
