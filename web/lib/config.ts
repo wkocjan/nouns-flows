@@ -31,4 +31,7 @@ export const NOUNS_CHANNEL_URL =
   "chain://eip155:1/erc721:0x9c8ff314c9bc7f6e59a9d9225fb22946427edc03"
 export const FLOWS_CHANNEL_URL = "https://warpcast.com/~/channel/flows"
 
+export const NOUNS_CHANNEL_ID = "nouns"
+export const FLOWS_CHANNEL_ID = "flows"
+
 export const MULTICALL_ADDRESS = "0xcA11bde05977b3631167028862bE2a173976CA11" as `0x${string}`

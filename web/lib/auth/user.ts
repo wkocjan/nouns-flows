@@ -22,6 +22,6 @@ export async function getUser() {
   return {
     address,
     username: ensName || farcasterUser?.fname || getShortEthAddress(address),
-    avatar: (await getEnsAvatar(address)) || farcasterUser?.avatar_url || undefined,
+    avatar: farcasterUser?.avatar_url || (await getEnsAvatar(address)) || undefined,
   } satisfies User
 }

@@ -1,41 +1,46 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { DateTime } from "@/components/ui/date-time"
-import { getIpfsUrl } from "@/lib/utils"
-import { Cast, FarcasterUser, Grant } from "@prisma/flows"
+import { Grant } from "@prisma/flows"
+import { Cast, Profile } from "@prisma/farcaster"
 import Linkify from "linkify-react"
-import Image from "next/image"
-import Link from "next/link"
 import { VideoPlayer } from "./video-player"
 
 interface Props {
-  cast: Cast & { user: FarcasterUser; grant?: Pick<Grant, "title" | "image"> | null }
+  cast: Cast & { profile: Profile; grant?: Pick<Grant, "title" | "image"> | null }
 }
 
 export const CastCard = (props: Props) => {
   const { cast } = props
+
+  const embeds: { url: string }[] = JSON.parse(cast.embeds || "[]")
+  const videos = embeds.filter((embed) => embed.url?.includes(".m3u8"))
+  const images = embeds.filter((embed) => !embed.url?.includes(".m3u8"))
 
   return (
     <Card className="w-full break-inside-avoid">
       <CardHeader className="flex w-full flex-row items-center justify-between space-x-2.5 space-y-0 pb-2">
         <a
           className="flex items-center space-x-2.5 truncate transition-opacity hover:opacity-80"
-          href={`https://warpcast.com/${cast.user.username}`}
+          href={`https://warpcast.com/${cast.profile.fname}`}
           target="_blank"
         >
           <Avatar className="size-8">
-            <AvatarImage src={cast.user.imageUrl} alt={cast.user.displayName} />
-            <AvatarFallback>{cast.user.displayName[0]}</AvatarFallback>
+            <AvatarImage
+              src={cast.profile.avatar_url || ""}
+              alt={cast.profile.display_name || ""}
+            />
+            <AvatarFallback>{cast.profile.display_name?.[0]}</AvatarFallback>
           </Avatar>
-          <span className="truncate text-sm font-semibold">{cast.user.displayName}</span>
+          <span className="truncate text-sm font-semibold">{cast.profile.display_name}</span>
         </a>
         <a
-          href={`https://warpcast.com/${cast.user.username}/${cast.hash}`}
+          href={`https://warpcast.com/${cast.profile.fname}/0x${cast.hash.toString("hex")}`}
           target="_blank"
           className="shrink-0 transition-opacity hover:opacity-80"
         >
           <DateTime
-            date={cast.createdAt}
+            date={cast.created_at}
             relative
             short
             className="text-sm text-muted-foreground"
@@ -54,24 +59,25 @@ export const CastCard = (props: Props) => {
             {cast.text}
           </Linkify>
         </div>
-        {(cast.videos?.length > 0 || cast.images?.length > 0) && (
+
+        {((videos.length || 0) > 0 || (images.length || 0) > 0) && (
           <div className="mt-4 grid grid-cols-1 gap-2.5">
-            {cast.videos?.map((video) => (
-              <div key={video} className="h-auto w-full overflow-hidden rounded-lg">
-                <VideoPlayer url={video} width="100%" height="100%" controls />
+            {videos.map((video) => (
+              <div key={video.url} className="h-auto w-full overflow-hidden rounded-lg">
+                <VideoPlayer url={video.url} width="100%" height="100%" controls />
               </div>
             ))}
-            {cast.images?.map((image) => (
+            {images.map((image) => (
               <a
-                href={image}
-                key={image}
+                href={image.url}
+                key={image.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="transition-opacity hover:opacity-80"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={image}
+                  src={image.url}
                   alt=""
                   className="h-auto w-full max-w-full rounded-lg"
                   loading="lazy"
@@ -80,7 +86,7 @@ export const CastCard = (props: Props) => {
             ))}
           </div>
         )}
-        {cast.grant && (
+        {/* {cast.grant && (
           <div className="mt-2.5 flex translate-y-1 justify-center md:translate-y-2.5">
             <Link href={`/item/${cast.grantId}`} className="group flex items-center space-x-2">
               <span className="text-xs text-muted-foreground transition-colors group-hover:text-foreground">
@@ -97,7 +103,7 @@ export const CastCard = (props: Props) => {
               </div>
             </Link>
           </div>
-        )}
+        )} */}
       </CardContent>
     </Card>
   )

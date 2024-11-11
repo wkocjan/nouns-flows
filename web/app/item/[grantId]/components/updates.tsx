@@ -1,12 +1,12 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { CastCard } from "@/components/ui/cast-card"
 import { FLOWS_CHANNEL_ID, NOUNS_CHANNEL_ID } from "@/lib/config"
-import { Cast, FarcasterUser } from "@prisma/flows"
+import { Cast, Profile } from "@prisma/farcaster"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { PostUpdate } from "./post-update"
 
 interface Props {
-  casts: Array<Cast & { user: FarcasterUser }>
+  casts: Array<Cast & { profile: Profile }>
   recipient: string
 }
 
@@ -34,7 +34,7 @@ export const Updates = (props: Props) => {
       {casts.length > 0 && (
         <div className="mt-4 columns-1 gap-2.5 space-y-2.5 sm:columns-2">
           {casts.map((cast) => (
-            <CastCard key={cast.hash} cast={cast} />
+            <CastCard key={cast.hash.toString("hex")} cast={cast} />
           ))}
         </div>
       )}

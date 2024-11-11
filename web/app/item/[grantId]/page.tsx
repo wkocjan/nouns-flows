@@ -24,6 +24,7 @@ import { CurationCard } from "./components/curation-card"
 import { Updates } from "./components/updates"
 import { UserVotes } from "./components/user-votes"
 import { Voters } from "./components/voters"
+import { getGrantCasts } from "@/lib/embedding/get-grant-casts"
 
 interface Props {
   params: {
@@ -62,6 +63,12 @@ export default async function GrantPage({ params }: Props) {
         take: 45,
       },
     },
+  })
+
+  const updates = await getGrantCasts({
+    grantId,
+    content: grant.description,
+    team: [getEthAddress(grant.recipient)],
   })
 
   const { title, tagline, description, flow, image, votesCount, parentContract, isFlow } = grant
@@ -116,7 +123,7 @@ export default async function GrantPage({ params }: Props) {
             <Markdown>{description}</Markdown>
           </div>
 
-          {!isFlow && <Updates casts={grant.updates} recipient={grant.recipient} />}
+          {!isFlow && <Updates casts={updates} recipient={grant.recipient} />}
         </div>
 
         <div className="space-y-4 md:col-span-2">

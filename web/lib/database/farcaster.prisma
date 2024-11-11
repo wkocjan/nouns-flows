@@ -19,6 +19,7 @@ model Profile {
   verified_addresses String[]
   updated_at         DateTime
   fid               BigInt    @id
+  casts             Cast[]
 
   @@map("farcaster_profile")
   @@schema("production")
@@ -42,8 +43,8 @@ model Cast {
   mentions_positions String?
   root_parent_hash Bytes?
   root_parent_url  String?
+  profile          Profile   @relation(fields: [fid], references: [fid])
 
   @@map("farcaster_casts") 
   @@schema("production")
 }
-
