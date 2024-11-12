@@ -1,41 +1,58 @@
-import "server-only"
+"use client"
 
 import { Button } from "@/components/ui/button"
 import { Markdown } from "@/components/ui/markdown"
 import { User } from "@/lib/auth/user"
-import { unstable_cache } from "next/dist/server/web/spec-extension/unstable-cache"
+import { useAnimatedText } from "@/lib/hooks/use-animated-text"
+import { experimental_useObject as useObject } from "ai/react"
+import { motion } from "framer-motion"
 import Link from "next/link"
-import { getGuidance } from "./get-guidance"
+import { useEffect, useRef } from "react"
+import { guidanceSchema } from "./guidance-schema"
 
 interface Props {
   user?: User
 }
 
-export async function ActionCard(props: Props) {
+export function ActionCard(props: Props) {
   const { user } = props
+  const hasSubmitted = useRef(false)
 
-  const { text, actions } = await unstable_cache(
-    async () => getGuidance(user?.address),
-    [`guidance_${user?.address ?? "guest"}`],
-    { revalidate: 1800 },
-  )()
+  const { object, submit } = useObject({ api: "/api/action-card", schema: guidanceSchema })
 
-  if (!text) return null
+  const animatedText = useAnimatedText(object?.text ?? "")
+
+  useEffect(() => {
+    if (!hasSubmitted.current) {
+      submit(`Hello`)
+      hasSubmitted.current = true
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
 
   return (
-    <div className="relative isolate row-span-2 overflow-hidden rounded-2xl bg-gradient-to-b from-secondary to-secondary/80 p-4">
+    <>
       <h2 className="text-lg font-semibold text-secondary-foreground">gm {user?.username}</h2>
-      <div className="mt-2.5 space-y-4 text-sm leading-loose text-secondary-foreground/75">
-        <Markdown>{text}</Markdown>
+      <div className="mt-2.5 space-y-4 text-sm text-secondary-foreground/75 [&>*]:leading-loose">
+        {animatedText && <Markdown>{animatedText}</Markdown>}
       </div>
 
-      <div className="mt-5 space-x-2.5">
-        {actions.map((action) => (
-          <Button key={action.link} asChild>
-            <Link href={action.link}>{action.text}</Link>
-          </Button>
-        ))}
-      </div>
-    </div>
+      {object?.actions && (
+        <motion.div
+          className="mt-5 space-x-2.5"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 4.5 }}
+        >
+          {object.actions
+            .filter((a) => Boolean(a?.link) && Boolean(a?.text))
+            .map((action) => (
+              <Button key={action?.link} asChild>
+                <Link href={action?.link || "#"}>{action?.text}</Link>
+              </Button>
+            ))}
+        </motion.div>
+      )}
+    </>
   )
 }
