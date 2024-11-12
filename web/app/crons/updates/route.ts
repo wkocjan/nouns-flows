@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic"
 export const revalidate = 0
 export const maxDuration = 300
 
-const KV_KEY = "last-analyzed-cast-time-v3"
+const KV_KEY = "last-analyzed-cast-time-v4"
 
 async function getFarcasterUsersForGrant(recipient: string) {
   const farcasterUsers = await getFarcasterUsersByEthAddresses([recipient as `0x${string}`])
@@ -59,11 +59,11 @@ async function getRecentCasts(users: string[], lastAnalyzedDate: Date) {
       ),
     )
     .orderBy((t) => asc(t.created_at))
-    .limit(isProduction() ? 30 : 100)
+    .limit(isProduction() ? 200 : 1)
 }
 
 async function updateCastTags(cast: any, grantId: string) {
-  const newTags = new Set([...(cast.tags || []), grantId])
+  const newTags = new Set([...(cast.tags || []), grantId, "flows"])
   await embeddingsDb
     .update(embeddings)
     .set({
