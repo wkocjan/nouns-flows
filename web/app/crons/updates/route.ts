@@ -59,7 +59,7 @@ async function getRecentCasts(users: string[], lastAnalyzedDate: Date) {
       ),
     )
     .orderBy((t) => asc(t.created_at))
-    .limit(isProduction() ? 200 : 1)
+    .limit(isProduction() ? 50 : 1)
 }
 
 async function updateCastTags(cast: any, grantId: string) {
