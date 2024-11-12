@@ -40,6 +40,8 @@ export const generateGrantEmbeddingForUpdates = async (
     // Try to get existing derived data first
     const existingData = await database.derivedData.findUnique({
       where: { grantId },
+      select: { updatesEmbeddingText: true },
+      cacheStrategy: { ttl: 172800 }, // 2 days in seconds
     })
 
     const programRequirements = await getProgramRequirements(parentGrantContract)
