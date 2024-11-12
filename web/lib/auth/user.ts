@@ -1,8 +1,9 @@
 import "server-only"
+
 import { getFarcasterUserByEthAddress } from "../farcaster/get-user"
 import { getShortEthAddress } from "../utils"
 import { getEnsAvatar, getEnsNameFromAddress } from "./ens"
-import { getUserAddressFromCookie } from "./privy"
+import { getUserAddressFromCookie } from "./get-user-from-cookie"
 
 export type User = {
   address: `0x${string}`
