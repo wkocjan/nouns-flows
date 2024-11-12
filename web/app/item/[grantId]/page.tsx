@@ -24,6 +24,8 @@ import { CurationCard } from "./components/curation-card"
 import { Updates } from "./components/updates"
 import { UserVotes } from "./components/user-votes"
 import { Voters } from "./components/voters"
+import { getGrantCasts } from "@/lib/embedding/get-grant-casts"
+import { Suspense } from "react"
 
 interface Props {
   params: {
@@ -55,11 +57,6 @@ export default async function GrantPage({ params }: Props) {
         orderBy: { creationBlock: "desc" },
         include: { evidences: true },
         take: 1,
-      },
-      updates: {
-        include: { user: true },
-        orderBy: { createdAt: "desc" },
-        take: 45,
       },
     },
   })
@@ -116,7 +113,17 @@ export default async function GrantPage({ params }: Props) {
             <Markdown>{description}</Markdown>
           </div>
 
-          {!isFlow && <Updates casts={grant.updates} recipient={grant.recipient} />}
+          {!isFlow && (
+            <Suspense fallback={<div>Loading...</div>}>
+              <Updates
+                casts={await getGrantCasts({
+                  grantId: grant.id,
+                  team: [getEthAddress(grant.recipient)],
+                })}
+                recipient={grant.recipient}
+              />
+            </Suspense>
+          )}
         </div>
 
         <div className="space-y-4 md:col-span-2">

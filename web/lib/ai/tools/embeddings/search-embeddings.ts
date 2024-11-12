@@ -1,11 +1,9 @@
 "use server"
 
-import { embeddingsDb } from "@/lib/embedding/db"
-import { embeddings } from "@/lib/embedding/schema"
 import { validTypes } from "@/lib/types/job"
-import { and, arrayOverlaps, cosineDistance, desc, gt, inArray, or, sql } from "drizzle-orm"
 import { z } from "zod"
-import { generateEmbedding } from "./generate-embedding"
+import { generateEmbedding } from "../../../embedding/generate-embedding"
+import { queryEmbeddingsSimilarity } from "@/lib/embedding/query"
 
 const embeddingQuerySchema = z.object({
   types: z.array(z.enum(validTypes)),
@@ -47,35 +45,16 @@ export async function searchEmbeddings({
       throw new Error(Object.values(errors).flat().join(", "))
     }
 
-    const embedding = await generateEmbedding(query)
-    const vectorQuery = `[${embedding.join(",")}]`
+    const embeddingQuery = await generateEmbedding(query)
 
-    const similarity = sql<number>`1 - (${cosineDistance(embeddings.embedding, vectorQuery)})`
-
-    const results = await embeddingsDb
-      .select({
-        id: embeddings.id,
-        content: embeddings.content,
-        similarity,
-        type: embeddings.type,
-        groups: embeddings.groups,
-        users: embeddings.users,
-        tags: embeddings.tags,
-        externalId: embeddings.externalId,
-      })
-      .from(embeddings)
-      .where(
-        and(
-          gt(similarity, 0.25),
-          or(
-            types.length > 0 ? inArray(embeddings.type, types) : undefined,
-            tags.length > 0 ? arrayOverlaps(embeddings.tags, tags) : undefined,
-            users && users.length > 0 ? arrayOverlaps(embeddings.users, users) : undefined,
-          ),
-        ),
-      )
-      .orderBy((t) => desc(t.similarity))
-      .limit(numResults)
+    const results = await queryEmbeddingsSimilarity({
+      embeddingQuery,
+      types,
+      groups,
+      users: users || [],
+      tags,
+      numResults,
+    })
 
     return results
   } catch (error) {

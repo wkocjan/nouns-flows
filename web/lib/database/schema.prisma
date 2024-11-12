@@ -37,35 +37,12 @@ model Draft {
   @@schema("web")
 }
 
-model Cast {
-  hash      String   @id
-  fid       Int
-  channelId String
-  text      String
-  images    String[]
-  videos    String[]
-  createdAt DateTime
-  grantId   String?
-
-  grant Grant?        @relation(fields: [grantId], references: [id])
-  user  FarcasterUser @relation(fields: [fid], references: [fid])
-
-  @@index([fid])
-  @@index([channelId])
-  @@index([createdAt])
-  @@index([grantId])
-  @@map("Cast")
-  @@schema("web")
-}
-
 model FarcasterUser {
   fid         Int      @id
   username    String
   displayName String
   imageUrl    String
   addresses   String[]
-
-  casts Cast[]
 
   @@map("FarcasterUser")
   @@schema("web")
@@ -177,7 +154,6 @@ view Grant {
   drafts       Draft[]
   disputes     Dispute[]
   tokenHolders TokenHolder[]
-  updates      Cast[]
   evidences    Evidence[]
   derivedData  DerivedData?
 

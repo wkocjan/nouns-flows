@@ -1,12 +1,18 @@
-import { getResizedImage } from "@/lib/image/sharp-resize"
 import { createAnthropic } from "@ai-sdk/anthropic"
-import { Cast, Grant } from "@prisma/flows"
+import { Grant } from "@prisma/flows"
 import { generateObject } from "ai"
 import { z } from "zod"
+import { Embedding } from "@/lib/embedding/schema"
 
 const anthropic = createAnthropic({ apiKey: `${process.env.ANTHROPIC_API_KEY}` })
 
-export async function analyzeCast(cast: Cast, grants: Array<Grant & { flow: Grant }>) {
+export async function analyzeCast(
+  cast: Pick<
+    Embedding,
+    "id" | "created_at" | "type" | "users" | "groups" | "tags" | "content" | "external_id"
+  >,
+  grants: Array<Grant & { flow: Grant }>,
+) {
   try {
     if (grants.length === 0) {
       return {
@@ -16,14 +22,6 @@ export async function analyzeCast(cast: Cast, grants: Array<Grant & { flow: Gran
         confidenceScore: 1,
       }
     }
-
-    const imageMessages = await Promise.all(
-      cast.images.map(async (url) => await getResizedImage(url)),
-    )
-
-    const filteredImageMessages = imageMessages.filter(
-      (msg): msg is { type: "image"; image: string } => msg !== null,
-    )
 
     const { object } = await generateObject({
       model: anthropic("claude-3-5-sonnet-20241022"),
@@ -45,7 +43,7 @@ export async function analyzeCast(cast: Cast, grants: Array<Grant & { flow: Gran
         If the cast is generic comment about grants program - return an empty grantId.
         If the cast is status update, but not about any of the grants listed below - return an empty grantId.
         Feel free to infer or otherwise make basic logical assumptions to determine if the cast is a grant update. Eg: if someone posts about buying supplies but doesn't mention the grant, you can assume it's an update for the grant.
-        
+        The cast includes some images, and they are already summarized and included in the cast data you are given.
         The cast's author is recipient of the following grants:
         ${grants
           .map(
@@ -57,7 +55,7 @@ export async function analyzeCast(cast: Cast, grants: Array<Grant & { flow: Gran
         },
         {
           role: "user",
-          content: [{ type: "text", text: cast.text }, ...filteredImageMessages],
+          content: [{ type: "text", text: cast.content || "" }],
         },
       ],
       maxTokens: 1500,
@@ -65,7 +63,7 @@ export async function analyzeCast(cast: Cast, grants: Array<Grant & { flow: Gran
 
     return { ...object, cast }
   } catch (e) {
-    console.error(`Error analyzing cast ${cast.hash}:`, e)
+    console.error(`Error analyzing cast ${cast.external_id}:`, e)
     return {
       grantId: null,
       isGrantUpdate: false,
