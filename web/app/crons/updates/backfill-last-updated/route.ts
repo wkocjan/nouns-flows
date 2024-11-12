@@ -20,7 +20,7 @@ async function getFarcasterUsersForGrant(recipient: string) {
   }
 }
 async function getLatestCast(users: string[], grantId: string) {
-  const embeddingCast = await embeddingsDb
+  const embeddingCasts = await embeddingsDb
     .select({
       external_id: embeddings.external_id,
       created_at: embeddings.created_at,
@@ -35,22 +35,27 @@ async function getLatestCast(users: string[], grantId: string) {
       ),
     )
     .orderBy((t) => desc(t.created_at))
-    .limit(1)
+    .limit(20)
 
   // log query
   console.log({
-    embeddingCast,
+    embeddingCasts,
   })
 
-  if (!embeddingCast[0]?.external_id) {
+  if (!embeddingCasts.length) {
     return []
   }
 
-  const castId = embeddingCast[0].external_id // Remove 0x prefix
+  const castIds = embeddingCasts
+    .map((cast) => cast.external_id)
+    .filter((id): id is string => !!id)
+    .map((id) => Buffer.from(id.replace("0x", ""), "hex"))
 
-  const farcasterCast = await farcasterDb.cast.findFirst({
+  const farcasterCasts = await farcasterDb.cast.findMany({
     where: {
-      hash: Buffer.from(castId.replace("0x", ""), "hex"),
+      hash: {
+        in: castIds,
+      },
     },
     select: {
       created_at: true,
@@ -60,11 +65,11 @@ async function getLatestCast(users: string[], grantId: string) {
     },
   })
 
-  if (!farcasterCast) {
-    throw new Error(`Cast not found for external ID: ${castId}`)
+  if (!farcasterCasts.length) {
+    throw new Error(`No casts found for external IDs: ${castIds.join(", ")}`)
   }
 
-  return [{ created_at: farcasterCast.created_at }]
+  return [{ created_at: farcasterCasts[0].created_at }]
 }
 
 export async function GET() {
