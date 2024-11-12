@@ -79,8 +79,6 @@ export async function GET() {
       where: {
         isFlow: 0,
         isTopLevel: 0,
-        // parentContract: "0x384f0924c2eb9c08d46409c80a5c13e967d52b31",
-        id: "0x9b6d4b4775be35a7a5ba1f255d0ef16455189c9729456f7cda255a2b05b59a3b",
       },
       include: { flow: true },
     })
