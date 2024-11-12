@@ -7,7 +7,7 @@ const farcasterClientSingleton = () => {
   if (isDevelopment) {
     return new FarcasterClient({
       datasources: {
-        db: { url: process.env.DATABASE_ACCELERATE_URL },
+        db: { url: process.env.FARCASTER_DATABASE_URL },
       },
     }).$extends(withAccelerate())
   }

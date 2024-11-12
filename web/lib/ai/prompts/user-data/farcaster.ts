@@ -8,14 +8,14 @@ export async function getFarcasterPrompt(address: string): Promise<string> {
     displayName: u.display_name,
     bio: u.bio,
     avatarUrl: u.avatar_url,
-    fid: u.fid,
+    fid: Number(u.fid), // Convert BigInt to Number for JSON serialization
   }))
 
   if (farcasterUsers.length === 0) return ""
 
   const channelIds = []
   for (const user of farcasterUsers) {
-    const channels = await getFarcasterUserChannels(Number(user.fid))
+    const channels = await getFarcasterUserChannels(user.fid)
     channelIds.push(...channels.map((c) => c.channelId))
   }
 
