@@ -5,6 +5,8 @@ import { Grant } from "@prisma/flows"
 import { Cast, Profile } from "@prisma/farcaster"
 import Linkify from "linkify-react"
 import { VideoPlayer } from "./video-player"
+import { getCastImages } from "@/lib/farcaster/get-cast-images"
+import { getCastVideos } from "@/lib/farcaster/get-cast-videos"
 
 interface Props {
   cast: Cast & { profile: Profile; grant?: Pick<Grant, "title" | "image"> | null }
@@ -13,9 +15,8 @@ interface Props {
 export const CastCard = (props: Props) => {
   const { cast } = props
 
-  const embeds: { url: string }[] = JSON.parse(cast.embeds || "[]")
-  const videos = embeds.filter((embed) => embed.url?.includes(".m3u8"))
-  const images = embeds.filter((embed) => !embed.url?.includes(".m3u8"))
+  const videos = getCastVideos(cast)
+  const images = getCastImages(cast)
 
   return (
     <Card className="w-full break-inside-avoid">
@@ -63,21 +64,21 @@ export const CastCard = (props: Props) => {
         {((videos.length || 0) > 0 || (images.length || 0) > 0) && (
           <div className="mt-4 grid grid-cols-1 gap-2.5">
             {videos.map((video) => (
-              <div key={video.url} className="h-auto w-full overflow-hidden rounded-lg">
-                <VideoPlayer url={video.url} width="100%" height="100%" controls />
+              <div key={video} className="h-auto w-full overflow-hidden rounded-lg">
+                <VideoPlayer url={video} width="100%" height="100%" controls />
               </div>
             ))}
             {images.map((image) => (
               <a
-                href={image.url}
-                key={image.url}
+                href={image}
+                key={image}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="transition-opacity hover:opacity-80"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={image.url}
+                  src={image}
                   alt=""
                   className="h-auto w-full max-w-full rounded-lg"
                   loading="lazy"

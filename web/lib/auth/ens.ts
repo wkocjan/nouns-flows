@@ -12,7 +12,7 @@ export const getEnsNameFromAddress = unstable_cache(
     }
   },
   ["ens-name"],
-  { revalidate: 21600 }, // 6 hours
+  { revalidate: 259200 }, // 72 hours
 )
 
 export const getEnsAvatar = unstable_cache(
@@ -25,5 +25,5 @@ export const getEnsAvatar = unstable_cache(
     }
   },
   ["ens-avatar"],
-  { revalidate: 21600 }, // 6 hours
+  { revalidate: 259200 }, // 72 hours
 )

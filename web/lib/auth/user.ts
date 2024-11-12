@@ -15,14 +15,12 @@ export async function getUser() {
   const address = await getUserAddressFromCookie()
   if (!address) return undefined
 
-  const [ensName, farcasterUser] = await Promise.all([
-    getEnsNameFromAddress(address),
-    getFarcasterUserByEthAddress(address),
-  ])
+  const farcasterUser = await getFarcasterUserByEthAddress(address)
 
   return {
     address,
-    username: ensName || farcasterUser?.fname || getShortEthAddress(address),
+    username:
+      farcasterUser?.fname || (await getEnsNameFromAddress(address)) || getShortEthAddress(address),
     avatar: farcasterUser?.avatar_url || (await getEnsAvatar(address)) || undefined,
   } satisfies User
 }
