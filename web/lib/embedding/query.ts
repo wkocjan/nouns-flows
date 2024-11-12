@@ -23,8 +23,6 @@ export async function queryEmbeddingsSimilarity({
   const vectorQuery = `[${embeddingQuery.join(",")}]`
   const similarity = sql<number>`1 - (${cosineDistance(embeddings.embedding, vectorQuery)})`
 
-  console.log({ types, tags, users, groups })
-
   const results = await embeddingsDb
     .select({
       id: embeddings.id,

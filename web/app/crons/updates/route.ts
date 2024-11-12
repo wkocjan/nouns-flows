@@ -9,7 +9,6 @@ import { embeddingsDb } from "@/lib/embedding/db"
 import { embeddings } from "@/lib/embedding/schema"
 import { and, arrayOverlaps, asc, eq, gt } from "drizzle-orm"
 import { getFarcasterUsersByEthAddresses } from "@/lib/farcaster/get-user"
-import { FLOWS_CHANNEL_URL, NOUNS_CHANNEL_URL } from "@/lib/config"
 import { farcasterDb } from "@/lib/database/farcaster"
 
 export const dynamic = "force-dynamic"
@@ -57,7 +56,6 @@ async function getRecentCasts(users: string[], lastAnalyzedDate: Date) {
         gt(embeddings.created_at, lastAnalyzedDate),
         eq(embeddings.type, "cast"),
         arrayOverlaps(embeddings.users, users),
-        arrayOverlaps(embeddings.groups, [NOUNS_CHANNEL_URL, FLOWS_CHANNEL_URL]),
       ),
     )
     .orderBy((t) => asc(t.created_at))
