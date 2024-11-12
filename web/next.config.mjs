@@ -39,6 +39,11 @@ const nextConfig = {
         hostname: "imagedelivery.net",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "dmo9tcngmx442k9p.public.blob.vercel-storage.com",
+        pathname: "/**",
+      },
     ],
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
