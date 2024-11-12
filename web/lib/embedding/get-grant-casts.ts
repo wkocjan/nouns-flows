@@ -7,17 +7,7 @@ import { getFarcasterUsersByEthAddresses, getFarcasterUsersByFids } from "../far
 import { Cast, Profile } from "@prisma/farcaster"
 import { and, arrayOverlaps, desc, eq } from "drizzle-orm"
 
-export async function getGrantCasts({
-  content,
-  team,
-  grantId,
-  parentGrantContract,
-}: {
-  content: string
-  team: string[]
-  grantId: string
-  parentGrantContract: string
-}) {
+export async function getGrantCasts({ team, grantId }: { team: string[]; grantId: string }) {
   try {
     // Get Farcaster FIDs for the team members
     const farcasterUsers = await getFarcasterUsersByEthAddresses(team as `0x${string}`[])

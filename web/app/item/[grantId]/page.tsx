@@ -118,9 +118,7 @@ export default async function GrantPage({ params }: Props) {
               <Updates
                 casts={await getGrantCasts({
                   grantId: grant.id,
-                  content: grant.description,
                   team: [getEthAddress(grant.recipient)],
-                  parentGrantContract: getEthAddress(grant.parentContract),
                 })}
                 recipient={grant.recipient}
               />

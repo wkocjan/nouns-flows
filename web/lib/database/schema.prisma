@@ -77,7 +77,6 @@ model DerivedData {
   // derived data here (generated from ai etc.)
   minimumSalary Int?
   template      String?
-  updatesEmbeddingText String?
 
   @@index([grantId])
   @@map("DerivedData")
