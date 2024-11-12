@@ -10,6 +10,7 @@ import { embeddings } from "@/lib/embedding/schema"
 import { and, arrayOverlaps, asc, eq, gt } from "drizzle-orm"
 import { getFarcasterUsersByEthAddresses } from "@/lib/farcaster/get-user"
 import { FLOWS_CHANNEL_URL, NOUNS_CHANNEL_URL } from "@/lib/config"
+import { farcasterDb } from "@/lib/database/farcaster"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
@@ -108,19 +109,20 @@ export async function GET() {
 
         console.debug({ text: cast.content, isGrantUpdate, reason, confidenceScore, grantId })
 
-        if (isGrantUpdate && grantId) {
+        if (isGrantUpdate && grantId && cast.external_id) {
           await updateCastTags(cast, grantId)
+          await updateLastBuilderUpdate(cast.external_id, grantId)
+        }
+
+        if (grant.id) {
+          const newDate =
+            casts[casts.length - 1]?.created_at?.toISOString() || new Date().toISOString()
+          console.log(`Saving last analyzed cast time for grant ${grant.id} and cast`, newDate)
+          // add 0.5 seconds to the date to avoid duplicates
+          await saveItem(`${KV_KEY}:${grant.id}`, new Date(newDate).getTime() + 500)
         }
 
         await new Promise((resolve) => setTimeout(resolve, 250))
-      }
-
-      if (grant.id) {
-        const newDate =
-          casts[casts.length - 1]?.created_at?.toISOString() || new Date().toISOString()
-        console.log(`Saving last analyzed cast time for grant ${grant.id} and cast`, newDate)
-        // add 0.5 seconds to the date to avoid duplicates
-        await saveItem(`${KV_KEY}:${grant.id}`, new Date(newDate).getTime() + 500)
       }
 
       analyzedCastsTotal += casts.length
@@ -130,5 +132,37 @@ export async function GET() {
   } catch (error: any) {
     console.error(error)
     return new Response(error.message, { status: 500 })
+  }
+}
+
+async function updateLastBuilderUpdate(castExternalId: string, grantId: string) {
+  // Get the actual cast from Farcaster DB
+  const farcasterCast = await farcasterDb.cast.findFirst({
+    where: {
+      hash: Buffer.from(castExternalId.replace("0x", ""), "hex"),
+    },
+    select: {
+      created_at: true,
+    },
+  })
+
+  if (!farcasterCast) {
+    throw new Error(`Cast not found for external ID: ${castExternalId}`)
+  }
+
+  if (farcasterCast.created_at) {
+    // Update the derived data with the latest builder update
+    await database.derivedData.upsert({
+      where: {
+        grantId: grantId,
+      },
+      create: {
+        grantId: grantId,
+        lastBuilderUpdate: farcasterCast.created_at,
+      },
+      update: {
+        lastBuilderUpdate: farcasterCast.created_at,
+      },
+    })
   }
 }
