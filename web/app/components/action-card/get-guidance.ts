@@ -6,7 +6,7 @@ import { searchEmbeddings } from "@/lib/ai/tools/embeddings/search-embeddings"
 import { streamObject } from "ai"
 import { unstable_cache } from "next/dist/server/web/spec-extension/unstable-cache"
 import { z } from "zod"
-import { guidanceSchema } from "./guidance-schema"
+import { guidanceSchema } from "./guidance-utils"
 
 export async function getGuidance(
   address: `0x${string}` | undefined,

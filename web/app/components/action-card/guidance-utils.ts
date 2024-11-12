@@ -6,3 +6,7 @@ export const guidanceSchema = z.object({
     .array(z.object({ text: z.string().max(12), link: z.string() }))
     .describe("Actions the user can take."),
 })
+
+export function getGuidanceCacheKey(address: `0x${string}` | undefined) {
+  return `guidance-${address?.toLowerCase() || "guest"}`
+}
