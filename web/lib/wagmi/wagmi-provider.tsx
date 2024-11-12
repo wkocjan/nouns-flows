@@ -25,7 +25,7 @@ export default function Wagmi({ children }: PropsWithChildren) {
         },
         defaultChain: base,
         supportedChains: chains.map((chain) =>
-          addRpcUrlOverrideToChain(chain, getRpcUrl(chain, "ws")),
+          addRpcUrlOverrideToChain(chain, getRpcUrl(chain, "http")),
         ),
         embeddedWallets: {
           createOnLogin: "users-without-wallets",
