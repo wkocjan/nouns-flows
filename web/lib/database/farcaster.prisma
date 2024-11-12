@@ -20,6 +20,7 @@ model Profile {
   updated_at         DateTime
   fid               BigInt    @id
   casts             Cast[]
+  channel_members   ChannelMember[]
 
   @@map("farcaster_profile")
   @@schema("production")
@@ -47,4 +48,20 @@ model Cast {
 
   @@map("farcaster_casts") 
   @@schema("production")
+}
+
+model ChannelMember {
+  id          BigInt    @id
+  created_at  DateTime
+  updated_at  DateTime
+  deleted_at  DateTime?
+  timestamp   DateTime
+  fid        BigInt
+  channel_id  String
+  profile     Profile   @relation(fields: [fid], references: [fid])
+
+  @@map("farcaster_channel_members")
+  @@schema("production")
+  @@index([fid])
+  @@index([channel_id])
 }

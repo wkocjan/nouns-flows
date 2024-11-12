@@ -1,8 +1,9 @@
-import { Cast, EmbedUrl } from "@neynar/nodejs-sdk/build/neynar-api/v2"
+import { EmbedUrl } from "@neynar/nodejs-sdk/build/neynar-api/v2"
+import { Cast } from "@prisma/farcaster"
 
 export function getCastImages(cast: Cast): string[] {
-  return cast.embeds
-    .filter((embed): embed is EmbedUrl => "url" in embed)
-    .map((embed) => embed.url)
-    .filter((url) => url.includes("imagedelivery"))
+  return JSON.parse(cast.embeds || "[]")
+    .filter((embed: EmbedUrl): embed is EmbedUrl => "url" in embed)
+    .map((embed: EmbedUrl) => embed.url)
+    .filter((url: string) => url.includes("imagedelivery"))
 }

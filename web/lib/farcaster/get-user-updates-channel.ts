@@ -20,7 +20,7 @@ export const getUserUpdatesChannel = cache(async (address: `0x${string}` | undef
     if (!user) return emptyResponse
 
     const channelIds = (await getFarcasterUserChannels(Number(user.fid))).map(
-      (channel) => channel.id,
+      (channel) => channel.channelId,
     )
     const isNounsMember = channelIds.includes(NOUNS_CHANNEL_ID)
     const isFlowsMember = channelIds.includes(FLOWS_CHANNEL_ID)

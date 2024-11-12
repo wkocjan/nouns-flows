@@ -1,12 +1,25 @@
 import "server-only"
 
 import { cache } from "react"
-import { farcaster } from "./client"
+import { farcasterDb } from "../database/farcaster"
 
 export const getFarcasterUserChannels = cache(async (fid: number) => {
   try {
-    const { channels } = await farcaster.fetchUserChannels(fid, { limit: 100 })
-    return channels
+    const channelMembers = await farcasterDb.channelMember.findMany({
+      where: {
+        fid: BigInt(fid),
+        deleted_at: null,
+      },
+      orderBy: {
+        timestamp: "desc",
+      },
+      take: 100,
+    })
+
+    return channelMembers.map((member) => ({
+      channelId: member.channel_id,
+      timestamp: member.timestamp,
+    }))
   } catch (e: any) {
     console.error(e?.message)
     return []
