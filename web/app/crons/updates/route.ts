@@ -108,20 +108,21 @@ export async function GET() {
         )
 
         console.debug({ text: cast.content, isGrantUpdate, reason, confidenceScore, grantId })
+
         if (isGrantUpdate && grantId && cast.external_id) {
           await updateCastTags(cast, grantId)
           await updateLastBuilderUpdate(cast.external_id, grantId)
         }
 
-        await new Promise((resolve) => setTimeout(resolve, 250))
-      }
+        if (grant.id) {
+          const newDate =
+            casts[casts.length - 1]?.created_at?.toISOString() || new Date().toISOString()
+          console.log(`Saving last analyzed cast time for grant ${grant.id} and cast`, newDate)
+          // add 0.5 seconds to the date to avoid duplicates
+          await saveItem(`${KV_KEY}:${grant.id}`, new Date(newDate).getTime() + 500)
+        }
 
-      if (grant.id) {
-        const newDate =
-          casts[casts.length - 1]?.created_at?.toISOString() || new Date().toISOString()
-        console.log(`Saving last analyzed cast time for grant ${grant.id} and cast`, newDate)
-        // add 0.5 seconds to the date to avoid duplicates
-        await saveItem(`${KV_KEY}:${grant.id}`, new Date(newDate).getTime() + 500)
+        await new Promise((resolve) => setTimeout(resolve, 250))
       }
 
       analyzedCastsTotal += casts.length
