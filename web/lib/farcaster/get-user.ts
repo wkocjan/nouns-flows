@@ -1,4 +1,4 @@
-import { farcasterDb } from "@/lib/database/farcaster"
+import { farcasterDb } from "@/lib/database/farcaster-edge"
 
 export const getFarcasterUserByEthAddress = async (address: `0x${string}`) => {
   try {
