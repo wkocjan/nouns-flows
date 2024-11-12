@@ -10,13 +10,15 @@ export async function getGrantCasts({
   content,
   team,
   grantId,
+  parentGrantContract,
 }: {
   content: string
   team: string[]
   grantId: string
+  parentGrantContract: string
 }) {
   try {
-    const embedding = await generateGrantEmbeddingForUpdates(content, grantId)
+    const embedding = await generateGrantEmbeddingForUpdates(content, grantId, parentGrantContract)
     if (!embedding) {
       throw new Error("Failed to generate grant embedding")
     }
@@ -43,7 +45,7 @@ async function getSimilarCasts(embedding: number[], teamFids: string[]) {
     embeddingQuery: embedding,
     types: ["cast"],
     users: teamFids,
-    similarityCutoff: 0.3,
+    similarityCutoff: 0.2,
     numResults: 100,
   })
 

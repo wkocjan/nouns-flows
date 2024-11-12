@@ -120,6 +120,7 @@ export default async function GrantPage({ params }: Props) {
                   grantId: grant.id,
                   content: grant.description,
                   team: [getEthAddress(grant.recipient)],
+                  parentGrantContract: getEthAddress(grant.parentContract),
                 })}
                 recipient={grant.recipient}
               />

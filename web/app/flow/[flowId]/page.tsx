@@ -72,6 +72,7 @@ export default async function FlowPage(props: Props) {
                     grantId: grant.id,
                     content: grant.description,
                     team: [getEthAddress(grant.recipient)],
+                    parentGrantContract: flow.parentContract,
                   })
               const hasUpdate = updates && updates.length > 0
               const lastUpdateTime = hasUpdate ? updates[0]?.created_at.getTime() / 1000 : 0
