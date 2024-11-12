@@ -34,7 +34,7 @@ export async function queryEmbeddingsSimilarity({
       groups: embeddings.groups,
       users: embeddings.users,
       tags: embeddings.tags,
-      externalId: embeddings.externalId,
+      external_id: embeddings.external_id,
     })
     .from(embeddings)
     .where(

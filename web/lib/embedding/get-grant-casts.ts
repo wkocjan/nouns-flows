@@ -1,10 +1,11 @@
 "use server"
 
 import { farcasterDb } from "@/lib/database/farcaster"
-import { queryEmbeddingsSimilarity } from "./query"
+import { embeddingsDb } from "./db"
+import { embeddings } from "./schema"
 import { getFarcasterUsersByEthAddresses, getFarcasterUsersByFids } from "../farcaster/get-user"
-import { generateGrantEmbeddingForUpdates } from "./get-or-generate-grant-embedding"
 import { Cast, Profile } from "@prisma/farcaster"
+import { and, arrayOverlaps, desc, eq } from "drizzle-orm"
 
 export async function getGrantCasts({
   content,
@@ -18,13 +19,30 @@ export async function getGrantCasts({
   parentGrantContract: string
 }) {
   try {
-    const embedding = await generateGrantEmbeddingForUpdates(content, grantId, parentGrantContract)
-    if (!embedding) {
-      throw new Error("Failed to generate grant embedding")
-    }
+    // Get Farcaster FIDs for the team members
+    const farcasterUsers = await getFarcasterUsersByEthAddresses(team as `0x${string}`[])
+    const fids = farcasterUsers.map((user) => user.fid.toString())
+    const users = team.concat(fids)
 
-    const teamFids = await getTeamFids(team)
-    const externalIds = await getSimilarCasts(embedding, teamFids)
+    // Query embeddings DB for casts tagged with this grant and authored by team
+    const results = await embeddingsDb
+      .select({
+        external_id: embeddings.external_id,
+      })
+      .from(embeddings)
+      .where(
+        and(
+          eq(embeddings.type, "cast"),
+          arrayOverlaps(embeddings.users, users),
+          arrayOverlaps(embeddings.tags, [grantId]),
+        ),
+      )
+      .orderBy(desc(embeddings.created_at))
+
+    const externalIds = results
+      .map((result) => result.external_id?.replace(/^0x/, ""))
+      .filter((id): id is string => id !== null)
+
     const casts = await getCastsFromDb(externalIds)
     const castsWithMentions = await Promise.all(casts.map(processCastMentions))
 
@@ -33,25 +51,6 @@ export async function getGrantCasts({
     console.error("Error in getGrantCasts:", error)
     throw new Error((error as Error).message || "Failed to get grant casts")
   }
-}
-
-async function getTeamFids(team: string[]) {
-  const users = await getFarcasterUsersByEthAddresses(team as `0x${string}`[])
-  return team.concat(users.map((user) => user.fid.toString()))
-}
-
-async function getSimilarCasts(embedding: number[], teamFids: string[]) {
-  const results = await queryEmbeddingsSimilarity({
-    embeddingQuery: embedding,
-    types: ["cast"],
-    users: teamFids,
-    similarityCutoff: 0.2,
-    numResults: 100,
-  })
-
-  return results
-    .map((result) => result.externalId?.replace(/^0x/, ""))
-    .filter((id): id is string => id !== null)
 }
 
 async function getCastsFromDb(externalIds: string[]): Promise<(Cast & { profile: Profile })[]> {
