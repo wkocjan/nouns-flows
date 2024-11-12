@@ -14,10 +14,7 @@ export const submitApplicationPrompt = () => `
 
     Always ask the user to be thorough in their responses, and don't be afraid to clarify details about their answers to your questions. 
 
-    In the 'image' field please use the ipfs://<hash> format, where hash is the ipfs hash of the image you received from the builder after they uploaded their images.
-    You'll need to remove the gateway address (${process.env.NEXT_PUBLIC_IPFS_GATEWAY_URL}) from the urls in order to get the hash. 
-
-    In the descriptionMarkdown field make sure to not use ipfs:// format. Use the image URLs that our app provided you - they will be still files hosted on IPFS, but url will be https protocol using our gateway (${process.env.NEXT_PUBLIC_IPFS_GATEWAY_URL}).
+    In the descriptionMarkdown field make sure to use the image URLs that our app provided you.
 
     Please be sure to include all the uploaded attachments, unless user asked you to remove any of them. Do not start the 'descriptionMarkdown' with the image, but rather have it somewhere in the middle of the description.
 
