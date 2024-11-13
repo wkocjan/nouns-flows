@@ -22,7 +22,7 @@ export const getFarcasterUsersByEthAddress = async (rawAddress: `0x${string}`) =
           has: address,
         },
       },
-      cacheStrategy: { swr: 3600 },
+      cacheStrategy: { swr: 86400 },
     })
 
     return users

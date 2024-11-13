@@ -12,15 +12,28 @@ export type User = {
 }
 
 export async function getUser() {
+  console.time("getUserAddressFromCookie")
   const address = await getUserAddressFromCookie()
+  console.timeEnd("getUserAddressFromCookie")
+
   if (!address) return undefined
 
+  console.time("getFarcasterUser")
   const farcasterUser = await getFarcasterUserByEthAddress(address)
+  console.timeEnd("getFarcasterUser")
+
+  console.time("getUsername")
+  const username =
+    farcasterUser?.fname || (await getEnsNameFromAddress(address)) || getShortEthAddress(address)
+  console.timeEnd("getUsername")
+
+  console.time("getAvatar")
+  const avatar = farcasterUser?.avatar_url || (await getEnsAvatar(address)) || undefined
+  console.timeEnd("getAvatar")
 
   return {
     address,
-    username:
-      farcasterUser?.fname || (await getEnsNameFromAddress(address)) || getShortEthAddress(address),
-    avatar: farcasterUser?.avatar_url || (await getEnsAvatar(address)) || undefined,
+    username,
+    avatar,
   } satisfies User
 }
