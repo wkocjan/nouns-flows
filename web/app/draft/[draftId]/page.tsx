@@ -20,9 +20,8 @@ import { CreatorCard } from "./creator-card"
 import DraftContent from "./draft-content"
 import { DraftEditButton } from "./draft-edit-button"
 import { DraftPublishButton } from "./draft-publish-button"
-import { getPageRuntime } from "@/lib/database/edge"
 
-export const runtime = getPageRuntime()
+export const runtime = "nodejs"
 
 interface Props {
   params: {

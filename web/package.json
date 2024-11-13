@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prebuild": "prisma generate --no-engine && prisma generate --schema=./lib/database/farcaster.prisma --no-engine",
+    "prebuild": "node edge-prebuild.js && prisma generate --no-engine && prisma generate --schema=./lib/database/farcaster.prisma --no-engine",
     "db:push": "prisma db push",
     "db:generate": "prisma generate && prisma generate --schema=./lib/database/farcaster.prisma",
     "typecheck": "tsc"
@@ -91,6 +91,8 @@
     "@types/react-dom": "^18.3.1",
     "eslint": "8.57.0",
     "eslint-config-next": "14.2.14",
+    "fs-extra": "^11.2.0",
+    "glob": "^11.0.0",
     "pino-pretty": "^11.3.0",
     "postcss": "^8.4.47",
     "prettier": "^3.3.3",

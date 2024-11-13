@@ -26,10 +26,6 @@ export default database
 
 if (process.env.NODE_ENV !== "production") globalThis.prisma = database
 
-export const getPageRuntime = () => {
-  return isDevelopment ? "nodejs" : "edge"
-}
-
 export const getCacheStrategy = (swr?: number, ttl?: number) => {
   return isDevelopment ? {} : { cacheStrategy: { swr, ttl } }
 }

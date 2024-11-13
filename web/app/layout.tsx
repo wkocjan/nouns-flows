@@ -19,9 +19,8 @@ import { Roboto_Mono } from "next/font/google"
 import Image from "next/image"
 import Link from "next/link"
 import "./globals.css"
-import { getPageRuntime } from "@/lib/database/edge"
 
-export const runtime = getPageRuntime()
+export const runtime = "nodejs"
 
 const mono = Roboto_Mono({ subsets: ["latin"], variable: "--font-mono" })
 

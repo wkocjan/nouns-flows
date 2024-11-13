@@ -16,9 +16,8 @@ import { Metadata } from "next"
 import Image from "next/image"
 import { SwapTokenButton } from "../token/swap-token-button"
 import Illustration from "./curate.svg"
-import { getPageRuntime } from "@/lib/database/edge"
 
-export const runtime = getPageRuntime()
+export const runtime = "nodejs"
 
 export async function generateMetadata(): Promise<Metadata> {
   const pool = await getPool()

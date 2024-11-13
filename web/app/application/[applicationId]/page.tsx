@@ -19,9 +19,8 @@ import Image from "next/image"
 import { redirect } from "next/navigation"
 import { StatusDisputed } from "./components/status-disputed"
 import { StatusNotDisputed } from "./components/status-not-disputed"
-import { getPageRuntime } from "@/lib/database/edge"
 
-export const runtime = getPageRuntime()
+export const runtime = "nodejs"
 
 interface Props {
   params: {

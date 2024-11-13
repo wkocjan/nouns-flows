@@ -18,9 +18,8 @@ import { PropsWithChildren } from "react"
 import { base } from "viem/chains"
 import { FlowHeader } from "./components/flow-header"
 import { FlowSubmenu } from "./components/flow-submenu"
-import { getPageRuntime } from "@/lib/database/edge"
 
-export const runtime = getPageRuntime()
+export const runtime = "nodejs"
 
 interface Props {
   params: {

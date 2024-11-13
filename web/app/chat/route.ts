@@ -4,11 +4,10 @@ import { anthropic } from "@ai-sdk/anthropic"
 import { convertToCoreMessages, streamText } from "ai"
 import { ChatBody } from "./chat-body"
 import { saveConversation } from "./save-conversation"
-import { getPageRuntime } from "@/lib/database/edge"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
-export const runtime = getPageRuntime()
+export const runtime = "nodejs"
 
 export async function POST(request: Request) {
   const body: ChatBody = await request.json()

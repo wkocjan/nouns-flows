@@ -8,9 +8,8 @@ import { getFlow } from "@/lib/database/queries/flow"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { Metadata } from "next"
 import { ApplyForm } from "../components/apply-form"
-import { getPageRuntime } from "@/lib/database/edge"
 
-export const runtime = getPageRuntime()
+export const runtime = "nodejs"
 
 interface Props {
   params: {

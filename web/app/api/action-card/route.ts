@@ -3,9 +3,8 @@ import { getGuidanceCacheKey } from "@/app/components/action-card/guidance-utils
 import { getUserAddressFromCookie } from "@/lib/auth/get-user-from-cookie"
 import { kv } from "@vercel/kv"
 import { cookies } from "next/headers"
-import { getPageRuntime } from "@/lib/database/edge"
 
-export const runtime = getPageRuntime()
+export const runtime = "nodejs"
 
 export const maxDuration = 30
 
