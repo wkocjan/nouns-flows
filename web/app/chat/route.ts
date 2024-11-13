@@ -1,5 +1,6 @@
 import { getAgent } from "@/lib/ai/agents/agent"
 import { getAttachmentsPrompt } from "@/lib/ai/utils/attachments"
+import { getUserAddressFromCookie } from "@/lib/auth/get-user-from-cookie"
 import { anthropic } from "@ai-sdk/anthropic"
 import { convertToCoreMessages, streamText } from "ai"
 import { ChatBody } from "./chat-body"
@@ -11,7 +12,10 @@ export const runtime = "edge"
 
 export async function POST(request: Request) {
   const body: ChatBody = await request.json()
-  const { messages, type, domain, data } = body
+  const { messages, type, domain } = body
+
+  const address = await getUserAddressFromCookie()
+  const data = { ...body.data, address }
 
   const agent = await getAgent(type, domain, data)
 
@@ -27,7 +31,7 @@ export async function POST(request: Request) {
       saveConversation({
         ...body,
         messages: [...coreMessages, ...responseMessages],
-        address: data?.address,
+        address,
       })
     },
   })

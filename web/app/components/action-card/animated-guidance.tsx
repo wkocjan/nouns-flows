@@ -47,7 +47,7 @@ export function AnimatedGuidance(props: Props) {
           {object.actions
             .filter((a) => Boolean(a?.link) && Boolean(a?.text))
             .map((action) => (
-              <Button key={action?.link} asChild>
+              <Button key={action?.link} variant="ai-secondary" size="md">
                 <Link href={action?.link || "#"}>{action?.text}</Link>
               </Button>
             ))}

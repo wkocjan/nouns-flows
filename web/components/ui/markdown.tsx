@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils"
 import MarkdownJsx, { MarkdownToJSX } from "markdown-to-jsx"
 import { Fragment } from "react"
 import { VideoPlayer } from "./video-player"
@@ -5,10 +6,11 @@ import { VideoPlayer } from "./video-player"
 interface Props {
   children: string
   options?: MarkdownToJSX.Options
+  links?: "underline" | "pill"
 }
 
 export const Markdown = (props: Props) => {
-  const { children = "", options } = props
+  const { children = "", options, links = "underline" } = props
 
   return (
     <MarkdownJsx
@@ -17,8 +19,12 @@ export const Markdown = (props: Props) => {
           a: {
             props: {
               target: "_blank",
-              className:
-                "underline break-words hover:text-primary transition-colors underline-offset-4",
+              className: cn({
+                "underline break-words hover:text-primary transition-colors underline-offset-4":
+                  links === "underline",
+                "items-center rounded-full transition-colors font-medium py-1 px-2 text-[10px] uppercase bg-secondary text-secondary-foreground dark:bg-accent dark:text-accent-foreground hover:bg-primary hover:text-primary-foreground dark:hover:bg-primary dark:hover:text-primary-foreground":
+                  links === "pill",
+              }),
             },
             component: (props) => {
               const { href = "" } = props
@@ -41,7 +47,8 @@ export const Markdown = (props: Props) => {
               return <a {...props} />
             },
           },
-          ul: { props: { className: "list-disc list-inside" } },
+          ul: { props: { className: "list-disc list-inside space-y-4" } },
+          ol: { props: { className: "list-none space-y-4" } },
           li: { props: { className: "[&>*]:inline-block leading-relaxed" } },
           h1: { props: { className: "text-[1.25em] font-medium tracking-tight" } },
           h2: { props: { className: "text-[1.15em] font-medium tracking-tight" } },
