@@ -12,6 +12,7 @@ import { ActionCard } from "./components/action-card/action-card"
 import FlowsList from "./components/flows-list"
 import { CTAButtons } from "./flow/[flowId]/components/cta-buttons"
 import { VotingBar } from "./flow/[flowId]/components/voting-bar"
+import { FlowsUpdates } from "./components/flows-updates"
 
 export const revalidate = 0
 export const dynamic = "force-dynamic"
@@ -57,6 +58,10 @@ export default async function Home() {
 
         <div className="mt-6">
           <FlowsList actionCard={<ActionCard user={user} />} flows={activeFlows} />
+        </div>
+
+        <div className="mt-12">
+          <FlowsUpdates />
         </div>
       </main>
       <VotingBar />
