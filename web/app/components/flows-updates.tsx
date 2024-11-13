@@ -7,6 +7,7 @@ export const FlowsUpdates = async () => {
   const casts = await farcasterDb.cast.findMany({
     where: {
       computed_tags: { has: "nouns-flows" },
+      deleted_at: null,
     },
     orderBy: { created_at: "desc" },
     take: 20,
