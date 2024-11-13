@@ -13,8 +13,9 @@ import FlowsList from "./components/flows-list"
 import { CTAButtons } from "./flow/[flowId]/components/cta-buttons"
 import { VotingBar } from "./flow/[flowId]/components/voting-bar"
 import { FlowsUpdates } from "./components/flows-updates"
+import { getPageRuntime } from "@/lib/database/edge"
 
-export const runtime = "edge"
+export const runtime = getPageRuntime()
 
 export const revalidate = 0
 export const dynamic = "force-dynamic"
