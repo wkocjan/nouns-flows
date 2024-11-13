@@ -2,13 +2,14 @@ import "server-only"
 
 import * as jose from "jose"
 import { cookies } from "next/headers"
+import { cache } from "react"
 import { getEthAddress } from "../utils"
 
 const verificationKey = `-----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEB1GUPYZCvCfMHfxcHwUb6rtzdp4LtC7V8tjdHA+l9y2YIzNmA1PyaQDDMNH9xz4bL5hDDsjuFriGzH4ODS4ZGQ==
 -----END PUBLIC KEY-----`
 
-export async function getUserAddressFromCookie() {
+export const getUserAddressFromCookie = cache(async () => {
   const token = cookies().get("privy-id-token")
   if (!token) return undefined
 
@@ -36,4 +37,4 @@ export async function getUserAddressFromCookie() {
     console.error(error)
     return undefined
   }
-}
+})
