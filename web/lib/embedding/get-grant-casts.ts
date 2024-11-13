@@ -24,9 +24,6 @@ async function getCastsFromDb(grantId: string): Promise<(Cast & { profile: Profi
       },
       parent_hash: null,
       deleted_at: null,
-      created_at: {
-        gte: new Date(new Date().setMonth(new Date().getMonth() - 3)),
-      },
     },
     include: {
       profile: true,
@@ -34,6 +31,7 @@ async function getCastsFromDb(grantId: string): Promise<(Cast & { profile: Profi
     orderBy: {
       created_at: "desc",
     },
+    take: 50,
     cacheStrategy: { swr: 600 },
   })
 }
