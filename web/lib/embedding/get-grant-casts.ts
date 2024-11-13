@@ -1,28 +1,12 @@
 "use server"
 
-import { farcasterDb } from "@/lib/database/farcaster"
-import { embeddingsDb } from "./db"
-import { embeddings } from "./schema"
+import { farcasterDb } from "@/lib/database/farcaster-edge"
 import { getFarcasterUsersByFids } from "../farcaster/get-user"
 import { Cast, Profile } from "@prisma/farcaster"
-import { and, arrayOverlaps, desc, eq } from "drizzle-orm"
 
 export async function getGrantCasts({ grantId }: { grantId: string }) {
   try {
-    // Query embeddings DB for casts tagged with this grant and authored by team
-    const results = await embeddingsDb
-      .select({
-        external_id: embeddings.external_id,
-      })
-      .from(embeddings)
-      .where(and(eq(embeddings.type, "cast"), arrayOverlaps(embeddings.tags, [grantId])))
-      .orderBy(desc(embeddings.created_at))
-
-    const externalIds = results
-      .map((result) => result.external_id?.replace(/^0x/, ""))
-      .filter((id): id is string => id !== null)
-
-    const casts = await getCastsFromDb(externalIds)
+    const casts = await getCastsFromDb(grantId)
     const castsWithMentions = await Promise.all(casts.map(processCastMentions))
 
     return castsWithMentions
@@ -32,11 +16,11 @@ export async function getGrantCasts({ grantId }: { grantId: string }) {
   }
 }
 
-async function getCastsFromDb(externalIds: string[]): Promise<(Cast & { profile: Profile })[]> {
+async function getCastsFromDb(grantId: string): Promise<(Cast & { profile: Profile })[]> {
   return await farcasterDb.cast.findMany({
     where: {
-      hash: {
-        in: externalIds.map((id) => Buffer.from(id, "hex")),
+      computed_tags: {
+        has: grantId,
       },
       parent_hash: null,
       deleted_at: null,
