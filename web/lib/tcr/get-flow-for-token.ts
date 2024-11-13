@@ -1,6 +1,6 @@
 "use server"
 
-import database from "@/lib/database"
+import database from "@/lib/database/edge"
 import { unstable_cache } from "next/cache"
 
 export const getFlowForToken = unstable_cache(

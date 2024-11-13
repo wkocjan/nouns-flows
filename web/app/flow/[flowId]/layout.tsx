@@ -8,7 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import database from "@/lib/database"
+import database, { getCacheStrategy } from "@/lib/database/edge"
 import { getFlowWithGrants } from "@/lib/database/queries/flow"
 import { getPool } from "@/lib/database/queries/pool"
 import { getEthAddress } from "@/lib/utils"
@@ -18,6 +18,8 @@ import { PropsWithChildren } from "react"
 import { base } from "viem/chains"
 import { FlowHeader } from "./components/flow-header"
 import { FlowSubmenu } from "./components/flow-submenu"
+
+export const runtime = "nodejs"
 
 interface Props {
   params: {
@@ -42,6 +44,7 @@ export default async function FlowLayout(props: PropsWithChildren<Props>) {
 
   const draftsCount = await database.draft.count({
     where: { flowId, isPrivate: false, isOnchain: false },
+    ...getCacheStrategy(120),
   })
 
   return (

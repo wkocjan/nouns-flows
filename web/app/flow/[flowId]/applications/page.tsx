@@ -27,7 +27,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { UserProfile } from "@/components/user-profile/user-profile"
-import database from "@/lib/database"
+import database from "@/lib/database/edge"
 import { getFlow } from "@/lib/database/queries/flow"
 import { Status } from "@/lib/enums"
 import { getPinataUrl } from "@/lib/pinata/get-file-url"
@@ -35,6 +35,8 @@ import { getEthAddress } from "@/lib/utils"
 import Link from "next/link"
 import { GrantLogoCell } from "../components/grant-logo-cell"
 import { GrantTitleCell } from "../components/grant-title-cell"
+
+export const runtime = "nodejs"
 
 interface Props {
   params: {

@@ -3,11 +3,13 @@ import "server-only"
 import { Card, CardContent } from "@/components/ui/card"
 import { Markdown } from "@/components/ui/markdown"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import database from "@/lib/database"
+import database from "@/lib/database/edge"
 import { getFlow } from "@/lib/database/queries/flow"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { Metadata } from "next"
 import { ApplyForm } from "../components/apply-form"
+
+export const runtime = "nodejs"
 
 interface Props {
   params: {

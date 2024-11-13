@@ -12,13 +12,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { DateTime } from "@/components/ui/date-time"
 import { Markdown } from "@/components/ui/markdown"
 import { UserProfile } from "@/components/user-profile/user-profile"
-import database from "@/lib/database"
+import database from "@/lib/database/edge"
 import { getEthAddress, getIpfsUrl, isProduction } from "@/lib/utils"
 import { Metadata } from "next"
 import Image from "next/image"
 import { redirect } from "next/navigation"
 import { StatusDisputed } from "./components/status-disputed"
 import { StatusNotDisputed } from "./components/status-not-disputed"
+
+export const runtime = "nodejs"
 
 interface Props {
   params: {

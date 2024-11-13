@@ -21,7 +21,7 @@ export async function saveOrGet<T>(key: string, value: T): Promise<T> {
 export async function getDecryptedItem<T>(key: string): Promise<T | null> {
   const item = await getItem<T>(key)
   if (item) {
-    const decryptedItem = await decrypt(item as string, key)
+    const decryptedItem = await decrypt(item as string)
     return decryptedItem
   }
   return null
@@ -30,10 +30,10 @@ export async function getDecryptedItem<T>(key: string): Promise<T | null> {
 export async function saveOrGetEncrypted<T>(key: string, value: T): Promise<T> {
   const item = await getItem<T>(key)
   if (item) {
-    const decryptedItem = await decrypt(item as string, key)
+    const decryptedItem = await decrypt(item as string)
     return decryptedItem
   }
-  const encryptedValue = await encrypt(value, key)
+  const encryptedValue = await encrypt(value)
   await saveItem(key, encryptedValue)
   return value
 }

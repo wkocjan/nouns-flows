@@ -4,7 +4,7 @@ import "server-only"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { UserProfile } from "@/components/user-profile/user-profile"
-import database from "@/lib/database"
+import database from "@/lib/database/edge"
 import { getEthAddress } from "@/lib/utils"
 
 interface Props {

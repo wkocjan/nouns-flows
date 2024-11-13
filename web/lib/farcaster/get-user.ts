@@ -1,4 +1,5 @@
 import { farcasterDb } from "@/lib/database/farcaster-edge"
+import { getCacheStrategy } from "../database/edge"
 
 export const getFarcasterUserByEthAddress = async (address: `0x${string}`) => {
   try {
@@ -22,7 +23,7 @@ export const getFarcasterUsersByEthAddress = async (rawAddress: `0x${string}`) =
           has: address,
         },
       },
-      cacheStrategy: { swr: 3600 },
+      ...getCacheStrategy(86400),
     })
 
     return users
@@ -42,7 +43,7 @@ export const getFarcasterUsersByEthAddresses = async (addresses: `0x${string}`[]
           hasSome: lowerAddresses,
         },
       },
-      cacheStrategy: { swr: 3600 },
+      ...getCacheStrategy(3600),
     })
 
     return users
@@ -57,7 +58,7 @@ export const getFarcasterUsersByFids = async (fids: bigint[]) => {
   try {
     const users = await farcasterDb.profile.findMany({
       where: { fid: { in: fids } },
-      cacheStrategy: { swr: 3600 },
+      ...getCacheStrategy(3600),
     })
 
     return users

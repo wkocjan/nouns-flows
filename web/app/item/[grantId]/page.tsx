@@ -14,7 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Currency } from "@/components/ui/currency"
 import { Markdown } from "@/components/ui/markdown"
 import { UserProfile } from "@/components/user-profile/user-profile"
-import database from "@/lib/database"
+import database from "@/lib/database/edge"
 import { getPool } from "@/lib/database/queries/pool"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import { Metadata } from "next"
@@ -26,6 +26,8 @@ import { UserVotes } from "./components/user-votes"
 import { Voters } from "./components/voters"
 import { getGrantCasts } from "@/lib/embedding/get-grant-casts"
 import { Suspense } from "react"
+
+export const runtime = "nodejs"
 
 interface Props {
   params: {

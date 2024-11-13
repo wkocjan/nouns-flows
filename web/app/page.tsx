@@ -1,7 +1,7 @@
 import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
 import { getUser } from "@/lib/auth/user"
-import database from "@/lib/database"
 import { isGrantApproved } from "@/lib/database/helpers"
+import database, { getCacheStrategy } from "@/lib/database/edge"
 import { getPool } from "@/lib/database/queries/pool"
 import { Status } from "@/lib/enums"
 import { getEthAddress } from "@/lib/utils"
@@ -13,6 +13,9 @@ import { ActionCard } from "./components/action-card/action-card"
 import FlowsList from "./components/flows-list"
 import { CTAButtons } from "./flow/[flowId]/components/cta-buttons"
 import { VotingBar } from "./flow/[flowId]/components/voting-bar"
+import { FlowsUpdates } from "./components/flows-updates"
+
+export const runtime = "nodejs"
 
 export const revalidate = 0
 export const dynamic = "force-dynamic"
@@ -23,6 +26,7 @@ export default async function Home() {
     database.grant.findMany({
       where: { isFlow: 1, isActive: 1, isTopLevel: 0 },
       include: { subgrants: true },
+      ...getCacheStrategy(120),
     }),
     getUser(),
   ])
@@ -58,6 +62,10 @@ export default async function Home() {
 
         <div className="mt-6">
           <FlowsList actionCard={<ActionCard user={user} />} flows={activeFlows} />
+        </div>
+
+        <div className="mt-12">
+          <FlowsUpdates />
         </div>
       </main>
       <VotingBar />
