@@ -3,7 +3,6 @@
 import { uploadFile } from "@/lib/pinata/upload-file"
 import { getIpfsUrl } from "@/lib/utils"
 import { isVideoFile } from "@/lib/video/is-video-file"
-import { uploadVideo } from "@/lib/video/upload-video"
 import { Block, BlockNoteSchema, defaultBlockSpecs } from "@blocknote/core"
 import { BlockNoteView } from "@blocknote/mantine"
 import "@blocknote/mantine/style.css"
@@ -47,7 +46,7 @@ export default function MarkdownEditor(props: Props) {
       }
 
       const ipfsUrl = getIpfsUrl(await uploadFile(file), "pinata")
-      return isVideoFile(file) ? await uploadVideo(ipfsUrl) : ipfsUrl
+      return ipfsUrl
     },
   })
 
