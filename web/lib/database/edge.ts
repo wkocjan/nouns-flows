@@ -31,5 +31,5 @@ export const getPageRuntime = () => {
 }
 
 export const getCacheStrategy = (swr?: number, ttl?: number) => {
-  return isDevelopment ? {} : { swr, ttl }
+  return isDevelopment ? {} : { cacheStrategy: { swr, ttl } }
 }
