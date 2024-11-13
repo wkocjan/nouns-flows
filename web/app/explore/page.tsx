@@ -3,6 +3,8 @@ import { getPool } from "@/lib/database/queries/pool"
 import { FullDiagram } from "./diagram"
 import { Metadata } from "next"
 
+export const runtime = "nodejs"
+
 export async function generateMetadata(): Promise<Metadata> {
   const pool = await getPool()
   return {

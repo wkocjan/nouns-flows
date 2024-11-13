@@ -27,6 +27,8 @@ import { Voters } from "./components/voters"
 import { getGrantCasts } from "@/lib/embedding/get-grant-casts"
 import { Suspense } from "react"
 
+export const runtime = "nodejs"
+
 interface Props {
   params: {
     grantId: string

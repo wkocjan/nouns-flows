@@ -2,6 +2,7 @@ import "server-only"
 
 import { CastCard } from "@/components/ui/cast-card"
 import { farcasterDb } from "@/lib/database/farcaster-edge"
+import { getCacheStrategy } from "@/lib/database/edge"
 
 export const FlowsUpdates = async () => {
   const casts = await farcasterDb.cast.findMany({
@@ -12,7 +13,7 @@ export const FlowsUpdates = async () => {
     orderBy: { created_at: "desc" },
     take: 20,
     include: { profile: true },
-    cacheStrategy: { swr: 600 },
+    ...getCacheStrategy(600),
   })
 
   if (casts.length === 0) return null

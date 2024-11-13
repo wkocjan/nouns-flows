@@ -1,21 +1,23 @@
 import { PrismaClient as PrismaClientEdge } from "@prisma/flows/edge"
+import { PrismaClient as PrismaClientLocal } from "@prisma/flows"
+
 import { withAccelerate } from "@prisma/extension-accelerate"
 
 const isDevelopment = process.env.NODE_ENV !== "production"
 
-const prismaClientSingleton = () => {
-  if (isDevelopment) {
-    return new PrismaClientEdge({
-      datasources: {
-        db: { url: process.env.DATABASE_ACCELERATE_URL },
-      },
-    }).$extends(withAccelerate())
-  }
+const getAccelerateClient = () => {
   return new PrismaClientEdge().$extends(withAccelerate())
 }
 
+const prismaClientSingleton = () => {
+  if (isDevelopment) {
+    return new PrismaClientLocal()
+  }
+  return getAccelerateClient()
+}
+
 declare const globalThis: {
-  prisma: ReturnType<typeof prismaClientSingleton>
+  prisma: ReturnType<typeof getAccelerateClient>
 } & typeof global
 
 const database = globalThis.prisma ?? prismaClientSingleton()
@@ -23,3 +25,7 @@ const database = globalThis.prisma ?? prismaClientSingleton()
 export default database
 
 if (process.env.NODE_ENV !== "production") globalThis.prisma = database
+
+export const getCacheStrategy = (swr?: number, ttl?: number) => {
+  return isDevelopment ? {} : { cacheStrategy: { swr, ttl } }
+}

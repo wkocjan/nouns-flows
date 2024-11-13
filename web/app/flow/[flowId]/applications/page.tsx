@@ -36,6 +36,8 @@ import Link from "next/link"
 import { GrantLogoCell } from "../components/grant-logo-cell"
 import { GrantTitleCell } from "../components/grant-title-cell"
 
+export const runtime = "nodejs"
+
 interface Props {
   params: {
     flowId: string

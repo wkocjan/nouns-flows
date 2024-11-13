@@ -9,6 +9,8 @@ import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { Metadata } from "next"
 import { ApplyForm } from "../components/apply-form"
 
+export const runtime = "nodejs"
+
 interface Props {
   params: {
     flowId: string

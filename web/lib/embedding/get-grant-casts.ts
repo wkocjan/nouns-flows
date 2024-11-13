@@ -3,6 +3,7 @@
 import { farcasterDb } from "@/lib/database/farcaster-edge"
 import { getFarcasterUsersByFids } from "../farcaster/get-user"
 import { Cast, Profile } from "@prisma/farcaster"
+import { getCacheStrategy } from "../database/edge"
 
 export async function getGrantCasts({ grantId }: { grantId: string }) {
   try {
@@ -32,7 +33,7 @@ async function getCastsFromDb(grantId: string): Promise<(Cast & { profile: Profi
       created_at: "desc",
     },
     take: 50,
-    cacheStrategy: { swr: 600 },
+    ...getCacheStrategy(600),
   })
 }
 

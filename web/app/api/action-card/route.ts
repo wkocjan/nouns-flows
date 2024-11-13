@@ -4,7 +4,8 @@ import { getUserAddressFromCookie } from "@/lib/auth/get-user-from-cookie"
 import { kv } from "@vercel/kv"
 import { cookies } from "next/headers"
 
-export const runtime = "edge"
+export const runtime = "nodejs"
+
 export const maxDuration = 30
 
 export async function POST(req: Request) {

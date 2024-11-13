@@ -21,6 +21,8 @@ import DraftContent from "./draft-content"
 import { DraftEditButton } from "./draft-edit-button"
 import { DraftPublishButton } from "./draft-publish-button"
 
+export const runtime = "nodejs"
+
 interface Props {
   params: {
     draftId: string

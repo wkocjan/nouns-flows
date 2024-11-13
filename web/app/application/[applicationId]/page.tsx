@@ -20,6 +20,8 @@ import { redirect } from "next/navigation"
 import { StatusDisputed } from "./components/status-disputed"
 import { StatusNotDisputed } from "./components/status-not-disputed"
 
+export const runtime = "nodejs"
+
 interface Props {
   params: {
     applicationId: string

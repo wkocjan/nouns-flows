@@ -20,7 +20,7 @@ import Image from "next/image"
 import Link from "next/link"
 import "./globals.css"
 
-export const runtime = "edge"
+export const runtime = "nodejs"
 
 const mono = Roboto_Mono({ subsets: ["latin"], variable: "--font-mono" })
 

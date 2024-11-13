@@ -18,6 +18,8 @@ import { getPinataUrl } from "@/lib/pinata/get-file-url"
 import { GrantLogoCell } from "../components/grant-logo-cell"
 import { GrantTitleCell } from "../components/grant-title-cell"
 
+export const runtime = "nodejs"
+
 interface Props {
   params: {
     flowId: string
