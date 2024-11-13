@@ -8,7 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import database from "@/lib/database/edge"
+import database, { getCacheStrategy } from "@/lib/database/edge"
 import { getFlowWithGrants } from "@/lib/database/queries/flow"
 import { getPool } from "@/lib/database/queries/pool"
 import { getEthAddress } from "@/lib/utils"
@@ -45,7 +45,7 @@ export default async function FlowLayout(props: PropsWithChildren<Props>) {
 
   const draftsCount = await database.draft.count({
     where: { flowId, isPrivate: false, isOnchain: false },
-    cacheStrategy: { swr: 120 },
+    ...getCacheStrategy(120),
   })
 
   return (

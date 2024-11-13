@@ -11,11 +11,7 @@ const getAccelerateClient = () => {
 
 const prismaClientSingleton = () => {
   if (isDevelopment) {
-    return new PrismaClientLocal({
-      datasources: {
-        db: { url: process.env.DATABASE_URL },
-      },
-    })
+    return new PrismaClientLocal()
   }
   return getAccelerateClient()
 }
@@ -32,4 +28,8 @@ if (process.env.NODE_ENV !== "production") globalThis.prisma = database
 
 export const getPageRuntime = () => {
   return isDevelopment ? "nodejs" : "edge"
+}
+
+export const getCacheStrategy = (swr?: number, ttl?: number) => {
+  return isDevelopment ? {} : { swr, ttl }
 }
