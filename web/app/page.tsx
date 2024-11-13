@@ -1,6 +1,6 @@
 import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
 import { getUser } from "@/lib/auth/user"
-import database from "@/lib/database"
+import database from "@/lib/database/edge"
 import { getPool } from "@/lib/database/queries/pool"
 import { Status } from "@/lib/enums"
 import { getEthAddress, isGrantApproved } from "@/lib/utils"
@@ -14,6 +14,8 @@ import { CTAButtons } from "./flow/[flowId]/components/cta-buttons"
 import { VotingBar } from "./flow/[flowId]/components/voting-bar"
 import { FlowsUpdates } from "./components/flows-updates"
 
+export const runtime = "edge"
+
 export const revalidate = 0
 export const dynamic = "force-dynamic"
 
@@ -23,6 +25,7 @@ export default async function Home() {
     database.grant.findMany({
       where: { isFlow: 1, isActive: 1, isTopLevel: 0 },
       include: { subgrants: true },
+      cacheStrategy: { swr: 120 },
     }),
     getUser(),
   ])

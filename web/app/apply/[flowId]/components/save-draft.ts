@@ -1,6 +1,6 @@
 "use server"
 
-import database from "@/lib/database"
+import database from "@/lib/database/edge"
 import { addDraftEmbedding } from "@/lib/embedding/embed-drafts"
 import { z } from "zod"
 

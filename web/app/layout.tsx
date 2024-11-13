@@ -20,6 +20,8 @@ import Image from "next/image"
 import Link from "next/link"
 import "./globals.css"
 
+export const runtime = "edge"
+
 const mono = Roboto_Mono({ subsets: ["latin"], variable: "--font-mono" })
 
 export async function generateMetadata(): Promise<Metadata> {

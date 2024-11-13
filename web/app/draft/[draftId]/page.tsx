@@ -11,7 +11,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { DateTime } from "@/components/ui/date-time"
 import { UserProfile } from "@/components/user-profile/user-profile"
-import database from "@/lib/database"
+import database from "@/lib/database/edge"
 import { getTcrCosts } from "@/lib/tcr/get-tcr-costs"
 import { getEthAddress } from "@/lib/utils"
 import { Metadata } from "next"

@@ -1,6 +1,6 @@
 "use server"
 
-import database from "@/lib/database"
+import database from "@/lib/database/edge"
 import { removeDraftEmbedding } from "@/lib/embedding/embed-drafts"
 import { revalidatePath } from "next/cache"
 

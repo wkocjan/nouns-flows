@@ -13,7 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { UserProfile } from "@/components/user-profile/user-profile"
-import database from "@/lib/database"
+import database from "@/lib/database/edge"
 import { getPinataUrl } from "@/lib/pinata/get-file-url"
 import { GrantLogoCell } from "../components/grant-logo-cell"
 import { GrantTitleCell } from "../components/grant-title-cell"
