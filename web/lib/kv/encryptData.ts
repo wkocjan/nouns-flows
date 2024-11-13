@@ -22,7 +22,7 @@ function arrayBufferToHex(buffer: ArrayBuffer): string {
 function hexToArrayBuffer(hexString: string): ArrayBuffer {
   const bytes = new Uint8Array(hexString.length / 2)
   for (let i = 0; i < bytes.length; i++) {
-    bytes[i] = parseInt(hexString.substr(i * 2, 2), 16)
+    bytes[i] = parseInt(hexString.slice(i * 2, i * 2 + 2), 16)
   }
   return bytes.buffer
 }
