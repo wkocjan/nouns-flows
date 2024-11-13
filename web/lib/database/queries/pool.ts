@@ -1,4 +1,4 @@
-import database from "@/lib/database"
+import database from "@/lib/database/edge"
 
 export const getPool = async () => {
   return await database.grant.findFirstOrThrow({
