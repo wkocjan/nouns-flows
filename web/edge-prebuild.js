@@ -1,5 +1,5 @@
 const fs = require("fs-extra")
-const glob = require("glob")
+const { glob } = require("glob")
 const path = require("path")
 
 // Define the pattern to match files (e.g., all .ts and .tsx files)
@@ -31,10 +31,10 @@ const processFile = (file) => {
 }
 
 // Execute the script
-glob(pattern, (err, files) => {
-  if (err) {
+glob(pattern)
+  .then((files) => {
+    files.forEach(processFile)
+  })
+  .catch((err) => {
     console.error("Error finding files:", err)
-    return
-  }
-  files.forEach(processFile)
-})
+  })
