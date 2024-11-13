@@ -5,34 +5,30 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Currency } from "@/components/ui/currency"
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { getUserUpdatesChannel } from "@/lib/farcaster/get-user-updates-channel"
 import { useServerFunction } from "@/lib/hooks/use-server-function"
 import { getEthAddress, getIpfsUrl, getShortEthAddress } from "@/lib/utils"
 import { PlusIcon } from "@radix-ui/react-icons"
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
-import { useAccount } from "wagmi"
+import { useRef } from "react"
 import { AnimatedSalary } from "../animated-salary"
 import { WithdrawSalaryButton } from "../withdraw-salary-button"
 import { useUserGrants } from "./use-user-grants"
-import { ScrollArea } from "@/components/ui/scroll-area"
 
-export const RecipientPopover = () => {
-  const [isVisible, setIsVisible] = useState(false)
-  const { address } = useAccount()
+interface Props {
+  address: `0x${string}`
+}
+
+export const RecipientPopover = (props: Props) => {
+  const { address } = props
   const { grants, earnings, refetch } = useUserGrants(address)
   const closeRef = useRef<HTMLButtonElement>(null)
 
   const { data, isLoading } = useServerFunction(getUserUpdatesChannel, "updates-channel", [address])
 
-  useEffect(() => {
-    setIsVisible(!!address)
-  }, [address])
-
   const hasGrants = grants.length > 0
-
-  if (!isVisible) return null
 
   const { isFlowsMember, isNounsMember, updatesChannel, hasFarcasterAccount } = data || {}
 
