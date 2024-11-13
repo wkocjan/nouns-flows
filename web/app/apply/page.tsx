@@ -9,6 +9,9 @@ import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
+import { getPageRuntime } from "@/lib/database/edge"
+
+export const runtime = getPageRuntime()
 
 export async function generateMetadata(): Promise<Metadata> {
   const pool = await getPool()

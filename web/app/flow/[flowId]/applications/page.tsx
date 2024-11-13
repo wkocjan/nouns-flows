@@ -35,6 +35,9 @@ import { getEthAddress } from "@/lib/utils"
 import Link from "next/link"
 import { GrantLogoCell } from "../components/grant-logo-cell"
 import { GrantTitleCell } from "../components/grant-title-cell"
+import { getPageRuntime } from "@/lib/database/edge"
+
+export const runtime = getPageRuntime()
 
 interface Props {
   params: {

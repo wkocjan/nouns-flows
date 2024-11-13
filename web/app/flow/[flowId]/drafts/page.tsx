@@ -17,6 +17,9 @@ import database from "@/lib/database/edge"
 import { getPinataUrl } from "@/lib/pinata/get-file-url"
 import { GrantLogoCell } from "../components/grant-logo-cell"
 import { GrantTitleCell } from "../components/grant-title-cell"
+import { getPageRuntime } from "@/lib/database/edge"
+
+export const runtime = getPageRuntime()
 
 interface Props {
   params: {

@@ -24,8 +24,9 @@ import Link from "next/link"
 import { GrantLogoCell } from "./components/grant-logo-cell"
 import { VotingBar } from "./components/voting-bar"
 import { VotingInput } from "./components/voting-input"
-import { getGrantCasts } from "@/lib/embedding/get-grant-casts"
-import { Suspense } from "react"
+import { getPageRuntime } from "@/lib/database/edge"
+
+export const runtime = getPageRuntime()
 
 interface Props {
   params: {

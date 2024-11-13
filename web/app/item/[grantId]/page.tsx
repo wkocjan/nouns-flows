@@ -26,6 +26,9 @@ import { UserVotes } from "./components/user-votes"
 import { Voters } from "./components/voters"
 import { getGrantCasts } from "@/lib/embedding/get-grant-casts"
 import { Suspense } from "react"
+import { getPageRuntime } from "@/lib/database/edge"
+
+export const runtime = getPageRuntime()
 
 interface Props {
   params: {
