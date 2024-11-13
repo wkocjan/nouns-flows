@@ -1,7 +1,5 @@
-import { saveItem, getItem } from "./kvStore"
-
 // Define the algorithm once
-const algorithm = { name: "AES-CBC", length: 256 }
+const algorithm = { name: "AES-GCM", length: 256 }
 
 // Helper functions for conversions
 function base64ToArrayBuffer(base64: string): ArrayBuffer {
@@ -37,9 +35,9 @@ async function getKey(): Promise<CryptoKey> {
 }
 
 // Encrypt function
-export async function encrypt(obj: any, uniqueKey: string): Promise<string> {
+export async function encrypt(obj: any): Promise<string> {
   const text = JSON.stringify(obj)
-  const iv = crypto.getRandomValues(new Uint8Array(16))
+  const iv = crypto.getRandomValues(new Uint8Array(12))
   const key = await getKey()
 
   const encoder = new TextEncoder()
@@ -49,30 +47,28 @@ export async function encrypt(obj: any, uniqueKey: string): Promise<string> {
     encoder.encode(text),
   )
 
-  // Convert encrypted data and IV to hex strings
-  const encryptedHex = arrayBufferToHex(encryptedBuffer)
-  const ivHex = arrayBufferToHex(iv.buffer)
+  // Combine IV and encrypted data
+  const combinedBuffer = new Uint8Array(iv.length + encryptedBuffer.byteLength)
+  combinedBuffer.set(iv, 0)
+  combinedBuffer.set(new Uint8Array(encryptedBuffer), iv.length)
 
-  // Store the IV
-  await saveItem(`iv:${uniqueKey}`, ivHex)
+  // Convert combined data to hex string
+  const encryptedHex = arrayBufferToHex(combinedBuffer.buffer)
 
   return encryptedHex
 }
 
 // Decrypt function
-export async function decrypt(encryptedHex: string, uniqueKey: string): Promise<any> {
-  const ivHex = await getItem<string>(`iv:${uniqueKey}`)
-  if (!ivHex) {
-    throw new Error("IV not found for the given key")
-  }
+export async function decrypt(encryptedHex: string): Promise<any> {
+  const combinedBuffer = hexToArrayBuffer(encryptedHex)
+  const combinedArray = new Uint8Array(combinedBuffer)
 
-  const ivBuffer = hexToArrayBuffer(ivHex)
-  const iv = new Uint8Array(ivBuffer)
+  const iv = combinedArray.slice(0, 12)
+  const encryptedData = combinedArray.slice(12)
+
   const key = await getKey()
 
-  const encryptedBuffer = hexToArrayBuffer(encryptedHex)
-
-  const decryptedBuffer = await crypto.subtle.decrypt({ ...algorithm, iv }, key, encryptedBuffer)
+  const decryptedBuffer = await crypto.subtle.decrypt({ ...algorithm, iv }, key, encryptedData)
 
   const decoder = new TextDecoder()
   return JSON.parse(decoder.decode(decryptedBuffer))
