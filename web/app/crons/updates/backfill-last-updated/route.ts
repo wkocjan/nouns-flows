@@ -1,11 +1,7 @@
 import "server-only"
 import { NextResponse } from "next/server"
 import database from "@/lib/database"
-import { embeddingsDb } from "@/lib/embedding/db"
-import { embeddings } from "@/lib/embedding/schema"
-import { and, arrayOverlaps, desc, eq } from "drizzle-orm"
 import { getFarcasterUsersByEthAddresses } from "@/lib/farcaster/get-user"
-import { FLOWS_CHANNEL_URL, NOUNS_CHANNEL_URL } from "@/lib/config"
 import { farcasterDb } from "@/lib/database/farcaster"
 
 export const dynamic = "force-dynamic"
@@ -14,62 +10,28 @@ export const maxDuration = 300
 
 async function getFarcasterUsersForGrant(recipient: string) {
   const farcasterUsers = await getFarcasterUsersByEthAddresses([recipient as `0x${string}`])
-  const fids = farcasterUsers.map((user) => user.fid.toString())
-  return {
-    users: [recipient.toLowerCase(), ...fids],
-  }
+  return farcasterUsers
 }
-async function getLatestCast(users: string[], grantId: string) {
-  const embeddingCasts = await embeddingsDb
-    .select({
-      external_id: embeddings.external_id,
-      created_at: embeddings.created_at,
-    })
-    .from(embeddings)
-    .where(
-      and(
-        eq(embeddings.type, "cast"),
-        arrayOverlaps(embeddings.users, users),
-        arrayOverlaps(embeddings.groups, [NOUNS_CHANNEL_URL, FLOWS_CHANNEL_URL]),
-        arrayOverlaps(embeddings.tags, [grantId]),
-      ),
-    )
-    .orderBy((t) => desc(t.created_at))
-    .limit(20)
 
-  // log query
-  console.log({
-    embeddingCasts,
-  })
-
-  if (!embeddingCasts.length) {
-    return []
-  }
-
-  const castIds = embeddingCasts
-    .map((cast) => cast.external_id)
-    .filter((id): id is string => !!id)
-    .map((id) => Buffer.from(id.replace("0x", ""), "hex"))
-
-  const farcasterCasts = await farcasterDb.cast.findMany({
+async function getLatestCast(grantId: string) {
+  const casts = await farcasterDb.cast.findMany({
     where: {
-      hash: {
-        in: castIds,
+      computed_tags: {
+        has: grantId,
       },
-    },
-    select: {
-      created_at: true,
+      parent_hash: null,
+      deleted_at: null,
     },
     orderBy: {
       created_at: "desc",
     },
+    take: 1,
+    select: {
+      created_at: true,
+    },
   })
 
-  if (!farcasterCasts.length) {
-    throw new Error(`No casts found for external IDs: ${castIds.join(", ")}`)
-  }
-
-  return [{ created_at: farcasterCasts[0].created_at }]
+  return casts
 }
 
 export async function GET() {
@@ -87,9 +49,7 @@ export async function GET() {
     let updatedCount = 0
 
     for (const grant of grants) {
-      const { users } = await getFarcasterUsersForGrant(grant.recipient)
-      console.log({ users })
-      const latestCasts = await getLatestCast(users, grant.id)
+      const latestCasts = await getLatestCast(grant.id)
       const lastUpdate = latestCasts[0]?.created_at
 
       if (!lastUpdate) {
