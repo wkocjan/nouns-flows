@@ -1,4 +1,4 @@
-import database from "@/lib/database"
+import database from "@/lib/database/edge"
 import { getPool } from "@/lib/database/queries/pool"
 import { FullDiagram } from "./diagram"
 import { Metadata } from "next"

@@ -1,5 +1,5 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import database from "@/lib/database"
+import database from "@/lib/database/edge"
 import { getPool } from "@/lib/database/queries/pool"
 import {
   AngleIcon,

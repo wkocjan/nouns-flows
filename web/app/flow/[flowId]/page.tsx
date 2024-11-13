@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/table"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { UserProfile } from "@/components/user-profile/user-profile"
-import database from "@/lib/database"
+import database from "@/lib/database/edge"
 import { Status } from "@/lib/enums"
 import { cn, getEthAddress, getIpfsUrl } from "@/lib/utils"
 import { Grant } from "@prisma/flows"

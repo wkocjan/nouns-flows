@@ -1,7 +1,7 @@
 "use server"
 
 import { PERCENTAGE_SCALE } from "@/lib/config"
-import database from "@/lib/database"
+import database from "@/lib/database/edge"
 
 export async function getTokenVotes(contract: `0x${string}`, tokenIds: string[]) {
   if (!tokenIds.length) return []

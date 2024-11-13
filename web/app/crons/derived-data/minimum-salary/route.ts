@@ -1,6 +1,6 @@
 import "server-only"
 
-import database from "@/lib/database"
+import database from "@/lib/database/edge"
 import { NextResponse } from "next/server"
 import { generateMinimumSalary } from "./generate-minimum-salary"
 

@@ -1,6 +1,6 @@
 "use server"
 
-import database from "@/lib/database"
+import database from "@/lib/database/edge"
 
 export async function publishDraft(id: number, transactionHash: string) {
   try {
