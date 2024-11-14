@@ -3,33 +3,30 @@
 import { canDisputeBeExecuted, isDisputeVotingOver } from "@/app/components/dispute/helpers"
 import { SwapTokenButton } from "@/app/token/swap-token-button"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { Currency } from "@/components/ui/currency"
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Status } from "@/lib/enums"
 import { Grant } from "@prisma/flows"
 import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
-import { useAccount } from "wagmi"
+import { useRef } from "react"
 import { AnimatedSalary } from "../animated-salary"
 import { CuratorGrants } from "./curator-grants"
 import { useUserTcrTokens } from "./hooks/use-user-tcr-tokens"
 import { TokenRow } from "./token-row"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Button } from "@/components/ui/button"
 
-export const CuratorPopover = ({ flow }: { flow: Grant }) => {
-  const [isVisible, setIsVisible] = useState(false)
-  const { address } = useAccount()
+interface Props {
+  flow: Grant
+  address: `0x${string}`
+}
+
+export const CuratorPopover = (props: Props) => {
+  const { flow, address } = props
   const { tokens, earnings } = useUserTcrTokens(address)
+
   const closeRef = useRef<HTMLButtonElement>(null)
-
-  useEffect(() => {
-    setIsVisible(!!address)
-  }, [address])
-
-  if (!isVisible) return null
-
   const closePopover = () => closeRef.current?.click()
 
   // active subgrants are all that aren't currently active or didn't resolved non-active

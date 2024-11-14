@@ -28,16 +28,18 @@ export function ErrorMessage({ error, onReset, buttonText, retryText, onRetry }:
                 {error.message.length > 100 && "..."}
               </p>
             )}
-            {onReset && (
-              <Button variant="destructive" size="sm" onClick={onReset}>
-                {buttonText}
-              </Button>
-            )}
-            {onRetry && (
-              <Button variant="default" onClick={onRetry}>
-                {retryText}
-              </Button>
-            )}
+            <div className="flex flex-col gap-2 md:flex-row md:items-center">
+              {onReset && (
+                <Button variant="destructive" onClick={onReset}>
+                  {buttonText}
+                </Button>
+              )}
+              {onRetry && (
+                <Button variant="default" onClick={onRetry}>
+                  {retryText}
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </div>

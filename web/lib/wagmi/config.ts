@@ -10,8 +10,6 @@ declare module "wagmi" {
 
 export const chains = [base, baseSepolia, mainnet] satisfies Chain[]
 
-export type SupportedChainId = (typeof chains)[number]["id"]
-
 export const config = createConfig({
   chains: chains as any,
   transports: {

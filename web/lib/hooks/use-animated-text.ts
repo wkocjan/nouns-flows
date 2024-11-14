@@ -3,7 +3,7 @@
 import { animate } from "framer-motion"
 import { useEffect, useState } from "react"
 
-export function useAnimatedText(text: string, split: "char" | "word" = "char") {
+export function useAnimatedText(text: string, split: "char" | "word" = "char", skip = false) {
   const [cursor, setCursor] = useState(0)
   const [startingCursor, setStartingCursor] = useState(0)
   const [prevText, setPrevText] = useState(text)
@@ -16,6 +16,7 @@ export function useAnimatedText(text: string, split: "char" | "word" = "char") {
   }
 
   useEffect(() => {
+    if (skip) return
     const controls = animate(startingCursor, text.split(delimiter).length, {
       duration: 4,
       ease: "easeOut",
@@ -25,7 +26,8 @@ export function useAnimatedText(text: string, split: "char" | "word" = "char") {
     })
 
     return () => controls.stop()
-  }, [startingCursor, text, delimiter])
+  }, [startingCursor, text, delimiter, skip])
 
+  if (skip) return text
   return text.split(delimiter).slice(0, cursor).join(delimiter)
 }

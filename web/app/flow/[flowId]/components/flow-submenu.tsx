@@ -2,8 +2,9 @@
 
 import { SwapTokenButton } from "@/app/token/swap-token-button"
 import { Button } from "@/components/ui/button"
+import { isGrantApproved, isGrantAwaiting } from "@/lib/database/helpers"
 import { useERC20Balances } from "@/lib/tcr/use-erc20-balances"
-import { cn, getEthAddress, isGrantApproved, isGrantAwaiting } from "@/lib/utils"
+import { cn, getEthAddress } from "@/lib/utils"
 import { Grant } from "@prisma/flows"
 import Link from "next/link"
 import { useSelectedLayoutSegment } from "next/navigation"
