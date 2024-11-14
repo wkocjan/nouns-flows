@@ -24,9 +24,15 @@ export function ActionCardContent(props: Props) {
 
   const hasSubmitted = useRef(false)
 
-  const { object, submit, isLoading } = useObject({
+  const { object, submit, isLoading, error } = useObject({
     api: "/api/action-card",
     schema: guidanceSchema,
+    onError: (error) => {
+      console.error("An error occurred:", error)
+      if (shouldRetry(error)) {
+        retrySubmit(1, "Hello", submit)
+      }
+    },
   })
 
   const animatedText = useAnimatedText(props.text || object?.text || "", "char", !animated)
@@ -48,6 +54,7 @@ export function ActionCardContent(props: Props) {
       <div className="mb-5 mt-2.5 space-y-4 text-sm text-secondary-foreground/75 [&>*]:leading-loose">
         {isLoading && <DotLoader />}
         {!isLoading && <Markdown>{animatedText}</Markdown>}
+        {error && <p className="text-destructive">An error occurred: {error.message}</p>}
       </div>
 
       {action?.text && (
@@ -65,4 +72,25 @@ export function ActionCardContent(props: Props) {
       )}
     </>
   )
+}
+
+const maxRetries = 3
+const retryDelay = 1000
+function shouldRetry(error: Error) {
+  return (
+    error.message.includes("Network Error") ||
+    error.message.includes("Network connection lost") ||
+    error.message.includes("Failed to fetch")
+  )
+}
+
+function retrySubmit(attempt: number, input: string, submit: (input: string) => void) {
+  if (attempt <= maxRetries) {
+    setTimeout(() => {
+      console.log(`Retrying... Attempt ${attempt}`)
+      submit(input)
+    }, retryDelay * attempt)
+  } else {
+    console.error("Max retry attempts reached. Please try again later.")
+  }
 }
