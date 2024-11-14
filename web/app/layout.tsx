@@ -1,6 +1,5 @@
 import { CuratorPopover } from "@/components/global/curator-popover/curator-popover"
 import Highlight from "@/components/global/Highlight"
-import { HighlightErrorBoundary } from "@/components/global/HighlightErrorBoundary"
 import { MenuDesktop, MenuMobile } from "@/components/global/menu"
 import { MenuAvatar } from "@/components/global/menu-avatar"
 import { RecipientPopover } from "@/components/global/recipient-popover/recipient-popover"
@@ -19,6 +18,14 @@ import { Roboto_Mono } from "next/font/google"
 import Image from "next/image"
 import Link from "next/link"
 import "./globals.css"
+import dynamic from "next/dynamic"
+
+// Dynamically import HighlightErrorBoundary
+const HighlightErrorBoundary = dynamic(
+  () =>
+    import("@/components/global/HighlightErrorBoundary").then((mod) => mod.HighlightErrorBoundary),
+  { ssr: false },
+)
 
 export const runtime = "nodejs"
 

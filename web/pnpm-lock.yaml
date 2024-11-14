@@ -30,8 +30,8 @@ importers:
         specifier: ^1.1.4
         version: 1.1.4
       '@highlight-run/next':
-        specifier: ^7.6.4
-        version: 7.6.4(@opentelemetry/api@1.9.0)(encoding@0.1.13)(next@14.2.14(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^7.6.8
+        version: 7.6.8(@opentelemetry/api@1.9.0)(encoding@0.1.13)(next@14.2.14(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@lodestar/types':
         specifier: ^1.22.0
         version: 1.22.0
@@ -1288,23 +1288,23 @@ packages:
   '@highlight-run/cloudflare@2.1.9':
     resolution: {integrity: sha512-RLuEDEd3sVZQ34WnLayiXQcdqss7g6Ss5kMw9uJ2bRU0S3Ga3aY3G/+bs+ng3xY+WD//iUxFETLGjdjc3mzEMg==}
 
-  '@highlight-run/next@7.6.4':
-    resolution: {integrity: sha512-3zzjshoSivrx+YJjNXqroFpnnL0XJ7ycovPS6ExB8NBrbupfMuA+N261g4z3R7Xn0Euxh46/jwAaxnaCspG8zg==}
+  '@highlight-run/next@7.6.8':
+    resolution: {integrity: sha512-nBauovBlp2YRmnq3PtZueC707NsGlWKpsWX9lCB40TBiM1xgs5NwewlGROcWG4Qh1HRRxOt0aDEy1cRhs6Mvzg==}
     peerDependencies:
       next: '>=13'
       react: '>=17'
 
-  '@highlight-run/node@3.9.6':
-    resolution: {integrity: sha512-IKd27D1FZWnzkF4+TNJ9z5p+a0Ekn9U9ocKrSL7pwQae+vosrd7vpUNqsHsjIAjKuuEDxHz97J8B2EcmJlUzAA==}
+  '@highlight-run/node@3.10.1':
+    resolution: {integrity: sha512-4Tb1zOt+ZFHBIAoNsCQ5VBlLSwpmEzaCHk/w4AlK2OSVm39oyV5TQqY6kTsOHahxI+oshENMH0DjTmG143L+SQ==}
 
   '@highlight-run/opentelemetry-sdk-workers@1.0.8':
     resolution: {integrity: sha512-MVlJnbjNptsMykWSFONF/+RFOLKTQm4nErc/9AOaJjRyMKYWjwrAgjUNknl7nkFGtOsIAisdvKJ7ISmIuxyTag==}
     engines: {node: '>=14'}
 
-  '@highlight-run/react@7.0.2':
-    resolution: {integrity: sha512-Q+HPdYjmcH53vxQvXDlu6TuQCOiZR6++tFz7OPqveD2SkoLRnDZmUdRv0LUxGovATs1b8LhVRxZSX7NG/5l06g==}
+  '@highlight-run/react@7.0.3':
+    resolution: {integrity: sha512-gJd3oaDC59cPSkTkNVFVeB9NEpnZzIk5nj5hVuxg4gRUYW2R6S+4Sho01u1oBTpN3WGf4KdMDq4IIoB5EFEnPw==}
     peerDependencies:
-      highlight.run: 9.5.2
+      highlight.run: 9.5.3
       react: '>=16'
       react-dom: '>=16'
 
@@ -4381,8 +4381,8 @@ packages:
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
-  electron-to-chromium@1.5.56:
-    resolution: {integrity: sha512-7lXb9dAvimCFdvUMTyucD4mnIndt/xhRKFAlky0CyFogdnNmdPQNoHI23msF/2V4mpTxMzgMdjK4+YRlFlRQZw==}
+  electron-to-chromium@1.5.58:
+    resolution: {integrity: sha512-al2l4r+24ZFL7WzyPTlyD0fC33LLzvxqLCwurtBibVPghRGO9hSTl+tis8t1kD7biPiH/en4U0I7o/nQbYeoVA==}
 
   elliptic@6.5.4:
     resolution: {integrity: sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ==}
@@ -4824,8 +4824,8 @@ packages:
   flow-enums-runtime@0.0.6:
     resolution: {integrity: sha512-3PYnM29RFXwvAN6Pc/scUfkI7RwhQ/xqyLUyPNlXUp9S40zI8nup9tUSrTLSVnWGBN38FNiGWbwZOB6uR4OGdw==}
 
-  flow-parser@0.252.0:
-    resolution: {integrity: sha512-z8hKPUjZ33VLn4HVntifqmEhmolUMopysnMNzazoDqo1GLUkBsreLNsxETlKJMPotUWStQnen6SGvUNe1j4Hlg==}
+  flow-parser@0.253.0:
+    resolution: {integrity: sha512-EbxtzRIzp8dDSzTloPhsc6uOvrEFIyu08cqQzXBWLAgxK+i2d/5qOos9ryQHRmk+RyDDXfnz/7qteh3jnAlc4w==}
     engines: {node: '>=0.4.0'}
 
   follow-redirects@1.15.9:
@@ -5107,8 +5107,8 @@ packages:
   hey-listen@1.0.8:
     resolution: {integrity: sha512-COpmrF2NOg4TBWUJ5UVyaCU2A88wEMkUPK4hNqyCkqHbxT92BbvfjoSozkAIIm6XhicGlJHhFdullInrdhwU8Q==}
 
-  highlight.run@9.5.2:
-    resolution: {integrity: sha512-AJztMQWwuigNz4RmdaThAtk5DPQBYeVwBUx0jMG+y2nLiwjATXAWscJbKoPgBq5ER67q5OV2ymVDZOtjMLIybw==}
+  highlight.run@9.5.3:
+    resolution: {integrity: sha512-SIV7eCtv5BJPvJUwzxWmhBA60w3DyKZYli2dpWooDuI1MpfSho9IjILcxcERUwUYL8E/deihJEQmZlZp3NvHRA==}
 
   hmac-drbg@1.0.1:
     resolution: {integrity: sha512-Tti3gMqLdZfhOQY1Mzf/AanLiqh1WTiJgEj26ZuYQ9fbkLomzGchCws4FyrSd4VkpBfiNhaE1On+lOz894jvXg==}
@@ -9745,14 +9745,14 @@ snapshots:
       - '@opentelemetry/api'
       - supports-color
 
-  '@highlight-run/next@7.6.4(@opentelemetry/api@1.9.0)(encoding@0.1.13)(next@14.2.14(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@highlight-run/next@7.6.8(@opentelemetry/api@1.9.0)(encoding@0.1.13)(next@14.2.14(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@highlight-run/cloudflare': 2.1.9(@opentelemetry/api@1.9.0)
-      '@highlight-run/node': 3.9.6
+      '@highlight-run/node': 3.10.1
       '@highlight-run/opentelemetry-sdk-workers': 1.0.8
-      '@highlight-run/react': 7.0.2(highlight.run@9.5.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@highlight-run/react': 7.0.3(highlight.run@9.5.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@highlight-run/sourcemap-uploader': 0.6.3(encoding@0.1.13)
-      highlight.run: 9.5.2
+      highlight.run: 9.5.3
       js-cookie: 3.0.5
       next: 14.2.14(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
@@ -9762,7 +9762,11 @@ snapshots:
       - react-dom
       - supports-color
 
-  '@highlight-run/node@3.9.6': {}
+  '@highlight-run/node@3.10.1':
+    dependencies:
+      require-in-the-middle: 7.4.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@highlight-run/opentelemetry-sdk-workers@1.0.8':
     dependencies:
@@ -9778,9 +9782,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@highlight-run/react@7.0.2(highlight.run@9.5.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@highlight-run/react@7.0.3(highlight.run@9.5.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      highlight.run: 9.5.2
+      highlight.run: 9.5.3
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
@@ -13006,7 +13010,7 @@ snapshots:
   browserslist@4.24.2:
     dependencies:
       caniuse-lite: 1.0.30001680
-      electron-to-chromium: 1.5.56
+      electron-to-chromium: 1.5.58
       node-releases: 2.0.18
       update-browserslist-db: 1.1.1(browserslist@4.24.2)
 
@@ -13565,7 +13569,7 @@ snapshots:
 
   ee-first@1.1.1: {}
 
-  electron-to-chromium@1.5.56: {}
+  electron-to-chromium@1.5.58: {}
 
   elliptic@6.5.4:
     dependencies:
@@ -14247,7 +14251,7 @@ snapshots:
 
   flow-enums-runtime@0.0.6: {}
 
-  flow-parser@0.252.0: {}
+  flow-parser@0.253.0: {}
 
   follow-redirects@1.15.9: {}
 
@@ -14629,7 +14633,7 @@ snapshots:
 
   hey-listen@1.0.8: {}
 
-  highlight.run@9.5.2: {}
+  highlight.run@9.5.3: {}
 
   hmac-drbg@1.0.1:
     dependencies:
@@ -15107,7 +15111,7 @@ snapshots:
       '@babel/register': 7.25.9(@babel/core@7.26.0)
       babel-core: 7.0.0-bridge.0(@babel/core@7.26.0)
       chalk: 4.1.2
-      flow-parser: 0.252.0
+      flow-parser: 0.253.0
       graceful-fs: 4.2.11
       micromatch: 4.0.8
       neo-async: 2.6.2
