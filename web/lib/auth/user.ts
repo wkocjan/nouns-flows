@@ -1,5 +1,6 @@
 import "server-only"
 
+import { cache } from "react"
 import { getFarcasterUserByEthAddress } from "../farcaster/get-user"
 import { getShortEthAddress } from "../utils"
 import { getEnsAvatar, getEnsNameFromAddress } from "./ens"
@@ -11,7 +12,7 @@ export type User = {
   avatar?: string
 }
 
-export async function getUser() {
+export const getUser = cache(async () => {
   const address = await getUserAddressFromCookie()
   if (!address) return undefined
 
@@ -23,4 +24,4 @@ export async function getUser() {
       farcasterUser?.fname || (await getEnsNameFromAddress(address)) || getShortEthAddress(address),
     avatar: farcasterUser?.avatar_url || (await getEnsAvatar(address)) || undefined,
   } satisfies User
-}
+})

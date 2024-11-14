@@ -11,12 +11,11 @@ type Props = Omit<ChatBody, "messages"> & {
 }
 
 export async function saveConversation(props: Props) {
-  const { messages, id, type, domain, data, address } = props
+  const { messages, id, type, data, address } = props
 
   const update = {
     type,
-    domain,
-    data: JSON.stringify(data),
+    data: JSON.stringify(data || {}),
     messages: JSON.stringify(messages),
     user: address || "guest",
     attachments: extractAttachments(messages),

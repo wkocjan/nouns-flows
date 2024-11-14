@@ -9,6 +9,8 @@ export type Tool = {
 export function getToolsPrompt(tools: Tool[]) {
   return `
     # Tools 
+    You have access to the following tools
+    
     ${tools.map((tool) => `## ${tool.name}\n ${tool.prompt}`).join("\n\n")}`
 }
 

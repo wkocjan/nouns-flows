@@ -9,8 +9,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { isGrantApproved } from "@/lib/database/helpers"
 import { Status } from "@/lib/enums"
-import { getIpfsUrl, isGrantApproved } from "@/lib/utils"
+import { getIpfsUrl } from "@/lib/utils"
 import { Grant } from "@prisma/flows"
 import Image from "next/image"
 import Link from "next/link"

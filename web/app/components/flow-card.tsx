@@ -1,5 +1,6 @@
 import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
-import { getIpfsUrl, isGrantApproved } from "@/lib/utils"
+import { isGrantApproved } from "@/lib/database/helpers"
+import { getIpfsUrl } from "@/lib/utils"
 import { Grant } from "@prisma/flows"
 import Image from "next/image"
 import Link from "next/link"
