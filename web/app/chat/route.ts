@@ -12,29 +12,33 @@ export const runtime = "nodejs"
 
 export async function POST(request: Request) {
   const body: ChatBody = await request.json()
-  const { messages, type, domain } = body
+  const { messages, type, context } = body
 
-  const address = await getUserAddressFromCookie()
-  const data = { ...body.data, address }
+  try {
+    const address = await getUserAddressFromCookie()
+    const data = { ...body.data, address }
 
-  const agent = await getAgent(type, domain, data)
+    const agent = await getAgent(type, data)
 
-  const coreMessages = convertToCoreMessages(messages)
+    const coreMessages = convertToCoreMessages(messages)
 
-  const result = await streamText({
-    model: anthropic("claude-3-5-sonnet-20241022"),
-    system: agent.prompt + getAttachmentsPrompt(coreMessages),
-    messages: coreMessages,
-    tools: agent.tools,
-    maxSteps: 7,
-    onFinish: async ({ responseMessages }) => {
-      saveConversation({
-        ...body,
-        messages: [...coreMessages, ...responseMessages],
-        address,
-      })
-    },
-  })
+    const result = await streamText({
+      model: anthropic("claude-3-5-sonnet-20241022"),
+      system: agent.prompt + getAttachmentsPrompt(coreMessages) + context,
+      messages: coreMessages,
+      tools: agent.tools,
+      maxSteps: 7,
+      onFinish: async ({ responseMessages }) => {
+        saveConversation({
+          ...body,
+          messages: [...coreMessages, ...responseMessages],
+          address,
+        })
+      },
+    })
 
-  return result.toDataStreamResponse({})
+    return result.toDataStreamResponse({})
+  } catch (error) {
+    return new Response((error as any).message || "Internal server error", { status: 500 })
+  }
 }

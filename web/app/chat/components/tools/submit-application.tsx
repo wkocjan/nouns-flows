@@ -10,7 +10,7 @@ export const SubmitApplicationResult = (props: Props) => {
   if (isNaN(draftId)) return null
 
   return (
-    <Link href={`/draft/${draftId}`}>
+    <Link href={`/draft/${draftId}`} className="py-3">
       <Button size="lg" variant="default" className="w-fit">
         View your application →
       </Button>

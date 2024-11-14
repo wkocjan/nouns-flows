@@ -47,9 +47,9 @@ export const Markdown = (props: Props) => {
               return <a {...props} />
             },
           },
-          ul: { props: { className: "list-disc list-inside space-y-4" } },
-          ol: { props: { className: "list-none space-y-4" } },
-          li: { props: { className: "[&>*]:inline-block leading-relaxed" } },
+          ul: { props: { className: "list-disc ml-6 space-y-4" } },
+          ol: { props: { className: "list-decimal ml-6 space-y-4" } },
+          li: { props: { className: "leading-relaxed pl-2" } },
           h1: { props: { className: "text-[1.25em] font-medium tracking-tight" } },
           h2: { props: { className: "text-[1.15em] font-medium tracking-tight" } },
           h3: { props: { className: "font-medium tracking-tight" } },

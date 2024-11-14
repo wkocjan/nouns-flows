@@ -1,3 +1,4 @@
+import { DotLoader } from "@/components/ui/dot-loader"
 import { useScrollToBottom } from "@/lib/hooks/use-scroll-to-bottom"
 import { useEffect } from "react"
 import { useAgentChat } from "./agent-chat"
@@ -5,7 +6,7 @@ import { ErrorMessage } from "./error-message"
 import { MessageItem } from "./message-item"
 
 export const Messages = () => {
-  const { messages, error, append, restart } = useAgentChat()
+  const { messages, error, append, restart, isLoading } = useAgentChat()
   const [messagesContainerRef, messagesEndRef] = useScrollToBottom<HTMLDivElement>()
 
   // Scroll to bottom on initial load and when messages change
@@ -43,6 +44,12 @@ export const Messages = () => {
             window.location.reload()
           }}
         />
+      )}
+
+      {isLoading && (
+        <div className="flex justify-center">
+          <DotLoader />
+        </div>
       )}
 
       <div ref={messagesEndRef} className="min-h-[24px] min-w-[24px] shrink-0" />

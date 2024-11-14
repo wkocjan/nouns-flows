@@ -1,17 +1,17 @@
 "use client"
 
+import { Markdown } from "@/components/ui/markdown"
 import Flo from "@/public/flo.png"
 import { Attachment, ToolInvocation } from "ai"
 import Image from "next/image"
 import { ReactNode } from "react"
 import { PreviewAttachment } from "./preview-attachment"
 import { SubmitApplicationResult } from "./tools/submit-application"
-import { Markdown } from "@/components/ui/markdown"
 
 interface Props {
   role: string
   content: string | ReactNode
-  toolInvocations: Array<ToolInvocation> | undefined
+  toolInvocations?: Array<ToolInvocation> | undefined
   attachments?: Array<Attachment>
 }
 
@@ -53,7 +53,7 @@ export const MessageItem = (props: Props) => {
         </div>
       </div>
       {toolInvocations && (
-        <div className="mt-4 flex flex-col items-center gap-2 py-3">
+        <div className="mt-4 flex flex-col items-center gap-2">
           {toolInvocations.map((tool) => {
             const { toolName, toolCallId, state } = tool
 
@@ -64,12 +64,6 @@ export const MessageItem = (props: Props) => {
                 default:
                   return null
               }
-            } else {
-              return (
-                <div key={toolCallId} className="animate-pulse text-xs text-muted-foreground">
-                  Please wait...
-                </div>
-              )
             }
           })}
         </div>

@@ -5,18 +5,22 @@ import { Messages } from "@/app/chat/components/messages"
 import { MultimodalInput } from "@/app/chat/components/multimodal-input"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { useLogin } from "@/lib/auth/use-login"
 import { User } from "@/lib/auth/user"
 import { RotateCcw } from "lucide-react"
 import { useState } from "react"
 
 interface Props {
   user?: User
+  children: string
+  context: string
 }
 
 export function GuidanceChat(props: Props) {
-  const { user } = props
+  const { user, children: buttonText, context } = props
   const [isOpen, setIsOpen] = useState(false)
-  const { append, messages, restart } = useAgentChat()
+  const { append, messages, restart, setContext } = useAgentChat()
+  const { login } = useLogin()
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -25,11 +29,17 @@ export function GuidanceChat(props: Props) {
         size="md"
         type="button"
         onClick={() => {
+          if (!user) return login()
           setIsOpen(true)
-          if (messages.length === 0) append({ role: "user", content: "Hello!" })
+          if (messages.length === 0) {
+            setContext(
+              `User just clicked the "${buttonText}" button to open chat with you. This happened after he saw this message on homepage: ${context}`,
+            )
+            append({ role: "user", content: buttonText })
+          }
         }}
       >
-        Tell me more
+        {buttonText}
       </Button>
       <DialogContent className="max-w-none pb-0 max-sm:px-0">
         <DialogHeader className="max-sm:px-4">

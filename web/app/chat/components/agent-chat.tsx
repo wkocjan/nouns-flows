@@ -1,18 +1,18 @@
 "use client"
 
-import { AgentDomain, AgentType } from "@/lib/ai/agents/agent"
+import { AgentType } from "@/lib/ai/agents/agent"
 import { User } from "@/lib/auth/user"
 import { Attachment, Message } from "ai"
 import { useChat, UseChatHelpers } from "ai/react"
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react"
+import { ChatBody, ChatData } from "../chat-body"
 import { useChatHistory } from "./use-chat-history"
 
 interface Props {
   id: string
   type: AgentType
-  domain: AgentDomain
   user?: User
-  data?: { flowId?: string }
+  data?: ChatData
   initialMessages?: Message[]
 }
 
@@ -21,19 +21,22 @@ interface AgentChatContext extends UseChatHelpers {
   attachments: Attachment[]
   setAttachments: React.Dispatch<React.SetStateAction<Attachment[]>>
   user?: User
+  context: string
+  setContext: React.Dispatch<React.SetStateAction<string>>
 }
 
 const AgentChatContext = createContext<AgentChatContext | undefined>(undefined)
 
 export function AgentChatProvider(props: PropsWithChildren<Props>) {
-  const { id, type, domain, user, data, initialMessages, children } = props
+  const { id, type, user, initialMessages, children, data } = props
   const { readChatHistory, storeChatHistory, resetChatHistory } = useChatHistory({ id })
   const [attachments, setAttachments] = useState<Array<Attachment>>([])
+  const [context, setContext] = useState("")
 
   const chat = useChat({
     id,
     api: `/chat`,
-    body: { type, domain, id, data },
+    body: { type, id, data, context } satisfies Omit<ChatBody, "messages">,
     initialMessages: initialMessages || readChatHistory(),
     keepLastMessageOnError: true,
   })
@@ -54,7 +57,9 @@ export function AgentChatProvider(props: PropsWithChildren<Props>) {
   }, [chat.messages])
 
   return (
-    <AgentChatContext.Provider value={{ ...chat, restart, attachments, setAttachments, user }}>
+    <AgentChatContext.Provider
+      value={{ ...chat, restart, attachments, setAttachments, user, context, setContext }}
+    >
       {children}
     </AgentChatContext.Provider>
   )

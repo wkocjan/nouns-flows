@@ -20,7 +20,7 @@ export default async function ApplyPage(props: Props) {
   const chatId = `chat-${flow.id}-${user?.address}`
 
   return (
-    <AgentChatProvider id={chatId} type="flo" domain="application" user={user} data={{ flowId }}>
+    <AgentChatProvider id={chatId} type="flo" user={user} data={{ flowId }}>
       <ApplicationChat flow={flow} title={flow.title} subtitle="Grant application" />
     </AgentChatProvider>
   )
