@@ -25,7 +25,7 @@ export const MessageItem = (props: Props) => {
     >
       <div className="flex w-full max-w-full gap-4 group-data-[role=user]/message:ml-auto group-data-[role=user]/message:w-fit md:group-data-[role=user]/message:max-w-xl">
         {role === "assistant" && (
-          <div className="flex size-[40px] shrink-0 items-center justify-center overflow-hidden rounded-full ring-1 ring-border md:size-10">
+          <div className="flex size-[28px] shrink-0 items-center justify-center overflow-hidden rounded-full ring-1 ring-border md:size-10 md:size-[40px]">
             <Image
               src={Flo}
               alt="Noggles"

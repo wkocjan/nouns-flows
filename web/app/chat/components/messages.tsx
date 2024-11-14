@@ -7,16 +7,18 @@ import { MessageItem } from "./message-item"
 export const Messages = () => {
   const { messages, error, append, restart, isLoading } = useAgentChat()
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const isInitialLoad = useRef(true)
 
-  // Scroll to bottom on initial load and when messages change
+  // Scroll to bottom only on initial load
   useEffect(() => {
-    if (messagesEndRef.current) {
+    if (isInitialLoad.current && messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+      isInitialLoad.current = false
     }
-  }, [messages, messagesEndRef])
+  }, [messages])
 
   return (
-    <div className="flex min-w-0 flex-1 flex-col gap-6 overflow-y-auto md:pt-6">
+    <div className="scrollbar scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent flex min-w-0 flex-1 flex-col gap-6 overflow-y-auto md:pt-6">
       {messages.map((message) => (
         <MessageItem
           key={message.id}
