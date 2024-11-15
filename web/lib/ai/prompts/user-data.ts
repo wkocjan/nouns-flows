@@ -53,7 +53,12 @@ async function getFarcasterAccountPrompt(
     fid: Number(u.fid), // Convert BigInt to Number for JSON serialization
   }))
 
-  if (farcasterUsers.length === 0) return { farcasterAccountPrompt: "", fid: 0 }
+  if (farcasterUsers.length === 0)
+    return {
+      farcasterAccountPrompt:
+        "The user has no Farcaster accounts connected to the address. Please prompt them to verify their address by asking them to visit the link: https://warpcast.com/~/settings/verified-addresses",
+      fid: 0,
+    }
 
   const channelIds = []
   for (const user of farcasterUsers) {

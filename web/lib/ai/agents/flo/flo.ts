@@ -7,6 +7,7 @@ import { getUserDataPrompt } from "../../prompts/user-data"
 import { applicationTemplateTool } from "../../tools/application-template/tool"
 import { Agent } from "../agent"
 import { floPersonalityPrompt } from "./personality"
+import { getAllNounishCitizensPrompt } from "../../prompts/nounish-citizens"
 
 export async function getFlo(data: ChatData): Promise<Agent> {
   const tools = [queryEmbeddingsTool, submitApplicationTool, applicationTemplateTool]
@@ -22,6 +23,7 @@ async function getFloPrompt(data: ChatData, tools: Tool[]) {
   prompt += `${floPersonalityPrompt}\n`
   prompt += await getUserDataPrompt(data.address)
   prompt += getDataPrompt(data)
+  prompt += await getAllNounishCitizensPrompt()
   prompt += getToolsPrompt(tools)
 
   return prompt
