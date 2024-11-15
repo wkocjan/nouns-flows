@@ -7,20 +7,19 @@ import { RefreshOnFocus } from "@/components/global/refresh-on-focus"
 import { ThemeProvider } from "@/components/global/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import { getUser } from "@/lib/auth/user"
+import { getUser, hasSession } from "@/lib/auth/user"
 import { getPool } from "@/lib/database/queries/pool"
 import Wagmi from "@/lib/wagmi/wagmi-provider"
 import Noggles from "@/public/noggles.svg"
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import type { Metadata } from "next"
+import dynamic from "next/dynamic"
 import { Roboto_Mono } from "next/font/google"
 import Image from "next/image"
 import Link from "next/link"
 import "./globals.css"
-import dynamic from "next/dynamic"
 
-// Dynamically import HighlightErrorBoundary
 const HighlightErrorBoundary = dynamic(
   () =>
     import("@/components/global/HighlightErrorBoundary").then((mod) => mod.HighlightErrorBoundary),
@@ -80,7 +79,7 @@ export default async function RootLayout(props: Readonly<{ children: React.React
                     <div className="flex items-center justify-end space-x-2.5 lg:w-1/5">
                       {user && <RecipientPopover address={user.address} />}
                       {user && <CuratorPopover flow={pool} address={user.address} />}
-                      <MenuAvatar user={user} />
+                      <MenuAvatar user={user} hasSession={hasSession()} />
                       <MenuMobile />
                     </div>
                   </nav>

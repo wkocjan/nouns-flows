@@ -1,10 +1,9 @@
 "use client"
 
 import { Card, CardContent } from "@/components/ui/card"
-import { SkeletonLoader } from "@/components/ui/skeleton"
 import { useVoting } from "@/lib/voting/voting-context"
 import { Grant } from "@prisma/flows"
-import { ReactNode, Suspense } from "react"
+import { ReactNode } from "react"
 import { FlowCard } from "./flow-card"
 import { FlowsTable } from "./flows-table"
 

@@ -1,5 +1,6 @@
 import "server-only"
 
+import { cookies } from "next/headers"
 import { cache } from "react"
 import { getFarcasterUserByEthAddress } from "../farcaster/get-user"
 import { getShortEthAddress } from "../utils"
@@ -25,3 +26,5 @@ export const getUser = cache(async () => {
     avatar: farcasterUser?.avatar_url || (await getEnsAvatar(address)) || undefined,
   } satisfies User
 })
+
+export const hasSession = () => Boolean(cookies().get("privy-session"))

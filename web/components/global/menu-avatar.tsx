@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { useIsGuest } from "@/lib/auth/use-is-guest"
 import { useLogin } from "@/lib/auth/use-login"
 import { User } from "@/lib/auth/user"
 import { MAX_VOTING_POWER, NOUNS_TOKEN } from "@/lib/config"
@@ -12,20 +13,23 @@ import Image from "next/image"
 import { useRef } from "react"
 import { mainnet } from "viem/chains"
 import { Alert, AlertDescription } from "../ui/alert"
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { Avatar, AvatarImage } from "../ui/avatar"
 import { LoginButton } from "./login-button"
 import { ModeToggle } from "./mode-toggle"
 
 interface Props {
   user?: User
+  hasSession: boolean
 }
 
 export const MenuAvatar = (props: Props) => {
-  const { user } = props
+  const { user, hasSession } = props
   const { votingPower } = useVotingPower()
   const closeRef = useRef<HTMLButtonElement>(null)
   const { tokens } = useDelegatedTokens(user?.address)
   const { logout } = useLogin()
+
+  const isGuest = useIsGuest(user, hasSession)
 
   return (
     <div className="inline-flex">
@@ -78,7 +82,7 @@ export const MenuAvatar = (props: Props) => {
           </PopoverContent>
         </Popover>
       )}
-      {!user && <LoginButton />}
+      {isGuest && <LoginButton />}
     </div>
   )
 }
