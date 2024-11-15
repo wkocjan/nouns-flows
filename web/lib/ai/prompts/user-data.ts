@@ -3,17 +3,24 @@ import { cache } from "react"
 import { getEthAddress } from "@/lib/utils"
 import { getFarcasterUsersByEthAddress } from "@/lib/farcaster/get-user"
 import { getFarcasterUserChannels } from "@/lib/farcaster/get-user-channels"
+import { embeddingsDb } from "@/lib/embedding/db"
+import { eq, and, arrayContains, desc } from "drizzle-orm"
+import { embeddings } from "@/lib/embedding/schema"
 
 export const getUserDataPrompt = cache(async (address?: string) => {
+  const { farcasterAccountPrompt, fid } = await getFarcasterAccountPrompt(address)
+
   return `## User data
   
   ${address ? `The address of the user is ${address}. ` : "The user is not logged in."}
   
-  ${address ? await getFarcasterAccountPrompt(address) : ""}
+  ${farcasterAccountPrompt}
 
   ${getLocationPrompt()}
 
   ${getUserAgentPrompt()}
+
+  ${fid ? await getBuilderProfilePrompt(fid) : ""}
   `
 })
 
@@ -34,7 +41,10 @@ function getUserAgentPrompt(): string {
   return `### User agent\n\nHere is the user agent: ${userAgent}. If the user is on mobile, you should be incredibly concise and to the point. They do not have a lot of time or space to read, so you must be incredibly concise and keep your questions and responses to them short in as few words as possible, unless they ask for clarification or it's otherwise necessary.`
 }
 
-async function getFarcasterAccountPrompt(address: string): Promise<string> {
+async function getFarcasterAccountPrompt(
+  address?: string,
+): Promise<{ farcasterAccountPrompt: string; fid: number }> {
+  if (!address) return { farcasterAccountPrompt: "", fid: 0 }
   const farcasterUsers = (await getFarcasterUsersByEthAddress(getEthAddress(address))).map((u) => ({
     username: u.fname,
     displayName: u.display_name,
@@ -43,7 +53,7 @@ async function getFarcasterAccountPrompt(address: string): Promise<string> {
     fid: Number(u.fid), // Convert BigInt to Number for JSON serialization
   }))
 
-  if (farcasterUsers.length === 0) return ""
+  if (farcasterUsers.length === 0) return { farcasterAccountPrompt: "", fid: 0 }
 
   const channelIds = []
   for (const user of farcasterUsers) {
@@ -51,11 +61,38 @@ async function getFarcasterAccountPrompt(address: string): Promise<string> {
     channelIds.push(...channels.map((c) => c.channelId))
   }
 
-  return `Here is the list of Farcaster users that are connected to the ${address}: ${JSON.stringify(farcasterUsers)}. You may learn something about the user from this information.
+  const prompt = `Here is the list of Farcaster users that are connected to the ${address}: ${JSON.stringify(farcasterUsers)}. You may learn something about the user from this information.
   
     The user is a member of the following Farcaster channels: ${JSON.stringify(Array.from(new Set(channelIds)))}.
   
     If the user has exactly one Farcaster account connected to the address, you can use it for the application. Inform briefly the user that their Farcaster account will be used for the application. If user has more Farcaster accounts, you can ask them to pick one.
     
     In context of Farcaster account please refer to the 'username' field (@username), not 'displayName'.`
+
+  return { farcasterAccountPrompt: prompt, fid: farcasterUsers[0].fid }
+}
+
+async function getBuilderProfilePrompt(fid: number): Promise<string> {
+  const builderProfiles = await embeddingsDb
+    .select()
+    .from(embeddings)
+    .where(
+      and(
+        arrayContains(embeddings.users, [fid.toString()]),
+        eq(embeddings.type, "builder-profile"),
+      ),
+    )
+    .orderBy(desc(embeddings.created_at))
+    .limit(1)
+
+  const builderProfile = builderProfiles[0]
+
+  if (!builderProfile) {
+    console.error(`No builder profile found for fid ${fid}`)
+    return ""
+  }
+
+  return `Here is a builder profile for the user, compiled from all of their public posts on Farcaster.
+  ${JSON.stringify(builderProfile.raw_content)}
+  `
 }
