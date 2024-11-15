@@ -16,6 +16,8 @@ export const embeddings = pgTable("embeddings", {
   external_id: text("external_id"), // id helpful for linking to other tables / documents
   urls: text("urls").array(), // Array of urls
   url_summaries: text("url_summaries").array(), // Array of url summaries
+  raw_content: text("raw_content"), // Raw content from the source
+  external_url: text("external_url"), // External url from the source
 })
 
 export type Embedding = typeof embeddings.$inferSelect

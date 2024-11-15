@@ -46,6 +46,7 @@ model Cast {
   root_parent_url  String?
   profile          Profile   @relation(fields: [fid], references: [fid])
   computed_tags    String[]
+  embed_summaries  String[]
 
   @@map("farcaster_casts") 
   @@schema("production")
