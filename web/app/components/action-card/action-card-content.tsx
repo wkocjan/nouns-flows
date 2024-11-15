@@ -57,19 +57,27 @@ export function ActionCardContent(props: Props) {
         {error && <p className="text-destructive">An error occurred: {error.message}</p>}
       </div>
 
-      {action?.text && (
-        <motion.div animate={animated ? { opacity: [0, 1] } : {}} transition={{ delay: 4.5 }}>
-          {action.isChat ? (
-            <GuidanceChat user={user} context={text}>
-              {action.text}
-            </GuidanceChat>
-          ) : (
-            <Button key={action.link} variant="ai-secondary" size="md">
-              <Link href={action.link || "#"}>{action.text}</Link>
-            </Button>
-          )}
-        </motion.div>
-      )}
+      {action?.text &&
+        (() => {
+          const Component = animated ? motion.div : "div"
+          const motionProps = animated
+            ? { animate: { opacity: [0, 1] }, transition: { delay: 4.5 } }
+            : {}
+
+          return (
+            <Component {...motionProps}>
+              {action.isChat ? (
+                <GuidanceChat user={user} context={text}>
+                  {action.text}
+                </GuidanceChat>
+              ) : (
+                <Button key={action.link} variant="ai-secondary" size="md">
+                  <Link href={action.link || "#"}>{action.text}</Link>
+                </Button>
+              )}
+            </Component>
+          )
+        })()}
     </>
   )
 }
