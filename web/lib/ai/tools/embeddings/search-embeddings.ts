@@ -7,17 +7,9 @@ import { queryEmbeddingsSimilarity } from "@/lib/embedding/query"
 
 const embeddingQuerySchema = z.object({
   types: z.array(z.enum(validTypes)),
-  query: z.string().trim().min(10, "Substantial query is required"),
+  query: z.string().trim().optional(),
   groups: z.array(z.string().trim()),
-  users: z
-    .array(
-      z
-        .string()
-        .trim()
-        .toLowerCase()
-        .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid user address"),
-    )
-    .optional(),
+  users: z.array(z.string().trim().toLowerCase()).optional(),
   tags: z.array(z.string().trim()),
   numResults: z.number().min(1).max(100),
 })
@@ -45,7 +37,7 @@ export async function searchEmbeddings({
       throw new Error(Object.values(errors).flat().join(", "))
     }
 
-    const embeddingQuery = await generateEmbedding(query)
+    const embeddingQuery = query ? await generateEmbedding(query) : null
 
     const results = await queryEmbeddingsSimilarity({
       embeddingQuery,

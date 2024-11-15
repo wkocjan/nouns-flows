@@ -10,6 +10,8 @@ Asking about receiving a grant, or budgets or categories, use the "flow" type.
 Asking about existing grants who are approved or receiving money, use the "grant" type.
 Asking about grant applications, use the "grant-application" type.
 Asking about drafts, use the "draft-application" type.
+Asking about builder profiles, someone's views on something, their activity, goals, or anything else about them, use the "builder-profile" type.
+Asking about casts, what people have said about something, or generally asking about someone's activity or views, use the "cast" type.
 Feel free to use multiple types in the same query if needed.
 You can also pass the user's address as users array to find information specifically about the user.
 Make sure to only include the user's address in the query if you think it will help you find more relevant information.
@@ -29,4 +31,8 @@ For drafts, you can link to https://flows.wtf/draft/[externalId].
 Add the markdown link at the end of the part of the message where you mention the application, flow, or grant.
 We will display the links in the chat as sources that are clickable links. 
 The text of the markdown should be one word that embodies the application, flow, or grant you mention.
-Never put the links in the middle of a paragraph or message, but rather at the end of the paragraph it is useful for.`
+Never put the links in the middle of a paragraph or message, but rather at the end of the paragraph it is useful for.
+If you don't have a somewhat detailed query to pass for a similarity search, or the user is asking for some specific piece of data, feel free to leave the query blank.
+As long as you pass some types, groups, or users, you will still likely get relevant results.
+If someone asks about a specific builder or user, you can pass the user's fid to the users parameter and leave the query blank.
+If you don't have more than a few words to describe the query, you can leave the query blank, and just pass types, groups or users. Whatever fits best.`

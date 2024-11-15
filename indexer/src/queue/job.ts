@@ -7,6 +7,8 @@ export interface JobBody {
   users: string[]
   tags: string[]
   externalId: string
+  hashSuffix?: string
+  urls?: string[]
 }
 
 export const validTypes = [
@@ -16,6 +18,7 @@ export const validTypes = [
   "flow",
   "dispute",
   "draft-application",
+  "builder-profile",
 ] as const
 
 export enum EmbeddingTag {
@@ -25,3 +28,16 @@ export enum EmbeddingTag {
 }
 
 export const validTags = [EmbeddingTag.Flows, EmbeddingTag.Drafts, EmbeddingTag.Grants] as const
+
+export interface IsGrantUpdateJobBody {
+  castContent: string
+  grantDescription: string
+  parentFlowDescription: string
+  castHash: string
+  grantId: string
+  urls: string[]
+}
+
+export interface BuilderProfileJobBody {
+  fid: string
+}
