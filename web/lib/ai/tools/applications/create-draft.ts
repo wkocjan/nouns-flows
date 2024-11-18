@@ -44,6 +44,21 @@ export async function createDraft({
       throw new Error(Object.values(errors).flat().join(", "))
     }
 
+    // Check for existing draft with same title/description/users
+    const existingDraft = await database.draft.findFirst({
+      where: {
+        title,
+        description: descriptionMarkdown,
+        users: {
+          equals: users.map((user) => user.toLowerCase()),
+        },
+      },
+    })
+
+    if (existingDraft) {
+      return existingDraft
+    }
+
     const draft = await database.draft.create({
       data: {
         title,
