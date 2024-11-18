@@ -1,16 +1,14 @@
 import { BuilderProfileJobBody, EmbeddingType, IsGrantUpdateJobBody, JobBody } from "./job"
 
-const validateEnvVars = () => {
+const makeRequest = async (endpoint: string, body: any) => {
+  // if no embeddings queue set, skip embeddings
   if (!process.env.EMBEDDINGS_QUEUE_URL) {
-    throw new Error("EMBEDDINGS_QUEUE_URL is not defined")
+    return
   }
+
   if (!process.env.EMBEDDINGS_QUEUE_API_KEY) {
     throw new Error("EMBEDDINGS_QUEUE_API_KEY is not defined")
   }
-}
-
-const makeRequest = async (endpoint: string, body: any) => {
-  validateEnvVars()
 
   const headers = new Headers({
     "Content-Type": "application/json",
