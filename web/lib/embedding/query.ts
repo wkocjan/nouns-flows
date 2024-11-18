@@ -83,6 +83,7 @@ export async function queryEmbeddingsSimilarity({
         users: embeddings.users,
         tags: embeddings.tags,
         external_id: embeddings.external_id,
+        external_url: embeddings.external_url,
       })
       .from(embeddings)
       .where(and(gt(similarity, similarityCutoff), getWhereClause({ types, groups, users, tags })))

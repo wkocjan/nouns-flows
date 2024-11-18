@@ -60,7 +60,6 @@ You can also use the numResults parameter to get more results. Ideally default t
 ## Tags
 Tags you pass should only be the following: ${validTags.join(", ")}.
 
-
 ## Links
 When you receive results from the queryEmbeddings tool, you should use the externalUrl field if possible, or the externalId field to add a markdown link to the specific application, flow, or grant you mention.
 If the externalUrl is not available, you can use the externalId to link to the specific application, flow, or grant as a fallback.
@@ -68,6 +67,8 @@ For flows, you can link to https://flows.wtf/flow/[externalId].
 For grants, you can link to https://flows.wtf/item/[externalId].
 For applications, you can link to https://flows.wtf/application/[externalId].
 For drafts, you can link to https://flows.wtf/draft/[externalId].
+When linking to a cast, you can use the externalUrl field.
+When linking to a builder profile, you can use warpcast.com/[username] or the externalUrl field if available.
 Add the markdown link at the end of the part of the message where you mention the application, flow, or grant.
 We will display the links in the chat as sources that are clickable links. 
 The text of the markdown should be one word that embodies the application, flow, or grant you mention.
