@@ -16,6 +16,7 @@ import { Alert, AlertDescription } from "../ui/alert"
 import { Avatar, AvatarImage } from "../ui/avatar"
 import { LoginButton } from "./login-button"
 import { ModeToggle } from "./mode-toggle"
+import { useRunUserJobs } from "@/lib/auth/use-run-user-jobs"
 
 interface Props {
   user?: User
@@ -28,6 +29,7 @@ export const MenuAvatar = (props: Props) => {
   const closeRef = useRef<HTMLButtonElement>(null)
   const { tokens } = useDelegatedTokens(user?.address)
   const { logout } = useLogin()
+  useRunUserJobs()
 
   const isGuest = useIsGuest(user, hasSession)
 
