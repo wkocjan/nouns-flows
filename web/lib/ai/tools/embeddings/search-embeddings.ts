@@ -6,11 +6,11 @@ import { generateEmbedding } from "../../../embedding/generate-embedding"
 import { queryEmbeddingsSimilarity } from "@/lib/embedding/query"
 
 const embeddingQuerySchema = z.object({
-  types: z.array(z.enum(validTypes)),
+  types: z.array(z.enum(validTypes)).optional(),
   query: z.string().trim().optional(),
-  groups: z.array(z.string().trim()),
+  groups: z.array(z.string().trim()).optional(),
   users: z.array(z.string().trim().toLowerCase()).optional(),
-  tags: z.array(z.string().trim()),
+  tags: z.array(z.string().trim()).optional(),
   numResults: z.number().min(1).max(100),
 })
 
@@ -34,6 +34,7 @@ export async function searchEmbeddings({
 
     if (!validation.success) {
       const errors = validation.error.flatten().fieldErrors
+      console.error(errors)
       throw new Error(Object.values(errors).flat().join(", "))
     }
 
@@ -41,10 +42,10 @@ export async function searchEmbeddings({
 
     const results = await queryEmbeddingsSimilarity({
       embeddingQuery,
-      types,
-      groups,
+      types: types || [],
+      groups: groups || [],
       users: users || [],
-      tags,
+      tags: tags || [],
       numResults,
     })
 

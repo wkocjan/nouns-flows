@@ -5,10 +5,10 @@ import { searchEmbeddings } from "./search-embeddings"
 
 export const queryEmbeddings = tool({
   parameters: z.object({
-    types: z.array(z.enum(validTypes)),
-    query: z.string(),
-    tags: z.array(z.string()),
-    users: z.array(z.string()),
+    types: z.array(z.enum(validTypes)).optional(),
+    query: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    users: z.array(z.string()).optional(),
     numResults: z.number().min(1).max(100),
   }),
   description:
@@ -18,11 +18,11 @@ export const queryEmbeddings = tool({
       `Querying embeddings database for types: ${types}, query: ${query}, users: ${users}, tags: ${tags}, numResults: ${numResults}`,
     )
     const results = await searchEmbeddings({
-      types,
+      types: types || [],
       query,
       groups: [],
-      users,
-      tags,
+      users: users || [],
+      tags: tags || [],
       numResults,
     })
     return JSON.stringify(results)

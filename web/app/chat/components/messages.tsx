@@ -18,7 +18,7 @@ export const Messages = () => {
   }, [messages])
 
   return (
-    <div className="scrollbar scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent flex min-w-0 flex-1 flex-col gap-6 overflow-y-auto md:pt-6">
+    <div className="flex min-w-0 flex-1 flex-col gap-6 overflow-y-auto scrollbar scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 md:pt-6">
       {messages.map((message) => (
         <MessageItem
           key={message.id}
