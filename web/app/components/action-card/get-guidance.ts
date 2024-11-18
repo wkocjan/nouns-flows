@@ -16,8 +16,7 @@ export async function getGuidance(
   const initialContext = await unstable_cache(
     async () => {
       return searchEmbeddings({
-        types: ["grant", "grant-application", "flow"],
-        query: `What do we know about the user ${address}? What flows, grants, and grant applications are available?`,
+        types: ["grant", "grant-application", "flow", "cast"],
         users: address ? [address] : undefined,
         tags: [],
         numResults: 15,

@@ -37,7 +37,12 @@ export async function POST(request: Request) {
       },
     })
 
-    return result.toDataStreamResponse({})
+    return result.toDataStreamResponse({
+      getErrorMessage: (error) => {
+        console.error({ error })
+        return (error as any).message
+      },
+    })
   } catch (error) {
     return new Response((error as any).message || "Internal server error", { status: 500 })
   }

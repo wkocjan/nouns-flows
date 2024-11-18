@@ -59,32 +59,38 @@ export async function queryEmbeddingsSimilarity({
   embeddingQuery: number[] | null
   similarityCutoff?: number
 }) {
-  if (!embeddingQuery) {
-    return queryEmbeddingsWithoutSimilarity({
-      types,
-      groups,
-      users,
-      tags,
-      numResults,
-    })
+  try {
+    if (!embeddingQuery) {
+      return queryEmbeddingsWithoutSimilarity({
+        types,
+        groups,
+        users,
+        tags,
+        numResults,
+      })
+    }
+
+    const vectorQuery = `[${embeddingQuery.join(",")}]`
+    const similarity = sql<number>`1 - (${cosineDistance(embeddings.embedding, vectorQuery)})`
+
+    return await embeddingsDb
+      .select({
+        id: embeddings.id,
+        content: embeddings.content,
+        similarity,
+        type: embeddings.type,
+        groups: embeddings.groups,
+        users: embeddings.users,
+        tags: embeddings.tags,
+        external_id: embeddings.external_id,
+        external_url: embeddings.external_url,
+      })
+      .from(embeddings)
+      .where(and(gt(similarity, similarityCutoff), getWhereClause({ types, groups, users, tags })))
+      .orderBy((t) => desc(t.similarity))
+      .limit(numResults)
+  } catch (error) {
+    console.error(error)
+    throw new Error((error as Error).message || "Failed to query embeddings")
   }
-
-  const vectorQuery = `[${embeddingQuery.join(",")}]`
-  const similarity = sql<number>`1 - (${cosineDistance(embeddings.embedding, vectorQuery)})`
-
-  return await embeddingsDb
-    .select({
-      id: embeddings.id,
-      content: embeddings.content,
-      similarity,
-      type: embeddings.type,
-      groups: embeddings.groups,
-      users: embeddings.users,
-      tags: embeddings.tags,
-      external_id: embeddings.external_id,
-    })
-    .from(embeddings)
-    .where(and(gt(similarity, similarityCutoff), getWhereClause({ types, groups, users, tags })))
-    .orderBy((t) => desc(t.similarity))
-    .limit(numResults)
 }
