@@ -21,7 +21,7 @@ export const UserProfilePopover = (props: PropsWithChildren<Props>) => {
       <HoverCardPortal>
         <HoverCardContent className="w-96">
           <div className="flex items-center space-x-2.5 whitespace-normal">
-            <Avatar className="size-10">
+            <Avatar className="size-10 bg-primary">
               <AvatarImage src={pfp_url} alt={display_name} />
               <AvatarFallback>{display_name.slice(0, 2)}</AvatarFallback>
             </Avatar>

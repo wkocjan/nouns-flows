@@ -1,16 +1,18 @@
 import { MonthlyBudget } from "@/app/components/monthly-budget"
-import { AnimatedSalary } from "@/components/global/animated-salary"
+import { Avatar, AvatarImage } from "@/components/ui/avatar"
+import { Profile } from "@/components/user-profile/get-user-profile"
+import { UserProfilePopover } from "@/components/user-profile/user-popover"
 import { getIpfsUrl } from "@/lib/utils"
 import { Grant } from "@prisma/flows"
 import Image from "next/image"
 
 interface Props {
-  grant: Grant
+  grant: Grant & { profile: Profile }
 }
 
 export function GrantCard({ grant }: Props) {
   return (
-    <article className="group relative isolate flex flex-col justify-between overflow-hidden rounded-2xl bg-primary p-5">
+    <article className="group relative isolate flex flex-col justify-between overflow-hidden rounded-2xl bg-primary p-4">
       <Image
         alt=""
         src={getIpfsUrl(grant.image)}
@@ -18,11 +20,15 @@ export function GrantCard({ grant }: Props) {
         width={256}
         height={256}
       />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-gray-900 via-gray-900/40" />
-      <div className="absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-secondary" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-gray-900 via-gray-900/40" />
+      <div className="pointer-events-none absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-secondary" />
 
-      <div className="flex justify-between text-sm">
-        <AnimatedSalary value={grant.totalEarned} monthlyRate={grant.monthlyIncomingFlowRate} />
+      <div className="flex items-center justify-between text-sm">
+        <UserProfilePopover profile={grant.profile}>
+          <Avatar className="z-20 size-6 border border-white/75 bg-primary text-xs">
+            <AvatarImage src={grant.profile.pfp_url} alt={grant.profile.display_name} />
+          </Avatar>
+        </UserProfilePopover>
         <MonthlyBudget display={grant.monthlyIncomingFlowRate} flow={grant} />
       </div>
 

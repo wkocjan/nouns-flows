@@ -18,6 +18,7 @@ import { PropsWithChildren } from "react"
 import { base } from "viem/chains"
 import { FlowHeader } from "./components/flow-header"
 import { FlowSubmenu } from "./components/flow-submenu"
+import { GrantsStories } from "./components/grants-stories"
 
 export const runtime = "nodejs"
 
@@ -65,6 +66,8 @@ export default async function FlowLayout(props: PropsWithChildren<Props>) {
         </Breadcrumb>
 
         <FlowHeader flow={flow} />
+
+        <GrantsStories />
 
         <FlowSubmenu
           flowId={flowId}
