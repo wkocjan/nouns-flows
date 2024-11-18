@@ -38,8 +38,11 @@ export async function searchEmbeddings({
       throw new Error(Object.values(errors).flat().join(", "))
     }
 
+    console.time("generateEmbedding")
     const embeddingQuery = query ? await generateEmbedding(query) : null
+    console.timeEnd("generateEmbedding")
 
+    console.time("queryEmbeddingsSimilarity")
     const results = await queryEmbeddingsSimilarity({
       embeddingQuery,
       types: types || [],
@@ -48,6 +51,9 @@ export async function searchEmbeddings({
       tags: tags || [],
       numResults,
     })
+    console.timeEnd("queryEmbeddingsSimilarity")
+
+    console.log(`got ${results.length} results`)
 
     return results
   } catch (error) {

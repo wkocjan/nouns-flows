@@ -1,7 +1,7 @@
 import { embeddingsDb } from "./db"
 import { embeddings } from "./schema"
 import { validTypes } from "@/lib/types/job"
-import { and, arrayOverlaps, cosineDistance, desc, gt, inArray, sql } from "drizzle-orm"
+import { and, arrayOverlaps, asc, inArray, sql } from "drizzle-orm"
 
 type QueryParams = {
   types: (typeof validTypes)[number][]
@@ -54,7 +54,6 @@ export async function queryEmbeddingsSimilarity({
   users = [],
   tags = [],
   numResults = 10,
-  similarityCutoff = 0.2,
 }: QueryParams & {
   embeddingQuery: number[] | null
   similarityCutoff?: number
@@ -71,23 +70,23 @@ export async function queryEmbeddingsSimilarity({
     }
 
     const vectorQuery = `[${embeddingQuery.join(",")}]`
-    const similarity = sql<number>`1 - (${cosineDistance(embeddings.embedding, vectorQuery)})`
+    const distanceExpr = sql<number>`(embeddings.embedding <=> ${vectorQuery}::vector)`
 
     return await embeddingsDb
       .select({
         id: embeddings.id,
         content: embeddings.content,
-        similarity,
         type: embeddings.type,
         groups: embeddings.groups,
         users: embeddings.users,
         tags: embeddings.tags,
         external_id: embeddings.external_id,
         external_url: embeddings.external_url,
+        url_summaries: embeddings.url_summaries,
       })
       .from(embeddings)
-      .where(and(gt(similarity, similarityCutoff), getWhereClause({ types, groups, users, tags })))
-      .orderBy((t) => desc(t.similarity))
+      .where(getWhereClause({ types, groups, users, tags }))
+      .orderBy(asc(distanceExpr))
       .limit(numResults)
   } catch (error) {
     console.error(error)
