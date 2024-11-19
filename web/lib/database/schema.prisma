@@ -120,6 +120,7 @@ model Story {
   tagline        String
   grant_id       String
   parent_flow_id String
+  edits          Json?
 
   user FarcasterUser? @relation("author", fields: [author], references: [fid])
 
