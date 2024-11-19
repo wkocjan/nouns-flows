@@ -21,10 +21,12 @@ export async function GrantsStories(props: Props) {
     take: 11,
   })
 
+  if (stories.length === 0) return null
+
   const [featuredStory, ...remainingStories] = stories
 
   return (
-    <div className="grid grid-cols-1 gap-2.5 md:grid-cols-4">
+    <div className="mt-10 grid grid-cols-1 gap-2.5 md:grid-cols-4">
       {featuredStory && <FeaturedStoryCard story={featuredStory} />}
       {remainingStories.map((story) => (
         <StoryCard story={story} key={story.id} />
