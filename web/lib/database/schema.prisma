@@ -43,6 +43,7 @@ model FarcasterUser {
   displayName String
   imageUrl    String
   addresses   String[]
+  stories     Story[]  @relation("author")
 
   @@map("FarcasterUser")
   @@schema("web")
@@ -97,6 +98,34 @@ model Conversation {
   @@index([user])
   @@index([type])
   @@map("Conversation")
+  @@schema("web")
+}
+
+model Story {
+  id             String   @id @default(uuid())
+  title          String
+  summary        String
+  key_points     String[]
+  participants   String[]
+  header_image   String?
+  timeline       Json
+  sentiment      String   @db.VarChar(10)
+  completeness   Decimal  @db.Decimal(3, 2)
+  complete       Boolean
+  sources        String[]
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+  media_urls     String[]
+  author         Int
+  tagline        String
+  grant_id       String
+  parent_flow_id String
+
+  user FarcasterUser? @relation("author", fields: [author], references: [fid])
+
+  @@index([complete])
+  @@index([updated_at])
+  @@map("Stories")
   @@schema("web")
 }
 

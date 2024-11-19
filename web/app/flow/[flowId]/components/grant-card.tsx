@@ -12,7 +12,7 @@ interface Props {
 
 export function GrantCard({ grant }: Props) {
   return (
-    <article className="group relative isolate flex flex-col justify-between overflow-hidden rounded-2xl bg-primary p-4">
+    <article className="group relative isolate flex flex-col justify-between overflow-hidden rounded-2xl bg-primary px-2.5 py-4 md:min-h-72 md:p-4">
       <Image
         alt=""
         src={getIpfsUrl(grant.image)}
@@ -33,13 +33,12 @@ export function GrantCard({ grant }: Props) {
       </div>
 
       <div>
-        <h3 className="mt-48 text-balance text-base font-medium text-white">
+        <h3 className="mt-32 text-balance text-sm font-medium text-white md:text-base">
           <a href={`/item/${grant.id}`}>
             <span className="absolute inset-0" />
             {grant.title}
           </a>
         </h3>
-        {/* <div className="mt-1 line-clamp-1 text-xs text-gray-300">{grant.tagline}</div> */}
       </div>
     </article>
   )

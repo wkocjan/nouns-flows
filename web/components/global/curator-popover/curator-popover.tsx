@@ -84,7 +84,7 @@ export const CuratorPopover = (props: Props) => {
               {tokens.length || "no"} {`flow${tokens.length !== 1 ? "s" : ""}`}.
             </p>
 
-            {tokens.length > 0 && <SwapTokenButton size="xs" flow={flow} />}
+            {tokens.length > 0 && <SwapTokenButton text="Swap" size="xs" flow={flow} />}
           </div>
 
           {tokens.length > 0 && (

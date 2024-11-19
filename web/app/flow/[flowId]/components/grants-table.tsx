@@ -41,7 +41,7 @@ export function GrantsTable(props: Props) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {grants.map(async (grant) => {
+        {grants.map((grant) => {
           const isRemovalRequested = grant.status === Status.ClearingRequested
           const lastUpdate = grant.derivedData?.lastBuilderUpdate || new Date(0)
 
@@ -55,14 +55,14 @@ export function GrantsTable(props: Props) {
               <GrantLogoCell image={getIpfsUrl(grant.image)} title={grant.title} />
 
               <TableCell className="space-y-1">
-                <div className="max-w-[250px] overflow-hidden truncate text-ellipsis">
+                <div className="max-w-64 overflow-hidden text-ellipsis max-sm:truncate">
                   <Link
                     href={
                       flow.isTopLevel && grant.isFlow && !isRemovalRequested
                         ? `/flow/${grant.id}`
                         : `/item/${grant.id}`
                     }
-                    className="text-sm font-medium duration-100 ease-out hover:text-primary md:text-lg"
+                    className="text-sm font-medium duration-100 ease-out hover:text-primary md:whitespace-normal"
                     tabIndex={-1}
                   >
                     {grant.title}

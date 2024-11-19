@@ -27,7 +27,7 @@ export default function GrantsList(props: Props) {
   }
 
   return (
-    <div className="mt-10 grid grid-cols-1 gap-4 lg:grid-cols-3 xl:grid-cols-5">
+    <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-3 xl:grid-cols-5">
       {grants.map((grant) => (
         <GrantCard key={grant.id} grant={grant} />
       ))}

@@ -18,7 +18,7 @@ export const FlowHeaderUserVotes = (props: Props) => {
   return (
     <div className="md:text-center">
       <p className="mb-1.5 text-muted-foreground">Your Vote</p>
-      <p className="font-medium">{votesCount / 100}%</p>
+      <p className="text-sm font-medium">{votesCount / 100}%</p>
     </div>
   )
 }

@@ -1,40 +1,36 @@
-"use client"
-
 import { SwapTokenButton } from "@/app/token/swap-token-button"
 import { Button } from "@/components/ui/button"
+import database, { getCacheStrategy } from "@/lib/database/edge"
 import { isGrantApproved, isGrantAwaiting } from "@/lib/database/helpers"
-import { useERC20Balances } from "@/lib/tcr/use-erc20-balances"
-import { cn, getEthAddress } from "@/lib/utils"
-import { Grant } from "@prisma/flows"
+import { getFlowWithGrants } from "@/lib/database/queries/flow"
+import { cn } from "@/lib/utils"
 import Link from "next/link"
-import { useSelectedLayoutSegment } from "next/navigation"
-import { useAccount } from "wagmi"
 import { VotingToggle } from "./voting-toggle"
 
 interface Props {
   flowId: string
-  flow: Grant
-  grants: Grant[]
-  isTopLevel: boolean
-  draftsCount: number
+  segment: "approved" | "applications" | "drafts"
 }
 
-export const FlowSubmenu = (props: Props) => {
-  const { flowId, isTopLevel, flow, grants, draftsCount } = props
+export const FlowSubmenu = async (props: Props) => {
+  const { flowId, segment } = props
 
-  const segment = useSelectedLayoutSegment()
-  const { address } = useAccount()
-  const { balances } = useERC20Balances([getEthAddress(flow.erc20)], address)
+  const flow = await getFlowWithGrants(flowId)
 
-  const isApproved = segment === null
+  const draftsCount = await database.draft.count({
+    where: { flowId, isPrivate: false, isOnchain: false },
+    ...getCacheStrategy(120),
+  })
+
+  const isApproved = segment === "approved"
   const isApplications = segment === "applications"
   const isDrafts = segment === "drafts"
 
-  const approvedCount = grants.filter(isGrantApproved).length
-  const awaitingCount = grants.filter(isGrantAwaiting).length
+  const approvedCount = flow.subgrants.filter(isGrantApproved).length
+  const awaitingCount = flow.subgrants.filter(isGrantAwaiting).length
 
   return (
-    <div className="mb-4 mt-10 flex items-center justify-between">
+    <div className="mb-4 mt-14 flex items-center justify-between md:mb-8">
       <div className="flex min-h-9 items-center space-x-5 md:space-x-7">
         <Link
           href={`/flow/${flowId}`}
@@ -87,7 +83,6 @@ export const FlowSubmenu = (props: Props) => {
       <div className="max-sm:hidden">
         <div className="flex items-center space-x-2">
           <SwapTokenButton
-            text={balances?.[0] ? (!isTopLevel ? "Buy TCR" : "Buy FLOWS") : "Become curator"}
             flow={flow}
             extraInfo="curator"
             variant="secondary"
@@ -96,7 +91,7 @@ export const FlowSubmenu = (props: Props) => {
           {isApproved && approvedCount > 0 && <VotingToggle />}
           {(isDrafts || isApplications || (isApproved && approvedCount === 0)) && (
             <Link href={`/apply/${flowId}`}>
-              <Button>{isTopLevel ? "Suggest flow" : "Apply for a grant"}</Button>
+              <Button>{flow.isTopLevel === 1 ? "Suggest flow" : "Apply for a grant"}</Button>
             </Link>
           )}
         </div>
