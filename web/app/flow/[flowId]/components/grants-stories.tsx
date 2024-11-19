@@ -36,7 +36,7 @@ export async function GrantsStories(props: Props) {
 }
 
 function FeaturedStoryCard(props: { story: Story & { user: FarcasterUser | null } }) {
-  const { header_image, title, key_points, user, created_at } = props.story
+  const { header_image, title, tagline, user, created_at } = props.story
 
   return (
     <div className="group relative isolate flex flex-col justify-between overflow-hidden rounded-xl shadow dark:border md:col-span-2">
@@ -72,7 +72,7 @@ function FeaturedStoryCard(props: { story: Story & { user: FarcasterUser | null 
 
       <div className="relative p-4 pt-32 md:p-6">
         <h3 className="text-lg font-medium leading-tight text-white md:text-xl">{title}</h3>
-        <p className="mt-1.5 text-sm text-white/80">{key_points[0]}</p>
+        <p className="mt-1.5 text-sm text-white/80">{tagline}</p>
       </div>
     </div>
   )

@@ -4,7 +4,7 @@ import { FarcasterUser, Story } from "@prisma/flows"
 import Image from "next/image"
 
 export function StoryCard(props: { story: Story & { user: FarcasterUser | null } }) {
-  const { header_image, title, key_points, user, created_at } = props.story
+  const { header_image, title, tagline, user, created_at } = props.story
 
   return (
     <div className="group flex flex-col overflow-hidden rounded-xl bg-white shadow dark:border dark:bg-card">
@@ -21,7 +21,7 @@ export function StoryCard(props: { story: Story & { user: FarcasterUser | null }
       )}
       <div className="grow p-4">
         <h3 className="text-base font-semibold leading-snug group-hover:text-primary">{title}</h3>
-        <p className="mt-1.5 text-sm text-muted-foreground">{key_points[0]}</p>
+        <p className="mt-1.5 text-sm text-muted-foreground">{tagline}</p>
       </div>
 
       <div className="flex items-center justify-between space-x-1.5 p-4">
