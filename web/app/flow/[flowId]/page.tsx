@@ -33,9 +33,7 @@ export default async function FlowPage(props: Props) {
 
   return (
     <>
-      <div className="mt-10">
-        <GrantsStories flowId={flowId} />
-      </div>
+      <GrantsStories flowId={flowId} />
 
       <FlowSubmenu flowId={flowId} segment="approved" />
 
