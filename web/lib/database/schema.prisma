@@ -122,7 +122,9 @@ model Story {
   parent_flow_id String
   edits          Json?
 
-  user FarcasterUser? @relation("author", fields: [author], references: [fid])
+  user  FarcasterUser? @relation("author", fields: [author], references: [fid])
+  grant Grant          @relation("story_grant", fields: [grant_id], references: [id])
+  flow  Grant          @relation("story_flow", fields: [parent_flow_id], references: [id])
 
   @@index([complete])
   @@index([updated_at])
@@ -185,6 +187,8 @@ view Grant {
   tokenHolders TokenHolder[]
   evidences    Evidence[]
   derivedData  DerivedData?
+  stories      Story[]       @relation("story_grant")
+  storiesFlow  Story[]       @relation("story_flow")
 
   @@map("Grant")
   @@schema("public")

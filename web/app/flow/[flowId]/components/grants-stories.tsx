@@ -6,6 +6,7 @@ import { DateTime } from "@/components/ui/date-time"
 import database from "@/lib/database/edge"
 import { FarcasterUser, Story } from "@prisma/flows"
 import Image from "next/image"
+import Link from "next/link"
 
 interface Props {
   flowId: string
@@ -36,7 +37,7 @@ export async function GrantsStories(props: Props) {
 }
 
 function FeaturedStoryCard(props: { story: Story & { user: FarcasterUser | null } }) {
-  const { header_image, title, tagline, user, created_at } = props.story
+  const { header_image, title, tagline, user, created_at, id } = props.story
 
   return (
     <div className="group relative isolate flex flex-col justify-between overflow-hidden rounded-xl shadow dark:border md:col-span-2">
@@ -71,7 +72,13 @@ function FeaturedStoryCard(props: { story: Story & { user: FarcasterUser | null 
       </div>
 
       <div className="relative p-4 pt-32 md:p-6">
-        <h3 className="text-lg font-medium leading-tight text-white md:text-xl">{title}</h3>
+        <Link
+          href={`/story/${id}`}
+          className="text-base font-semibold leading-snug group-hover:text-primary"
+        >
+          <h3 className="text-lg font-medium leading-tight text-white md:text-xl">{title}</h3>
+          <span className="absolute inset-0" />
+        </Link>
         <p className="mt-1.5 text-sm text-white/80">{tagline}</p>
       </div>
     </div>
