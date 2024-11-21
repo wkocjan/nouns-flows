@@ -55,7 +55,7 @@ function FeaturedStoryCard(props: { story: Story & { user: FarcasterUser | null 
 
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-gray-900 via-gray-900/40" />
 
-      <div className="relative flex items-center justify-between space-x-1.5 p-4 md:p-6">
+      <div className="flex items-center justify-between space-x-1.5 p-4 md:p-6">
         <div className="flex items-center gap-1.5">
           {user && (
             <>
@@ -71,7 +71,7 @@ function FeaturedStoryCard(props: { story: Story & { user: FarcasterUser | null 
         </p>
       </div>
 
-      <div className="relative p-4 pt-32 md:p-6">
+      <div className="p-4 pt-32 md:p-6">
         <Link
           href={`/story/${id}`}
           className="text-base font-semibold leading-snug group-hover:text-primary"

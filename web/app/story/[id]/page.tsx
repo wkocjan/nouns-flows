@@ -2,6 +2,14 @@ import "server-only"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+import {
   Carousel,
   CarouselContent,
   CarouselItem,
@@ -14,28 +22,67 @@ import { VideoPlayer } from "@/components/ui/video-player"
 import database, { getCacheStrategy } from "@/lib/database/edge"
 import { getIpfsUrl } from "@/lib/utils"
 import { CalendarIcon } from "lucide-react"
+import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
+import { cache } from "react"
 import { KeyPoints } from "./components/key-points"
+import { Sources } from "./components/sources"
 
 interface Props {
   params: { id: string }
 }
 
-export default async function Page(props: Props) {
-  const { id } = props.params
-
-  const story = await database.story.findUniqueOrThrow({
+const getStory = cache(async (id: string) => {
+  return await database.story.findUniqueOrThrow({
     where: { id },
     include: { grant: true, user: true, flow: true },
     ...getCacheStrategy(240),
   })
+})
 
-  const { user, title, grant, key_points, updated_at, flow, timeline } = story
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const { id } = props.params
+
+  const story = await getStory(id)
+
+  return {
+    title: story.title,
+    description: story.tagline,
+    ...(story.header_image ? { openGraph: { images: [story.header_image] } } : {}),
+  }
+}
+
+export default async function Page(props: Props) {
+  const { id } = props.params
+
+  const story = await getStory(id)
+
+  const { user, title, grant, key_points, updated_at, flow, timeline, sources } = story
 
   return (
-    <article className="container mt-10 max-w-6xl pb-12 md:pb-24">
-      <header className="max-w-2xl">
+    <article className="container mt-2.5 max-w-6xl pb-12 md:mt-6 md:pb-24">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Flows</BreadcrumbLink>
+          </BreadcrumbItem>
+
+          <BreadcrumbSeparator />
+
+          <BreadcrumbItem>
+            <BreadcrumbLink href={`/flow/${flow.id}`}>{flow.title}</BreadcrumbLink>
+          </BreadcrumbItem>
+
+          <BreadcrumbSeparator className="max-sm:hidden" />
+
+          <BreadcrumbItem className="max-sm:hidden">
+            <BreadcrumbPage>{title}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
+      <header className="mt-8 max-w-2xl">
         <h1 className="text-pretty text-2xl font-bold tracking-tight md:text-4xl">{title}</h1>
         <p className="mt-2 text-pretty text-lg text-muted-foreground md:text-xl">{story.tagline}</p>
       </header>
@@ -57,7 +104,7 @@ export default async function Page(props: Props) {
                 </div>
               </div>
             )}
-            <div className="flex items-center text-sm leading-none text-muted-foreground">
+            <div className="flex items-center text-xs leading-none text-muted-foreground md:text-sm">
               <CalendarIcon className="mr-2 size-3" />
               <DateTime date={updated_at} relative />
             </div>
@@ -69,7 +116,13 @@ export default async function Page(props: Props) {
                 <CarouselItem key={index}>
                   <div className="relative aspect-video">
                     {url.endsWith(".m3u8") ? (
-                      <VideoPlayer url={url} controls className="h-full w-full rounded-lg" />
+                      <VideoPlayer
+                        url={url}
+                        controls
+                        className="overflow-hidden rounded-lg"
+                        width="100%"
+                        height="100%"
+                      />
                     ) : (
                       <Image src={url} alt="" fill className="rounded-lg object-cover" />
                     )}
@@ -89,6 +142,7 @@ export default async function Page(props: Props) {
 
           <div className="my-8 space-y-5 text-pretty text-sm md:text-base [&>p]:text-foreground/75">
             <Markdown>{story.summary}</Markdown>
+            <Sources sources={sources} />
           </div>
 
           {timeline && Array.isArray(timeline) && timeline.length > 0 && (
