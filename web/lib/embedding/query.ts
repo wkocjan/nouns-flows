@@ -1,7 +1,7 @@
 import { embeddingsDb } from "./db"
 import { embeddings } from "./schema"
 import { validTypes } from "@/lib/types/job"
-import { and, arrayOverlaps, asc, inArray, sql } from "drizzle-orm"
+import { and, arrayOverlaps, asc, desc, inArray, sql } from "drizzle-orm"
 
 type QueryParams = {
   types: (typeof validTypes)[number][]
@@ -9,6 +9,7 @@ type QueryParams = {
   users?: string[]
   tags?: string[]
   numResults?: number
+  orderBy?: "similarity" | "created_at"
 }
 
 async function queryEmbeddingsWithoutSimilarity({
@@ -54,6 +55,7 @@ export async function queryEmbeddingsSimilarity({
   users = [],
   tags = [],
   numResults = 10,
+  orderBy = "similarity",
 }: QueryParams & {
   embeddingQuery: number[] | null
   similarityCutoff?: number
@@ -86,7 +88,7 @@ export async function queryEmbeddingsSimilarity({
       })
       .from(embeddings)
       .where(getWhereClause({ types, groups, users, tags }))
-      .orderBy(asc(distanceExpr))
+      .orderBy(orderBy === "similarity" ? asc(distanceExpr) : desc(embeddings.created_at))
       .limit(numResults)
   } catch (error) {
     console.error(error)

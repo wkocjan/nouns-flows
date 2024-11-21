@@ -1,7 +1,6 @@
 "use client"
 
 import { Input } from "@/components/ui/input"
-import { getPinataUrl } from "@/lib/pinata/get-file-url"
 import { useFileUpload } from "@/lib/pinata/use-file-upload"
 import { UpdateIcon } from "@radix-ui/react-icons"
 import Image from "next/image"
@@ -47,7 +46,7 @@ export function FileInput({ name, accept, onSuccess, maxFileSizeMB = 5 }: Props)
       <div className="absolute inset-y-0 right-0 flex items-center pl-3">
         {url && (
           <Image
-            src={getPinataUrl(url)}
+            src={url}
             alt=" "
             width={32}
             height={32}
