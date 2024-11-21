@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/table"
 import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database/edge"
-import { getPinataUrl } from "@/lib/pinata/get-file-url"
 import { GrantLogoCell } from "../components/grant-logo-cell"
 import { GrantTitleCell } from "../components/grant-title-cell"
 
@@ -62,7 +61,7 @@ export default async function FlowDraftsPage(props: Props) {
       <TableBody>
         {drafts.map((draft) => (
           <TableRow key={draft.id}>
-            <GrantLogoCell image={getPinataUrl(draft.image)} title={draft.title} />
+            <GrantLogoCell image={draft.image} title={draft.title} />
             <GrantTitleCell title={draft.title} href={`/draft/${draft.id}`} />
             <TableCell className="max-sm:hidden">
               <div className="flex space-x-0.5">

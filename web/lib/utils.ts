@@ -3,7 +3,6 @@ import { twMerge } from "tailwind-merge"
 import { base, baseSepolia, mainnet } from "viem/chains"
 import { nounsTokenAddress } from "./abis"
 import { NOUNS_TOKEN } from "./config"
-import { getPinataUrl } from "./pinata/get-file-url"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -25,6 +24,12 @@ export function explorerUrl(address: string, chainId: number, type: "tx" | "addr
   if (!(chainId in explorerDomain)) throw new Error("Unsupported chain")
 
   return `https://${explorerDomain[chainId]}/${type}/${address}`
+}
+
+const gatewayUrl = `${process.env.NEXT_PUBLIC_GATEWAY_URL}`
+
+function getPinataUrl(hash: string) {
+  return `https://${gatewayUrl}/ipfs/${hash.replace("ipfs://", "")}`
 }
 
 export function getIpfsUrl(url: string, gateway: "pinata" | "ipfs" = "ipfs") {

@@ -12,6 +12,7 @@ const embeddingQuerySchema = z.object({
   users: z.array(z.string().trim().toLowerCase()).optional(),
   tags: z.array(z.string().trim()).optional(),
   numResults: z.number().min(1).max(100),
+  orderBy: z.enum(["similarity", "created_at"]).optional(),
 })
 
 export async function searchEmbeddings({
@@ -21,6 +22,7 @@ export async function searchEmbeddings({
   users,
   tags,
   numResults,
+  orderBy,
 }: z.infer<typeof embeddingQuerySchema>) {
   try {
     const validation = embeddingQuerySchema.safeParse({
@@ -30,6 +32,7 @@ export async function searchEmbeddings({
       users,
       tags,
       numResults,
+      orderBy,
     })
 
     if (!validation.success) {

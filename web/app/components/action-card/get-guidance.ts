@@ -15,15 +15,25 @@ export async function getGuidance(
 ) {
   const initialContext = await unstable_cache(
     async () => {
-      return searchEmbeddings({
-        types: ["grant", "grant-application", "flow", "cast"],
+      const casts = await searchEmbeddings({
+        types: ["cast"],
         users: address ? [address] : undefined,
         tags: [],
         numResults: 15,
         groups: [],
+        orderBy: "created_at",
       })
+      const grants = await searchEmbeddings({
+        types: ["grant", "grant-application", "flow"],
+        users: address ? [address] : undefined,
+        tags: [],
+        numResults: 15,
+        groups: [],
+        orderBy: "created_at",
+      })
+      return { casts, grants }
     },
-    [`initial-context-${address ?? "guest"}`],
+    [`initial-builder-context-${address ?? "guest"}`],
     { revalidate: 3600 * 5 }, // 5 hours
   )()
 

@@ -30,7 +30,6 @@ import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database/edge"
 import { getFlow } from "@/lib/database/queries/flow"
 import { Status } from "@/lib/enums"
-import { getPinataUrl } from "@/lib/pinata/get-file-url"
 import { getEthAddress } from "@/lib/utils"
 import Link from "next/link"
 import { GrantLogoCell } from "../components/grant-logo-cell"
@@ -85,7 +84,7 @@ export default async function FlowApplicationsPage(props: Props) {
 
           return (
             <TableRow key={grant.id}>
-              <GrantLogoCell image={getPinataUrl(grant.image)} title={grant.title} />
+              <GrantLogoCell image={grant.image} title={grant.title} />
               <GrantTitleCell title={grant.title} href={`/application/${grant.id}`} />
               <TableCell className="max-sm:hidden">
                 <div className="flex space-x-0.5">
