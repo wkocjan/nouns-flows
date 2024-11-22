@@ -97,7 +97,7 @@ export function ApplicationChat(props: Props) {
 
       {user && messages.length > 0 && <Messages />}
 
-      {messages.length > 0 && <MultimodalInput />}
+      {messages.length > 0 && <MultimodalInput className="bg-background px-4 pb-4 md:pb-6" />}
     </div>
   )
 }

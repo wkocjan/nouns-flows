@@ -1,11 +1,12 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { DateTime } from "@/components/ui/date-time"
-import { FarcasterUser, Story } from "@prisma/flows"
+import { UserProfile } from "@/components/user-profile/user-profile"
+import { Story } from "@prisma/flows"
 import Image from "next/image"
 import Link from "next/link"
 
-export function StoryCard(props: { story: Story & { user: FarcasterUser | null } }) {
-  const { header_image, title, tagline, user, created_at, id } = props.story
+export function StoryCard(props: { story: Story }) {
+  const { header_image, title, tagline, author, updated_at, id } = props.story
 
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-xl bg-white shadow dark:border dark:bg-card">
@@ -32,18 +33,18 @@ export function StoryCard(props: { story: Story & { user: FarcasterUser | null }
       </div>
 
       <div className="flex items-center justify-between space-x-1.5 p-4">
-        <div className="flex items-center gap-1.5">
-          {user && (
-            <>
+        <UserProfile address={author as `0x${string}`}>
+          {(profile) => (
+            <div className="flex items-center gap-1.5">
               <Avatar className="size-5">
-                <AvatarImage src={user.imageUrl} alt={user.displayName} />
+                <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
               </Avatar>
-              <span className="text-xs">{user.displayName}</span>
-            </>
+              <span className="text-sm text-white">{profile.display_name}</span>
+            </div>
           )}
-        </div>
+        </UserProfile>
         <p className="text-xs text-muted-foreground">
-          <DateTime date={created_at} relative short />
+          <DateTime date={updated_at} relative short />
         </p>
       </div>
     </div>

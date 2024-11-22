@@ -5,7 +5,7 @@ import { ErrorMessage } from "./error-message"
 import { MessageItem } from "./message-item"
 
 export const Messages = () => {
-  const { messages, error, append, restart, isLoading } = useAgentChat()
+  const { messages, error, append, restart, isLoading, type } = useAgentChat()
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const isInitialLoad = useRef(true)
 
@@ -22,6 +22,7 @@ export const Messages = () => {
       {messages.map((message) => (
         <MessageItem
           key={message.id}
+          type={type}
           role={message.role}
           content={message.content}
           attachments={message.experimental_attachments}

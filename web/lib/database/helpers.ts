@@ -1,4 +1,4 @@
-import { Grant } from "@prisma/flows"
+import { Grant, Story } from "@prisma/flows"
 import { Status } from "../enums"
 
 export function isGrantApproved(grant: Grant) {
@@ -15,4 +15,8 @@ export function isGrantChallenged(grant: Grant) {
 
 export function isGrantAwaiting(grant: Grant) {
   return grant.status === Status.RegistrationRequested
+}
+
+export function canEditStory(story: Story, user: string | undefined) {
+  return user && (story.participants.includes(user) || story.author === user)
 }

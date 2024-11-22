@@ -3,11 +3,11 @@ import { submitApplicationTool } from "@/lib/ai/tools/applications/tool"
 import { queryEmbeddingsTool } from "@/lib/ai/tools/embeddings/tool"
 import { getTools, getToolsPrompt, Tool } from "@/lib/ai/tools/tool"
 import { aboutPrompt } from "../../prompts/about"
+import { getAllNounishCitizensPrompt } from "../../prompts/nounish-citizens"
 import { getUserDataPrompt } from "../../prompts/user-data"
 import { applicationTemplateTool } from "../../tools/application-template/tool"
 import { Agent } from "../agent"
 import { floPersonalityPrompt } from "./personality"
-import { getAllNounishCitizensPrompt } from "../../prompts/nounish-citizens"
 
 export async function getFlo(data: ChatData): Promise<Agent> {
   const tools = [queryEmbeddingsTool, submitApplicationTool, applicationTemplateTool]

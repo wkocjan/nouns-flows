@@ -37,18 +37,6 @@ model Draft {
   @@schema("web")
 }
 
-model FarcasterUser {
-  fid         Int      @id
-  username    String
-  displayName String
-  imageUrl    String
-  addresses   String[]
-  stories     Story[]  @relation("author")
-
-  @@map("FarcasterUser")
-  @@schema("web")
-}
-
 model Comment {
   id            String   @id @default(cuid())
   content       String
@@ -110,21 +98,20 @@ model Story {
   header_image   String?
   timeline       Json
   sentiment      String   @db.VarChar(10)
-  completeness   Decimal  @db.Decimal(3, 2)
+  completeness   Int
   complete       Boolean
   sources        String[]
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
   media_urls     String[]
-  author         Int
+  author         String
   tagline        String
   grant_id       String
   parent_flow_id String
   edits          Json?
 
-  user  FarcasterUser? @relation("author", fields: [author], references: [fid])
-  grant Grant          @relation("story_grant", fields: [grant_id], references: [id])
-  flow  Grant          @relation("story_flow", fields: [parent_flow_id], references: [id])
+  grant Grant @relation("story_grant", fields: [grant_id], references: [id])
+  flow  Grant @relation("story_flow", fields: [parent_flow_id], references: [id])
 
   @@index([complete])
   @@index([updated_at])

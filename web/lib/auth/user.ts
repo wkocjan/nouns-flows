@@ -11,6 +11,7 @@ export type User = {
   address: `0x${string}`
   username: string
   avatar?: string
+  fid?: number
 }
 
 export const getUser = cache(async () => {
@@ -24,6 +25,7 @@ export const getUser = cache(async () => {
     username:
       farcasterUser?.fname || (await getEnsNameFromAddress(address)) || getShortEthAddress(address),
     avatar: farcasterUser?.avatar_url || (await getEnsAvatar(address)) || undefined,
+    fid: Number(farcasterUser?.fid),
   } satisfies User
 })
 
