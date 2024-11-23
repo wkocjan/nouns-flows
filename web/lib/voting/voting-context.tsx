@@ -7,7 +7,6 @@ import { Vote } from "@prisma/flows"
 import { useRouter } from "next/navigation"
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react"
 import { toast } from "sonner"
-import { toHex } from "viem"
 import { useAccount } from "wagmi"
 import {
   cfav1ForwarderAbi,
@@ -15,7 +14,6 @@ import {
   gdav1ForwarderAbi,
   nounsFlowImplAbi,
   rewardPoolImplAbi,
-  superfluidMacroForwarderAbi,
   superfluidPoolAbi,
   tokenVerifierAbi,
 } from "../abis"

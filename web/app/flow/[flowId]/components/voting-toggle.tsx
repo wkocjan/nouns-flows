@@ -29,6 +29,7 @@ export const VotingToggle = () => {
       }}
       disabled={isLoading || isActive}
       loading={isLoading}
+      type="button"
     >
       {isActive ? "In progress..." : `Vote`}
     </Button>

@@ -1,36 +1,20 @@
 import "server-only"
 
-import { MonthlyBudget } from "@/app/components/monthly-budget"
-import { AnimatedSalary } from "@/components/global/animated-salary"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { DateTime } from "@/components/ui/date-time"
 import { EmptyState } from "@/components/ui/empty-state"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { UserProfile } from "@/components/user-profile/user-profile"
+import { getUserProfiles } from "@/components/user-profile/get-user-profile"
 import database from "@/lib/database/edge"
 import { Status } from "@/lib/enums"
-import { cn, getEthAddress, getIpfsUrl } from "@/lib/utils"
+import { getEthAddress } from "@/lib/utils"
 import { Grant } from "@prisma/flows"
-import Link from "next/link"
-import { GrantLogoCell } from "./components/grant-logo-cell"
+import { FlowSubmenu } from "./components/flow-submenu"
+import GrantsList from "./components/grants-list"
+import { GrantsStories } from "./components/grants-stories"
 import { VotingBar } from "./components/voting-bar"
-import { VotingInput } from "./components/voting-input"
 
 export const runtime = "nodejs"
 
 interface Props {
-  params: {
-    flowId: string
-  }
+  params: { flowId: string }
 }
 
 export default async function FlowPage(props: Props) {
@@ -41,125 +25,28 @@ export default async function FlowPage(props: Props) {
     include: { subgrants: { where: { isActive: 1 }, include: { derivedData: true } } },
   })
 
-  if (flow.subgrants.length === 0) {
+  if (!flow.subgrants || flow.subgrants.length === 0) {
     return <EmptyState title="No grants found" description="There are no approved grants yet" />
   }
 
+  const profiles = await getUserProfiles(flow.subgrants.map((g) => getEthAddress(g.recipient)))
+
   return (
     <>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead colSpan={2}>Name</TableHead>
-            {!flow.isTopLevel && <TableHead>Builders</TableHead>}
-            <TableHead className="text-center">Total earned</TableHead>
-            <TableHead className="text-center">Monthly support</TableHead>
-            <TableHead className="text-center">Community Votes</TableHead>
-            <TableHead className="text-center">Your Vote</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {flow.subgrants.sort(sortGrants).map(async (grant) => {
-            const isRemovalRequested = grant.status === Status.ClearingRequested
-            const lastUpdate = grant.derivedData?.lastBuilderUpdate || new Date(0)
+      <GrantsStories flowId={flowId} />
 
-            const hasUpdate = lastUpdate.getTime() > 0
-            const lastUpdateTime = hasUpdate ? lastUpdate.getTime() / 1000 : 0
-            const hasRecentUpdate =
-              hasUpdate && new Date().getTime() / 1000 - lastUpdateTime < 10 * 24 * 60 * 60
+      <FlowSubmenu flowId={flowId} segment="approved" />
 
-            return (
-              <TableRow key={grant.id}>
-                <GrantLogoCell image={getIpfsUrl(grant.image)} title={grant.title} />
-
-                <TableCell className="space-y-1">
-                  <div className="max-w-[250px] overflow-hidden truncate text-ellipsis">
-                    <Link
-                      href={
-                        flow.isTopLevel && grant.isFlow && !isRemovalRequested
-                          ? `/flow/${grant.id}`
-                          : `/item/${grant.id}`
-                      }
-                      className="text-sm font-medium duration-100 ease-out hover:text-primary md:text-lg"
-                      tabIndex={-1}
-                    >
-                      {grant.title}
-                    </Link>
-                  </div>
-
-                  {isRemovalRequested && <Badge variant="destructive">Removal Requested</Badge>}
-                </TableCell>
-                {!flow.isTopLevel && (
-                  <TableCell>
-                    <div className="relative inline-flex">
-                      <UserProfile address={getEthAddress(grant.recipient)} key={grant.recipient}>
-                        {(profile) => (
-                          <div className="flex items-center space-x-1.5">
-                            <Avatar className="size-7 bg-accent text-xs">
-                              <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
-                              <AvatarFallback>
-                                {profile.display_name[0].toUpperCase()}
-                              </AvatarFallback>
-                            </Avatar>
-                            <span className="tracking-tight max-sm:hidden">
-                              {profile.display_name}
-                            </span>
-                          </div>
-                        )}
-                      </UserProfile>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <span
-                            className={cn(
-                              "absolute left-5 top-0 inline-block size-2.5 cursor-help rounded-full",
-                              {
-                                "bg-red-500": !hasRecentUpdate,
-                                "bg-green-500": hasRecentUpdate,
-                              },
-                            )}
-                          />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          {hasUpdate && (
-                            <p>
-                              Posted update <DateTime date={lastUpdate} relative />
-                            </p>
-                          )}
-                          {!hasUpdate && <p>Builder hasn&apos;t posted any updates yet</p>}
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>
-                  </TableCell>
-                )}
-
-                <TableCell className="text-center">
-                  <AnimatedSalary
-                    value={grant.totalEarned}
-                    monthlyRate={grant.monthlyIncomingFlowRate}
-                  />
-                </TableCell>
-
-                <TableCell className="text-center">
-                  <MonthlyBudget display={grant.monthlyIncomingFlowRate} flow={grant} />
-                </TableCell>
-                <TableCell className="text-center">{grant.votesCount}</TableCell>
-
-                <TableCell className="w-[100px] max-w-[100px] text-center">
-                  <div className="px-0.5">
-                    <VotingInput recipientId={grant.id} />
-                  </div>
-                </TableCell>
-              </TableRow>
-            )
-          })}
-        </TableBody>
-      </Table>
+      <GrantsList
+        flow={flow}
+        grants={flow.subgrants
+          .map((g) => ({
+            ...g,
+            profile: profiles.find((p) => p.address === getEthAddress(g.recipient))!,
+          }))
+          .sort(sortGrants)}
+      />
       <VotingBar />
-      {/* <div className="mt-10 grid grid-cols-1 gap-4 lg:grid-cols-3 xl:grid-cols-5">
-        {flow.subgrants.map((grant) => (
-          <GrantCard key={grant.id} grant={grant} />
-        ))}
-      </div> */}
     </>
   )
 }

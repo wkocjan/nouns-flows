@@ -2,9 +2,10 @@
 
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
+import { useLogin } from "@/lib/auth/use-login"
 import useWindowSize from "@/lib/hooks/use-window-size"
 import { useFileUploads } from "@/lib/pinata/use-file-uploads"
-import { getIpfsUrl } from "@/lib/utils"
+import { cn, getIpfsUrl } from "@/lib/utils"
 import { ArrowUp, Paperclip, StopCircle } from "lucide-react"
 import React, { ChangeEvent, useCallback, useEffect, useRef } from "react"
 import { toast } from "sonner"
@@ -13,11 +14,20 @@ import { PreviewAttachment } from "./preview-attachment"
 
 const maxFileSize = 15 * 1024 * 1024 // 10MB
 
-export function MultimodalInput() {
+interface Props {
+  rows?: number
+  placeholder?: string
+  className?: string
+  onSubmit?: () => void
+}
+
+export function MultimodalInput(props: Props) {
+  const { rows = 3, placeholder = "Send a message...", className, onSubmit } = props
   const { input, setInput, isLoading, stop, attachments, setAttachments, handleSubmit, user } =
     useAgentChat()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const { width } = useWindowSize()
+  const { login } = useLogin()
 
   useEffect(() => {
     if (textareaRef.current) adjustHeight()
@@ -50,13 +60,19 @@ export function MultimodalInput() {
     if (width && width > 768) {
       textareaRef.current?.focus()
     }
-  }, [attachments, handleSubmit, setAttachments, width, input])
+
+    onSubmit?.()
+  }, [attachments, handleSubmit, setAttachments, width, input, onSubmit])
 
   return (
     <form
-      className="mx-auto flex w-full gap-2 bg-background px-4 pb-4 md:max-w-3xl md:pb-6"
+      className={cn("relative z-10 mx-auto flex w-full md:max-w-3xl", className)}
       onSubmit={handleSubmit}
     >
+      {!user && (
+        <div className="absolute inset-0 z-20 cursor-pointer bg-transparent" onClick={login} />
+      )}
+
       <div className="relative flex w-full flex-col gap-4">
         <input
           type="file"
@@ -102,12 +118,12 @@ export function MultimodalInput() {
 
         <Textarea
           ref={textareaRef}
-          placeholder="Send a message..."
+          placeholder={placeholder}
           value={input}
           disabled={disabled}
           onChange={handleInput}
-          className="max-h-48 min-h-6 resize-none overflow-hidden rounded-xl border-none bg-card p-4 text-sm focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-secondary"
-          rows={3}
+          className="max-h-48 min-h-6 resize-none overflow-hidden rounded-xl border-none bg-card p-4 text-sm focus-visible:ring-0 focus-visible:ring-offset-0 disabled:opacity-100 dark:bg-secondary"
+          rows={rows}
           onKeyDown={(event) => {
             if (event.key === "Enter" && !event.shiftKey) {
               event.preventDefault()
@@ -122,7 +138,7 @@ export function MultimodalInput() {
             }
           }}
         />
-        <div className="absolute bottom-2 right-2 flex items-center gap-2">
+        <div className="absolute bottom-3 right-4 flex items-center gap-2">
           <Button
             className="h-fit rounded-full p-1.5"
             onClick={(event) => {

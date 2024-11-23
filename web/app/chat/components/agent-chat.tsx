@@ -4,6 +4,7 @@ import { AgentType } from "@/lib/ai/agents/agent"
 import { User } from "@/lib/auth/user"
 import { Attachment, Message } from "ai"
 import { useChat, UseChatHelpers } from "ai/react"
+import { useRouter } from "next/navigation"
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react"
 import { ChatBody, ChatData } from "../chat-body"
 import { useChatHistory } from "./use-chat-history"
@@ -23,6 +24,7 @@ interface AgentChatContext extends UseChatHelpers {
   user?: User
   context: string
   setContext: React.Dispatch<React.SetStateAction<string>>
+  type: AgentType
 }
 
 const AgentChatContext = createContext<AgentChatContext | undefined>(undefined)
@@ -32,6 +34,7 @@ export function AgentChatProvider(props: PropsWithChildren<Props>) {
   const { readChatHistory, storeChatHistory, resetChatHistory } = useChatHistory({ id })
   const [attachments, setAttachments] = useState<Array<Attachment>>([])
   const [context, setContext] = useState("")
+  const router = useRouter()
 
   const chat = useChat({
     id,
@@ -39,6 +42,13 @@ export function AgentChatProvider(props: PropsWithChildren<Props>) {
     body: { type, id, data, context } satisfies Omit<ChatBody, "messages">,
     initialMessages: initialMessages || readChatHistory(),
     keepLastMessageOnError: true,
+    onToolCall: ({ toolCall }) => {
+      switch (toolCall.toolName) {
+        case "updateStory":
+          router.refresh()
+          break
+      }
+    },
   })
 
   const restart = () => {
@@ -58,7 +68,7 @@ export function AgentChatProvider(props: PropsWithChildren<Props>) {
 
   return (
     <AgentChatContext.Provider
-      value={{ ...chat, restart, attachments, setAttachments, user, context, setContext }}
+      value={{ ...chat, type, restart, attachments, setAttachments, user, context, setContext }}
     >
       {children}
     </AgentChatContext.Provider>

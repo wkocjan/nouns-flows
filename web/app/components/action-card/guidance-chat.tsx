@@ -58,7 +58,7 @@ export function GuidanceChat(props: Props) {
         </DialogHeader>
         <div className="flex h-[calc(100dvh-100px)] min-w-0 flex-col">
           {user && messages.length > 0 && <Messages />}
-          <MultimodalInput />
+          <MultimodalInput className="bg-background px-4 pb-4 md:pb-6" />
         </div>
       </DialogContent>
     </Dialog>

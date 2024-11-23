@@ -118,9 +118,7 @@ export default async function GrantPage({ params }: Props) {
           {!isFlow && (
             <Suspense fallback={<div>Loading...</div>}>
               <Updates
-                casts={await getGrantCasts({
-                  grantId: grant.id,
-                })}
+                casts={await getGrantCasts({ grantId: grant.id })}
                 recipient={grant.recipient}
               />
             </Suspense>

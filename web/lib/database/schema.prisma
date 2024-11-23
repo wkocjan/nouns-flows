@@ -37,17 +37,6 @@ model Draft {
   @@schema("web")
 }
 
-model FarcasterUser {
-  fid         Int      @id
-  username    String
-  displayName String
-  imageUrl    String
-  addresses   String[]
-
-  @@map("FarcasterUser")
-  @@schema("web")
-}
-
 model Comment {
   id            String   @id @default(cuid())
   content       String
@@ -97,6 +86,33 @@ model Conversation {
   @@index([user])
   @@index([type])
   @@map("Conversation")
+  @@schema("web")
+}
+
+model Story {
+  id             String   @id @default(uuid())
+  title          String
+  summary        String
+  key_points     String[]
+  participants   String[]
+  header_image   String?
+  timeline       Json
+  sentiment      String   @db.VarChar(10)
+  completeness   Int
+  complete       Boolean
+  sources        String[]
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+  media_urls     String[]
+  author         String
+  tagline        String
+  grant_ids      String[]
+  parent_flow_ids String[]
+  edits          Json?
+
+  @@index([complete])
+  @@index([updated_at])
+  @@map("Stories")
   @@schema("web")
 }
 

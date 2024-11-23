@@ -12,6 +12,9 @@ import { Grant } from "@prisma/flows"
 import Link from "next/link"
 import { useRef } from "react"
 import { SwapTokenBox } from "./swap-token-box"
+import { getEthAddress } from "@/lib/utils"
+import { useAccount } from "wagmi"
+import { useERC20Balances } from "@/lib/tcr/use-erc20-balances"
 
 interface Props {
   flow: Grant
@@ -28,7 +31,6 @@ export function SwapTokenButton(props: Props) {
     flow,
     defaultTokenAmount = BigInt(1e18),
     size = "default",
-    text = "Swap",
     variant = "default",
     extraInfo,
     onSuccess = () => {
@@ -37,6 +39,12 @@ export function SwapTokenButton(props: Props) {
     },
   } = props
   const ref = useRef<HTMLButtonElement>(null)
+
+  const { address } = useAccount()
+  const { balances } = useERC20Balances([getEthAddress(flow.erc20)], address)
+
+  const text =
+    props.text || (balances?.[0] ? (!flow.isTopLevel ? "Buy TCR" : "Buy FLOWS") : "Become curator")
 
   return (
     <Dialog>

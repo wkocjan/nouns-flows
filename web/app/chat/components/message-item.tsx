@@ -1,22 +1,26 @@
 "use client"
 
 import { Markdown } from "@/components/ui/markdown"
+import Gonzo from "@/public/gonzo.svg"
 import Flo from "@/public/flo.png"
 import { Attachment, ToolInvocation } from "ai"
 import Image from "next/image"
 import { ReactNode } from "react"
 import { PreviewAttachment } from "./preview-attachment"
 import { SubmitApplicationResult } from "./tools/submit-application"
+import { UpdateStoryResult } from "./tools/update-story"
+import { AgentType } from "@/lib/ai/agents/agent"
 
 interface Props {
   role: string
   content: string | ReactNode
   toolInvocations?: Array<ToolInvocation> | undefined
   attachments?: Array<Attachment>
+  type: AgentType
 }
 
 export const MessageItem = (props: Props) => {
-  const { role, content, toolInvocations, attachments } = props
+  const { role, content, toolInvocations, attachments, type } = props
 
   return (
     <div
@@ -25,10 +29,10 @@ export const MessageItem = (props: Props) => {
     >
       <div className="flex w-full max-w-full gap-4 group-data-[role=user]/message:ml-auto group-data-[role=user]/message:w-fit md:group-data-[role=user]/message:max-w-xl">
         {role === "assistant" && (
-          <div className="flex size-[28px] shrink-0 items-center justify-center overflow-hidden rounded-full ring-1 ring-border md:size-10 md:size-[40px]">
+          <div className="flex size-7 shrink-0 items-center justify-center overflow-hidden rounded-full ring-1 ring-border md:size-10">
             <Image
-              src={Flo}
-              alt="Noggles"
+              src={type === "gonzo" ? Gonzo : Flo}
+              alt={type}
               width={64}
               height={64}
               className="h-full w-full object-cover"
@@ -61,6 +65,8 @@ export const MessageItem = (props: Props) => {
               switch (toolName) {
                 case "submitApplication":
                   return <SubmitApplicationResult key={toolCallId} draftId={Number(tool.result)} />
+                case "updateStory":
+                  return <UpdateStoryResult key={toolCallId} message={tool.result} />
                 default:
                   return null
               }
