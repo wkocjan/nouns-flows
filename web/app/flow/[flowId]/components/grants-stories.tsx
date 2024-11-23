@@ -8,6 +8,7 @@ import database from "@/lib/database/edge"
 import { Story } from "@prisma/flows"
 import Image from "next/image"
 import Link from "next/link"
+import { getPinataWithKey } from "@/lib/pinata/url-with-key"
 
 interface Props {
   flowId: string
@@ -17,7 +18,7 @@ export async function GrantsStories(props: Props) {
   const { flowId } = props
 
   const stories = await database.story.findMany({
-    where: { complete: true, header_image: { not: null }, parent_flow_id: flowId },
+    where: { complete: true, header_image: { not: null }, parent_flow_ids: { has: flowId } },
     orderBy: { updated_at: "desc" },
     take: 11,
   })
@@ -44,7 +45,7 @@ function FeaturedStoryCard(props: { story: Story }) {
       {header_image && (
         <div className="pointer-events-none absolute inset-0 -z-10 size-full overflow-hidden">
           <Image
-            src={header_image}
+            src={getPinataWithKey(header_image)}
             alt={title}
             className="size-full object-cover transition-transform group-hover:scale-110"
             width={674}

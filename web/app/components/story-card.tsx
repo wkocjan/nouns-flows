@@ -1,6 +1,7 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { DateTime } from "@/components/ui/date-time"
 import { UserProfile } from "@/components/user-profile/user-profile"
+import { getPinataWithKey } from "@/lib/pinata/url-with-key"
 import { Story } from "@prisma/flows"
 import Image from "next/image"
 import Link from "next/link"
@@ -13,7 +14,7 @@ export function StoryCard(props: { story: Story }) {
       {header_image && (
         <div className="h-32 w-full overflow-hidden rounded-lg md:h-40">
           <Image
-            src={header_image}
+            src={getPinataWithKey(header_image)}
             alt={title}
             className="size-full object-cover transition-transform group-hover:scale-110"
             width={320}

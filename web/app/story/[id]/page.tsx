@@ -32,16 +32,27 @@ import { cache } from "react"
 import { KeyPoints } from "./components/key-points"
 import { Sources } from "./components/sources"
 import { StoryChat } from "./components/story-chat"
+import { getPinataWithKey } from "@/lib/pinata/url-with-key"
 
 interface Props {
   params: { id: string }
 }
 
 const getStory = cache(async (id: string) => {
-  return await database.story.findUniqueOrThrow({
+  const story = await database.story.findUniqueOrThrow({
     where: { id },
-    include: { grant: true, flow: true },
   })
+
+  const [grants, flows] = await Promise.all([
+    database.grant.findMany({
+      where: { id: { in: story.grant_ids } },
+    }),
+    database.grant.findMany({
+      where: { id: { in: story.parent_flow_ids } },
+    }),
+  ])
+
+  return { ...story, grants, flows }
 })
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
@@ -62,7 +73,7 @@ export default async function Page(props: Props) {
   const story = await getStory(id)
   const user = await getUser()
 
-  const { title, grant, key_points, updated_at, flow, timeline, sources, author } = story
+  const { title, grants, flows, key_points, updated_at, timeline, sources, author } = story
 
   return (
     <AgentChatProvider
@@ -81,7 +92,7 @@ export default async function Page(props: Props) {
             <BreadcrumbSeparator />
 
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/flow/${flow.id}`}>{flow.title}</BreadcrumbLink>
+              <BreadcrumbLink href={`/flow/${flows[0].id}`}>{flows[0].title}</BreadcrumbLink>
             </BreadcrumbItem>
 
             <BreadcrumbSeparator className="max-sm:hidden" />
@@ -109,8 +120,14 @@ export default async function Page(props: Props) {
                       <Avatar className="size-10 bg-primary">
                         <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
                       </Avatar>
-                      <div>
-                        <p className="text-sm font-medium">{profile.display_name}</p>
+                      <div className="flex flex-col items-start justify-center">
+                        <Link
+                          target="_blank"
+                          href={`https://warpcast.com/${profile.username}`}
+                          className="text-sm font-medium"
+                        >
+                          {profile.display_name}
+                        </Link>
                         <p className="text-xs text-muted-foreground">
                           {Math.ceil(story.summary.split(" ").length / 200)} min read
                         </p>
@@ -139,7 +156,12 @@ export default async function Page(props: Props) {
                           height="100%"
                         />
                       ) : (
-                        <Image src={url} alt="" fill className="rounded-lg object-cover" />
+                        <Image
+                          src={getPinataWithKey(url)}
+                          alt=""
+                          fill
+                          className="rounded-lg object-cover"
+                        />
                       )}
                     </div>
                   </CarouselItem>
@@ -180,33 +202,41 @@ export default async function Page(props: Props) {
           </div>
 
           <aside className="space-y-6 md:col-span-4">
-            {grant && flow && (
-              <div className="flex items-center gap-4 rounded-xl border border-secondary p-3">
-                {grant.image && (
-                  <Image
-                    src={getIpfsUrl(grant.image, "pinata")}
-                    alt={grant.title}
-                    width={40}
-                    height={40}
-                    className="rounded-full"
-                  />
-                )}
-                <div className="flex flex-col space-y-1">
-                  <Link
-                    href={`/item/${grant.id}`}
-                    className="text-sm font-medium leading-tight hover:underline"
-                  >
-                    {grant.title}
-                  </Link>
-                  <Link
-                    href={`/flow/${flow.id}`}
-                    className="text-sm text-muted-foreground hover:underline"
-                  >
-                    {flow.title}
-                  </Link>
+            {story.grants.map((grant, i) => {
+              const flow = story.flows[i]
+              return (
+                <div
+                  key={grant.id}
+                  className="flex items-center gap-4 rounded-xl border border-secondary p-3"
+                >
+                  {grant.image && (
+                    <Image
+                      src={getIpfsUrl(grant.image, "pinata")}
+                      alt={grant.title}
+                      width={40}
+                      height={40}
+                      className="rounded-full"
+                    />
+                  )}
+                  <div className="flex flex-col space-y-1">
+                    <Link
+                      href={`/item/${grant.id}`}
+                      className="text-sm font-medium leading-tight hover:underline"
+                    >
+                      {grant.title}
+                    </Link>
+                    {flow && (
+                      <Link
+                        href={`/flow/${flow.id}`}
+                        className="text-sm text-muted-foreground hover:underline"
+                      >
+                        {flow.title}
+                      </Link>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )
+            })}
 
             <KeyPoints key_points={key_points} className="max-sm:hidden" />
           </aside>
