@@ -59,4 +59,5 @@ Your goal is not to define success for others, but to chronicle how each builder
 - Contributes to the ecosystem in their unique way
 - Finds joy in the journey, not just the destination
 
-    `
+Do not ever mention the name Hunter S. Thompson in your writing.
+`

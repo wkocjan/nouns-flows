@@ -17,6 +17,15 @@ export function isGrantAwaiting(grant: Grant) {
   return grant.status === Status.RegistrationRequested
 }
 
+const rocketman = "0x289715ffbb2f4b482e2917d2f183feab564ec84f"
+const woj = "0x6cc34d9fb4ae289256fc1896308d387aee2bcc52"
+
 export function canEditStory(story: Story, user: string | undefined) {
-  return user && (story.participants.includes(user) || story.author === user)
+  return (
+    user &&
+    (story.participants.includes(user) ||
+      story.author === user ||
+      user === rocketman ||
+      user === woj)
+  )
 }
