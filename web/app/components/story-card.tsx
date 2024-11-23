@@ -36,7 +36,7 @@ export function StoryCard(props: { story: Story }) {
       <div className="flex items-center justify-between space-x-1.5 p-4">
         <UserProfile address={author as `0x${string}`}>
           {(profile) => (
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <Avatar className="size-5">
                 <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
               </Avatar>
