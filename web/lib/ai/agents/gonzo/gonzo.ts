@@ -23,12 +23,12 @@ export async function getGonzo(data: ChatData): Promise<Agent> {
   }
 
   return {
-    prompt: await getFloPrompt(data, tools),
+    prompt: await getGonzoPrompt(data, tools),
     tools: getTools(tools),
   }
 }
 
-async function getFloPrompt(data: ChatData, tools: Tool[]) {
+async function getGonzoPrompt(data: ChatData, tools: Tool[]) {
   let prompt = `${aboutPrompt}\n\n`
   prompt += `${gonzoPersonalityPrompt}\n`
   prompt += await getStoryPrompt(data.storyId)
