@@ -42,6 +42,8 @@ model Cast {
   embeds           String?
   mentions         String?
   mentions_positions String?
+  mentioned_fids     BigInt[]
+  mentions_positions_array Int[]
   root_parent_hash Bytes?
   root_parent_url  String?
   profile          Profile   @relation(fields: [fid], references: [fid])
