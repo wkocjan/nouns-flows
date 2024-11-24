@@ -3,6 +3,7 @@
 import database from "@/lib/database/edge"
 import { removeDraftEmbedding } from "@/lib/embedding/embed-drafts"
 import { revalidatePath } from "next/cache"
+import { unstable_after as after } from "next/server"
 
 export async function deleteDraft(id: number, user?: string) {
   try {
@@ -15,7 +16,9 @@ export async function deleteDraft(id: number, user?: string) {
 
     await database.draft.update({ where: { id }, data: { isPrivate: true } })
 
-    await removeDraftEmbedding(draft)
+    after(async () => {
+      await removeDraftEmbedding(draft)
+    })
 
     revalidatePath(`/flow/${draft.flowId}/drafts`)
 
