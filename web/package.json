@@ -14,9 +14,9 @@
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^0.0.56",
-    "@blocknote/core": "^0.17.1",
-    "@blocknote/mantine": "^0.17.1",
-    "@blocknote/react": "^0.17.1",
+    "@blocknote/core": "^0.19.2",
+    "@blocknote/mantine": "^0.19.2",
+    "@blocknote/react": "^0.19.2",
     "@chainsafe/persistent-merkle-tree": "^0.8.0",
     "@chainsafe/ssz": "^0.17.1",
     "@dagrejs/dagre": "^1.1.4",
@@ -88,8 +88,8 @@
     "@types/node": "^20",
     "@types/pg": "^8.11.10",
     "@types/pluralize": "^0.0.33",
-    "@types/react": "npm:types-react@19.0.0-rc.1",
-    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
     "eslint": "8.57.0",
     "eslint-config-next": "15.0.3",
     "fs-extra": "^11.2.0",
@@ -105,11 +105,5 @@
   },
   "prisma": {
     "schema": "lib/database/schema.prisma"
-  },
-  "pnpm": {
-    "overrides": {
-      "@types/react": "npm:types-react@19.0.0-rc.1",
-      "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
-    }
   }
 }

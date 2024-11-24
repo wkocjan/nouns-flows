@@ -10,7 +10,6 @@ import { useCreateBlockNote } from "@blocknote/react"
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import { BlockVideoPlayer } from "./block-video-player"
 import "./markdown-editor.css"
 
 type Props = {
@@ -31,7 +30,6 @@ export default function MarkdownEditor(props: Props) {
         ...defaultBlockSpecs,
         audio: undefined as any,
         file: undefined as any,
-        video: BlockVideoPlayer,
       },
     }),
     initialContent: initialBlocks,
