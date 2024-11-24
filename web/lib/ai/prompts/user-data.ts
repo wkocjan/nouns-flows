@@ -1,4 +1,4 @@
-import { headers } from "next/headers"
+import { headers, type UnsafeUnwrappedHeaders } from "next/headers";
 import { cache } from "react"
 import { getEthAddress } from "@/lib/utils"
 import { getFarcasterUsersByEthAddress } from "@/lib/farcaster/get-user"
@@ -25,9 +25,9 @@ export const getUserDataPrompt = cache(async (address?: string) => {
 })
 
 function getLocationPrompt(): string {
-  const country = headers().get("X-Vercel-IP-Country")
-  const countryRegion = headers().get("X-Vercel-IP-Country-Region")
-  const city = headers().get("X-Vercel-IP-City")
+  const country = (headers() as unknown as UnsafeUnwrappedHeaders).get("X-Vercel-IP-Country")
+  const countryRegion = (headers() as unknown as UnsafeUnwrappedHeaders).get("X-Vercel-IP-Country-Region")
+  const city = (headers() as unknown as UnsafeUnwrappedHeaders).get("X-Vercel-IP-City")
 
   if (!city && !country && !countryRegion) return ""
 
@@ -35,7 +35,7 @@ function getLocationPrompt(): string {
 }
 
 function getUserAgentPrompt(): string {
-  const userAgent = headers().get("user-agent")
+  const userAgent = (headers() as unknown as UnsafeUnwrappedHeaders).get("user-agent")
   if (!userAgent) return ""
 
   return `### User agent\n\nHere is the user agent: ${userAgent}. If the user is on mobile, you should be incredibly concise and to the point. They do not have a lot of time or space to read, so you must be incredibly concise and keep your questions and responses to them short in as few words as possible, unless they ask for clarification or it's otherwise necessary.`

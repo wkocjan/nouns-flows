@@ -18,17 +18,17 @@ export async function ActionCard(props: Props) {
   const { data } = guidanceSchema.safeParse(cachedGuidance)
 
   return (
-    <AgentChatProvider
+    (<AgentChatProvider
       id={`action-card-${user?.address.toLowerCase()}-${new Date().toISOString().split("T")[0]}`}
       type="flo"
       user={user}
     >
       <ActionCardContent
         user={user}
-        animated={!data || (!user && !cookies().has("guidance-guest"))}
+        animated={!data || (!user && !(await cookies()).has("guidance-guest"))}
         text={data?.text}
         action={data?.action}
       />
-    </AgentChatProvider>
-  )
+    </AgentChatProvider>)
+  );
 }

@@ -1,8 +1,9 @@
 "use server"
 
 import database from "@/lib/database/edge"
-import { removeDraftEmbedding, updateDraftEmbedding } from "@/lib/embedding/embed-drafts"
+import { updateDraftEmbedding } from "@/lib/embedding/embed-drafts"
 import { revalidatePath } from "next/cache"
+import { unstable_after as after } from "next/server"
 import { z } from "zod"
 
 const schema = z.object({
@@ -41,7 +42,9 @@ export async function updateDraft(id: number, formData: FormData, user?: `0x${st
       },
     })
 
-    await updateDraftEmbedding(draft, newDraft, draft.flowId)
+    after(async () => {
+      await updateDraftEmbedding(draft, newDraft, draft.flowId)
+    })
 
     revalidatePath(`/draft/${id}`)
 

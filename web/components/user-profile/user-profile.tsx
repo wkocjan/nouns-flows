@@ -1,7 +1,7 @@
 import "server-only"
 
 import { getShortEthAddress } from "@/lib/utils"
-import { Suspense } from "react"
+import { Suspense, type JSX } from "react";
 import { getUserProfile, Profile } from "./get-user-profile"
 import { UserProfilePopover } from "./user-popover"
 

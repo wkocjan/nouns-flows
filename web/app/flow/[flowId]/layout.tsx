@@ -12,11 +12,11 @@ import { FlowHeader } from "./components/flow-header"
 export const runtime = "nodejs"
 
 interface Props {
-  params: { flowId: string }
+  params: Promise<{ flowId: string }>
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { flowId } = props.params
+  const { flowId } = (await props.params)
 
   const pool = await getPool()
   const flow = await getFlowWithGrants(flowId)
@@ -26,7 +26,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
 export default async function FlowLayout(props: PropsWithChildren<Props>) {
   const { children } = props
-  const { flowId } = props.params
+  const { flowId } = (await props.params)
 
   const flow = await getFlowWithGrants(flowId)
 

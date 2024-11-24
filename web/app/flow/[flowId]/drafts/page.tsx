@@ -21,14 +21,14 @@ import { GrantTitleCell } from "../components/grant-title-cell"
 export const runtime = "nodejs"
 
 interface Props {
-  params: { flowId: string }
+  params: Promise<{ flowId: string }>
 }
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
 
 export default async function FlowDraftsPage(props: Props) {
-  const { flowId } = props.params
+  const { flowId } = (await props.params)
 
   const flow = await database.grant.findFirstOrThrow({
     where: { id: flowId, isFlow: 1, isRemoved: 0 },

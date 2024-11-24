@@ -35,7 +35,7 @@ import { StoryChat } from "./components/story-chat"
 import { getPinataWithKey } from "@/lib/pinata/url-with-key"
 
 interface Props {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 const getStory = cache(async (id: string) => {
@@ -56,7 +56,7 @@ const getStory = cache(async (id: string) => {
 })
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { id } = props.params
+  const { id } = (await props.params)
 
   const story = await getStory(id)
 
@@ -68,7 +68,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function Page(props: Props) {
-  const { id } = props.params
+  const { id } = (await props.params)
 
   const story = await getStory(id)
   const user = await getUser()

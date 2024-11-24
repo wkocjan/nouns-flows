@@ -3,7 +3,7 @@
 import database from "@/lib/database/edge"
 import { addDraftEmbedding } from "@/lib/embedding/embed-drafts"
 import { z } from "zod"
-
+import { unstable_after as after } from "next/server"
 const schema = z
   .object({
     title: z.string().trim().min(1, "Title is required"),
@@ -54,7 +54,9 @@ export async function saveDraft(formData: FormData, user?: `0x${string}`) {
       },
     })
 
-    await addDraftEmbedding(draft, rest.flowId)
+    after(async () => {
+      await addDraftEmbedding(draft, rest.flowId)
+    })
 
     return { error: false, id: draft.id }
   } catch (error) {

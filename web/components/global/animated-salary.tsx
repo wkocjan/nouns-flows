@@ -34,7 +34,7 @@ export function AnimatedSalary({ value, monthlyRate }: Props) {
         maximumFractionDigits: fractionDigits,
       }}
       locales="en-US"
-      trend="increasing"
+      trend={1}
     />
   )
 }
