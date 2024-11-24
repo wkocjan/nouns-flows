@@ -14,17 +14,10 @@ import Noggles from "@/public/noggles.svg"
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import type { Metadata } from "next"
-import dynamic from "next/dynamic"
 import { Roboto_Mono } from "next/font/google"
 import Image from "next/image"
 import Link from "next/link"
 import "./globals.css"
-
-const HighlightErrorBoundary = dynamic(
-  () =>
-    import("@/components/global/HighlightErrorBoundary").then((mod) => mod.HighlightErrorBoundary),
-  { ssr: false },
-)
 
 export const runtime = "nodejs"
 
@@ -43,7 +36,7 @@ export const viewport = {
 export default async function RootLayout(props: Readonly<{ children: React.ReactNode }>) {
   const { children } = props
 
-  const [pool, user] = await Promise.all([getPool(), getUser()])
+  const [pool, user, sessionPresent] = await Promise.all([getPool(), getUser(), hasSession()])
 
   return (
     <>
@@ -57,38 +50,36 @@ export default async function RootLayout(props: Readonly<{ children: React.React
             enableSystem
             disableTransitionOnChange
           >
-            <HighlightErrorBoundary>
-              <TooltipProvider delayDuration={350}>
-                <Wagmi>
-                  <nav className="container flex items-center py-4 max-lg:justify-between md:py-5">
-                    <div className="lg:w-1/5">
-                      <h2>
-                        <Link
-                          href="/"
-                          className="flex items-center font-medium text-card-foreground max-sm:text-sm"
-                        >
-                          <Image
-                            src={Noggles}
-                            alt={pool.title}
-                            className="mr-2.5 h-5 w-auto md:h-7"
-                          />
-                        </Link>
-                      </h2>
-                    </div>
-                    <MenuDesktop />
-                    <div className="flex items-center justify-end space-x-2.5 lg:w-1/5">
-                      {user && <RecipientPopover address={user.address} />}
-                      {user && <CuratorPopover flow={pool} address={user.address} />}
-                      <MenuAvatar user={user} hasSession={hasSession()} />
-                      <MenuMobile />
-                    </div>
-                  </nav>
-                  {children}
-                  <Toaster />
-                  <Analytics />
-                </Wagmi>
-              </TooltipProvider>
-            </HighlightErrorBoundary>
+            <TooltipProvider delayDuration={350}>
+              <Wagmi>
+                <nav className="container flex items-center py-4 max-lg:justify-between md:py-5">
+                  <div className="lg:w-1/5">
+                    <h2>
+                      <Link
+                        href="/"
+                        className="flex items-center font-medium text-card-foreground max-sm:text-sm"
+                      >
+                        <Image
+                          src={Noggles}
+                          alt={pool.title}
+                          className="mr-2.5 h-5 w-auto md:h-7"
+                        />
+                      </Link>
+                    </h2>
+                  </div>
+                  <MenuDesktop />
+                  <div className="flex items-center justify-end space-x-2.5 lg:w-1/5">
+                    {user && <RecipientPopover address={user.address} />}
+                    {user && <CuratorPopover flow={pool} address={user.address} />}
+                    <MenuAvatar user={user} hasSession={sessionPresent} />
+                    <MenuMobile />
+                  </div>
+                </nav>
+                {children}
+                <Toaster />
+                <Analytics />
+              </Wagmi>
+            </TooltipProvider>
           </ThemeProvider>
           <SpeedInsights />
         </body>
