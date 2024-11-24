@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   const address = await getUserAddressFromCookie()
 
   if (!address) {
-    cookies().set("guidance-guest", "true", { maxAge: 60 * 60 * 24 * 7 }) // 7 days
+    (await cookies()).set("guidance-guest", "true", { maxAge: 60 * 60 * 24 * 7 }) // 7 days
   }
 
   const cachedGuidance = await kv.get(getGuidanceCacheKey(address))

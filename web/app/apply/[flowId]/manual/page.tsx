@@ -12,13 +12,13 @@ import { ApplyForm } from "../components/apply-form"
 export const runtime = "nodejs"
 
 interface Props {
-  params: {
+  params: Promise<{
     flowId: string
-  }
+  }>
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const flow = await getFlow(props.params.flowId)
+  const flow = await getFlow((await props.params).flowId)
 
   return {
     title: `Apply for a grant - ${flow.title}`,
@@ -27,7 +27,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function ApplyFlowPage(props: Props) {
-  const { flowId } = props.params
+  const { flowId } = (await props.params)
 
   const flow = await database.grant.findFirstOrThrow({
     where: { id: flowId, isFlow: 1, isActive: 1 },

@@ -23,13 +23,13 @@ import { StatusNotDisputed } from "./components/status-not-disputed"
 export const runtime = "nodejs"
 
 interface Props {
-  params: {
+  params: Promise<{
     applicationId: string
-  }
+  }>
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { applicationId } = props.params
+  const { applicationId } = (await props.params)
 
   const grant = await database.grant.findFirstOrThrow({
     where: { id: applicationId },
@@ -38,7 +38,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   return { title: grant.title, description: grant.tagline }
 }
 
-export default async function ApplicationPage({ params }: Props) {
+export default async function ApplicationPage(props: Props) {
+  const params = await props.params;
   const { applicationId } = params
 
   const grant = await database.grant.findUniqueOrThrow({

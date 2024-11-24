@@ -10,7 +10,7 @@ MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEB1GUPYZCvCfMHfxcHwUb6rtzdp4LtC7V8tjdHA+l9y2Y
 -----END PUBLIC KEY-----`
 
 export const getUserAddressFromCookie = cache(async () => {
-  const token = cookies().get("privy-id-token")
+  const token = (await cookies()).get("privy-id-token")
   if (!token) return undefined
 
   try {

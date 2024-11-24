@@ -14,11 +14,11 @@ import { VotingBar } from "./components/voting-bar"
 export const runtime = "nodejs"
 
 interface Props {
-  params: { flowId: string }
+  params: Promise<{ flowId: string }>
 }
 
 export default async function FlowPage(props: Props) {
-  const { flowId } = props.params
+  const { flowId } = (await props.params)
 
   const flow = await database.grant.findFirstOrThrow({
     where: { id: flowId, isActive: 1 },

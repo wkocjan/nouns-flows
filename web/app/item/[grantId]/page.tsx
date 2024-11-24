@@ -30,13 +30,13 @@ import { Suspense } from "react"
 export const runtime = "nodejs"
 
 interface Props {
-  params: {
+  params: Promise<{
     grantId: string
-  }
+  }>
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { grantId } = props.params
+  const { grantId } = (await props.params)
 
   const pool = await getPool()
 
@@ -48,7 +48,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   return { title: `${grant.title} - ${pool.title}`, description: grant.tagline }
 }
 
-export default async function GrantPage({ params }: Props) {
+export default async function GrantPage(props: Props) {
+  const params = await props.params;
   const { grantId } = params
 
   const grant = await database.grant.findUniqueOrThrow({

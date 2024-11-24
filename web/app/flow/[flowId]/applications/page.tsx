@@ -39,13 +39,13 @@ import { GrantTitleCell } from "../components/grant-title-cell"
 export const runtime = "nodejs"
 
 interface Props {
-  params: {
+  params: Promise<{
     flowId: string
-  }
+  }>
 }
 
 export default async function FlowApplicationsPage(props: Props) {
-  const { flowId } = props.params
+  const { flowId } = (await props.params)
 
   const [flow, grants] = await Promise.all([
     getFlow(flowId),

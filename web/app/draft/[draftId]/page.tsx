@@ -24,16 +24,16 @@ import { DraftPublishButton } from "./draft-publish-button"
 export const runtime = "nodejs"
 
 interface Props {
-  params: {
+  params: Promise<{
     draftId: string
-  }
-  searchParams: {
+  }>
+  searchParams: Promise<{
     edit?: string
-  }
+  }>
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { draftId } = props.params
+  const { draftId } = (await props.params)
 
   const draft = await database.draft.findFirstOrThrow({
     where: { id: Number(draftId) },
@@ -42,7 +42,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   return { title: draft.title, description: draft.tagline }
 }
 
-export default async function DraftPage({ params, searchParams }: Props) {
+export default async function DraftPage(props: Props) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const { draftId } = params
 
   const draft = await database.draft.findUniqueOrThrow({

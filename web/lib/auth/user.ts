@@ -1,6 +1,6 @@
 import "server-only"
 
-import { cookies } from "next/headers"
+import { cookies, type UnsafeUnwrappedCookies } from "next/headers";
 import { cache } from "react"
 import { getFarcasterUserByEthAddress } from "../farcaster/get-user"
 import { getShortEthAddress } from "../utils"
@@ -29,4 +29,4 @@ export const getUser = cache(async () => {
   } satisfies User
 })
 
-export const hasSession = () => Boolean(cookies().get("privy-session"))
+export const hasSession = () => Boolean((cookies() as unknown as UnsafeUnwrappedCookies).get("privy-session"))

@@ -30,7 +30,7 @@ export async function GET(request: Request) {
 
     if (farcasterUser) {
       // Check if builder profile has already been processed via cookie
-      const hasRunBuilderProfile = cookies().get(COOKIE_NAME)
+      const hasRunBuilderProfile = (await cookies()).get(COOKIE_NAME)
       if (!hasRunBuilderProfile) {
         // Double check KV store to prevent duplicate processing
         const kvKey = `${COOKIE_NAME}-${address.toLowerCase()}`
@@ -41,7 +41,7 @@ export async function GET(request: Request) {
           const payload = { fid: farcasterUser.fid.toString() }
           await postBuilderProfileRequest([payload])
           // Set cookie and KV flags to prevent reprocessing
-          cookies().set(COOKIE_NAME, "true", {
+          (await cookies()).set(COOKIE_NAME, "true", {
             maxAge: EXPIRY_TIME,
           })
           await kv.set(kvKey, true)
