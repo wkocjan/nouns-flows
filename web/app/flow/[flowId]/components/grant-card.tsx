@@ -4,6 +4,7 @@ import { Profile } from "@/components/user-profile/get-user-profile"
 import { UserProfilePopover } from "@/components/user-profile/user-popover"
 import { getIpfsUrl } from "@/lib/utils"
 import { Grant } from "@prisma/flows"
+import Link from "next/dist/client/link"
 import Image from "next/image"
 
 interface Props {
@@ -34,10 +35,10 @@ export function GrantCard({ grant }: Props) {
 
       <div>
         <h3 className="mt-32 text-balance text-sm font-medium text-white md:text-base">
-          <a href={`/item/${grant.id}`}>
+          <Link href={`/item/${grant.id}`}>
             <span className="absolute inset-0" />
             {grant.title}
-          </a>
+          </Link>
         </h3>
       </div>
     </article>

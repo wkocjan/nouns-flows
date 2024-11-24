@@ -17,6 +17,7 @@ import { Avatar, AvatarImage } from "../ui/avatar"
 import { LoginButton } from "./login-button"
 import { ModeToggle } from "./mode-toggle"
 import { useRunUserJobs } from "@/lib/auth/use-run-user-jobs"
+import Link from "next/dist/client/link"
 
 interface Props {
   user?: User
@@ -73,10 +74,10 @@ export const MenuAvatar = (props: Props) => {
                 </p>
                 <div className="flex space-x-2.5">
                   <Button asChild size="sm" className="w-full">
-                    <a href="/apply">Apply for a grant</a>
+                    <Link href="/apply">Apply for a grant</Link>
                   </Button>
                   <Button asChild size="sm" className="w-full">
-                    <a href="/curate">Become a curator</a>
+                    <Link href="/curate">Become a curator</Link>
                   </Button>
                 </div>
               </div>
