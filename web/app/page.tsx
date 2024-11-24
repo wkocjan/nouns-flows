@@ -15,7 +15,7 @@ import { FlowsUpdates } from "./components/flows-updates"
 import { CTAButtons } from "./flow/[flowId]/components/cta-buttons"
 import { VotingBar } from "./flow/[flowId]/components/voting-bar"
 
-export const runtime = "nodejs"
+// export const runtime = "nodejs"
 
 export const revalidate = 0
 export const dynamic = "force-dynamic"
