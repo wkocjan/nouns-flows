@@ -55,14 +55,14 @@ importers:
         specifier: ^1.2.1
         version: 1.2.1(@prisma/client@5.21.1(prisma@5.21.1))
       '@privy-io/react-auth':
-        specifier: ^1.92.6
-        version: 1.92.6(@solana/web3.js@1.95.4(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(@upstash/redis@1.34.3)(@vercel/kv@3.0.0)(bs58@6.0.0)(bufferutil@4.0.8)(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)(types-react@19.0.0-rc.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+        specifier: ^1.95.0
+        version: 1.95.0(@solana/web3.js@1.95.4(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(@upstash/redis@1.34.3)(@vercel/kv@3.0.0)(bs58@6.0.0)(bufferutil@4.0.8)(permissionless@0.2.15(viem@2.21.36(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)))(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)(types-react@19.0.0-rc.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@privy-io/server-auth':
-        specifier: 1.15.3
-        version: 1.15.3(encoding@0.1.13)
+        specifier: 1.16.5
+        version: 1.16.5(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)
       '@privy-io/wagmi':
         specifier: ^0.2.12
-        version: 0.2.12(dmeaam7wu7nhac2hohei2fpfoq)
+        version: 0.2.12(ta56ssp6cy55uefza3h774lb5u)
       '@radix-ui/react-avatar':
         specifier: ^1.1.1
         version: 1.1.1(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)(types-react-dom@19.0.0-rc.1)(types-react@19.0.0-rc.1)
@@ -1283,12 +1283,12 @@ packages:
   '@floating-ui/utils@0.2.8':
     resolution: {integrity: sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==}
 
-  '@headlessui/react@1.7.19':
-    resolution: {integrity: sha512-Ll+8q3OlMJfJbAKM/+/Y2q6PPYbryqNTXDbryx7SXLIDamkF6iQFbriYHga0dY44PvDhvvBWCx1Xj4U5+G4hOw==}
+  '@headlessui/react@2.2.0':
+    resolution: {integrity: sha512-RzCEg+LXsuI7mHiSomsu/gBJSjpupm6A1qIZ5sWjd7JhARNlMiSA4kKfJpCKwU9tE+zMRterhhrP74PvfJrpXQ==}
     engines: {node: '>=10'}
     peerDependencies:
-      react: ^16 || ^17 || ^18
-      react-dom: ^16 || ^17 || ^18
+      react: ^18 || ^19 || ^19.0.0-rc
+      react-dom: ^18 || ^19 || ^19.0.0-rc
 
   '@heroicons/react@2.1.5':
     resolution: {integrity: sha512-FuzFN+BsHa+7OxbvAERtgBTNeZpUjgM/MIizfVkSCL2/edriN0Hx/DWRCR//aPYwO5QX/YlgLGXk+E3PcfZwjA==}
@@ -2043,29 +2043,43 @@ packages:
   '@prisma/get-platform@5.21.1':
     resolution: {integrity: sha512-sRxjL3Igst3ct+e8ya/x//cDXmpLbZQ5vfps2N4tWl4VGKQAmym77C/IG/psSMsQKszc8uFC/q1dgmKFLUgXZQ==}
 
-  '@privy-io/api-base@1.4.0':
-    resolution: {integrity: sha512-8Pm/8bx6WvNt8uLtYOOj9acYL+JjUJxeChlBEvSywmre1l5o8naK6J4SeAb5v8b8p4178VNI4AYhd+rFh4HCsA==}
+  '@privy-io/api-base@1.4.1':
+    resolution: {integrity: sha512-q98uQGVBIY5SBHjJWL/udpbxM9ISpZl8Lwwjd0p0XHSMJMOgEhS4GLjcO7l3clfNrqL0fAuinQaa+seCaYOzng==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
 
-  '@privy-io/js-sdk-core@0.30.3':
-    resolution: {integrity: sha512-g/h3YABDiQ9rG555gax7vYwBVrWos9Uh8DNzGBxwjECYRGGkuNuVY8Nc9gq3TBeQySUAKRFfWgSDCHtq7uDXRQ==}
-
-  '@privy-io/public-api@2.11.6':
-    resolution: {integrity: sha512-0xv9XpStuMPnZ8lJUXwybuzu3o1EW2iKtezIurM3X34d84wcYprdjEpcya8jZIzqozYrht2+3T2bnryvO3HrXA==}
-    engines: {node: '>=18.0.0', npm: '>=8.0.0'}
-
-  '@privy-io/react-auth@1.92.6':
-    resolution: {integrity: sha512-8tkCWAnvD7rbpJTH88Wp+t7lEEehod+RIFwHjqDfoUxASobRNuctH0Tn6QPZ9AaATKT46r6EeW1hOuLch5VqUA==}
+  '@privy-io/js-sdk-core@0.35.0':
+    resolution: {integrity: sha512-pSjKFMmH2EhX9UAECPAKOVOX9bQ2BYRZHDOGKGYGHhaVaecOr6B25K1BOzXK0tHS8xpWIxataFQTeOcO87/2ag==}
     peerDependencies:
+      permissionless: ^0.2.10
+      viem: ^2.21.36
+    peerDependenciesMeta:
+      permissionless:
+        optional: true
+      viem:
+        optional: true
+
+  '@privy-io/public-api@2.15.2':
+    resolution: {integrity: sha512-p8D2TPI0A319+tF5R8XvaaaKbXopltcd1d0/zELB6pXY5kkd1sCv9RZy+b52aweQgh3rvGrUo/lmlM11QRNPog==}
+    engines: {node: '>=18.0.0', npm: '>=8.0.0'}
+
+  '@privy-io/react-auth@1.95.0':
+    resolution: {integrity: sha512-7xngZOGAdDPPuf0IIyJxw6Tn6kcdMf6s/CydIgX8f0uWxpi0n42JZqGIDPffDbW2GVmBb7frBK4dT2wVQbx8bw==}
+    peerDependencies:
+      '@abstract-foundation/agw-client': ^0.0.1-beta.17
       '@solana/web3.js': ^1.95.3
+      permissionless: ^0.2.10
       react: ^18 || ^19
       react-dom: ^18 || ^19
     peerDependenciesMeta:
+      '@abstract-foundation/agw-client':
+        optional: true
       '@solana/web3.js':
         optional: true
+      permissionless:
+        optional: true
 
-  '@privy-io/server-auth@1.15.3':
-    resolution: {integrity: sha512-qSNTzSvnwzSxmQoLlawkcoHgkJbIh6E3GWyxv2rL0JCxH8puFYtv82AjlArDgtXInPaEWPsfkhnH+VEIu0oYag==}
+  '@privy-io/server-auth@1.16.5':
+    resolution: {integrity: sha512-twcMhWTKrr4KsChRWPrNHBqA7uTlZ6Y1Xp0VaUpEyn7rTAVzINRnbr3q4pNR5hM1Bu9LuCDgs05ojlvA98ImJQ==}
 
   '@privy-io/wagmi@0.2.12':
     resolution: {integrity: sha512-MJQVnrsA1BVT4SUOLCGiDB58qj0JvEaXBSle7R8yTXtmLuEfsRsXZTA9b0CKMe9wGUQfX4U6BligLBZBhreT0Q==}
@@ -2571,6 +2585,27 @@ packages:
   '@radix-ui/rect@1.1.0':
     resolution: {integrity: sha512-A9+lCBZoaMJlVKcRBz2YByCG+Cp2t6nAnMnNba+XiWxnj6r4JUFqfsgwocMBZU9LPtdxC6wB56ySYpc7LQIoJg==}
 
+  '@react-aria/focus@3.19.0':
+    resolution: {integrity: sha512-hPF9EXoUQeQl1Y21/rbV2H4FdUR2v+4/I0/vB+8U3bT1CJ+1AFj1hc/rqx2DqEwDlEwOHN+E4+mRahQmlybq0A==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-aria/interactions@3.22.5':
+    resolution: {integrity: sha512-kMwiAD9E0TQp+XNnOs13yVJghiy8ET8L0cbkeuTgNI96sOAp/63EJ1FSrDf17iD8sdjt41LafwX/dKXW9nCcLQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-aria/ssr@3.9.7':
+    resolution: {integrity: sha512-GQygZaGlmYjmYM+tiNBA5C6acmiDWF52Nqd40bBp0Znk4M4hP+LTmI0lpI1BuKMw45T8RIhrAsICIfKwZvi2Gg==}
+    engines: {node: '>= 12'}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-aria/utils@3.26.0':
+    resolution: {integrity: sha512-LkZouGSjjQ0rEqo4XJosS4L3YC/zzQkfRM3KoqK6fUOmUJ9t0jQ09WjiF+uOoG9u+p30AVg3TrZRUWmoTS+koQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-native-community/cli-debugger-ui@15.1.2':
     resolution: {integrity: sha512-GSncUVzyhNAVg/uTFdjf5nERKCg7E/rPbpz4FZS6NeOtgrd/eJXXJEEfn1AU3bHZblr/wf9hl6V2yfBHtJ/wlw==}
 
@@ -2644,6 +2679,16 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
+
+  '@react-stately/utils@3.10.5':
+    resolution: {integrity: sha512-iMQSGcpaecghDIh3mZEpZfoFH3ExBwTtuBEcvZ2XnGzCgQjeYXcMdIUwAfVQLXFTdHUHGF6Gu6/dFrYsCzySBQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-types/shared@3.26.0':
+    resolution: {integrity: sha512-6FuPqvhmjjlpEDLTiYx29IJCbCNWPlsyO+ZUmCUXzhUv2ttShOXfw8CmeHWHftT/b2KweAWuzqSlfeXPR76jpw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
   '@remirror/core-constants@3.0.0':
     resolution: {integrity: sha512-42aWfPrimMfDKDi4YegyS7x+/0tlzaqwPQCULLanv3DMIlu96KTJR0fM5isWX2UViOqlGnX6YFgqWepcX+XMNg==}
@@ -4042,10 +4087,6 @@ packages:
 
   crypto-js@4.2.0:
     resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
-
-  crypto@1.0.1:
-    resolution: {integrity: sha512-VxBKmeNcqQdiUQUW2Tzq0t377b54N2bMtXO/qiLa+6eRRmmC4qT3D4OnTGoT/U6O9aklQ/jTwbOtRMTTY8G0Ig==}
-    deprecated: This package is no longer supported. It's now a built-in Node module. If you've depended on crypto, you should switch to the one that's built-in.
 
   css-color-keywords@1.0.0:
     resolution: {integrity: sha512-FyyrDHZKEjXDpNJYvVsV960FiqQyXc/LlYmsxl2BcdMb2WPx0OGRVgTg55rPSyLSNMqP52R9r8geSp7apN3Ofg==}
@@ -9741,10 +9782,12 @@ snapshots:
 
   '@floating-ui/utils@0.2.8': {}
 
-  '@headlessui/react@1.7.19(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)':
+  '@headlessui/react@2.2.0(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)':
     dependencies:
+      '@floating-ui/react': 0.26.25(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)
+      '@react-aria/focus': 3.19.0(react@19.0.0-rc-66855b96-20241106)
+      '@react-aria/interactions': 3.22.5(react@19.0.0-rc-66855b96-20241106)
       '@tanstack/react-virtual': 3.10.8(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)
-      client-only: 0.0.1
       react: 19.0.0-rc-66855b96-20241106
       react-dom: 19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106)
 
@@ -10655,11 +10698,11 @@ snapshots:
     dependencies:
       '@prisma/debug': 5.21.1
 
-  '@privy-io/api-base@1.4.0':
+  '@privy-io/api-base@1.4.1':
     dependencies:
       zod: 3.23.8
 
-  '@privy-io/js-sdk-core@0.30.3(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
+  '@privy-io/js-sdk-core@0.35.0(bufferutil@4.0.8)(permissionless@0.2.15(viem@2.21.36(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)))(utf-8-validate@5.0.10)(viem@2.21.36(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))':
     dependencies:
       '@ethersproject/abstract-signer': 5.7.0
       '@ethersproject/bignumber': 5.7.0
@@ -10667,8 +10710,8 @@ snapshots:
       '@ethersproject/providers': 5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@ethersproject/transactions': 5.7.0
       '@ethersproject/units': 5.7.0
-      '@privy-io/api-base': 1.4.0
-      '@privy-io/public-api': 2.11.6(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      '@privy-io/api-base': 1.4.1
+      '@privy-io/public-api': 2.15.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       eventemitter3: 5.0.1
       fetch-retry: 5.0.6
       jose: 4.15.9
@@ -10676,13 +10719,16 @@ snapshots:
       libphonenumber-js: 1.11.12
       set-cookie-parser: 2.7.1
       uuid: 9.0.1
+    optionalDependencies:
+      permissionless: 0.2.15(viem@2.21.36(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+      viem: 2.21.36(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
 
-  '@privy-io/public-api@2.11.6(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
+  '@privy-io/public-api@2.15.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
     dependencies:
-      '@privy-io/api-base': 1.4.0
+      '@privy-io/api-base': 1.4.1
       bs58: 5.0.0
       ethers: 5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       libphonenumber-js: 1.11.12
@@ -10691,7 +10737,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@privy-io/react-auth@1.92.6(@solana/web3.js@1.95.4(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(@upstash/redis@1.34.3)(@vercel/kv@3.0.0)(bs58@6.0.0)(bufferutil@4.0.8)(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)(types-react@19.0.0-rc.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)':
+  '@privy-io/react-auth@1.95.0(@solana/web3.js@1.95.4(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(@upstash/redis@1.34.3)(@vercel/kv@3.0.0)(bs58@6.0.0)(bufferutil@4.0.8)(permissionless@0.2.15(viem@2.21.36(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)))(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)(types-react@19.0.0-rc.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)':
     dependencies:
       '@coinbase/wallet-sdk': 4.0.3
       '@ethersproject/abstract-signer': 5.7.0
@@ -10705,11 +10751,11 @@ snapshots:
       '@ethersproject/transactions': 5.7.0
       '@ethersproject/units': 5.7.0
       '@floating-ui/react': 0.26.25(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)
-      '@headlessui/react': 1.7.19(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)
+      '@headlessui/react': 2.2.0(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)
       '@heroicons/react': 2.1.5(react@19.0.0-rc-66855b96-20241106)
       '@marsidev/react-turnstile': 0.4.1(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)
       '@metamask/eth-sig-util': 6.0.2
-      '@privy-io/js-sdk-core': 0.30.3(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      '@privy-io/js-sdk-core': 0.35.0(bufferutil@4.0.8)(permissionless@0.2.15(viem@2.21.36(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)))(utf-8-validate@5.0.10)(viem@2.21.36(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
       '@simplewebauthn/browser': 9.0.1
       '@solana/wallet-adapter-base': 0.9.23(@solana/web3.js@1.95.4(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))
       '@solana/wallet-standard-wallet-adapter-base': 1.1.2(@solana/web3.js@1.95.4(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(bs58@6.0.0)
@@ -10728,7 +10774,6 @@ snapshots:
       md5: 2.3.0
       mipd: 0.0.7(typescript@5.6.3)
       ofetch: 1.4.1
-      permissionless: 0.2.15(viem@2.21.36(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
       pino-pretty: 10.3.1
       qrcode: 1.5.4
       react: 19.0.0-rc-66855b96-20241106
@@ -10744,6 +10789,7 @@ snapshots:
       web3-core-helpers: 1.10.3
     optionalDependencies:
       '@solana/web3.js': 1.95.4(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)
+      permissionless: 0.2.15(viem@2.21.36(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -10766,10 +10812,12 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@privy-io/server-auth@1.15.3(encoding@0.1.13)':
+  '@privy-io/server-auth@1.16.5(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)':
     dependencies:
+      '@noble/curves': 1.6.0
+      '@noble/hashes': 1.5.0
+      '@solana/web3.js': 1.95.4(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)
       canonicalize: 2.0.0
-      crypto: 1.0.1
       dotenv: 16.4.5
       jose: 4.15.9
       node-fetch-native: 1.6.4
@@ -10778,11 +10826,13 @@ snapshots:
       ts-case-convert: 2.1.0
       type-fest: 3.13.1
     transitivePeerDependencies:
+      - bufferutil
       - encoding
+      - utf-8-validate
 
-  '@privy-io/wagmi@0.2.12(dmeaam7wu7nhac2hohei2fpfoq)':
+  '@privy-io/wagmi@0.2.12(ta56ssp6cy55uefza3h774lb5u)':
     dependencies:
-      '@privy-io/react-auth': 1.92.6(@solana/web3.js@1.95.4(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(@upstash/redis@1.34.3)(@vercel/kv@3.0.0)(bs58@6.0.0)(bufferutil@4.0.8)(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)(types-react@19.0.0-rc.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+      '@privy-io/react-auth': 1.95.0(@solana/web3.js@1.95.4(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(@upstash/redis@1.34.3)(@vercel/kv@3.0.0)(bs58@6.0.0)(bufferutil@4.0.8)(permissionless@0.2.15(viem@2.21.36(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)))(react-dom@19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106))(react@19.0.0-rc-66855b96-20241106)(types-react@19.0.0-rc.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       react: 19.0.0-rc-66855b96-20241106
       react-dom: 19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106)
       viem: 2.21.36(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -11295,6 +11345,37 @@ snapshots:
 
   '@radix-ui/rect@1.1.0': {}
 
+  '@react-aria/focus@3.19.0(react@19.0.0-rc-66855b96-20241106)':
+    dependencies:
+      '@react-aria/interactions': 3.22.5(react@19.0.0-rc-66855b96-20241106)
+      '@react-aria/utils': 3.26.0(react@19.0.0-rc-66855b96-20241106)
+      '@react-types/shared': 3.26.0(react@19.0.0-rc-66855b96-20241106)
+      '@swc/helpers': 0.5.15
+      clsx: 2.1.1
+      react: 19.0.0-rc-66855b96-20241106
+
+  '@react-aria/interactions@3.22.5(react@19.0.0-rc-66855b96-20241106)':
+    dependencies:
+      '@react-aria/ssr': 3.9.7(react@19.0.0-rc-66855b96-20241106)
+      '@react-aria/utils': 3.26.0(react@19.0.0-rc-66855b96-20241106)
+      '@react-types/shared': 3.26.0(react@19.0.0-rc-66855b96-20241106)
+      '@swc/helpers': 0.5.15
+      react: 19.0.0-rc-66855b96-20241106
+
+  '@react-aria/ssr@3.9.7(react@19.0.0-rc-66855b96-20241106)':
+    dependencies:
+      '@swc/helpers': 0.5.15
+      react: 19.0.0-rc-66855b96-20241106
+
+  '@react-aria/utils@3.26.0(react@19.0.0-rc-66855b96-20241106)':
+    dependencies:
+      '@react-aria/ssr': 3.9.7(react@19.0.0-rc-66855b96-20241106)
+      '@react-stately/utils': 3.10.5(react@19.0.0-rc-66855b96-20241106)
+      '@react-types/shared': 3.26.0(react@19.0.0-rc-66855b96-20241106)
+      '@swc/helpers': 0.5.15
+      clsx: 2.1.1
+      react: 19.0.0-rc-66855b96-20241106
+
   '@react-native-community/cli-debugger-ui@15.1.2':
     dependencies:
       serve-static: 1.16.2
@@ -11474,6 +11555,15 @@ snapshots:
       react-native: 0.76.1(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@react-native-community/cli-server-api@15.1.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(encoding@0.1.13)(react@19.0.0-rc-66855b96-20241106)(types-react@19.0.0-rc.1)(utf-8-validate@5.0.10)
     optionalDependencies:
       '@types/react': types-react@19.0.0-rc.1
+
+  '@react-stately/utils@3.10.5(react@19.0.0-rc-66855b96-20241106)':
+    dependencies:
+      '@swc/helpers': 0.5.15
+      react: 19.0.0-rc-66855b96-20241106
+
+  '@react-types/shared@3.26.0(react@19.0.0-rc-66855b96-20241106)':
+    dependencies:
+      react: 19.0.0-rc-66855b96-20241106
 
   '@remirror/core-constants@3.0.0': {}
 
@@ -11888,7 +11978,7 @@ snapshots:
 
   '@types/bn.js@5.1.6':
     dependencies:
-      '@types/node': 20.17.2
+      '@types/node': 20.17.6
 
   '@types/connect@3.4.38':
     dependencies:
@@ -13344,8 +13434,6 @@ snapshots:
   crypt@0.0.2: {}
 
   crypto-js@4.2.0: {}
-
-  crypto@1.0.1: {}
 
   css-color-keywords@1.0.0: {}
 
@@ -16252,6 +16340,7 @@ snapshots:
   permissionless@0.2.15(viem@2.21.36(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)):
     dependencies:
       viem: 2.21.36(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+    optional: true
 
   pg-int8@1.0.1: {}
 
