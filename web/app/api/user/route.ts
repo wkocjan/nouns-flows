@@ -40,8 +40,10 @@ export async function GET(request: Request) {
           // Create and submit builder profile job
           const payload = { fid: farcasterUser.fid.toString() }
           await postBuilderProfileRequest([payload])
+
+          const newCookies = await cookies()
           // Set cookie and KV flags to prevent reprocessing
-          (await cookies()).set(COOKIE_NAME, "true", {
+          newCookies.set(COOKIE_NAME, "true", {
             maxAge: EXPIRY_TIME,
           })
           await kv.set(kvKey, true)
