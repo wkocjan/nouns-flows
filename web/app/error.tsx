@@ -1,11 +1,16 @@
 "use client" // Error components must be Client Components
 
-import { appRouterSsrErrorHandler, AppRouterErrorProps } from "@highlight-run/next/ssr"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
-export default appRouterSsrErrorHandler(({ error, reset }: AppRouterErrorProps) => {
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string }
+  reset: () => void
+}) {
   console.error(error)
 
   return (
@@ -31,4 +36,4 @@ export default appRouterSsrErrorHandler(({ error, reset }: AppRouterErrorProps) 
       </div>
     </div>
   )
-})
+}

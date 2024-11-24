@@ -20,7 +20,6 @@
     "@chainsafe/persistent-merkle-tree": "^0.8.0",
     "@chainsafe/ssz": "^0.17.1",
     "@dagrejs/dagre": "^1.1.4",
-    "@highlight-run/next": "^7.6.8",
     "@lodestar/types": "^1.22.0",
     "@neondatabase/serverless": "^0.10.2",
     "@neynar/nodejs-sdk": "^1.57.0",
@@ -85,6 +84,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^15.0.3",
     "@types/node": "^20",
     "@types/pg": "^8.11.10",
     "@types/pluralize": "^0.0.33",
