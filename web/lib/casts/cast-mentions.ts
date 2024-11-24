@@ -1,4 +1,3 @@
-import { TextEncoder } from "util"
 const encoder = new TextEncoder()
 
 // Precompute byte to code unit position mapping
