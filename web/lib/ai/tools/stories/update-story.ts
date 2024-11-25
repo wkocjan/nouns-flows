@@ -38,6 +38,9 @@ export const updateStoryTool = {
     Do not allow user to remove themselves from the participants list.
     When you add new participants, ensure you don't remove existing ones - provide them in the "participants" parameter as well. Your new value will replace existing value.
 
+    When adding key points, make sure to add them in the same order as they appear in the story.
+    Also, do not add more than 6 key points at absolute maximum. Only include the most important ones. 
+
     Using this tool you can update fields:
     - title
     - tagline
