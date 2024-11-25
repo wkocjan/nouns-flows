@@ -10,6 +10,8 @@ const validateEnvVars = () => {
 }
 
 const makeRequest = async (endpoint: string, body: any) => {
+  if (process.env.EMBEDDINGS_DISABLED == "true") return
+
   validateEnvVars()
 
   const headers = new Headers({

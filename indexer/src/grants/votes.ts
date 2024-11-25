@@ -13,6 +13,8 @@ async function handleVoteCast(params: {
   const { recipientId, tokenId, bps, totalWeight } = event.args
 
   const blockNumber = event.block.number.toString()
+  const blockTimestamp = Number(event.block.timestamp)
+  const transactionHash = event.transaction.hash
   const voter = event.transaction.from.toLowerCase()
   const contract = event.log.address.toLowerCase() as `0x${string}`
   const votesCount = bps / (totalWeight / BigInt(1e18))
@@ -47,6 +49,8 @@ async function handleVoteCast(params: {
       bps: Number(bps),
       voter,
       blockNumber,
+      blockTimestamp,
+      transactionHash,
       isStale: false,
       votesCount: votesCount.toString(),
     },
