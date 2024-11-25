@@ -6,34 +6,26 @@ import { Story } from "@prisma/flows"
 import Image from "next/image"
 import Link from "next/link"
 
-export function StoryCard(props: { story: Story }) {
+export function FeaturedStoryCard(props: { story: Story }) {
   const { header_image, title, tagline, updated_at, id, participants } = props.story
 
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-xl bg-white shadow dark:border dark:bg-card">
+    <div className="group relative isolate flex flex-col justify-between overflow-hidden rounded-xl shadow dark:border md:col-span-2">
       {header_image && (
-        <div className="h-32 w-full overflow-hidden rounded-lg md:h-44">
+        <div className="pointer-events-none absolute inset-0 -z-10 size-full overflow-hidden">
           <Image
             src={getPinataWithKey(header_image)}
             alt={title}
             className="size-full object-cover transition-transform group-hover:scale-110"
-            width={320}
-            height={160}
+            width={674}
+            height={328}
           />
         </div>
       )}
-      <div className="grow p-4">
-        <Link
-          href={`/story/${id}`}
-          className="text-base font-semibold leading-snug group-hover:text-primary"
-        >
-          {title}
-          <span className="absolute inset-0" />
-        </Link>
-        <p className="mt-1.5 text-sm text-muted-foreground">{tagline}</p>
-      </div>
 
-      <div className="flex items-center justify-between space-x-1.5 p-4">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-gray-900 via-gray-900/40" />
+
+      <div className="flex items-center justify-between space-x-1.5 p-4 md:p-6">
         <div className="flex items-center gap-1.5">
           {participants.map((address) => (
             <UserProfile address={address as `0x${string}`} key={address}>
@@ -45,10 +37,20 @@ export function StoryCard(props: { story: Story }) {
             </UserProfile>
           ))}
         </div>
-
-        <p className="text-xs text-muted-foreground">
+        <p className="text-sm text-white">
           <DateTime date={updated_at} relative short />
         </p>
+      </div>
+
+      <div className="p-4 pt-32 md:p-6">
+        <Link
+          href={`/story/${id}`}
+          className="text-base font-semibold leading-snug group-hover:text-primary"
+        >
+          <h3 className="text-lg font-medium leading-tight text-white md:text-xl">{title}</h3>
+          <span className="absolute inset-0" />
+        </Link>
+        <p className="mt-1.5 text-sm text-white/80">{tagline}</p>
       </div>
     </div>
   )

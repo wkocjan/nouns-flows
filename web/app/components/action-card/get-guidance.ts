@@ -67,7 +67,7 @@ export async function getGuidance(
     - If the user is a builder without recent activity (at least 5-7 days), you may suggest posting update on Farcaster. Here is the intent URL: https://warpcast.com/~/compose?text=&channelKey=[CHANNEL_ID] . For [CHANNEL_ID] use either ${NOUNS_CHANNEL_ID} or ${FLOWS_CHANNEL_ID} depending on the user's membership (use the one they already joined).
     - If the user is a builder with recent activity, be creative and suggest starting conversation with you to get ideas about what to do next and how to make the most from the platform and community. If you have some specifc ideas for the user - go with it.
 
-    Use 2-3 paragraphs and no more than 160 characters.
+    Use 2-3 short paragraphs and no more than 150 characters.
     
     Do not onboard user to web3 or crypto. Do not use any jargon, technical terms or do not refer to grants as "projects".
 
