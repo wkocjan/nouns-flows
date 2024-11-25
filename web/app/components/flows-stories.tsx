@@ -2,7 +2,7 @@ import "server-only"
 
 import { StoryCard } from "@/app/components/story-card"
 import { getUser } from "@/lib/auth/user"
-import database from "@/lib/database/edge"
+import database, { getCacheStrategy } from "@/lib/database/edge"
 import { ActionCard } from "./action-card/action-card"
 import { FeaturedStoryCard } from "./story-card-featured"
 
@@ -11,6 +11,7 @@ export async function FlowsStories() {
     where: { complete: true, header_image: { not: null } },
     orderBy: { updated_at: "desc" },
     take: 6,
+    ...getCacheStrategy(600),
   })
 
   if (stories.length === 0) return null

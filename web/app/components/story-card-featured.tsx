@@ -18,6 +18,7 @@ export function FeaturedStoryCard(props: { story: Story }) {
             alt={title}
             className="size-full object-cover transition-transform group-hover:scale-110"
             width={674}
+            priority
             height={328}
           />
         </div>
