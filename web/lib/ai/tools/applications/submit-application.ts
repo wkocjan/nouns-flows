@@ -1,6 +1,7 @@
 import { tool } from "ai"
 import { z } from "zod"
 import { createDraft } from "./create-draft"
+import { getUserAddressFromCookie } from "@/lib/auth/get-user-from-cookie"
 
 export const submitApplication = tool({
   parameters: z.object({
@@ -9,22 +10,17 @@ export const submitApplication = tool({
     descriptionMarkdown: z.string(),
     image: z.string(),
     tagline: z.string().optional(),
-    users: z.array(z.string().describe("The wallet address of the user")),
   }),
   description: "Submit the draft application for the builder you've been working with",
-  execute: async ({
-    title,
-    image,
-    descriptionMarkdown,
-    users,
-    tagline,
-    flowId,
-  }): Promise<string> => {
+  execute: async ({ title, image, descriptionMarkdown, tagline, flowId }): Promise<string> => {
+    const user = await getUserAddressFromCookie()
+    if (!user) throw new Error("User not found")
+
     const draft = await createDraft({
       title,
       image,
       descriptionMarkdown,
-      users,
+      users: [user],
       tagline,
       flowId,
     })
