@@ -23,16 +23,18 @@ import { VideoPlayer } from "@/components/ui/video-player"
 import { UserProfile } from "@/components/user-profile/user-profile"
 import { getUser } from "@/lib/auth/user"
 import database from "@/lib/database/edge"
+import { getPinataWithKey } from "@/lib/pinata/url-with-key"
 import { getIpfsUrl } from "@/lib/utils"
 import { CalendarIcon } from "lucide-react"
 import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
+import pluralize from "pluralize"
 import { cache } from "react"
 import { KeyPoints } from "./components/key-points"
+import { Participants } from "./components/participants"
 import { Sources } from "./components/sources"
 import { StoryChat } from "./components/story-chat"
-import { getPinataWithKey } from "@/lib/pinata/url-with-key"
 
 interface Props {
   params: Promise<{ id: string }>
@@ -56,7 +58,7 @@ const getStory = cache(async (id: string) => {
 })
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { id } = (await props.params)
+  const { id } = await props.params
 
   const story = await getStory(id)
 
@@ -68,7 +70,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function Page(props: Props) {
-  const { id } = (await props.params)
+  const { id } = await props.params
 
   const story = await getStory(id)
   const user = await getUser()
@@ -82,7 +84,7 @@ export default async function Page(props: Props) {
       user={user}
       data={{ storyId: id }}
     >
-      <article className="container mt-2.5 max-w-6xl pb-12 md:mt-6 md:pb-24">
+      <article className="container mt-2.5 max-w-6xl pb-24 md:mt-6">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -138,7 +140,7 @@ export default async function Page(props: Props) {
               )}
               <div className="flex items-center text-xs leading-none text-muted-foreground md:text-sm">
                 <CalendarIcon className="mr-2 size-3" />
-                <DateTime date={updated_at} relative />
+                <DateTime date={updated_at} relative short />
               </div>
             </section>
 
@@ -201,44 +203,51 @@ export default async function Page(props: Props) {
             )}
           </div>
 
-          <aside className="space-y-6 md:col-span-4">
-            {story.grants.map((grant, i) => {
-              const flow = story.flows[i]
-              return (
-                <div
-                  key={grant.id}
-                  className="flex items-center gap-4 rounded-xl border border-secondary p-3"
-                >
-                  {grant.image && (
-                    <Image
-                      src={getIpfsUrl(grant.image, "pinata")}
-                      alt={grant.title}
-                      width={40}
-                      height={40}
-                      className="size-[40px] rounded-full"
-                    />
-                  )}
-                  <div className="flex flex-col space-y-1">
-                    <Link
-                      href={`/item/${grant.id}`}
-                      className="text-sm font-medium leading-tight hover:underline"
-                    >
-                      {grant.title}
-                    </Link>
-                    {flow && (
-                      <Link
-                        href={`/flow/${flow.id}`}
-                        className="text-sm text-muted-foreground hover:underline"
-                      >
-                        {flow.title}
-                      </Link>
+          <aside className="space-y-8 md:col-span-4">
+            <div>
+              <h2 className="mb-4 text-sm font-medium text-muted-foreground">
+                {pluralize("Grant", grants.length)}
+              </h2>
+              {grants.map((grant, i) => {
+                const flow = story.flows[i]
+                return (
+                  <div
+                    key={grant.id}
+                    className="flex items-center gap-4 rounded-xl border border-secondary p-3"
+                  >
+                    {grant.image && (
+                      <Image
+                        src={getIpfsUrl(grant.image, "pinata")}
+                        alt={grant.title}
+                        width={40}
+                        height={40}
+                        className="size-[40px] rounded-full"
+                      />
                     )}
+                    <div className="flex flex-col space-y-1">
+                      <Link
+                        href={`/item/${grant.id}`}
+                        className="text-sm font-medium leading-tight hover:underline"
+                      >
+                        {grant.title}
+                      </Link>
+                      {flow && (
+                        <Link
+                          href={`/flow/${flow.id}`}
+                          className="text-xs text-muted-foreground hover:underline"
+                        >
+                          {flow.title}
+                        </Link>
+                      )}
+                    </div>
                   </div>
-                </div>
-              )
-            })}
+                )
+              })}
+            </div>
 
             <KeyPoints key_points={key_points} className="max-sm:hidden" />
+
+            <Participants addresses={story.participants} />
           </aside>
         </div>
       </article>

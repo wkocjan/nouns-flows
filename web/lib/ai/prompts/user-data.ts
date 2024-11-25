@@ -1,11 +1,11 @@
-import { headers, type UnsafeUnwrappedHeaders } from "next/headers";
-import { cache } from "react"
-import { getEthAddress } from "@/lib/utils"
+import { embeddingsDb } from "@/lib/embedding/db"
+import { embeddings } from "@/lib/embedding/schema"
 import { getFarcasterUsersByEthAddress } from "@/lib/farcaster/get-user"
 import { getFarcasterUserChannels } from "@/lib/farcaster/get-user-channels"
-import { embeddingsDb } from "@/lib/embedding/db"
-import { eq, and, arrayContains, desc } from "drizzle-orm"
-import { embeddings } from "@/lib/embedding/schema"
+import { getEthAddress } from "@/lib/utils"
+import { and, arrayContains, desc, eq } from "drizzle-orm"
+import { headers } from "next/headers"
+import { cache } from "react"
 
 export const getUserDataPrompt = cache(async (address?: string) => {
   const { farcasterAccountPrompt, fid } = await getFarcasterAccountPrompt(address)
@@ -16,26 +16,30 @@ export const getUserDataPrompt = cache(async (address?: string) => {
   
   ${farcasterAccountPrompt}
 
-  ${getLocationPrompt()}
+  ${await getLocationPrompt()}
 
-  ${getUserAgentPrompt()}
+  ${await getUserAgentPrompt()}
 
   ${fid ? await getBuilderProfilePrompt(fid) : ""}
   `
 })
 
-function getLocationPrompt(): string {
-  const country = (headers() as unknown as UnsafeUnwrappedHeaders).get("X-Vercel-IP-Country")
-  const countryRegion = (headers() as unknown as UnsafeUnwrappedHeaders).get("X-Vercel-IP-Country-Region")
-  const city = (headers() as unknown as UnsafeUnwrappedHeaders).get("X-Vercel-IP-City")
+async function getLocationPrompt(): Promise<string> {
+  const headersList = await headers()
+
+  const country = headersList.get("X-Vercel-IP-Country")
+  const countryRegion = headersList.get("X-Vercel-IP-Country-Region")
+  const city = headersList.get("X-Vercel-IP-City")
 
   if (!city && !country && !countryRegion) return ""
 
   return `### Language and location\n\nHere is the user's location: ${city}, ${country}, ${countryRegion} from geolocation. If the user is not in the US or English speaking country, feel free to ask questions in their language. At the start, you may want to ask user which language they prefer in conversation with you. In the same message do not ask more questions - let the user first pick the language. Do not mention you know the city - it may be not accurate.`
 }
 
-function getUserAgentPrompt(): string {
-  const userAgent = (headers() as unknown as UnsafeUnwrappedHeaders).get("user-agent")
+async function getUserAgentPrompt(): Promise<string> {
+  const headersList = await headers()
+
+  const userAgent = headersList.get("user-agent")
   if (!userAgent) return ""
 
   return `### User agent\n\nHere is the user agent: ${userAgent}. If the user is on mobile, you should be incredibly concise and to the point. They do not have a lot of time or space to read, so you must be incredibly concise and keep your questions and responses to them short in as few words as possible, unless they ask for clarification or it's otherwise necessary.`

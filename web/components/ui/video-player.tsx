@@ -13,6 +13,7 @@ export function VideoPlayer(props: Props) {
       config={{
         file: {
           forceHLS: true,
+          forceSafariHLS: true,
           attributes: { preload: "metadata" },
         },
       }}

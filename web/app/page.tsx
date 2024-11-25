@@ -1,5 +1,4 @@
 import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
-import { getUser } from "@/lib/auth/user"
 import database, { getCacheStrategy } from "@/lib/database/edge"
 import { isGrantApproved } from "@/lib/database/helpers"
 import { getPool } from "@/lib/database/queries/pool"
@@ -9,40 +8,34 @@ import { VotingProvider } from "@/lib/voting/voting-context"
 import { Grant } from "@prisma/flows"
 import Link from "next/link"
 import { base } from "viem/chains"
-import { ActionCard } from "./components/action-card/action-card"
 import FlowsList from "./components/flows-list"
-import { FlowsUpdates } from "./components/flows-updates"
+import { FlowsStories } from "./components/flows-stories"
 import { CTAButtons } from "./flow/[flowId]/components/cta-buttons"
 import { VotingBar } from "./flow/[flowId]/components/voting-bar"
 
-export const runtime = "nodejs"
-
-export const revalidate = 0
-export const dynamic = "force-dynamic"
-
 export default async function Home() {
-  const [pool, activeFlows, user] = await Promise.all([
+  const [pool, activeFlows] = await Promise.all([
     getPool(),
     database.grant.findMany({
       where: { isFlow: 1, isActive: 1, isTopLevel: 0 },
       include: { subgrants: true },
       ...getCacheStrategy(120),
     }),
-    getUser(),
   ])
 
-  // sort by monthlyIncomingFlowRate
   activeFlows.sort(sortGrants)
 
   return (
     <VotingProvider chainId={base.id} contract={getEthAddress(pool.recipient)}>
-      <main className="container mt-2.5 pb-24 md:mt-8">
-        <div className="flex items-center justify-between">
+      <main className="container pb-24">
+        <FlowsStories />
+
+        <div className="mt-12 flex items-center justify-between">
           <div>
             <div className="flex items-center space-x-4">
               <h3 className="font-semibold leading-none tracking-tight md:text-lg">
                 <Link href={`/flow/${pool.id}`} className="hover:text-primary">
-                  {pool.title}
+                  Explore Flows
                 </Link>
               </h3>
               <GrantStatusCountBadges
@@ -61,11 +54,7 @@ export default async function Home() {
         </div>
 
         <div className="mt-6">
-          <FlowsList actionCard={<ActionCard user={user} />} flows={activeFlows} />
-        </div>
-
-        <div className="mt-12">
-          <FlowsUpdates />
+          <FlowsList flows={activeFlows} />
         </div>
       </main>
       <VotingBar />
