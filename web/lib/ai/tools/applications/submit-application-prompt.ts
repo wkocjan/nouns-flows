@@ -94,6 +94,8 @@ export const submitApplicationPrompt = () => `
     Always ask the user to be thorough in their responses, and don't be afraid to clarify details about their answers to your questions. 
 
     In the descriptionMarkdown field make sure to use the image URLs that our app provided you.
+    Be absolutely sure that a user has added all the images they need to add.
+    Triple check this at the end of the application process.
 
     Please be sure to include all the uploaded attachments, unless user asked you to remove any of them. Do not start the 'descriptionMarkdown' with the image, but rather have it somewhere in the middle of the description.
 
