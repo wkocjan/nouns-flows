@@ -15,7 +15,7 @@ export function Participants(props: Props) {
 
   return (
     <div>
-      <h2 className="text-sm font-medium text-muted-foreground">Participants</h2>
+      <h2 className="text-sm font-medium text-muted-foreground">Builders</h2>
       <div className="mt-4 space-y-4">
         {addresses.map((address) => (
           <UserProfile address={address as `0x${string}`} key={address}>

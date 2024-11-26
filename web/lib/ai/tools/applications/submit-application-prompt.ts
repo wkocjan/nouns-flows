@@ -101,6 +101,10 @@ export const submitApplicationPrompt = () => `
     If you don't have them, ask the user to upload them again.
     The media is an absolutely necessary part of the application, and it's better to be safe than sorry.
 
+    If the user asks for a specific amount of money, or defines a specific budget for the project, inform them
+    that this is a streaming grant, where the money is paid every second over time, and that they cannot request a specific amount of money.
+    However, they will have a monthly budget, and can earn more by getting more votes from the community.
+
     If there are no other media files uploaded to the application besides the logo image, you should likely ask the user for more. If they don't, at least include the logo image in the descriptionMarkdown at the top of the application.
     When you are writing the draft and embedding images, make sure to put the images in the correct sections of the draft. 
     Don't put headshots or logo images in the body of the application for example, but rather in the appropriate sections.
