@@ -4,17 +4,27 @@ import { CastCard } from "@/components/ui/cast-card"
 import { farcasterDb } from "@/lib/database/farcaster-edge"
 import { getCacheStrategy } from "@/lib/database/edge"
 
+async function getFlowsCasts() {
+  try {
+    const casts = await farcasterDb.cast.findMany({
+      where: {
+        computed_tags: { has: "nouns-flows" },
+        deleted_at: null,
+      },
+      orderBy: { created_at: "desc" },
+      take: 20,
+      include: { profile: true },
+      ...getCacheStrategy(600),
+    })
+    return casts
+  } catch (error) {
+    console.error("Error fetching flows casts:", error)
+    return []
+  }
+}
+
 export const FlowsUpdates = async () => {
-  const casts = await farcasterDb.cast.findMany({
-    where: {
-      computed_tags: { has: "nouns-flows" },
-      deleted_at: null,
-    },
-    orderBy: { created_at: "desc" },
-    take: 20,
-    include: { profile: true },
-    ...getCacheStrategy(600),
-  })
+  const casts = await getFlowsCasts()
 
   if (casts.length === 0) return null
 

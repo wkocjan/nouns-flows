@@ -19,23 +19,28 @@ export async function getGrantCasts({ grantId }: { grantId: string }) {
 }
 
 async function getCastsFromDb(grantId: string): Promise<(Cast & { profile: Profile })[]> {
-  return await farcasterDb.cast.findMany({
-    where: {
-      computed_tags: {
-        has: grantId,
+  try {
+    return await farcasterDb.cast.findMany({
+      where: {
+        computed_tags: {
+          has: grantId,
+        },
+        parent_hash: null,
+        deleted_at: null,
       },
-      parent_hash: null,
-      deleted_at: null,
-    },
-    include: {
-      profile: true,
-    },
-    orderBy: {
-      created_at: "desc",
-    },
-    take: 50,
-    ...getCacheStrategy(600),
-  })
+      include: {
+        profile: true,
+      },
+      orderBy: {
+        created_at: "desc",
+      },
+      take: 50,
+      ...getCacheStrategy(600),
+    })
+  } catch (error) {
+    console.error("Error fetching casts from DB:", error)
+    return []
+  }
 }
 
 async function processCastMentions(cast: Cast & { profile: Profile }) {
