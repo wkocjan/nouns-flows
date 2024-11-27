@@ -10,7 +10,7 @@ export async function deleteDraft(id: number, user?: string) {
     const draft = await database.draft.findUnique({ where: { id, isOnchain: false } })
     if (!draft) throw new Error("Draft not found")
 
-    if (!user || !draft.users.some((address) => address === user?.toLowerCase())) {
+    if (!user || !draft.users.some((address) => address.toLowerCase() === user?.toLowerCase())) {
       throw new Error("Failed to update draft")
     }
 

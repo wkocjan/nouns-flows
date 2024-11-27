@@ -21,7 +21,7 @@ export async function updateDraft(id: number, formData: FormData, user?: `0x${st
 
     if (!draft) throw new Error("Draft not found")
 
-    if (!draft.users.some((address) => address === user?.toLowerCase())) {
+    if (!draft.users.some((address) => address.toLowerCase() === user?.toLowerCase())) {
       throw new Error("Failed to update draft")
     }
 
