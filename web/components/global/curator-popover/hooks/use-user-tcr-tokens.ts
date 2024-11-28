@@ -3,7 +3,6 @@
 import { getEthAddress } from "@/lib/utils"
 import useSWR from "swr"
 import { getUserTcrTokens } from "./get-user-tcr-tokens"
-import { useUserTotalRewardsBalance } from "./use-user-total-rewards-balance"
 import { getUserTotalRewardsBalance } from "./get-user-total-rewards-balance"
 
 export function useUserTcrTokens(address: string | undefined) {
