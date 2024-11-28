@@ -22,7 +22,7 @@ export const VotingToggle = () => {
         }
 
         if (tokens.length === 0) {
-          return toast.error("You don't have any Nouns delegated to vote with", { duration: 450 })
+          return toast.error("You don't have any Nouns delegated to vote with")
         }
 
         activate()
