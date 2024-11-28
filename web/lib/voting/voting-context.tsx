@@ -1,7 +1,6 @@
 "use client"
 
 import { useDelegatedTokens } from "@/lib/voting/delegated-tokens/use-delegated-tokens"
-import { generateOwnerProofs } from "@/lib/voting/owner-proofs/proofs"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { Vote } from "@prisma/flows"
 import { useRouter } from "next/navigation"
@@ -19,6 +18,7 @@ import {
 } from "../abis"
 import { PERCENTAGE_SCALE } from "../config"
 import { useUserVotes } from "./user-votes/use-user-votes"
+import { serialize } from "../serialize"
 
 type UserVote = Pick<Vote, "bps" | "recipientId">
 
@@ -92,62 +92,77 @@ export const VotingProvider = (
         },
         votes: votes || [],
         saveVotes: async () => {
-          if (!votes) return
-          if (!address)
-            return toast.error("Please connect your wallet again. (Try logging out and back in)")
-          if (!tokens.length) return toast.error("No delegated tokens found")
+          try {
+            if (!votes) return
+            if (!address)
+              return toast.error("Please connect your wallet again. (Try logging out and back in)")
+            if (!tokens.length) return toast.error("No delegated tokens found")
 
-          const toastId = toast.loading("Preparing vote...")
+            const toastId = toast.loading("Preparing vote...")
 
-          // Get unique owners (or delegators) in order of first appearance
-          const owners = tokens.reduce((acc: `0x${string}`[], token) => {
-            if (!acc.includes(token.owner)) acc.push(token.owner)
-            return acc
-          }, [])
+            // Get unique owners (or delegators) in order of first appearance
+            const owners = tokens.reduce((acc: `0x${string}`[], token) => {
+              if (!acc.includes(token.owner)) acc.push(token.owner)
+              return acc
+            }, [])
 
-          // Group tokenIds by owner
-          const tokenIds: bigint[][] = owners.map((owner) =>
-            tokens.filter((token) => token.owner === owner).map((token) => token.id),
-          )
+            // Group tokenIds by owner
+            const tokenIds: bigint[][] = owners.map((owner) =>
+              tokens.filter((token) => token.owner === owner).map((token) => token.id),
+            )
 
-          const proofs = await generateOwnerProofs(tokens)
-
-          if (proofs.error !== false) {
-            return toast.error("Failed to generate token ownership proofs", {
-              description: proofs.error,
+            const proofs = await fetch("/api/proofs", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ tokens: serialize(tokens) }),
             })
+              .then((res) => {
+                console.log(res)
+                return res.json()
+              })
+              .catch((error) => {
+                console.error(error)
+                return toast.error("Failed to fetch token ownership proofs", {
+                  description: error.message,
+                })
+              })
+
+            const recipientIds = votes.map((vote) => vote.recipientId as `0x${string}`)
+            const percentAllocations = votes.map((vote) => (vote.bps / 10000) * PERCENTAGE_SCALE)
+            const { ownershipStorageProofs, delegateStorageProofs, ...baseProofParams } = proofs
+
+            await prepareWallet(toastId)
+
+            writeContract({
+              account: address,
+              abi: [
+                ...nounsFlowImplAbi,
+                ...rewardPoolImplAbi,
+                ...erc20VotesMintableImplAbi,
+                ...superfluidPoolAbi,
+                ...tokenVerifierAbi,
+                ...gdav1ForwarderAbi,
+                ...cfav1ForwarderAbi,
+              ],
+              functionName: "castVotes",
+              address: contract,
+              chainId,
+              args: [
+                owners,
+                tokenIds,
+                recipientIds,
+                percentAllocations,
+                baseProofParams,
+                ownershipStorageProofs,
+                delegateStorageProofs,
+              ],
+            })
+          } catch (e: any) {
+            console.error(e)
+            return toast.error(`Failed to vote`, { description: e.message })
           }
-
-          const recipientIds = votes.map((vote) => vote.recipientId as `0x${string}`)
-          const percentAllocations = votes.map((vote) => (vote.bps / 10000) * PERCENTAGE_SCALE)
-          const { ownershipStorageProofs, delegateStorageProofs, ...baseProofParams } = proofs
-
-          await prepareWallet(toastId)
-
-          writeContract({
-            account: address,
-            abi: [
-              ...nounsFlowImplAbi,
-              ...rewardPoolImplAbi,
-              ...erc20VotesMintableImplAbi,
-              ...superfluidPoolAbi,
-              ...tokenVerifierAbi,
-              ...gdav1ForwarderAbi,
-              ...cfav1ForwarderAbi,
-            ],
-            functionName: "castVotes",
-            address: contract,
-            chainId,
-            args: [
-              owners,
-              tokenIds,
-              recipientIds,
-              percentAllocations,
-              baseProofParams,
-              ownershipStorageProofs,
-              delegateStorageProofs,
-            ],
-          })
         },
         updateVote: (vote: UserVote) => {
           const { recipientId, bps } = vote
