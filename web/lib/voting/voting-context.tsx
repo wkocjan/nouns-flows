@@ -1,7 +1,6 @@
 "use client"
 
 import { useDelegatedTokens } from "@/lib/voting/delegated-tokens/use-delegated-tokens"
-import { generateOwnerProofs } from "@/lib/voting/owner-proofs/proofs"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { Vote } from "@prisma/flows"
 import { useRouter } from "next/navigation"
@@ -110,13 +109,23 @@ export const VotingProvider = (
             tokens.filter((token) => token.owner === owner).map((token) => token.id),
           )
 
-          const proofs = await generateOwnerProofs(tokens)
-
-          if (proofs.error !== false) {
-            return toast.error("Failed to generate token ownership proofs", {
-              description: proofs.error,
+          const proofs = await fetch("/api/proofs", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ address }),
+          })
+            .then((res) => {
+              console.log(res)
+              return res.json()
             })
-          }
+            .catch((error) => {
+              console.error(error)
+              return toast.error("Failed to fetch token ownership proofs", {
+                description: error.message,
+              })
+            })
 
           const recipientIds = votes.map((vote) => vote.recipientId as `0x${string}`)
           const percentAllocations = votes.map((vote) => (vote.bps / 10000) * PERCENTAGE_SCALE)

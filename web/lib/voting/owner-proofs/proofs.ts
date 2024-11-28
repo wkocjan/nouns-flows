@@ -1,5 +1,3 @@
-"use server"
-
 import { NOUNS_TOKEN } from "@/lib/config"
 import { l1Client, l2Client } from "@/lib/viem/client"
 import { encodeAbiParameters, keccak256, PublicClient, toHex, type Address } from "viem"
@@ -9,7 +7,6 @@ import { getExecutionStateRootProof } from "./get-execution-state-root-proof"
 
 export async function generateOwnerProofs(tokens: { id: bigint; owner: Address }[]) {
   try {
-    const tokenIds = tokens.map(({ id }) => id)
     const delegators = Array.from(new Set(tokens.map((token) => token.owner)))
     const tokenIdsByOwner = delegators.map((owner) =>
       tokens.filter((token) => token.owner === owner).map((token) => token.id),
