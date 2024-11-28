@@ -98,10 +98,19 @@ export const VotingProvider = (
           if (!tokens.length) return toast.error("No delegated tokens found")
 
           const toastId = toast.loading("Preparing vote...")
-          const tokenIds = tokens.map(({ id }) => id)
-          const delegators = Array.from(new Set(tokens.map((token) => token.owner)))
 
-          const proofs = await generateOwnerProofs(tokenIds, delegators)
+          // Get unique owners (or delegators) in order of first appearance
+          const owners = tokens.reduce((acc: `0x${string}`[], token) => {
+            if (!acc.includes(token.owner)) acc.push(token.owner)
+            return acc
+          }, [])
+
+          // Group tokenIds by owner
+          const tokenIds: bigint[][] = owners.map((owner) =>
+            tokens.filter((token) => token.owner === owner).map((token) => token.id),
+          )
+
+          const proofs = await generateOwnerProofs(tokens)
 
           if (proofs.error !== false) {
             return toast.error("Failed to generate token ownership proofs", {
@@ -130,14 +139,12 @@ export const VotingProvider = (
             address: contract,
             chainId,
             args: [
-              delegators,
-              delegators.map((delegator) =>
-                tokens.filter((token) => token.owner === delegator).map((token) => token.id),
-              ),
+              owners,
+              tokenIds,
               recipientIds,
               percentAllocations,
               baseProofParams,
-              [ownershipStorageProofs],
+              ownershipStorageProofs,
               delegateStorageProofs,
             ],
           })

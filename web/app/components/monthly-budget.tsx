@@ -37,7 +37,7 @@ export const MonthlyBudget = ({ flow, approvedGrants, display }: Props) => {
 
   return (
     <Tooltip>
-      <TooltipTrigger>
+      <TooltipTrigger tabIndex={-1}>
         <Badge variant={isGoingNegative ? "warning" : "default"}>
           <Currency>{Number(display)}</Currency>
           /mo
