@@ -13,15 +13,15 @@ datasource db {
 
 model Profile {
   fname              String?
-  display_name        String?
+  display_name       String?
   avatar_url         String?
   bio               String?
   verified_addresses String[]
   updated_at         DateTime
   fid               BigInt    @id
   casts             Cast[]
-  channel_members   ChannelMember[]
-
+  channel_members    ChannelMember[]
+  
   @@map("farcaster_profile")
   @@schema("production")
   @@index([verified_addresses], type: Gin)
@@ -40,9 +40,7 @@ model Cast {
   parent_url       String?
   text             String?
   embeds           String?
-  mentions         String?
-  mentions_positions String?
-  mentioned_fids     BigInt[]
+  mentioned_fids   BigInt[]
   mentions_positions_array Int[]
   root_parent_hash Bytes?
   root_parent_url  String?
@@ -50,7 +48,7 @@ model Cast {
   computed_tags    String[]
   embed_summaries  String[]
 
-  @@map("farcaster_casts") 
+  @@map("farcaster_casts")
   @@schema("production")
 }
 

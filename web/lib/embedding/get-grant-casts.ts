@@ -1,10 +1,9 @@
 "use server"
 
 import { farcasterDb } from "@/lib/database/farcaster-edge"
-import { getFarcasterUsersByFids } from "../farcaster/get-user"
-import { Cast, Profile } from "@prisma/farcaster"
 import { getCacheStrategy } from "../database/edge"
 import { insertMentionsIntoText } from "../casts/cast-mentions"
+import { getFarcasterUsersByFids } from "../farcaster/get-user"
 
 export async function getGrantCasts({ grantId }: { grantId: string }) {
   try {
@@ -18,7 +17,7 @@ export async function getGrantCasts({ grantId }: { grantId: string }) {
   }
 }
 
-async function getCastsFromDb(grantId: string): Promise<(Cast & { profile: Profile })[]> {
+async function getCastsFromDb(grantId: string) {
   try {
     return await farcasterDb.cast.findMany({
       where: {
@@ -43,20 +42,19 @@ async function getCastsFromDb(grantId: string): Promise<(Cast & { profile: Profi
   }
 }
 
-async function processCastMentions(cast: Cast & { profile: Profile }) {
+type CastWithMentions = Awaited<ReturnType<typeof getCastsFromDb>>[number]
+
+async function processCastMentions(cast: CastWithMentions) {
   try {
-    const mentions = Array.isArray(cast.mentioned_fids)
-      ? cast.mentioned_fids
-      : (JSON.parse(cast.mentions || "[]") as bigint[])
+    const mentions = cast.mentioned_fids
     if (!mentions.length) return cast
+
     const mentionedUsers = await getFarcasterUsersByFids(mentions)
     const fidToFname = new Map(
       mentionedUsers.map((user) => [user.fid.toString(), user.fname || ""]),
     )
 
-    const positions = Array.isArray(cast.mentions_positions_array)
-      ? cast.mentions_positions_array
-      : (JSON.parse(cast.mentions_positions || "[]") as number[])
+    const positions = cast.mentions_positions_array
 
     const text = insertMentionsIntoText(
       cast.text || "",
