@@ -37,7 +37,7 @@ export const Voters = async (props: Props) => {
                     <AvatarFallback>{profile.display_name[0].toUpperCase()}</AvatarFallback>
                   </Avatar>
 
-                  <span className="mr-1 text-sm font-medium">{profile.display_name}</span>
+                  {/* <span className="mr-1 text-sm font-medium">{profile.display_name}</span> */}
                   <span className="text-xs text-muted-foreground">({v._count.tokenId})</span>
                 </div>
               )}

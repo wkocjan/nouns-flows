@@ -61,12 +61,14 @@ model DerivedData {
   grantId   String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  grant     Grant    @relation(fields: [grantId], references: [id])
+
+  grant Grant @relation(fields: [grantId], references: [id])
 
   // derived data here (generated from ai etc.)
   minimumSalary     Int?
   template          String?
   lastBuilderUpdate DateTime?
+  pageData          String?
 
   @@index([grantId])
   @@map("DerivedData")
@@ -90,25 +92,25 @@ model Conversation {
 }
 
 model Story {
-  id             String   @id @default(uuid())
-  title          String
-  summary        String
-  key_points     String[]
-  participants   String[]
-  header_image   String?
-  timeline       Json
-  sentiment      String   @db.VarChar(10)
-  completeness   Int
-  complete       Boolean
-  sources        String[]
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
-  media_urls     String[]
-  author         String
-  tagline        String
-  grant_ids      String[]
+  id              String   @id @default(uuid())
+  title           String
+  summary         String
+  key_points      String[]
+  participants    String[]
+  header_image    String?
+  timeline        Json
+  sentiment       String   @db.VarChar(10)
+  completeness    Int
+  complete        Boolean
+  sources         String[]
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  media_urls      String[]
+  author          String
+  tagline         String
+  grant_ids       String[]
   parent_flow_ids String[]
-  edits          Json?
+  edits           Json?
 
   @@index([complete])
   @@index([id])

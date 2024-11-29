@@ -43,7 +43,7 @@ export function FeaturedStoryCard(props: { story: Story }) {
         </p>
       </div>
 
-      <div className="p-4 pt-32 md:p-6">
+      <div className="p-4 pt-36 md:p-6 md:pt-36">
         <Link
           href={`/story/${id}`}
           className="text-base font-semibold leading-snug group-hover:text-primary"

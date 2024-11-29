@@ -16,7 +16,7 @@ interface Props {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { flowId } = (await props.params)
+  const { flowId } = await props.params
 
   const pool = await getPool()
   const flow = await getFlowWithGrants(flowId)
@@ -26,7 +26,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
 export default async function FlowLayout(props: PropsWithChildren<Props>) {
   const { children } = props
-  const { flowId } = (await props.params)
+  const { flowId } = await props.params
 
   const flow = await getFlowWithGrants(flowId)
 
@@ -35,7 +35,6 @@ export default async function FlowLayout(props: PropsWithChildren<Props>) {
       <div className="container mt-4 max-w-6xl md:mt-8">
         <FlowHeader flow={flow} />
       </div>
-
       <div className="container max-w-6xl pb-24">{children}</div>
     </VotingProvider>
   )
