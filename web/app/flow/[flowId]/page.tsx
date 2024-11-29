@@ -18,7 +18,7 @@ interface Props {
 }
 
 export default async function FlowPage(props: Props) {
-  const { flowId } = (await props.params)
+  const { flowId } = await props.params
 
   const flow = await database.grant.findFirstOrThrow({
     where: { id: flowId, isActive: 1 },

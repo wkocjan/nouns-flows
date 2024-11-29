@@ -18,7 +18,7 @@ export const CurationCard = (props: Props) => {
 
   return (
     <>
-      <Card>
+      <Card className="h-full bg-transparent">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             Curation
