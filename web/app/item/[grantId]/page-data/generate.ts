@@ -71,81 +71,77 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
     model: anthropic("claude-3-5-sonnet-latest"),
     schema: grantPageSchema,
     system: agent.prompt,
-    prompt: `You are an experienced data analyst and project manager specializing in web3 projects. Your task is to analyze grant information, related stories, and recipient details to create a structured and informative grant page. The output will be a JSON object containing all the required sections.
+    prompt: `You are an experienced data analyst and project manager specializing in web3 projects. Your task is to analyze grant information, related stories, and recipient details to create a structured and informative grant page in JSON format.
 
     First, review the following data carefully:
 
-    <grant_data>
+    ----
+    Grant Data:
     ${JSON.stringify(grant)}
-    </grant_data>
-
-    <flow_data>
+    ----
+    Flow Data:
     ${JSON.stringify(flow)}
-    </flow_data>
-
-    <stories_data>
+    ----
+    Stories Data:
     ${JSON.stringify(stories)}
-    </stories_data>
-
-    <casts_data>
+    ----
+    Casts Data:
     ${JSON.stringify(casts)}
-    </casts_data>
-
+    ----
     Available Icon Names:
-    <icon_names>
     ${JSON.stringify(iconNames)}
-    </icon_names>
+    ----
 
-    Before creating the JSON object, conduct a thorough analysis of the provided data. Conduct your analysis within <detailed_analysis> tags, following this structure:
+    Before creating the JSON object, conduct a thorough analysis of the provided data. 
 
-    2. Grant Data Analysis:
+    1. Grant Data Analysis:
       - Summarize key information from the grant's description (in markdown format).
       - List the grant's main objectives.
       - Extract other relevant details about the grant and builder(s).
 
-    3. Flow Data Analysis:
+    2. Flow Data Analysis:
       - Explain how the grant fits into the overall flow.
       - Identify any dependencies or connections with other projects.
 
-    4. Stories Data Analysis:
+    3. Stories Data Analysis:
       - Summarize important points about the grant's progress.
       - List significant milestones achieved, with dates if available.
       - For each story, provide a brief summary and note significant events, achievements, or challenges.
       - Identify common themes or patterns across the stories.
       - List all images from the stories.
 
-    5. Casts Data Analysis:
+    4. Casts Data Analysis:
       - Extract any additional context not covered in the grant description or stories.
       - Note any recurring topics or concerns mentioned in the casts.
 
-    6. Cross-referencing:
+    5. Cross-referencing:
       - Identify information that appears in multiple data sources.
       - Note any discrepancies or contradictions between different sources.
 
-    7. Metrics Analysis:
+    6. Metrics Analysis:
       - List all potential metrics extracted from the data.
       - For each metric, note its source and potential impact.
       - Rank metrics by relevance and impact.
 
-    8. Social Links Analysis:
+    7. Social Links Analysis:
       - List all potential social links mentioned in the data.
       - Note the platform and associated information for each link.
       - Verify the validity and relevance of each link.
 
-    9. Content Mapping:
+    8. Content Mapping:
       - For each section of the JSON structure (about, small_cards, metrics, timeline, plan, builder, media, dynamic_cards), list relevant pieces of extracted information.
       - Brainstorm 2-3 ideas for content in each section based on the analyzed data.
 
-    10. Challenges and Solutions:
+    9. Challenges and Solutions:
         - List any challenges or obstacles mentioned in the data.
         - Brainstorm potential solutions or approaches to these challenges.
         - Identify any information gaps that might need creative filling.
 
-    11. Icon Selection:
+    10. Icon Selection:
         - For each instance where an icon is needed, list all potential icon choices.
         - Cross-check each icon choice against the provided icon_names dataset to ensure only valid icons are used.
 
-    12. Final Summary:
+    11. Final Summary:
         - Provide a concise summary of the most crucial findings across all sections.
         - Highlight the unique aspects of this grant that should be emphasized in the final output.
 
@@ -201,13 +197,15 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
     Before finalizing the JSON object, review it to ensure all required fields are present and properly formatted. If any fields are missing or incomplete, address them before outputting the final JSON.
 
     Remember:
-  - Use ONLY icon names included in the "icon_names" data set.
+    - Use ONLY icon names included in the "icon_names" data set.
     - Include all important information from the grant description and stories.
     - Keep text impactful, easy to read, and understand.
     - Maintain a balance between formal and engaging language.
     - Choose visually appealing images that showcase the grant and builder.
+    - Ensure that the final JSON object does not contain any XML tags or formatting.
+    - Ensure you use correct names for all fields.
 
-    Ensure that your final JSON object adheres to this structure and includes all required fields with appropriate content.`,
+    After your analysis, present the final JSON object. Start the JSON object with an opening curly brace and ensure it's properly formatted without any XML tags inside.`,
     maxTokens: 5000,
     temperature: 0.5,
     maxRetries: 3,
