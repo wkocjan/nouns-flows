@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic"
-import { LucideProps } from "lucide-react"
+import { LucideProps, Info } from "lucide-react"
 import dynamicIconImports from "lucide-react/dynamicIconImports"
 
 interface IconProps extends LucideProps {
@@ -9,10 +9,10 @@ interface IconProps extends LucideProps {
 export const Icon = ({ name, ...props }: IconProps) => {
   if (!dynamicIconImports[name as keyof typeof dynamicIconImports]) {
     console.warn(`Icon ${name} not found`)
-    return null
+    return <Info {...props} />
   }
 
   const LucideIcon = dynamic(dynamicIconImports[name as keyof typeof dynamicIconImports])
 
-  return <LucideIcon size={24} {...props} />
+  return <LucideIcon {...props} />
 }
