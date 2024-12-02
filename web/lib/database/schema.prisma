@@ -111,6 +111,7 @@ model Story {
   edits          Json?
 
   @@index([complete])
+  @@index([id])
   @@index([updated_at])
   @@index([parent_flow_ids])
   @@map("Stories")
@@ -178,6 +179,7 @@ view Grant {
   @@index([isTopLevel])
   @@index([isFlow])
   @@index([isActive]) 
+  @@index([isTopLevel, isFlow])
 }
 
 view Vote {
@@ -244,6 +246,7 @@ view DisputeVote {
 
   @@unique([disputeId, arbitrator, voter])
   @@schema("public")
+  @@index([voter])
 }
 
 view TokenHolder {
@@ -256,6 +259,8 @@ view TokenHolder {
 
   @@unique([tokenContract, holder])
   @@schema("public")
+  @@index([holder])
+  @@index([holder, amount])
 }
 
 view Evidence {
