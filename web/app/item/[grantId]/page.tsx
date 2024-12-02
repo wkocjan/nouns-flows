@@ -15,7 +15,7 @@ import { VideoPlayer } from "@/components/ui/video-player"
 import { UserProfile } from "@/components/user-profile/user-profile"
 import database, { getCacheStrategy } from "@/lib/database/edge"
 import { getPool } from "@/lib/database/queries/pool"
-import { getEthAddress, getIpfsUrl } from "@/lib/utils"
+import { cn, getEthAddress, getIpfsUrl } from "@/lib/utils"
 import { Metadata } from "next"
 import Image from "next/image"
 import { notFound } from "next/navigation"
@@ -24,7 +24,6 @@ import { CSSProperties } from "react"
 import { CurationCard } from "./components/curation-card"
 import { generateAndStoreGrantPageData } from "./page-data/get"
 import { GrantPageData } from "./page-data/schema"
-import { DateTime } from "@/components/ui/date-time"
 
 interface Props {
   params: Promise<{ grantId: string }>
@@ -62,7 +61,8 @@ export default async function GrantPage(props: Props) {
     _count: { tokenId: true },
   })
 
-  const data = JSON.parse(grant.derivedData?.pageData ?? "{}") as GrantPageData | null
+  const pageData = JSON.parse(grant.derivedData?.pageData ?? "null") as GrantPageData
+  const data = pageData || (await generateAndStoreGrantPageData(grant.id))
 
   if (!data || Object.keys(data).length === 0) notFound()
 
@@ -112,10 +112,14 @@ export default async function GrantPage(props: Props) {
         <div className="col-span-7">
           <div className="relative aspect-video w-full overflow-hidden rounded-xl">
             <Image
-              src={getIpfsUrl(coverImage)}
-              alt={title}
+              src={getIpfsUrl(coverImage.url, "pinata")}
+              alt={coverImage.alt}
               fill
-              className="object-cover"
+              className={cn("object-cover", {
+                "object-top": coverImage.position === "top",
+                "object-center": coverImage.position === "center",
+                "object-bottom": coverImage.position === "bottom",
+              })}
               priority
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
@@ -129,12 +133,12 @@ export default async function GrantPage(props: Props) {
         <div className="col-span-5 grid grid-cols-2 gap-4">
           <div className="flex flex-col gap-4">
             <div
-              style={getGradientVariables(focus.gradient)}
+              style={getGradientVariables(how.gradient)}
               className="h-3/5 rounded-xl bg-gradient-to-br from-[var(--gradient-start-light)] to-[var(--gradient-end-light)] dark:from-[var(--gradient-start-dark)] dark:to-[var(--gradient-end-dark)]"
             >
               <div className="flex h-full flex-col items-start justify-between p-6 text-[var(--text-light)] dark:text-[var(--text-dark)]">
-                <Icon name={focus.icon} className="size-6" />
-                <p className="mt-2 text-sm leading-normal">{focus.text}</p>
+                <Icon name={how.icon} className="size-6" />
+                <p className="mt-2 text-sm leading-normal">{how.text}</p>
               </div>
             </div>
 
@@ -157,14 +161,12 @@ export default async function GrantPage(props: Props) {
 
           <div className="flex flex-col gap-4">
             <div
-              style={getGradientVariables(how.gradient)}
+              style={getGradientVariables(focus.gradient)}
               className="relative h-2/5 rounded-xl bg-gradient-to-br from-[var(--gradient-start-light)] to-[var(--gradient-end-light)] p-6 dark:from-[var(--gradient-start-dark)] dark:to-[var(--gradient-end-dark)]"
             >
               <div className="flex h-full flex-col justify-between text-[var(--text-light)] dark:text-[var(--text-dark)]">
-                <div className="flex justify-end">
-                  <Icon name={how.icon} className="size-6" />
-                </div>
-                <p className="mt-2 text-sm leading-normal">{how.text}</p>
+                <div className="text-[11px] uppercase tracking-wider opacity-50">Current Focus</div>
+                <p className="mt-2 text-sm leading-normal">{focus.text}</p>
               </div>
             </div>
 
@@ -257,8 +259,7 @@ export default async function GrantPage(props: Props) {
             className="col-span-full grid gap-3"
             style={{ gridTemplateColumns: `repeat(${media.length}, minmax(0, 1fr))` }}
           >
-            {media.map((hash) => {
-              const url = getIpfsUrl(hash)
+            {media.map(({ url, alt }) => {
               const isVideo = url.endsWith("m3u8")
 
               return (
@@ -272,7 +273,12 @@ export default async function GrantPage(props: Props) {
                       height="100%"
                     />
                   ) : (
-                    <Image src={url} alt="" fill className="rounded-lg object-cover" />
+                    <Image
+                      src={getIpfsUrl(url, "pinata")}
+                      alt={alt}
+                      fill
+                      className="rounded-lg object-cover"
+                    />
                   )}
                 </div>
               )
@@ -292,18 +298,6 @@ export default async function GrantPage(props: Props) {
           />
         </div>
 
-        {plan.map((item) => (
-          <div
-            key={item.title}
-            className="col-span-4 flex gap-x-4 rounded-xl border bg-white/50 p-8 dark:bg-black/5"
-          >
-            <div className="text-base">
-              <h3 className="font-bold text-foreground">{item.title}</h3>
-              <p className="mt-2 text-muted-foreground">{item.description}</p>
-            </div>
-          </div>
-        ))}
-
         <div className="col-span-4 rounded-xl border bg-white/50 p-6 dark:bg-transparent">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
@@ -313,16 +307,10 @@ export default async function GrantPage(props: Props) {
             <div className="relative space-y-6 pl-6">
               <div className="absolute left-[11px] top-[30px] h-[calc(100%-40px)] w-px bg-border" />
               {timeline.map((item) => (
-                <div key={item.date} className="relative">
+                <div key={`${item.date}-${item.title}`} className="relative">
                   <div className="absolute -left-6 top-1 size-2.5 rounded-full bg-primary"></div>
-                  <DateTime
-                    date={new Date(item.date)}
-                    relative
-                    className="block text-xs text-muted-foreground"
-                  />
-
+                  <div className="text-xs text-muted-foreground">{item.date}</div>
                   <p className="mt-2 text-sm font-medium">{item.title}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">{item.description}</p>
                 </div>
               ))}
             </div>
@@ -378,6 +366,22 @@ export default async function GrantPage(props: Props) {
         <div className="col-span-4 bg-white/50 dark:bg-transparent">
           <CurationCard grant={grant} flow={flow} dispute={grant.disputes?.[0]} />
         </div>
+
+        <div className="col-span-full mt-8">
+          <h3 className="text-2xl font-medium">The plan</h3>
+        </div>
+
+        {plan.map((item) => (
+          <div
+            key={item.title}
+            className="col-span-4 flex gap-x-4 rounded-xl border bg-white/50 p-8 dark:bg-black/5"
+          >
+            <div className="text-base">
+              <h3 className="font-bold text-foreground">{item.title}</h3>
+              <p className="mt-2 text-muted-foreground">{item.description}</p>
+            </div>
+          </div>
+        ))}
       </div>
 
       <div className="col-span-full mt-8">
