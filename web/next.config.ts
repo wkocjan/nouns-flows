@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
         hostname: "dmo9tcngmx442k9p.public.blob.vercel-storage.com",
         pathname: "/**",
       },
+      { protocol: "https", hostname: "i.imgur.com", pathname: "/**" },
     ],
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
