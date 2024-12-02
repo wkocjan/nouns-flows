@@ -26,6 +26,7 @@
     "@number-flow/react": "^0.4.0",
     "@prisma/client": "^5.21.1",
     "@prisma/extension-accelerate": "^1.2.1",
+    "@prisma/extension-optimize": "^1.1.0",
     "@privy-io/react-auth": "^1.95.0",
     "@privy-io/server-auth": "1.16.5",
     "@privy-io/wagmi": "^0.2.12",
