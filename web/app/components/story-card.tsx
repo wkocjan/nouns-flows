@@ -7,7 +7,7 @@ import Image from "next/image"
 import Link from "next/link"
 
 export function StoryCard(props: { story: Story }) {
-  const { header_image, title, tagline, updated_at, id, participants } = props.story
+  const { header_image, title, tagline, created_at, id, participants } = props.story
 
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-xl bg-white shadow dark:border dark:bg-card">
@@ -47,7 +47,7 @@ export function StoryCard(props: { story: Story }) {
         </div>
 
         <p className="text-xs text-muted-foreground">
-          <DateTime date={updated_at} relative short />
+          <DateTime date={created_at} relative short />
         </p>
       </div>
     </div>
