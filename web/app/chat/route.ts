@@ -28,10 +28,10 @@ export async function POST(request: Request) {
       messages: coreMessages,
       tools: agent.tools,
       maxSteps: 7,
-      onFinish: async ({ responseMessages }) => {
+      onFinish: async ({ response }) => {
         saveConversation({
           ...body,
-          messages: [...coreMessages, ...responseMessages],
+          messages: [...coreMessages, ...response.messages],
           address,
         })
       },
