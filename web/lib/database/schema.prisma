@@ -112,6 +112,7 @@ model Story {
 
   @@index([complete])
   @@index([updated_at])
+  @@index([parent_flow_ids])
   @@map("Stories")
   @@schema("web")
 }
@@ -174,6 +175,9 @@ view Grant {
 
   @@map("Grant")
   @@schema("public")
+  @@index([isTopLevel])
+  @@index([isFlow])
+  @@index([isActive]) 
 }
 
 view Vote {
@@ -188,6 +192,9 @@ view Vote {
   votesCount  String
 
   @@schema("public")
+  @@index([contract])
+  @@index([recipientId])
+  @@index([isStale])
 }
 
 view PonderMeta {
@@ -263,4 +270,5 @@ view Evidence {
   grant   Grant   @relation(fields: [evidenceGroupID], references: [evidenceGroupID])
 
   @@schema("public")
+  @@index([evidenceGroupID])
 }
