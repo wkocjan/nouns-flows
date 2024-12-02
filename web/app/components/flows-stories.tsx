@@ -9,7 +9,7 @@ import { FeaturedStoryCard } from "./story-card-featured"
 export async function FlowsStories() {
   const stories = await database.story.findMany({
     where: { complete: true, header_image: { not: null } },
-    orderBy: { updated_at: "desc" },
+    orderBy: { created_at: "desc" },
     take: 6,
     ...getCacheStrategy(600),
   })
