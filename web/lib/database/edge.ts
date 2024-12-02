@@ -13,12 +13,12 @@ if (!optimizeApiKey) {
 const getAccelerateClient = () => {
   return new PrismaClientEdge()
     .$extends(withAccelerate())
-    .$extends(withOptimize({ apiKey: optimizeApiKey }))
 }
 
 const prismaClientSingleton = () => {
   if (isDevelopment) {
     return new PrismaClientLocal()
+      .$extends(withOptimize({ apiKey: optimizeApiKey }))
   }
   return getAccelerateClient()
 }

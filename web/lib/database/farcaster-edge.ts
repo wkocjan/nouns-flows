@@ -21,7 +21,6 @@ const farcasterClientSingleton = () => {
   }
   return new FarcasterClient()
     .$extends(withAccelerate())
-    .$extends(withOptimize({ apiKey: optimizeApiKey }))
 }
 
 declare const globalThis: {
