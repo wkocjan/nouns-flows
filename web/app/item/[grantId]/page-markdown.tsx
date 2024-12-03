@@ -21,9 +21,7 @@ import { Metadata } from "next"
 import Image from "next/image"
 import { ClaimableBalance } from "./components/claimable-balance"
 import { CurationCard } from "./components/curation-card"
-import { Updates } from "./components/updates"
 import { UserVotes } from "./components/user-votes"
-import { Voters } from "./components/voters"
 import { getGrantCasts } from "@/lib/embedding/get-grant-casts"
 import { Suspense } from "react"
 
@@ -36,7 +34,7 @@ interface Props {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { grantId } = (await props.params)
+  const { grantId } = await props.params
 
   const pool = await getPool()
 
@@ -49,7 +47,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function GrantPage(props: Props) {
-  const params = await props.params;
+  const params = await props.params
   const { grantId } = params
 
   const grant = await database.grant.findUniqueOrThrow({
@@ -115,15 +113,6 @@ export default async function GrantPage(props: Props) {
           <div className="mb-12 mt-6 space-y-5 text-pretty text-sm md:text-base">
             <Markdown>{description}</Markdown>
           </div>
-
-          {!isFlow && (
-            <Suspense fallback={<div>Loading...</div>}>
-              <Updates
-                casts={await getGrantCasts({ grantId: grant.id })}
-                recipient={grant.recipient}
-              />
-            </Suspense>
-          )}
         </div>
 
         <div className="space-y-4 md:col-span-2">

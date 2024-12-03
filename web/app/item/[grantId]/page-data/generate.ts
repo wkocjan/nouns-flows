@@ -144,13 +144,11 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
     Structure:
     <coverImage>
       <url>{url}</url>
-      <position>{position}</position>
       <alt>{alt}</alt>
     </coverImage>
 
     Instructions:
     - Provide URL of the most relevant image, defaulting to "grant.image" field if unsure
-    - For "position" provide vertical position of the focal point or main subject in the image. It can be "top", "center" or "bottom".
   
     ### Why
     Structure:
@@ -237,6 +235,7 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
     - Choose visually appealing images that showcase the grant and its impact
     - Avoid using the same photos used in other sections
     - Prefer real-world photos over screenshots or text-heavy images, posters, etc.
+    - Images will be displayed in a square format
     
     ### Plan
     Structure:
@@ -325,12 +324,20 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
     </icons>
 
     !!! DO NOT use any icon name that is not listed in the dataset above !!!
+
+    ## Image position
+    Whenever you need to provide image position, it can be "top", "center" or "bottom".
+    It's the vertical position of the focal point or main subject in the image.
+    So if you provide "top", it means that the main subject is at the top of the image.
+
     `,
     prompt: `
     Output the grant page data in JSON format based on the following text:
     ${result.text}
 
     Generate gradients and text color for "how", "focus" and "who" cards. Make sure these gradients are cohesive, but different from each other.
+
+    Analyze the cover image and provide its cropping position. 
     `,
     maxTokens: 5000,
     temperature: 0,

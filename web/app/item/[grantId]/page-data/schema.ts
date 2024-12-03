@@ -10,7 +10,9 @@ export const grantPageSchema = z.object({
   tagline: z.string(),
   coverImage: z.object({
     url: z.string(),
-    position: z.enum(["top", "center", "bottom"]),
+    position: z
+      .enum(["top", "center", "bottom"])
+      .describe("Vertical position of the focal point or main subject in the image"),
     alt: z.string(),
   }),
   why: z.object({ text: z.string(), image: z.string() }),
