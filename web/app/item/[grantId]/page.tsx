@@ -33,6 +33,8 @@ interface Props {
   params: Promise<{ grantId: string }>
 }
 
+export const runtime = "nodejs"
+
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const { grantId } = await props.params
 
