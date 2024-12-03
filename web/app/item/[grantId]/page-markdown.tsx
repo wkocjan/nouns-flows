@@ -1,3 +1,4 @@
+// @ts-ignore
 import { Comments } from "@/components/comments/comments"
 import { AnimatedSalary } from "@/components/global/animated-salary"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -178,9 +179,9 @@ export default async function GrantPage(props: Props) {
 
           <CurationCard grant={grant} flow={flow} dispute={grant.disputes?.[0]} />
 
-          {Number(votesCount) > 0 && (
+          {/* {Number(votesCount) > 0 && (
             <Voters contract={getEthAddress(parentContract)} recipientId={grant.id} />
-          )}
+          )} */}
 
           {!isFlow && (
             <Card>
