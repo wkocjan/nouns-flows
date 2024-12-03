@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
       { protocol: "https", hostname: "i.imgur.com", pathname: "/**" },
+      {
+        protocol: "https",
+        hostname: "wrpcd.net",
+        pathname: "/**",
+      },
     ],
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
