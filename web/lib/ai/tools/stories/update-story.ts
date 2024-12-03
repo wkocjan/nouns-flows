@@ -82,13 +82,18 @@ export const updateStoryTool = {
       const existingStory = await database.story.findFirstOrThrow({ where: { id: storyId } })
       if (!existingStory) throw new Error(`Story ${storyId} not found`)
 
+      const edits =
+        typeof existingStory.edits === "string"
+          ? JSON.parse(existingStory.edits).push || []
+          : existingStory.edits || []
+
+      edits.push({ timestamp: new Date(), message, address })
+
       await database.story.update({
         where: { id: storyId },
         data: {
           ...updates,
-          edits: {
-            push: [{ timestamp: new Date(), message, address }],
-          },
+          edits,
         },
       })
 
