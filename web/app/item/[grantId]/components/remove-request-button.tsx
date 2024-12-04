@@ -123,7 +123,7 @@ export function GrantRemoveRequestButton(props: Props) {
         <Button
           type="button"
           ref={ref}
-          className="w-full"
+          className="w-full bg-transparent"
           variant="outline"
           onClick={(e) => {
             if (!address) {
@@ -145,7 +145,7 @@ export function GrantRemoveRequestButton(props: Props) {
           <div className="md:pr-6">
             <h2 className="font-medium tracking-tight">{flow.title}</h2>
             <h3 className="text-sm text-muted-foreground">Guidelines & requirements</h3>
-            <div className="mt-6 space-y-2.5 text-sm leading-normal">
+            <div className="mt-6 max-h-[75vh] space-y-2.5 overflow-y-auto text-sm leading-normal scrollbar scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
               <Markdown>{flow.description}</Markdown>
             </div>
           </div>

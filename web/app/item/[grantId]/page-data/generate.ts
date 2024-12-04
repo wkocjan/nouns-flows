@@ -167,7 +167,7 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
 
     Instructions:
     - Explain how the goal will be achieved
-    - Max 120 characters (including spaces)
+    - Max 100 characters (including spaces)
     
     ### Who
     Structure:
@@ -176,7 +176,7 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
     Instructions:
     - Short introduction of grant recipient(s), including name
     - If there are multiple recipients, mention them all
-    - Max 80 characters (including spaces)
+    - Max 75 characters (including spaces)
     
     ### Focus
     Structure:
@@ -185,7 +185,7 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
     Instructions:
     - Describe what's the current focus of builder(s) in context of the grant
     - Ensure is not too similar to "how" section
-    - Max 90 characters (including spaces)
+    - Max 75 characters (including spaces)
     
     ### Metrics
     Structure:
@@ -197,7 +197,7 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
     </metrics>
 
     Instructions:
-    - Include 4 or 5 metrics with short labels and numeric values
+    - Include 4 metrics with short labels and numeric values
     - Focus on progress and impact, not budget or community votes
     - Extract interesting numeric data if lacking specific metrics
     - From the label it should be clear what the value means (what's the unit)
@@ -231,7 +231,7 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
     </media>
 
     Instructions:
-    - Include 4 or 5 or 8 or 10  media items (images) with URL
+    - Include 4, 8 or 12 media items (images) with URL
     - Choose visually appealing images that showcase the grant and its impact
     - Avoid using the same photos used in other sections
     - Prefer real-world photos over screenshots or text-heavy images, posters, etc.
@@ -247,7 +247,7 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
     </plan>
 
     Instructions:
-    - Provide 3 or 6 items with short headlines and brief descriptions (20-25 words)
+    - Provide 3, 6 or 9 items with short headlines and brief descriptions (20-25 words)
 
     ### Timeline
     Structure:

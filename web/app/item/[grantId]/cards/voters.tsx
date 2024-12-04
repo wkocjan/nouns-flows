@@ -21,7 +21,7 @@ export const Voters = async (props: Props) => {
   `
 
   return (
-    <div className="grow rounded-xl border bg-white/50 p-6 dark:bg-transparent">
+    <div className="grow rounded-xl border bg-white/50 p-5 dark:bg-transparent">
       <h3 className="mb-4 font-medium">Voters</h3>
       {voters.length === 0 && (
         <div className="text-sm text-muted-foreground">
@@ -33,7 +33,7 @@ export const Voters = async (props: Props) => {
         </div>
       )}
       {voters.length > 0 && (
-        <div className="grid grid-cols-2 gap-x-4 gap-y-6">
+        <div className="grid gap-x-4 gap-y-6 lg:grid-cols-2">
           {voters.map((v) => (
             <UserProfile address={v.voter} key={v.voter}>
               {(profile) => (

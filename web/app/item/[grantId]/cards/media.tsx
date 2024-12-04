@@ -9,15 +9,10 @@ interface Props {
 export function Media(props: Props) {
   const { media } = props
 
-  if (media.length <= 3) return null
-
-  const columns = media.length % 4 === 0 ? 4 : 5
+  if (media.length < 3) return null
 
   return (
-    <div
-      className="col-span-full grid gap-3"
-      style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
-    >
+    <div className="col-span-full grid grid-cols-2 gap-3 lg:grid-cols-4">
       {media.map(({ url, alt }) => {
         const isVideo = url.endsWith("m3u8")
 

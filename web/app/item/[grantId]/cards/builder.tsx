@@ -14,8 +14,8 @@ export function Builder(props: Props) {
   const { tags, bio, links, recipient } = props
 
   return (
-    <div className="col-span-4 row-span-2">
-      <div className="h-full rounded-xl border bg-secondary p-6 text-secondary-foreground">
+    <div className="col-span-full lg:col-span-4 lg:row-span-2">
+      <div className="h-full rounded-xl border bg-secondary/50 p-5 text-secondary-foreground dark:bg-secondary">
         <UserProfile address={recipient} withPopover={false}>
           {(profile) => (
             <div className="space-y-6">
@@ -23,9 +23,7 @@ export function Builder(props: Props) {
                 <Avatar className="size-12 bg-primary">
                   <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
                 </Avatar>
-                <div>
-                  <h2 className="text-xl font-semibold">{profile.display_name}</h2>
-                </div>
+                <h2 className="text-xl font-semibold">{profile.display_name}</h2>
               </div>
 
               <div className="flex flex-wrap gap-2">

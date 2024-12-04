@@ -20,9 +20,7 @@ const prismaClientSingleton = () => {
   return getAccelerateClient()
 }
 
-declare const globalThis: {
-  prisma: ReturnType<typeof getAccelerateClient>
-} & typeof global
+declare const globalThis: { prisma: ReturnType<typeof getAccelerateClient> } & typeof global
 
 const database = globalThis.prisma ?? prismaClientSingleton()
 
