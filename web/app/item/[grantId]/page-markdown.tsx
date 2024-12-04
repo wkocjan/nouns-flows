@@ -53,14 +53,7 @@ export default async function GrantPage(props: Props) {
 
   const grant = await database.grant.findUniqueOrThrow({
     where: { id: grantId, isActive: 1, isTopLevel: 0 },
-    include: {
-      flow: true,
-      disputes: {
-        orderBy: { creationBlock: "desc" },
-        include: { evidences: true },
-        take: 1,
-      },
-    },
+    include: { flow: true },
   })
 
   const { title, tagline, description, flow, image, votesCount, parentContract, isFlow } = grant
@@ -177,7 +170,7 @@ export default async function GrantPage(props: Props) {
             </CardContent>
           </Card>
 
-          <CurationCard grant={grant} flow={flow} dispute={grant.disputes?.[0]} />
+          <CurationCard grant={grant} flow={flow} />
 
           {/* {Number(votesCount) > 0 && (
             <Voters contract={getEthAddress(parentContract)} recipientId={grant.id} />
