@@ -5,14 +5,17 @@ import { PropsWithChildren } from "react"
 import { UserVotes } from "../components/user-votes"
 
 interface Props {
-  grant: Grant
+  grant: Pick<
+    Grant,
+    "monthlyIncomingFlowRate" | "totalEarned" | "votesCount" | "id" | "parentContract"
+  >
 }
 
 export const Stats = (props: Props) => {
   const { grant } = props
 
   return (
-    <div className="grid grid-cols-2 gap-6 rounded-xl border bg-white/50 p-6 dark:bg-transparent">
+    <div className="grid grid-cols-2 gap-6 rounded-xl border bg-white/50 p-5 dark:bg-transparent">
       <Stat label="Budget">
         <Currency>{grant.monthlyIncomingFlowRate}</Currency>/mo
       </Stat>
@@ -31,7 +34,7 @@ const Stat = (props: PropsWithChildren<{ label: string }>) => {
   const { children, label } = props
   return (
     <div>
-      <div className="text-3xl font-bold leading-[46px]">{children}</div>
+      <div className="text-2xl font-bold leading-[46px] lg:text-3xl">{children}</div>
       <div className="text-sm text-muted-foreground">{label}</div>
     </div>
   )

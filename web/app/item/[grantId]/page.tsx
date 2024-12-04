@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/breadcrumb"
 import { Icon } from "@/components/ui/icon"
 import database, { getCacheStrategy } from "@/lib/database/edge"
-import { getPool } from "@/lib/database/queries/pool"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { Suspense } from "react"
@@ -26,6 +25,7 @@ import { WhoCard } from "./cards/who"
 import { WhyCard } from "./cards/why"
 import { BgGradient } from "./components/bg-gradient"
 import { CurationCard } from "./components/curation-card"
+import { GrantStories } from "./components/grant-stories"
 import { generateAndStoreGrantPageData } from "./page-data/get"
 import { GrantPageData } from "./page-data/schema"
 
@@ -38,15 +38,13 @@ export const runtime = "nodejs"
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const { grantId } = await props.params
 
-  const pool = await getPool()
-
   const grant = await database.grant.findFirstOrThrow({
     where: { id: grantId, isTopLevel: 0 },
     select: { title: true, tagline: true },
     ...getCacheStrategy(1200),
   })
 
-  return { title: `${grant.title} - ${pool.title}`, description: grant.tagline }
+  return { title: grant.title, description: grant.tagline }
 }
 
 export default async function GrantPage(props: Props) {
@@ -57,7 +55,6 @@ export default async function GrantPage(props: Props) {
     include: {
       flow: true,
       derivedData: { select: { pageData: true } },
-      disputes: { orderBy: { creationBlock: "desc" }, include: { evidences: true }, take: 1 },
     },
     ...getCacheStrategy(600), // ToDo: Invalidate on edit
   })
@@ -84,17 +81,17 @@ export default async function GrantPage(props: Props) {
               {isFlow ? title : flow.title}
             </BreadcrumbLink>
           </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
+          <BreadcrumbSeparator className="max-sm:hidden" />
+          <BreadcrumbItem className="max-sm:hidden">
             <BreadcrumbPage>{isFlow ? "Flow details" : title}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="grid grid-cols-12 gap-4">
+      <div className="grid grid-cols-12 gap-x-2 gap-y-4 lg:gap-x-4">
         <CoverImage coverImage={data.coverImage} title={title} tagline={data.tagline} />
 
-        <div className="col-span-5 grid grid-cols-2 gap-4">
+        <div className="col-span-full grid grid-cols-1 gap-x-3 gap-y-4 lg:col-span-5 lg:grid-cols-2 lg:gap-x-4">
           <div className="flex flex-col gap-4">
             <HowCard gradient={how.gradient} icon={how.icon} text={how.text} />
             <WhoCard gradient={who.gradient} text={who.text} recipient={grant.recipient} />
@@ -116,11 +113,14 @@ export default async function GrantPage(props: Props) {
         />
 
         {data.cards.map((card) => (
-          <div key={card.title} className="col-span-4 rounded-xl border bg-card p-6">
+          <div
+            key={card.title}
+            className="col-span-full rounded-xl border bg-card p-5 lg:col-span-4"
+          >
             <div className="flex flex-col items-start gap-4">
               <Icon name={card.icon} className="size-9 text-primary" />
               <h3 className="font-bold tracking-tight">{card.title}</h3>
-              <p className="leading-relaxed opacity-60">{card.description}</p>
+              <p className="leading-relaxed opacity-60 max-sm:text-sm">{card.description}</p>
             </div>
           </div>
         ))}
@@ -128,14 +128,14 @@ export default async function GrantPage(props: Props) {
         <Media media={data.media} />
       </div>
 
-      <div className="relative mt-6 grid grid-cols-12 gap-4">
+      <div className="relative mt-4 grid grid-cols-12 gap-4">
         <BgGradient />
 
-        <div className="col-span-4">
+        <div className="col-span-full lg:col-span-4">
           <Timeline timeline={data.timeline} />
         </div>
 
-        <div className="col-span-4 flex flex-col space-y-4">
+        <div className="col-span-full flex flex-col space-y-4 lg:col-span-4">
           <Stats grant={grant} />
 
           <Suspense>
@@ -147,12 +147,16 @@ export default async function GrantPage(props: Props) {
           </Suspense>
         </div>
 
-        <div className="col-span-4 bg-white/50 dark:bg-transparent">
-          <CurationCard grant={grant} flow={flow} dispute={grant.disputes?.[0]} />
+        <div className="col-span-full lg:col-span-4">
+          <Suspense>
+            <CurationCard grant={grant} flow={flow} />
+          </Suspense>
         </div>
-
-        <Plan plan={data.plan} />
       </div>
+
+      <Plan plan={data.plan} className="mt-10" />
+
+      <GrantStories grantId={grant.id} className="mt-10" />
     </div>
   )
 }

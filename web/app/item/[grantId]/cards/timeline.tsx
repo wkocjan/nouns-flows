@@ -6,7 +6,7 @@ export function Timeline(props: Props) {
   const { timeline } = props
 
   return (
-    <div className="h-full rounded-xl border bg-white/50 p-6 dark:bg-transparent">
+    <div className="h-full rounded-xl border bg-white/50 p-5 dark:bg-transparent">
       <h3 className="font-medium">Timeline</h3>
 
       <div className="relative space-y-6">

@@ -6,10 +6,11 @@ import database, { getCacheStrategy } from "@/lib/database/edge"
 
 interface Props {
   grantId: string
+  className?: string
 }
 
 export async function GrantStories(props: Props) {
-  const { grantId } = props
+  const { grantId, className = "" } = props
 
   const stories = await database.story.findMany({
     where: { complete: true, header_image: { not: null }, grant_ids: { has: grantId } },
@@ -23,9 +24,9 @@ export async function GrantStories(props: Props) {
   const [featuredStory, ...remainingStories] = stories
 
   return (
-    <div className="col-span-full mt-8">
-      <h3 className="text-2xl font-medium">Stories</h3>
-      <div className="mt-10 grid grid-cols-1 gap-2.5 md:grid-cols-4">
+    <div className={className}>
+      <h3 className="text-xl font-medium lg:text-2xl">Stories</h3>
+      <div className="mt-6 grid grid-cols-1 gap-2.5 md:grid-cols-4">
         {featuredStory && <FeaturedStoryCard story={featuredStory} />}
         {remainingStories.map((story) => (
           <StoryCard story={story} key={story.id} />
