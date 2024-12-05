@@ -49,7 +49,7 @@ export const getUserTotalRewardsBalance = unstable_cache(
 
       return {
         earnings: {
-          claimable,
+          claimable: claimable.toString(),
           monthly,
           yearly: 12 * monthly,
         },
@@ -58,7 +58,7 @@ export const getUserTotalRewardsBalance = unstable_cache(
       console.error("Error getting rewards balances:", error)
       return {
         earnings: {
-          claimable: BigInt(0),
+          claimable: BigInt(0).toString(),
           monthly: 0,
           yearly: 0,
         },

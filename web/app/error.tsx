@@ -11,8 +11,6 @@ export default function Error({
   error: Error & { digest?: string }
   reset: () => void
 }) {
-  console.error(error)
-
   return (
     <div className="container flex min-h-[calc(100vh-200px)] flex-col items-center justify-center">
       <div className="mx-auto flex max-w-md flex-col items-center space-y-8 text-center">

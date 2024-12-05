@@ -97,7 +97,7 @@ async function getBuilderProfilePrompt(fid: number): Promise<string> {
   const builderProfile = builderProfiles[0]
 
   if (!builderProfile) {
-    console.error(`No builder profile found for fid ${fid}`)
+    console.warn(`No builder profile found for fid ${fid}`)
     return ""
   }
 
