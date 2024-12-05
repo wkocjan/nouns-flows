@@ -69,6 +69,8 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
 
   const agent = await getAgent("flo", { grantId: id, address: grant.recipient })
 
+  console.time(`Text generation for ${grant.title}`)
+
   const result = await generateText({
     model: anthropic("claude-3-5-sonnet-latest"),
     system: agent.prompt,
@@ -289,11 +291,11 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
     temperature: 0.5,
     maxRetries: 3,
   })
+  console.timeEnd(`Text generation for ${grant.title}`)
 
   if (!result.text) throw new Error("No text generated")
 
-  console.debug("Got the text. Now generating JSON...", result.text)
-
+  console.time(`JSON generation for ${grant.title}`)
   const { object } = await generateObject({
     model: anthropic("claude-3-5-sonnet-latest"),
     schema: grantPageSchema,
@@ -343,8 +345,7 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
     temperature: 0,
     maxRetries: 3,
   })
-
-  console.debug("Got the JSON object")
+  console.timeEnd(`JSON generation for ${grant.title}`)
 
   return object
 }

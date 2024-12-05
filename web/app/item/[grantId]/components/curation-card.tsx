@@ -1,7 +1,10 @@
+import "server-only"
+
 import { DisputeUserVote } from "@/app/components/dispute/dispute-user-vote"
 import { Badge } from "@/components/ui/badge"
-import database from "@/lib/database/edge"
+import database, { getCacheStrategy } from "@/lib/database/edge"
 import { Status } from "@/lib/enums"
+import { cn } from "@/lib/utils"
 import { Grant } from "@prisma/flows"
 import { StatusDisputed } from "./status-disputed"
 import { StatusNotDisputed } from "./status-not-disputed"
@@ -9,10 +12,11 @@ import { StatusNotDisputed } from "./status-not-disputed"
 interface Props {
   grant: Grant
   flow: Grant
+  className?: string
 }
 
 export const CurationCard = async (props: Props) => {
-  const { grant, flow } = props
+  const { grant, flow, className } = props
 
   const isDisputed = grant.isDisputed === 1
 
@@ -20,10 +24,11 @@ export const CurationCard = async (props: Props) => {
     where: { grantId: grant.id },
     orderBy: { creationBlock: "desc" },
     include: { evidences: true },
+    ...getCacheStrategy(60),
   })
 
   return (
-    <div className="flex h-full flex-col space-y-4">
+    <div className={cn("flex flex-col space-y-4", className)}>
       <div className="flex h-full flex-col rounded-xl border bg-white/50 p-5 dark:bg-transparent">
         <h3 className="mb-4 flex items-center justify-between font-medium">
           Curation

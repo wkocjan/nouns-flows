@@ -9,7 +9,7 @@ import {
 import { Icon } from "@/components/ui/icon"
 import database, { getCacheStrategy } from "@/lib/database/edge"
 import { Metadata } from "next"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { Suspense } from "react"
 import { Builder } from "./cards/builder"
 import { CoverImage } from "./cards/cover-image"
@@ -26,7 +26,6 @@ import { WhyCard } from "./cards/why"
 import { BgGradient } from "./components/bg-gradient"
 import { CurationCard } from "./components/curation-card"
 import { GrantStories } from "./components/grant-stories"
-import { generateAndStoreGrantPageData } from "./page-data/get"
 import { GrantPageData } from "./page-data/schema"
 
 interface Props {
@@ -52,19 +51,14 @@ export default async function GrantPage(props: Props) {
 
   const { flow, ...grant } = await database.grant.findUniqueOrThrow({
     where: { id: grantId, isActive: 1, isTopLevel: 0 },
-    include: {
-      flow: true,
-      derivedData: { select: { pageData: true } },
-    },
+    include: { flow: true, derivedData: { select: { pageData: true } } },
     ...getCacheStrategy(600), // ToDo: Invalidate on edit
   })
 
-  const pageData = JSON.parse(grant.derivedData?.pageData ?? "null") as GrantPageData | null
-  const data = pageData || (await generateAndStoreGrantPageData(grant.id))
+  if (grant.isFlow) return redirect(`/flow/${grant.id}/about`)
 
+  const data = JSON.parse(grant.derivedData?.pageData ?? "null") as GrantPageData | null
   if (!data || Object.keys(data).length === 0) notFound()
-
-  const { isFlow } = grant
 
   const { why, focus, who, how, builder, title } = data
 
@@ -77,13 +71,11 @@ export default async function GrantPage(props: Props) {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href={`/flow/${isFlow ? grant.id : flow.id}`}>
-              {isFlow ? title : flow.title}
-            </BreadcrumbLink>
+            <BreadcrumbLink href={`/flow/${flow.id}`}>{flow.title}</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator className="max-sm:hidden" />
           <BreadcrumbItem className="max-sm:hidden">
-            <BreadcrumbPage>{isFlow ? "Flow details" : title}</BreadcrumbPage>
+            <BreadcrumbPage>{title}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -149,7 +141,7 @@ export default async function GrantPage(props: Props) {
 
         <div className="col-span-full lg:col-span-4">
           <Suspense>
-            <CurationCard grant={grant} flow={flow} />
+            <CurationCard grant={grant} flow={flow} className="h-full" />
           </Suspense>
         </div>
       </div>
