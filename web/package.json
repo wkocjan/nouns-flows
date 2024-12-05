@@ -7,9 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prebuild": "node edge-prebuild.js && prisma generate --no-engine && prisma generate --schema=./lib/database/farcaster.prisma --no-engine",
+    "prebuild": "node edge-prebuild.js && prisma generate --no-engine --no-hints && prisma generate --schema=./lib/database/farcaster.prisma --no-hints --no-engine",
     "db:push": "prisma db push",
-    "db:generate": "prisma generate && prisma generate --schema=./lib/database/farcaster.prisma",
+    "db:generate": "prisma generate --no-hints && prisma generate --no-hints --schema=./lib/database/farcaster.prisma",
     "typecheck": "tsc"
   },
   "dependencies": {
