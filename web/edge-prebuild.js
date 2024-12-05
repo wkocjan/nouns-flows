@@ -6,8 +6,16 @@ const path = require("path")
 const pattern = "**/*.{ts,tsx}"
 
 // Define the search and replacement strings
-const searchString = 'export const runtime = "nodejs"'
-const replaceString = 'export const runtime = "edge"'
+const searchStrings = [
+  {
+    search: 'export const runtime = "nodejs"',
+    replace: 'export const runtime = "edge"',
+  },
+  {
+    search: 'import { PrismaClient } from "@prisma/flows"',
+    replace: 'import { PrismaClient } from "@prisma/flows/edge"',
+  },
+]
 
 // Function to process each file
 const processFile = (file) => {
@@ -17,8 +25,18 @@ const processFile = (file) => {
       console.error(`Error reading file ${filePath}:`, err)
       return
     }
-    if (data.includes(searchString)) {
-      const result = data.replace(searchString, replaceString)
+
+    let result = data
+    let updated = false
+
+    searchStrings.forEach(({ search, replace }) => {
+      if (data.includes(search)) {
+        result = result.replace(search, replace)
+        updated = true
+      }
+    })
+
+    if (updated) {
       fs.writeFile(filePath, result, "utf8", (err) => {
         if (err) {
           console.error(`Error writing file ${filePath}:`, err)

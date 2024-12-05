@@ -1,5 +1,5 @@
-import { PrismaClient as PrismaClientEdge } from "@prisma/flows/edge"
-import { PrismaClient as PrismaClientLocal } from "@prisma/flows"
+// this will be updated by the edge-prebuild.js script to pull in the edge client
+import { PrismaClient } from "@prisma/flows"
 import { withAccelerate } from "@prisma/extension-accelerate"
 import { withOptimize } from "@prisma/extension-optimize"
 
@@ -11,14 +11,12 @@ if (!optimizeApiKey) {
 }
 
 const getAccelerateClient = () => {
-  return new PrismaClientEdge()
-    .$extends(withAccelerate())
+  return new PrismaClient().$extends(withAccelerate())
 }
 
 const prismaClientSingleton = () => {
   if (isDevelopment) {
-    return new PrismaClientLocal()
-      .$extends(withOptimize({ apiKey: optimizeApiKey }))
+    return new PrismaClient().$extends(withOptimize({ apiKey: optimizeApiKey }))
   }
   return getAccelerateClient()
 }
