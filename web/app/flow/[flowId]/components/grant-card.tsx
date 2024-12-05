@@ -3,7 +3,7 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { Profile } from "@/components/user-profile/get-user-profile"
 import { UserProfilePopover } from "@/components/user-profile/user-popover"
 import { getIpfsUrl } from "@/lib/utils"
-import { Grant } from "@prisma/flows/edge"
+import { Grant } from "@prisma/flows"
 import Link from "next/dist/client/link"
 import Image from "next/image"
 

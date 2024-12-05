@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DateTime } from "@/components/ui/date-time"
 import { UserProfile } from "@/components/user-profile/user-profile"
 import { cn } from "@/lib/utils"
-import { Comment } from "@prisma/flows/edge"
+import { Comment } from "@prisma/flows"
 import { CommentReply } from "./comment-reply"
 
 interface Props {

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { getEthAddress } from "@/lib/utils"
-import { Grant } from "@prisma/flows/edge"
+import { Grant } from "@prisma/flows"
 import { useState } from "react"
 import { Address } from "viem"
 import { BuyTokenBox } from "./buy-token-box"

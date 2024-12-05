@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Grant } from "@prisma/flows/edge"
+import { Grant } from "@prisma/flows"
 import Link from "next/link"
 import { useRef } from "react"
 import { SwapTokenBox } from "./swap-token-box"

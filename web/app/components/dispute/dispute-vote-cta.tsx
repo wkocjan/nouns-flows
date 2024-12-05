@@ -2,7 +2,7 @@
 
 import { isDisputeResolvedForNoneParty, isRequestRejected } from "@/app/components/dispute/helpers"
 import { Button } from "@/components/ui/button"
-import { Dispute, Grant } from "@prisma/flows/edge"
+import { Dispute, Grant } from "@prisma/flows"
 import Link from "next/link"
 import { Address } from "viem"
 import { useAccount } from "wagmi"

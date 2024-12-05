@@ -15,7 +15,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Profile } from "@/components/user-profile/get-user-profile"
 import { Status } from "@/lib/enums"
 import { cn, getIpfsUrl } from "@/lib/utils"
-import { DerivedData, Grant } from "@prisma/flows/edge"
+import { DerivedData, Grant } from "@prisma/flows"
 import Link from "next/link"
 import { GrantLogoCell } from "./grant-logo-cell"
 import { VotingInput } from "./voting-input"

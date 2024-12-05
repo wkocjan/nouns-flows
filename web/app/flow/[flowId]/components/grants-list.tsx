@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Profile } from "@/components/user-profile/get-user-profile"
 import { useVoting } from "@/lib/voting/voting-context"
-import { DerivedData, Grant } from "@prisma/flows/edge"
+import { DerivedData, Grant } from "@prisma/flows"
 import { GrantCard } from "./grant-card"
 import { GrantsTable } from "./grants-table"
 

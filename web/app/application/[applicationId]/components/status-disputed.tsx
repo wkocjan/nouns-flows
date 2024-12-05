@@ -12,7 +12,7 @@ import { DateTime } from "@/components/ui/date-time"
 import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database/edge"
 import { getEthAddress } from "@/lib/utils"
-import { Dispute, Grant } from "@prisma/flows/edge"
+import { Dispute, Grant } from "@prisma/flows"
 
 interface Props {
   grant: Grant

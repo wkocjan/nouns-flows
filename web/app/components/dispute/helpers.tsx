@@ -1,6 +1,6 @@
 import { Status } from "@/lib/enums"
 import { Party } from "@/lib/kv/disputeVote"
-import { Dispute, Grant } from "@prisma/flows/edge"
+import { Dispute, Grant } from "@prisma/flows"
 
 export function canRequestBeExecuted(
   grant: Pick<Grant, "challengePeriodEndsAt" | "isDisputed" | "status">,

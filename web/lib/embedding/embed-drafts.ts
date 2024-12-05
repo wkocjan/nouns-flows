@@ -1,4 +1,4 @@
-import { Draft } from "@prisma/flows/edge"
+import { Draft } from "@prisma/flows"
 import { cleanTextForEmbedding } from "./utils"
 import { getContentHash } from "./utils"
 import { EmbeddingTag, EmbeddingType, JobBody } from "../types/job"

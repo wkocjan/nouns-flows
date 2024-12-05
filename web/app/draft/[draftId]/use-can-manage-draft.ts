@@ -1,6 +1,6 @@
 "use client"
 
-import { Draft } from "@prisma/flows/edge"
+import { Draft } from "@prisma/flows"
 import { useEffect, useState } from "react"
 import { useAccount } from "wagmi"
 

@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { useVoting } from "@/lib/voting/voting-context"
-import { Grant } from "@prisma/flows/edge"
+import { Grant } from "@prisma/flows"
 import { FlowCard } from "./flow-card"
 import { FlowsTable } from "./flows-table"
 

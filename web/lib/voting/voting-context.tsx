@@ -2,7 +2,7 @@
 
 import { useDelegatedTokens } from "@/lib/voting/delegated-tokens/use-delegated-tokens"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
-import { Vote } from "@prisma/flows/edge"
+import { Vote } from "@prisma/flows"
 import { useRouter } from "next/navigation"
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react"
 import { toast } from "sonner"
