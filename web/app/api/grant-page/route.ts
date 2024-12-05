@@ -40,7 +40,7 @@ async function generateAndStoreGrantPageData(grantId: string) {
 
     const hasDerivedData = await database.derivedData.count({ where: { grantId } })
 
-    if (hasDerivedData > 1) {
+    if (hasDerivedData > 0) {
       await database.derivedData.update({ where: { grantId }, data: { pageData } })
     } else {
       await database.derivedData.create({ data: { grantId, pageData } })
