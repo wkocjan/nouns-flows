@@ -221,7 +221,7 @@ export default async function Page(props: Props) {
                         alt={grant.title}
                         width={40}
                         height={40}
-                        className="size-[40px] rounded-full"
+                        className="size-[40px] rounded-full object-cover"
                       />
                     )}
                     <div className="flex flex-col space-y-1">
