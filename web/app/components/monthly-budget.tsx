@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge"
 import { Currency } from "@/components/ui/currency"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import pluralize from "pluralize"
-import { Grant } from "@prisma/flows"
+import { Grant } from "@prisma/flows/edge"
 
 interface Props {
   flow: Pick<

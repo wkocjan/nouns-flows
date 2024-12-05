@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge"
 import { Currency } from "@/components/ui/currency"
 import { getIpfsUrl } from "@/lib/utils"
-import { Grant } from "@prisma/flows"
+import { Grant } from "@prisma/flows/edge"
 import { Handle, Node, NodeProps, Position } from "@xyflow/react"
 import Image from "next/image"
 import Link from "next/link"

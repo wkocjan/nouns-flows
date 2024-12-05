@@ -9,7 +9,7 @@ import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/compone
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Status } from "@/lib/enums"
-import { Grant } from "@prisma/flows"
+import { Grant } from "@prisma/flows/edge"
 import Link from "next/link"
 import { useRef } from "react"
 import { AnimatedSalary } from "../animated-salary"

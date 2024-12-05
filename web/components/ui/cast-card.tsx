@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { DateTime } from "@/components/ui/date-time"
-import { Grant } from "@prisma/flows"
+import { Grant } from "@prisma/flows/edge"
 import { Cast, Profile } from "@prisma/farcaster"
 import Linkify from "linkify-react"
 import { VideoPlayer } from "./video-player"

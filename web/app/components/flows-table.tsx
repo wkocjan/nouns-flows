@@ -12,7 +12,7 @@ import {
 import { isGrantApproved } from "@/lib/database/helpers"
 import { Status } from "@/lib/enums"
 import { getIpfsUrl } from "@/lib/utils"
-import { Grant } from "@prisma/flows"
+import { Grant } from "@prisma/flows/edge"
 import Image from "next/image"
 import Link from "next/link"
 import { VotingInput } from "../flow/[flowId]/components/voting-input"

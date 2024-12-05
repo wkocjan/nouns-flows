@@ -1,6 +1,6 @@
 import "server-only"
 
-import { Grant } from "@prisma/flows"
+import { Grant } from "@prisma/flows/edge"
 import { unstable_cache } from "next/cache"
 import { erc20Abi, getContract } from "viem"
 import { flowTcrImplAbi } from "../abis"

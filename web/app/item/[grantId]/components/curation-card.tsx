@@ -2,7 +2,7 @@ import { DisputeUserVote } from "@/app/components/dispute/dispute-user-vote"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Status } from "@/lib/enums"
-import { Dispute, Evidence, Grant } from "@prisma/flows"
+import { Dispute, Evidence, Grant } from "@prisma/flows/edge"
 import { StatusDisputed } from "./status-disputed"
 import { StatusNotDisputed } from "./status-not-disputed"
 

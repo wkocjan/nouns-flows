@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { User } from "@/lib/auth/user"
 import { canEditStory } from "@/lib/database/helpers"
-import { Story } from "@prisma/flows"
+import { Story } from "@prisma/flows/edge"
 import { RotateCcw } from "lucide-react"
 import { useState } from "react"
 

@@ -1,4 +1,4 @@
-import { Grant, Story } from "@prisma/flows"
+import { Grant, Story } from "@prisma/flows/edge"
 import { Status } from "../enums"
 
 export function isGrantApproved(grant: Grant) {

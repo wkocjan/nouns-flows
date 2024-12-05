@@ -5,7 +5,7 @@ import { getUserProfiles } from "@/components/user-profile/get-user-profile"
 import database from "@/lib/database/edge"
 import { Status } from "@/lib/enums"
 import { getEthAddress } from "@/lib/utils"
-import { Grant } from "@prisma/flows"
+import { Grant } from "@prisma/flows/edge"
 import { FlowSubmenu } from "./components/flow-submenu"
 import GrantsList from "./components/grants-list"
 import { GrantsStories } from "./components/grants-stories"
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export default async function FlowPage(props: Props) {
-  const { flowId } = (await props.params)
+  const { flowId } = await props.params
 
   const flow = await database.grant.findFirstOrThrow({
     where: { id: flowId, isActive: 1 },

@@ -6,7 +6,7 @@ import { RequestExecuteButton } from "@/app/components/dispute/request-execute"
 import { DateTime } from "@/components/ui/date-time"
 import database from "@/lib/database/edge"
 import { Status } from "@/lib/enums"
-import { Grant } from "@prisma/flows"
+import { Grant } from "@prisma/flows/edge"
 import { GrantRemoveRequestButton } from "./remove-request-button"
 
 interface Props {

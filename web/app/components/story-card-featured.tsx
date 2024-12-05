@@ -2,7 +2,7 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { DateTime } from "@/components/ui/date-time"
 import { UserProfile } from "@/components/user-profile/user-profile"
 import { getPinataWithKey } from "@/lib/pinata/url-with-key"
-import { Story } from "@prisma/flows"
+import { Story } from "@prisma/flows/edge"
 import Image from "next/image"
 import Link from "next/link"
 

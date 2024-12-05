@@ -2,7 +2,7 @@ import { DisputeStartButton } from "@/app/components/dispute/dispute-start"
 import { canRequestBeExecuted } from "@/app/components/dispute/helpers"
 import { RequestExecuteButton } from "@/app/components/dispute/request-execute"
 import { DateTime } from "@/components/ui/date-time"
-import { Grant } from "@prisma/flows"
+import { Grant } from "@prisma/flows/edge"
 
 interface Props {
   grant: Grant
