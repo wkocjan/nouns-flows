@@ -8,10 +8,11 @@ interface Props {
   contract: `0x${string}`
   recipientId: string
   flowVotesCount: string
+  isFlow?: boolean
 }
 
 export const Voters = async (props: Props) => {
-  const { contract, recipientId, flowVotesCount } = props
+  const { contract, recipientId, flowVotesCount, isFlow } = props
 
   const voters = await database.$queryRaw<{ voter: `0x${string}`; votesCount: number }[]>`
     SELECT voter, SUM(CAST("votesCount" AS INTEGER)) as "votesCount"
@@ -25,11 +26,11 @@ export const Voters = async (props: Props) => {
       <h3 className="mb-4 font-medium">Voters</h3>
       {voters.length === 0 && (
         <div className="text-sm text-muted-foreground">
-          There are no direct votes for this grant yet.
+          There are no direct votes for this {isFlow ? "flow" : "grant"} yet.
           <br />
           <br />
-          The budget is a minimal support based on the {flowVotesCount}&nbsp;votes for the parent
-          flow.
+          {!isFlow &&
+            `The budget is a minimal support based on the ${flowVotesCount} votes for the parent flow.`}
         </div>
       )}
       {voters.length > 0 && (

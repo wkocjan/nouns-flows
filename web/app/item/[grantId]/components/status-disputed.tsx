@@ -1,6 +1,5 @@
 import "server-only"
 
-import { DisputeExecuteButton } from "@/app/components/dispute/dispute-execute"
 import {
   canDisputeBeExecuted,
   canDisputeBeVotedOn,
@@ -8,12 +7,20 @@ import {
   isDisputeRevealingVotes,
   isDisputeWaitingForVoting,
 } from "@/app/components/dispute/helpers"
-import { VotesTicker } from "@/app/components/dispute/votes-ticker"
 import { DateTime } from "@/components/ui/date-time"
 import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database/edge"
 import { getEthAddress } from "@/lib/utils"
 import { Dispute, Grant } from "@prisma/flows"
+import dynamic from "next/dynamic"
+
+const DisputeExecuteButton = dynamic(() =>
+  import("@/app/components/dispute/dispute-execute").then((mod) => mod.DisputeExecuteButton),
+)
+
+const VotesTicker = dynamic(() =>
+  import("@/app/components/dispute/votes-ticker").then((mod) => mod.VotesTicker),
+)
 
 interface Props {
   grant: Grant
