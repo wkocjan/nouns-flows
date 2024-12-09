@@ -10,7 +10,7 @@ export const base = {
   NounsFlowImpl: "0x6cb79492e90a11decc9f231d40b0c6b09ad2059b",
   RewardPoolImpl: "0xb1898c5de9b4ac8643362196f7a11cd5db42f43c",
   FlowTCRImpl: "0xe0dbe3ea8f5bae3c43475ee61fb620aec88121f7",
-  TokenVerifier: "0x69245a8ccdcd76a3e20bad9a5ec9f6cd138dd0b8",
+  TokenVerifier: "0x08009fcf85af4724589706a22ddf2844607b8853",
   NounsFlow: "0x0d4a25d07015ec7bdebf78f2937a617a86af27ff",
   RewardPool: "0x9cbfbcdc0fc5035bb74eefc7c11502380f063dc3",
   FlowTCR: "0x9bdceb7e93d77b84c276ce1147dcf622cad02c07",

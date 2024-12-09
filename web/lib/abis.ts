@@ -9381,7 +9381,7 @@ export const tokenEmitterImplConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x69245a8ccdcd76a3e20bad9a5ec9f6cd138dd0b8)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x08009fcf85af4724589706a22ddf2844607b8853)
  */
 export const tokenVerifierAbi = [
   {
@@ -9582,14 +9582,14 @@ export const tokenVerifierAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x69245a8ccdcd76a3e20bad9a5ec9f6cd138dd0b8)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x08009fcf85af4724589706a22ddf2844607b8853)
  */
 export const tokenVerifierAddress = {
-  8453: '0x69245A8cCdCd76A3E20bAD9a5EC9F6cd138Dd0b8',
+  8453: '0x08009Fcf85aF4724589706a22DDF2844607b8853',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x69245a8ccdcd76a3e20bad9a5ec9f6cd138dd0b8)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x08009fcf85af4724589706a22ddf2844607b8853)
  */
 export const tokenVerifierConfig = {
   address: tokenVerifierAddress,

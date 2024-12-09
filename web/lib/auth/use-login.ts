@@ -1,6 +1,6 @@
 "use client"
 
-import { useLogin as usePrivyLogin, useLogout } from "@privy-io/react-auth"
+import { useLogin as usePrivyLogin, useLogout, useConnectWallet } from "@privy-io/react-auth"
 import { useRouter } from "next/navigation"
 
 export function useLogin() {
@@ -8,6 +8,7 @@ export function useLogin() {
 
   const { login } = usePrivyLogin({ onComplete: router.refresh })
   const { logout } = useLogout({ onSuccess: router.refresh })
+  const { connectWallet } = useConnectWallet({ onSuccess: router.refresh })
 
-  return { login, logout }
+  return { login, logout, connectWallet }
 }

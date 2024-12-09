@@ -1,6 +1,6 @@
 import { PrismaClient as FarcasterClient } from "@prisma/farcaster/edge"
 import { withAccelerate } from "@prisma/extension-accelerate"
-import { withOptimize } from "@prisma/extension-optimize"
+// import { withOptimize } from "@prisma/extension-optimize"
 
 const isDevelopment = process.env.NODE_ENV !== "production"
 const optimizeApiKey = process.env.PRISMA_OPTIMIZE_KEY
@@ -15,12 +15,10 @@ const farcasterClientSingleton = () => {
       datasources: {
         db: { url: process.env.FARCASTER_DATABASE_URL },
       },
-    })
-      .$extends(withAccelerate())
-      .$extends(withOptimize({ apiKey: optimizeApiKey }))
+    }).$extends(withAccelerate())
+    // .$extends(withOptimize({ apiKey: optimizeApiKey }))
   }
-  return new FarcasterClient()
-    .$extends(withAccelerate())
+  return new FarcasterClient().$extends(withAccelerate())
 }
 
 declare const globalThis: {

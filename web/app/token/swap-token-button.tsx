@@ -15,6 +15,7 @@ import { SwapTokenBox } from "./swap-token-box"
 import { getEthAddress } from "@/lib/utils"
 import { useAccount } from "wagmi"
 import { useERC20Balances } from "@/lib/tcr/use-erc20-balances"
+import { useLogin } from "@/lib/auth/use-login"
 
 interface Props {
   flow: Grant
@@ -40,11 +41,30 @@ export function SwapTokenButton(props: Props) {
   } = props
   const ref = useRef<HTMLButtonElement>(null)
 
-  const { address } = useAccount()
+  const { address, isConnected } = useAccount()
+  const { login, connectWallet } = useLogin()
   const { balances } = useERC20Balances([getEthAddress(flow.erc20)], address)
 
   const text =
     props.text || (balances?.[0] ? (!flow.isTopLevel ? "Buy TCR" : "Buy FLOWS") : "Become curator")
+
+  // if not connected, return login
+  if (!isConnected) {
+    return (
+      <Button
+        size={size}
+        variant={variant}
+        onClick={() => {
+          login()
+          connectWallet()
+        }}
+        type="button"
+        ref={ref}
+      >
+        {text}
+      </Button>
+    )
+  }
 
   return (
     <Dialog>
