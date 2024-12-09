@@ -29,3 +29,7 @@ export function canEditStory(story: Story, user: string | undefined) {
       user === woj)
   )
 }
+
+export function canEditGrant(grant: Pick<Grant, "recipient">, user: string | undefined) {
+  return user && [grant.recipient, rocketman, woj].includes(user)
+}

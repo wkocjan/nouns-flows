@@ -13,7 +13,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^1.0.2",
+    "@ai-sdk/anthropic": "^1.0.4",
     "@blocknote/core": "^0.19.2",
     "@blocknote/mantine": "^0.19.2",
     "@blocknote/react": "^0.19.2",
@@ -55,7 +55,7 @@
     "@vercel/kv": "^3.0.0",
     "@vercel/speed-insights": "^1.0.14",
     "@xyflow/react": "^12.3.2",
-    "ai": "^4.0.9",
+    "ai": "^4.0.13",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "compressorjs": "^1.2.1",

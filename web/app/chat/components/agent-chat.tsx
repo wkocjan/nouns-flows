@@ -44,8 +44,11 @@ export function AgentChatProvider(props: PropsWithChildren<Props>) {
     keepLastMessageOnError: true,
     onToolCall: ({ toolCall }) => {
       switch (toolCall.toolName) {
+        case "updateGrant":
         case "updateStory":
           router.refresh()
+          break
+        default:
           break
       }
     },
