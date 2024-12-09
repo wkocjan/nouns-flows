@@ -1,3 +1,4 @@
+import { AgentChatProvider } from "@/app/chat/components/agent-chat"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,6 +8,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Icon } from "@/components/ui/icon"
+import { getUser } from "@/lib/auth/user"
 import database, { getCacheStrategy } from "@/lib/database/edge"
 import { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
@@ -25,6 +27,7 @@ import { WhoCard } from "./cards/who"
 import { WhyCard } from "./cards/why"
 import { BgGradient } from "./components/bg-gradient"
 import { CurationCard } from "./components/curation-card"
+import { GrantChat } from "./components/grant-chat"
 import { GrantStories } from "./components/grant-stories"
 import { GrantPageData } from "./page-data/schema"
 
@@ -62,93 +65,103 @@ export default async function GrantPage(props: Props) {
 
   const { why, focus, who, how, builder, title } = data
 
+  const user = await getUser()
+
   return (
-    <div className="container mt-2.5 pb-24 md:mt-6">
-      <Breadcrumb className="mb-6">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/">Flows</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href={`/flow/${flow.id}`}>{flow.title}</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator className="max-sm:hidden" />
-          <BreadcrumbItem className="max-sm:hidden">
-            <BreadcrumbPage>{title}</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+    <AgentChatProvider
+      id={`grant-${grant.id}-${user?.address}`}
+      type="flo"
+      user={user}
+      data={{ grantId: grant.id }}
+    >
+      <div className="container mt-2.5 pb-24 md:mt-6">
+        <Breadcrumb className="mb-6">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Flows</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href={`/flow/${flow.id}`}>{flow.title}</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator className="max-sm:hidden" />
+            <BreadcrumbItem className="max-sm:hidden">
+              <BreadcrumbPage>{title}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
-      <div className="grid grid-cols-12 gap-x-2 gap-y-4 lg:gap-x-4">
-        <CoverImage coverImage={data.coverImage} title={title} tagline={data.tagline} />
+        <div className="grid grid-cols-12 gap-x-2 gap-y-4 lg:gap-x-4">
+          <CoverImage coverImage={data.coverImage} title={title} tagline={data.tagline} />
 
-        <div className="col-span-full grid grid-cols-1 gap-x-3 gap-y-4 lg:col-span-5 lg:grid-cols-2 lg:gap-x-4">
-          <div className="flex flex-col gap-4">
-            <HowCard gradient={how.gradient} icon={how.icon} text={how.text} />
-            <WhoCard gradient={who.gradient} text={who.text} recipient={grant.recipient} />
-          </div>
+          <div className="col-span-full grid grid-cols-1 gap-x-3 gap-y-4 lg:col-span-5 lg:grid-cols-2 lg:gap-x-4">
+            <div className="flex flex-col gap-4">
+              <HowCard gradient={how.gradient} icon={how.icon} text={how.text} />
+              <WhoCard gradient={who.gradient} text={who.text} recipient={grant.recipient} />
+            </div>
 
-          <div className="flex flex-col gap-4">
-            <FocusCard gradient={focus.gradient} text={focus.text} />
-            <WhyCard image={why.image} text={why.text} />
-          </div>
-        </div>
-
-        <Metrics metrics={data.metrics} />
-
-        <Builder
-          tags={builder.tags}
-          bio={builder.bio}
-          links={builder.links}
-          recipient={grant.recipient as `0x${string}`}
-        />
-
-        {data.cards.map((card) => (
-          <div
-            key={card.title}
-            className="col-span-full rounded-xl border bg-card p-5 lg:col-span-4"
-          >
-            <div className="flex flex-col items-start gap-4">
-              <Icon name={card.icon} className="size-9 text-primary" />
-              <h3 className="font-bold tracking-tight">{card.title}</h3>
-              <p className="leading-relaxed opacity-60 max-sm:text-sm">{card.description}</p>
+            <div className="flex flex-col gap-4">
+              <FocusCard gradient={focus.gradient} text={focus.text} />
+              <WhyCard image={why.image} text={why.text} />
             </div>
           </div>
-        ))}
 
-        <Media media={data.media} />
+          <Metrics metrics={data.metrics} />
+
+          <Builder
+            tags={builder.tags}
+            bio={builder.bio}
+            links={builder.links}
+            recipient={grant.recipient as `0x${string}`}
+          />
+
+          {data.cards.map((card) => (
+            <div
+              key={card.title}
+              className="col-span-full rounded-xl border bg-card p-5 lg:col-span-4"
+            >
+              <div className="flex flex-col items-start gap-4">
+                <Icon name={card.icon} className="size-9 text-primary" />
+                <h3 className="font-bold tracking-tight">{card.title}</h3>
+                <p className="leading-relaxed opacity-60 max-sm:text-sm">{card.description}</p>
+              </div>
+            </div>
+          ))}
+
+          <Media media={data.media} />
+        </div>
+
+        <div className="relative mt-4 grid grid-cols-12 gap-4">
+          <BgGradient />
+
+          <div className="col-span-full lg:col-span-4">
+            <Timeline timeline={data.timeline} />
+          </div>
+
+          <div className="col-span-full flex flex-col space-y-4 lg:col-span-4">
+            <Stats grant={grant} />
+
+            <Suspense>
+              <Voters
+                contract={grant.parentContract as `0x${string}`}
+                recipientId={grant.id}
+                flowVotesCount={flow.votesCount}
+              />
+            </Suspense>
+          </div>
+
+          <div className="col-span-full lg:col-span-4">
+            <Suspense>
+              <CurationCard grant={grant} flow={flow} className="h-full" />
+            </Suspense>
+          </div>
+        </div>
+
+        <Plan plan={data.plan} className="mt-10" />
+
+        <GrantStories grantId={grant.id} className="mt-10" />
       </div>
-
-      <div className="relative mt-4 grid grid-cols-12 gap-4">
-        <BgGradient />
-
-        <div className="col-span-full lg:col-span-4">
-          <Timeline timeline={data.timeline} />
-        </div>
-
-        <div className="col-span-full flex flex-col space-y-4 lg:col-span-4">
-          <Stats grant={grant} />
-
-          <Suspense>
-            <Voters
-              contract={grant.parentContract as `0x${string}`}
-              recipientId={grant.id}
-              flowVotesCount={flow.votesCount}
-            />
-          </Suspense>
-        </div>
-
-        <div className="col-span-full lg:col-span-4">
-          <Suspense>
-            <CurationCard grant={grant} flow={flow} className="h-full" />
-          </Suspense>
-        </div>
-      </div>
-
-      <Plan plan={data.plan} className="mt-10" />
-
-      <GrantStories grantId={grant.id} className="mt-10" />
-    </div>
+      <GrantChat grant={grant} user={user} />
+    </AgentChatProvider>
   )
 }
