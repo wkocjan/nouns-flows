@@ -13,13 +13,9 @@ async function handleItemSubmitted(params: {
   context: Context<"NounsFlowTcr:ItemSubmitted">
 }) {
   const { event, context } = params
-  const { _submitter, _data, _itemID, _evidenceGroupID } = event.args
-
   const tcr = event.log.address.toLowerCase()
 
-  if (event.block.number === BigInt(21826311)) {
-    console.log({ _data, _itemID })
-  }
+  const { _submitter, _data, _itemID, _evidenceGroupID } = event.args
 
   const [flow] = await context.db.sql
     .select()

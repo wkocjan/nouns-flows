@@ -26,18 +26,15 @@ async function handleFlowRecipientCreated(params: {
     baselinePoolFlowRatePercent,
   } = event.args
 
-  await context.db.sql
-    .update(grants)
-    .set({
-      baselinePool: baselinePool.toLowerCase(),
-      bonusPool: bonusPool.toLowerCase(),
-      managerRewardPoolFlowRatePercent,
-      baselinePoolFlowRatePercent,
-      recipient: recipient.toLowerCase(),
-      updatedAt: Number(event.block.timestamp),
-      isActive: true,
-    })
-    .where(eq(grants.id, recipientId.toString()))
+  await context.db.update(grants, { id: recipientId.toString() }).set({
+    baselinePool: baselinePool.toLowerCase(),
+    bonusPool: bonusPool.toLowerCase(),
+    managerRewardPoolFlowRatePercent,
+    baselinePoolFlowRatePercent,
+    recipient: recipient.toLowerCase(),
+    updatedAt: Number(event.block.timestamp),
+    isActive: true,
+  })
 
   // don't update recipient counts here because it's already done in the recipient created event
   // eg: the recipient created event is emitted when a flow recipient is created anyway
@@ -56,26 +53,17 @@ async function handleRecipientCreated(params: {
   const flowAddress = event.log.address.toLowerCase()
   const parentFlow = await getParentFlow(context.db, flowAddress)
 
-  const [grant] = await context.db.sql
-    .update(grants)
-    .set({
-      ...metadata,
-      recipient: recipient.toLowerCase(),
-      updatedAt: Number(event.block.timestamp),
-      isActive: true,
-    })
-    .where(eq(grants.id, recipientId.toString()))
-    .returning()
+  const grant = await context.db.update(grants, { id: recipientId.toString() }).set({
+    ...metadata,
+    recipient: recipient.toLowerCase(),
+    updatedAt: Number(event.block.timestamp),
+    isActive: true,
+  })
 
-  if (!grant) throw new Error("Grant not found")
-
-  await context.db.sql
-    .update(grants)
-    .set({
-      awaitingRecipientCount: parentFlow.awaitingRecipientCount - 1,
-      activeRecipientCount: parentFlow.activeRecipientCount + 1,
-    })
-    .where(eq(grants.id, parentFlow.id))
+  await context.db.update(grants, { id: parentFlow.id }).set({
+    awaitingRecipientCount: parentFlow.awaitingRecipientCount - 1,
+    activeRecipientCount: parentFlow.activeRecipientCount + 1,
+  })
 
   await addGrantEmbedding(grant, recipientType, parentFlow.id)
 }
@@ -90,24 +78,15 @@ async function handleRecipientRemoved(params: {
   const flowAddress = event.log.address.toLowerCase()
   const parentFlow = await getParentFlow(context.db, flowAddress)
 
-  const [removedGrant] = await context.db.sql
-    .update(grants)
-    .set({
-      isRemoved: true,
-      isActive: false,
-      monthlyIncomingFlowRate: "0",
-    })
-    .where(eq(grants.id, recipientId.toString()))
-    .returning()
+  const removedGrant = await context.db.update(grants, { id: recipientId.toString() }).set({
+    isRemoved: true,
+    isActive: false,
+    monthlyIncomingFlowRate: "0",
+  })
 
-  if (!removedGrant) throw new Error("Grant not found")
-
-  await context.db.sql
-    .update(grants)
-    .set({
-      activeRecipientCount: parentFlow.activeRecipientCount - 1,
-    })
-    .where(eq(grants.id, parentFlow.id))
+  await context.db.update(grants, { id: parentFlow.id }).set({
+    activeRecipientCount: parentFlow.activeRecipientCount - 1,
+  })
 
   await removeGrantEmbedding(removedGrant)
 }
