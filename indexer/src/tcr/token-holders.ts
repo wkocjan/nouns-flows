@@ -1,4 +1,4 @@
-import { ponder, type Context, type Event } from "@/generated"
+import { ponder, type Context, type Event } from "ponder:registry"
 import { zeroAddress } from "viem"
 import { tokenHolders } from "../../ponder.schema"
 

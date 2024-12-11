@@ -1,7 +1,7 @@
-import { ponder } from "@/generated"
+import { ponder } from "ponder:registry"
 import { getTotalEarned } from "./lib/total-earned"
 import { grants } from "../../ponder.schema"
-import { eq } from "@ponder/core"
+import { eq } from "ponder"
 
 ponder.on("Balance:block", async (params) => {
   const { event, context } = params

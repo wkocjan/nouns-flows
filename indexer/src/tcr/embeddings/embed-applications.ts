@@ -1,4 +1,4 @@
-import { schema } from "@/generated"
+import { schema } from "ponder:registry"
 import { postToEmbeddingsQueueRequest } from "../../queue/queue"
 import { EmbeddingTag, JobBody } from "../../queue/job"
 import { getNonzeroLowercasedAddresses } from "../../queue/helpers"

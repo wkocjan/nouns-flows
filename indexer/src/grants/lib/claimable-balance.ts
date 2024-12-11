@@ -1,4 +1,4 @@
-import { Context } from "@/generated"
+import { Context } from "ponder:registry"
 import { formatEther, getAddress } from "viem"
 
 export async function getClaimableBalance(context: Context, contract: string, recipient: string) {

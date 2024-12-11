@@ -1,9 +1,9 @@
-import { ponder, type Context, type Event } from "@/generated"
+import { ponder, type Context, type Event } from "ponder:registry"
 import { decodeAbiParameters, getAddress } from "viem"
 import { RecipientType, Status } from "../enums"
 import { addApplicationEmbedding } from "./embeddings/embed-applications"
 import { grants } from "../../ponder.schema"
-import { and, eq } from "@ponder/core"
+import { and, eq } from "ponder"
 
 ponder.on("NounsFlowTcr:ItemSubmitted", handleItemSubmitted)
 ponder.on("NounsFlowTcrChildren:ItemSubmitted", handleItemSubmitted)

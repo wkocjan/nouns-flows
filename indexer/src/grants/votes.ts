@@ -1,9 +1,9 @@
-import { ponder, type Context, type Event } from "@/generated"
+import { ponder, type Context, type Event } from "ponder:registry"
 import { getMonthlyIncomingFlowRate } from "./lib/monthly-flow"
 import { handleIncomingFlowRates } from "./lib/handle-incoming-flow-rates"
 import { votes, grants } from "../../ponder.schema"
-import { eq, not } from "@ponder/core"
-import { and } from "@ponder/core"
+import { eq, not } from "ponder"
+import { and } from "ponder"
 
 ponder.on("NounsFlow:VoteCast", handleVoteCast)
 ponder.on("NounsFlowChildren:VoteCast", handleVoteCast)

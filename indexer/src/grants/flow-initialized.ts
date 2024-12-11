@@ -1,4 +1,4 @@
-import { ponder } from "@/generated"
+import { ponder } from "ponder:registry"
 import { zeroAddress } from "viem"
 import { rewardPoolImplAbi } from "../../abis"
 import { Status } from "../enums"

@@ -1,7 +1,6 @@
-import { type Context } from "@/generated"
+import { type Context } from "ponder:registry"
 import { grants } from "../../../ponder.schema"
-import { and } from "@ponder/core"
-import { eq } from "@ponder/core"
+import { and, eq } from "ponder"
 
 export async function handleIncomingFlowRates(db: Context["db"], parentContract: string) {
   const items = await db.sql
@@ -15,13 +14,13 @@ export async function handleIncomingFlowRates(db: Context["db"], parentContract:
       )
     )
 
+  if (!items?.length) return
+
   const parents = await db.sql.select().from(grants).where(eq(grants.recipient, parentContract))
 
   const parent = parents?.[0]
 
   if (!parent) throw new Error(`Parent not found: ${parentContract}`)
-
-  if (!items?.length) return
 
   const secondsPerMonth = 60 * 60 * 24 * 30
   const baselineFlowRate = Number(parent.monthlyBaselinePoolFlowRate) / secondsPerMonth

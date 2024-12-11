@@ -1,9 +1,9 @@
-import { ponder, type Context, type Event } from "@/generated"
+import { ponder, type Context, type Event } from "ponder:registry"
 import { Status } from "../enums"
 import { getAddress } from "viem"
 import { removeApplicationEmbedding } from "./embeddings/embed-applications"
 
-import { eq, and } from "@ponder/core"
+import { eq, and } from "ponder"
 import { grants } from "../../ponder.schema"
 
 ponder.on("NounsFlowTcr:ItemStatusChange", handleItemStatusChange)

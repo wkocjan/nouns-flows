@@ -1,6 +1,6 @@
-import { ponder, type Context, type Event } from "@/generated"
+import { ponder, type Context, type Event } from "ponder:registry"
 import { disputes } from "../../ponder.schema"
-import { and, eq } from "@ponder/core"
+import { and, eq } from "ponder"
 
 ponder.on("NounsFlowTcr:Ruling", handleRuling)
 ponder.on("NounsFlowTcrChildren:Ruling", handleRuling)

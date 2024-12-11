@@ -1,7 +1,7 @@
-import { ponder, type Context, type Event } from "@/generated"
+import { ponder, type Context, type Event } from "ponder:registry"
 import { Party } from "../enums"
 import { disputes, disputeVotes } from "../../ponder.schema"
-import { eq, and } from "@ponder/core"
+import { eq, and } from "ponder"
 
 ponder.on("Arbitrator:VoteCommitted", handleVoteCommitted)
 ponder.on("ArbitratorChildren:VoteCommitted", handleVoteCommitted)

@@ -1,4 +1,4 @@
-import { ponder, type Context, type Event } from "@/generated"
+import { ponder, type Context, type Event } from "ponder:registry"
 import { evidence } from "../../ponder.schema"
 
 ponder.on("NounsFlowTcr:Evidence", handleEvidence)
