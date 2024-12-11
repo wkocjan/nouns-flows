@@ -1,6 +1,9 @@
 import { ponder, type Context, type Event } from "@/generated"
 import { getMonthlyIncomingFlowRate } from "./lib/monthly-flow"
 import { handleIncomingFlowRates } from "./lib/handle-incoming-flow-rates"
+import { votes, grants } from "../../ponder.schema"
+import { eq, not } from "@ponder/core"
+import { and } from "@ponder/core"
 
 ponder.on("NounsFlow:VoteCast", handleVoteCast)
 ponder.on("NounsFlowChildren:VoteCast", handleVoteCast)
@@ -24,36 +27,37 @@ async function handleVoteCast(params: {
   let hasPreviousVotes = false
 
   // Mark old votes for this token as stale
-  ;(
-    await context.db.Vote.updateMany({
-      where: {
-        contract,
-        tokenId: tokenId.toString(),
-        isStale: false,
-        blockNumber: { not: blockNumber },
-      },
-      data: { isStale: true },
-    })
-  ).forEach((vote) => {
+  const oldVotes = await context.db.sql
+    .update(votes)
+    .set({ isStale: true })
+    .where(
+      and(
+        eq(votes.contract, contract),
+        eq(votes.tokenId, tokenId.toString()),
+        eq(votes.isStale, false),
+        not(eq(votes.blockNumber, blockNumber))
+      )
+    )
+    .returning()
+
+  oldVotes.forEach((vote) => {
     affectedGrantsIds.add(vote.recipientId)
     hasPreviousVotes = true
   })
 
   // Create the new vote
-  await context.db.Vote.create({
+  await context.db.insert(votes).values({
     id: `${contract}_${recipientId}_${voter}_${blockNumber}_${tokenId}`,
-    data: {
-      contract,
-      recipientId: recipientId.toString(),
-      tokenId: tokenId.toString(),
-      bps: Number(bps),
-      voter,
-      blockNumber,
-      blockTimestamp,
-      transactionHash,
-      isStale: false,
-      votesCount: votesCount.toString(),
-    },
+    contract,
+    recipientId: recipientId.toString(),
+    tokenId: tokenId.toString(),
+    bps: Number(bps),
+    voter,
+    blockNumber,
+    blockTimestamp,
+    transactionHash,
+    isStale: false,
+    votesCount: votesCount.toString(),
   })
 
   for (const affectedGrantId of affectedGrantsIds) {
@@ -62,14 +66,12 @@ async function handleVoteCast(params: {
       getGrantBudget(context as Context, contract, affectedGrantId),
     ])
 
-    await context.db.Grant.update({
-      id: affectedGrantId,
-      data: {
-        votesCount,
-        monthlyIncomingFlowRate,
-      },
+    await context.db.update(grants, { id: affectedGrantId }).set({
+      votesCount,
+      monthlyIncomingFlowRate,
     })
   }
+
   // if is a new voter, then we are adding new member units to the total
   // so must handle all sibling flow rates
   if (!hasPreviousVotes) {
@@ -78,12 +80,22 @@ async function handleVoteCast(params: {
 }
 
 async function getGrantVotesCount(context: Context<"NounsFlow:VoteCast">, recipientId: string) {
-  const votes = await context.db.Vote.findMany({ where: { recipientId, isStale: false } })
-  return votes.items.reduce((acc, v) => acc + BigInt(v.votesCount), BigInt(0)).toString()
+  const result = await context.db.sql
+    .select()
+    .from(votes)
+    .where(and(eq(votes.recipientId, recipientId), eq(votes.isStale, false)))
+
+  return result.reduce((acc: bigint, v) => acc + BigInt(v.votesCount), BigInt(0)).toString()
 }
 
 async function getGrantBudget(context: Context, parentContract: `0x${string}`, id: string) {
-  const grant = await context.db.Grant.findUnique({ id })
+  const grant = await context.db.sql
+    .select()
+    .from(grants)
+    .where(eq(grants.id, id))
+    .limit(1)
+    .then((rows) => rows[0])
+
   if (!grant) throw new Error(`Could not find grant ${id}`)
 
   return getMonthlyIncomingFlowRate(context, parentContract, grant.recipient)

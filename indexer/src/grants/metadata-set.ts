@@ -1,4 +1,6 @@
 import { ponder, type Context, type Event } from "@/generated"
+import { grants } from "../../ponder.schema"
+import { and, eq } from "@ponder/core"
 
 ponder.on("NounsFlow:MetadataSet", handleMetadataSet)
 ponder.on("NounsFlowChildren:MetadataSet", handleMetadataSet)
@@ -11,11 +13,11 @@ async function handleMetadataSet(params: {
   const { metadata } = event.args
   const flow = event.log.address.toLowerCase()
 
-  await context.db.Grant.updateMany({
-    where: {
-      recipient: flow,
-      isFlow: true,
-    },
-    data: { ...metadata, updatedAt: Number(event.block.timestamp) },
-  })
+  await context.db.sql
+    .update(grants)
+    .set({
+      ...metadata,
+      updatedAt: Number(event.block.timestamp),
+    })
+    .where(and(eq(grants.recipient, flow), eq(grants.isFlow, true)))
 }

@@ -1,5 +1,7 @@
 import { ponder, type Context, type Event } from "@/generated"
 import { Party } from "../enums"
+import { disputes, disputeVotes } from "../../ponder.schema"
+import { eq, and } from "@ponder/core"
 
 ponder.on("Arbitrator:VoteCommitted", handleVoteCommitted)
 ponder.on("ArbitratorChildren:VoteCommitted", handleVoteCommitted)
@@ -17,15 +19,13 @@ async function handleVoteCommitted(params: {
   const arbitrator = event.log.address.toLowerCase()
   const voter = event.transaction.from.toLowerCase()
 
-  await context.db.DisputeVote.create({
+  await context.db.insert(disputeVotes).values({
     id: `${disputeId}_${arbitrator}_${voter}`,
-    data: {
-      disputeId: disputeId.toString(),
-      committedAt: Number(event.block.timestamp),
-      commitHash,
-      arbitrator,
-      voter,
-    },
+    disputeId: disputeId.toString(),
+    committedAt: Number(event.block.timestamp),
+    commitHash,
+    arbitrator,
+    voter,
   })
 }
 
@@ -42,37 +42,41 @@ async function handleVoteRevealed(params: {
   const arbitrator = event.log.address.toLowerCase()
   const revealedBy = event.transaction.from.toLowerCase()
 
-  const { items } = await context.db.Dispute.findMany({
-    where: { disputeId: disputeId.toString(), arbitrator },
-  })
-  const dispute = items?.[0]
+  const [dispute] = await context.db.sql
+    .select()
+    .from(disputes)
+    .where(and(eq(disputes.disputeId, disputeId.toString()), eq(disputes.arbitrator, arbitrator)))
+    .limit(1)
+
   if (!dispute) throw new Error("Dispute not found")
 
   // Update vote
-  await context.db.DisputeVote.updateMany({
-    where: {
-      disputeId: disputeId.toString(),
-      arbitrator: arbitrator.toLowerCase(),
-      voter: voter.toLowerCase(),
-      commitHash,
-    },
-    data: {
+  await context.db.sql
+    .update(disputeVotes)
+    .set({
       choice,
       votes: votes.toString(),
       reason: reason,
       revealedAt: Number(event.block.timestamp),
       revealedBy: revealedBy.toLowerCase(),
-    },
-  })
+    })
+    .where(
+      and(
+        eq(disputeVotes.disputeId, disputeId.toString()),
+        eq(disputeVotes.arbitrator, arbitrator.toLowerCase()),
+        eq(disputeVotes.voter, voter.toLowerCase()),
+        eq(disputeVotes.commitHash, commitHash)
+      )
+    )
 
   // Update dispute
   const partyVotes = choice === Party.Requester ? "requesterPartyVotes" : "challengerPartyVotes"
 
-  await context.db.Dispute.update({
-    id: dispute.id,
-    data: {
+  await context.db.sql
+    .update(disputes)
+    .set({
       votes: (BigInt(dispute.votes) + votes).toString(),
       [partyVotes]: (BigInt(dispute[partyVotes]) + votes).toString(),
-    },
-  })
+    })
+    .where(eq(disputes.id, dispute.id))
 }

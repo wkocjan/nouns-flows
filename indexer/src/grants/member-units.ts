@@ -1,5 +1,7 @@
 import { ponder, type Context, type Event } from "@/generated"
 import { handleIncomingFlowRates } from "./lib/handle-incoming-flow-rates"
+import { grants } from "../../ponder.schema"
+import { eq, or, and } from "@ponder/core"
 
 ponder.on("BonusPool:MemberUnitsUpdated", handleMemberUnitsUpdated)
 ponder.on("BaselinePool:MemberUnitsUpdated", handleMemberUnitsUpdated)
@@ -14,11 +16,10 @@ async function handleMemberUnitsUpdated(params: {
   const { newUnits, member } = event.args
   const pool = event.log.address.toLowerCase()
 
-  const { items } = await context.db.Grant.findMany({
-    where: {
-      OR: [{ baselinePool: pool }, { bonusPool: pool }],
-    },
-  })
+  const items = await context.db.sql
+    .select()
+    .from(grants)
+    .where(or(eq(grants.baselinePool, pool), eq(grants.bonusPool, pool)))
 
   const parentGrant = items[0]
 
@@ -30,29 +31,35 @@ async function handleMemberUnitsUpdated(params: {
   const shouldUpdateBaseline = parentGrant.baselinePool === pool
   const shouldUpdateBonus = parentGrant.bonusPool === pool
 
-  if (shouldUpdateBaseline)
-    await context.db.Grant.updateMany({
-      where: {
-        parentContract: parentGrant.recipient,
-        recipient: member.toLowerCase(),
-      },
-      data: {
+  if (shouldUpdateBaseline) {
+    await context.db.sql
+      .update(grants)
+      .set({
         baselineMemberUnits: newUnits.toString(),
         updatedAt: Number(event.block.timestamp),
-      },
-    })
+      })
+      .where(
+        and(
+          eq(grants.parentContract, parentGrant.recipient),
+          eq(grants.recipient, member.toLowerCase())
+        )
+      )
+  }
 
-  if (shouldUpdateBonus)
-    await context.db.Grant.updateMany({
-      where: {
-        parentContract: parentGrant.recipient,
-        recipient: member.toLowerCase(),
-      },
-      data: {
+  if (shouldUpdateBonus) {
+    await context.db.sql
+      .update(grants)
+      .set({
         bonusMemberUnits: newUnits.toString(),
         updatedAt: Number(event.block.timestamp),
-      },
-    })
+      })
+      .where(
+        and(
+          eq(grants.parentContract, parentGrant.recipient),
+          eq(grants.recipient, member.toLowerCase())
+        )
+      )
+  }
 
   await handleIncomingFlowRates(context.db, parentGrant.recipient)
 }

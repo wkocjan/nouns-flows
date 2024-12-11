@@ -1,5 +1,6 @@
 import { ponder, type Context, type Event } from "@/generated"
 import { zeroAddress } from "viem"
+import { tokenHolders } from "../../ponder.schema"
 
 ponder.on("Erc20Token:Transfer", handleTransfer)
 ponder.on("Erc20TokenChildren:Transfer", handleTransfer)
@@ -17,23 +18,24 @@ async function handleTransfer(params: {
 
   // Decrease the amount from the sender
   if (from !== zeroAddress) {
-    await context.db.TokenHolder.update({
-      id: `${tokenContract}-${from}`,
-      data: ({ current }) => ({ amount: (BigInt(current.amount) - value).toString() }),
-    })
+    await context.db.update(tokenHolders, { id: `${tokenContract}-${from}` }).set((row) => ({
+      amount: (BigInt(row.amount) - value).toString(),
+    }))
   }
 
   // Increase the amount for the receiver
   if (to !== zeroAddress) {
-    await context.db.TokenHolder.upsert({
-      id: `${tokenContract}-${to}`,
-      create: {
+    await context.db
+      .insert(tokenHolders)
+      .values({
+        id: `${tokenContract}-${to}`,
         tokenContract,
         holder: to,
         amount: value.toString(),
         firstPurchase: Number(event.block.timestamp),
-      },
-      update: ({ current }) => ({ amount: (BigInt(current.amount) + value).toString() }),
-    })
+      })
+      .onConflictDoUpdate((row) => ({
+        amount: (BigInt(row.amount) + value).toString(),
+      }))
   }
 }
