@@ -1,4 +1,5 @@
 import { ponder, type Context, type Event } from "@/generated"
+import { evidence } from "../../ponder.schema"
 
 ponder.on("NounsFlowTcr:Evidence", handleEvidence)
 ponder.on("NounsFlowTcrChildren:Evidence", handleEvidence)
@@ -15,14 +16,12 @@ async function handleEvidence(params: {
   const party = _party.toString().toLowerCase()
   const evidenceGroupID = _evidenceGroupID.toString()
 
-  await context.db.Evidence.create({
+  await context.db.insert(evidence).values({
     id: `${arbitrator}_${blockNumber}_${party}_${evidenceGroupID}`,
-    data: {
-      arbitrator,
-      evidenceGroupID,
-      evidence: _evidence,
-      party,
-      blockNumber: blockNumber.toString(),
-    },
+    arbitrator,
+    evidenceGroupID,
+    evidence: _evidence,
+    party,
+    blockNumber: blockNumber.toString(),
   })
 }

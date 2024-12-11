@@ -3,6 +3,9 @@ import { Status } from "../enums"
 import { getAddress } from "viem"
 import { removeApplicationEmbedding } from "./embeddings/embed-applications"
 
+import { eq, and } from "@ponder/core"
+import { grants } from "../../ponder.schema"
+
 ponder.on("NounsFlowTcr:ItemStatusChange", handleItemStatusChange)
 ponder.on("NounsFlowTcrChildren:ItemStatusChange", handleItemStatusChange)
 
@@ -15,11 +18,17 @@ async function handleItemStatusChange(params: {
 
   const tcr = event.log.address.toLowerCase()
 
-  const { items } = await context.db.Grant.findMany({ where: { tcr, isFlow: true } })
-  const flow = items?.[0]
+  const flowResults = await context.db.sql
+    .select()
+    .from(grants)
+    .where(and(eq(grants.tcr, tcr), eq(grants.isFlow, true)))
+
+  const flow = flowResults[0]
   if (!flow) throw new Error("Flow not found for TCR item")
 
-  const grant = await context.db.Grant.findUnique({ id: _itemID })
+  const grantResults = await context.db.sql.select().from(grants).where(eq(grants.id, _itemID))
+
+  const grant = grantResults[0]
   if (!grant) throw new Error(`Grant not found: ${_itemID}`)
 
   let challengePeriodEndsAt = grant.challengePeriodEndsAt
@@ -42,23 +51,17 @@ async function handleItemStatusChange(params: {
     await removeApplicationEmbedding(grant)
   }
 
-  await context.db.Grant.update({
-    id: _itemID,
-    data: {
-      status: _itemStatus,
-      isDisputed: _disputed,
-      isResolved: _resolved,
-      challengePeriodEndsAt,
-    },
+  await context.db.update(grants, { id: _itemID }).set({
+    status: _itemStatus,
+    isDisputed: _disputed,
+    isResolved: _resolved,
+    challengePeriodEndsAt,
   })
 
   if (_itemStatus === Status.ClearingRequested) {
-    await context.db.Grant.update({
-      id: _itemID,
-      data: {
-        challengedRecipientCount: flow.challengedRecipientCount + 1,
-        awaitingRecipientCount: flow.awaitingRecipientCount - 1,
-      },
-    })
+    await context.db.update(grants, { id: _itemID }).set((row) => ({
+      challengedRecipientCount: row.challengedRecipientCount + 1,
+      awaitingRecipientCount: row.awaitingRecipientCount - 1,
+    }))
   }
 }

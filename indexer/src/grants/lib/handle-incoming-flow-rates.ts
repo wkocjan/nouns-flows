@@ -1,12 +1,22 @@
 import { type Context } from "@/generated"
+import { grants } from "../../../ponder.schema"
+import { and } from "@ponder/core"
+import { eq } from "@ponder/core"
 
 export async function handleIncomingFlowRates(db: Context["db"], parentContract: string) {
-  const { items } = await db.Grant.findMany({
-    where: { parentContract, isActive: true, isRemoved: false },
-  })
-  const { items: parents } = await db.Grant.findMany({
-    where: { recipient: parentContract },
-  })
+  const items = await db.sql
+    .select()
+    .from(grants)
+    .where(
+      and(
+        eq(grants.parentContract, parentContract),
+        eq(grants.isActive, true),
+        eq(grants.isRemoved, false)
+      )
+    )
+
+  const parents = await db.sql.select().from(grants).where(eq(grants.recipient, parentContract))
+
   const parent = parents?.[0]
 
   if (!parent) throw new Error(`Parent not found: ${parentContract}`)
@@ -19,9 +29,9 @@ export async function handleIncomingFlowRates(db: Context["db"], parentContract:
 
   // Calculate total baseline and bonus member units across all siblings
   const [totalBaselineMemberUnits, totalBonusMemberUnits] = items.reduce(
-    ([baselineSum, bonusSum], item) => [
-      baselineSum + Number(item.baselineMemberUnits),
-      bonusSum + Number(item.bonusMemberUnits),
+    (acc: [number, number], item) => [
+      acc[0] + Number(item.baselineMemberUnits),
+      acc[1] + Number(item.bonusMemberUnits),
     ],
     [1, 1] // the parent always has 1 unit directing the pool flow to itself
   )
@@ -58,13 +68,13 @@ export async function handleIncomingFlowRates(db: Context["db"], parentContract:
       throw new Error(`Invalid monthly incoming flow rate: ${monthlyIncomingFlowRate}`)
     }
 
-    await db.Grant.update({
-      id: sibling.id,
-      data: {
+    await db.sql
+      .update(grants)
+      .set({
         monthlyIncomingFlowRate: monthlyIncomingFlowRate.toString(),
         monthlyIncomingBaselineFlowRate: monthlyIncomingBaselineFlowRate.toString(),
         monthlyIncomingBonusFlowRate: monthlyIncomingBonusFlowRate.toString(),
-      },
-    })
+      })
+      .where(eq(grants.id, sibling.id))
   }
 }

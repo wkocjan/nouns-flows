@@ -1,9 +1,10 @@
 import { ponder } from "@/generated"
 import { rewardPoolImplAbi } from "../../abis"
+import { grants } from "../../ponder.schema"
+import { eq } from "@ponder/core"
 
 ponder.on("NounsFlowTcrFactory:FlowTCRDeployed", async (params) => {
   const { event, context } = params
-  const { Grant } = context.db
 
   const {
     flowTCRProxy,
@@ -32,17 +33,34 @@ ponder.on("NounsFlowTcrFactory:FlowTCRDeployed", async (params) => {
     }),
   ])
 
-  await Grant.updateMany({
-    where: { recipient: flowProxy.toLowerCase() },
-    data: {
-      superToken: superToken.toLowerCase(),
-      tcr: flowTCRProxy.toLowerCase(),
-      arbitrator: arbitratorProxy.toLowerCase(),
-      erc20: erc20Proxy.toLowerCase(),
-      parentContract: parentContract.toLowerCase(),
-      tokenEmitter: tokenEmitterProxy.toLowerCase(),
-      managerRewardPool: rewardPoolProxy.toLowerCase(),
-      managerRewardSuperfluidPool: managerRewardSuperfluidPool.toLowerCase(),
-    },
+  // Find grant with matching recipient
+  const matchingGrants = await context.db.sql
+    .select()
+    .from(grants)
+    .where(eq(grants.recipient, flowProxy.toLowerCase()))
+
+  if (matchingGrants.length > 1) {
+    throw new Error("Multiple grants found with same recipient")
+  }
+
+  if (matchingGrants.length === 0) {
+    throw new Error("No grant found with recipient " + flowProxy.toLowerCase())
+  }
+
+  const grant = matchingGrants[0]
+
+  if (!grant) {
+    throw new Error("No grant found with recipient " + flowProxy.toLowerCase())
+  }
+
+  await context.db.update(grants, { id: grant.id }).set({
+    superToken: superToken.toLowerCase(),
+    tcr: flowTCRProxy.toLowerCase(),
+    arbitrator: arbitratorProxy.toLowerCase(),
+    erc20: erc20Proxy.toLowerCase(),
+    parentContract: parentContract.toLowerCase(),
+    tokenEmitter: tokenEmitterProxy.toLowerCase(),
+    managerRewardPool: rewardPoolProxy.toLowerCase(),
+    managerRewardSuperfluidPool: managerRewardSuperfluidPool.toLowerCase(),
   })
 })

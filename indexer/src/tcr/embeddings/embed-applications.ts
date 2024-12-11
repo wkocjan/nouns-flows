@@ -1,12 +1,13 @@
-import { Schema } from "@/generated"
+import { schema } from "@/generated"
 import { postToEmbeddingsQueueRequest } from "../../queue/queue"
 import { EmbeddingTag, JobBody } from "../../queue/job"
 import { getNonzeroLowercasedAddresses } from "../../queue/helpers"
 import { deleteEmbeddingRequest } from "../../queue/queue"
 import { getContentHash } from "../../hash"
 import { cleanTextForEmbedding } from "../../clean"
+import { Grant } from "../../../types"
 
-export async function addApplicationEmbedding(grant: Schema["Grant"], parentId: string) {
+export async function addApplicationEmbedding(grant: Grant, parentId: string) {
   const users = getNonzeroLowercasedAddresses([grant.recipient])
 
   const content = getApplicationContent(grant)
@@ -23,13 +24,13 @@ export async function addApplicationEmbedding(grant: Schema["Grant"], parentId: 
   await postToEmbeddingsQueueRequest(payload)
 }
 
-export async function removeApplicationEmbedding(grant: Schema["Grant"]) {
+export async function removeApplicationEmbedding(grant: Grant) {
   const content = getApplicationContent(grant)
   const contentHash = getContentHash(content, "grant-application")
   await deleteEmbeddingRequest(contentHash, "grant-application")
 }
 
-const getApplicationContent = (grant: Schema["Grant"]) => {
+const getApplicationContent = (grant: Grant) => {
   const cleanedGrant = cleanTextForEmbedding(
     JSON.stringify({
       title: grant.title,

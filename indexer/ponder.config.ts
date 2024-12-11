@@ -26,7 +26,7 @@ const START_BLOCK = 21519031
 const SECONDS_PER_BLOCK = 2
 
 export default createConfig({
-  database: { kind: "postgres", schema: "public" },
+  database: { kind: "postgres" },
   networks: {
     base: {
       chainId: base.id,

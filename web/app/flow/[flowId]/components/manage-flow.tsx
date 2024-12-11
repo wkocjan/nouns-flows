@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button"
 
 import { FlowWithGrants } from "@/lib/database/queries/flow"
 import { useIsFlowOwner } from "../hooks/useIsFlowOwner"
-import { getEthAddress } from "@/lib/utils"
+import { explorerUrl, getEthAddress } from "@/lib/utils"
 import { useUpgradeTo } from "../hooks/useUpgradeTo"
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { useUpdateVerifier } from "../hooks/useUpdateVerifier"
-import { base } from "@/addresses"
+import { base as baseContracts } from "@/addresses"
 import { useImplementation } from "../hooks/useImplementation"
 import { useSetFlowImpl } from "../hooks/useSetFlowImpl"
 import { useVerifier } from "../hooks/useVerifier"
@@ -19,6 +19,10 @@ import { useSetFlowRate } from "../hooks/useSetFlowRate"
 import { useFlowRate } from "../hooks/useFlowRate"
 import { useSetBaselinePoolPercent } from "../hooks/useSetBaselinePoolPercent"
 import { useBaselinePoolFlowRatePercent } from "../hooks/useBaselinePoolFlowRatePercent"
+import { useUpgradeArbitrator } from "../hooks/useUpgradeArbitrator"
+import { useArbitrator } from "../hooks/useArbitrator"
+import Link from "next/link"
+import { base } from "viem/chains"
 
 interface Props {
   flow: FlowWithGrants
@@ -37,6 +41,7 @@ export const ManageFlow = ({ flow }: Props) => {
   const flowAddress = getEthAddress(flow.recipient)
   const tcrAddress = getEthAddress(flow.tcr)
   const isFlowOwner = useIsFlowOwner(flowAddress)
+  const arbitratorAddress = useArbitrator(tcrAddress)
   const implementation = useImplementation(flowAddress)
   const verifier = useVerifier(flowAddress)
   const { upgrade } = useUpgradeTo(flowAddress)
@@ -48,6 +53,8 @@ export const ManageFlow = ({ flow }: Props) => {
   const flowRate = useFlowRate(flowAddress)
   const { setBaselinePoolPercent } = useSetBaselinePoolPercent(flowAddress)
   const baselinePoolFlowRatePercent = useBaselinePoolFlowRatePercent(flowAddress)
+  const { upgradeArbitrator } = useUpgradeArbitrator(arbitratorAddress)
+  const arbitratorImplementation = baseContracts.ERC20VotesArbitratorImpl
 
   if (!isFlowOwner) return null
 
@@ -59,16 +66,16 @@ export const ManageFlow = ({ flow }: Props) => {
         {/* Contract Upgrades */}
         <AddressForm
           title="Upgrading"
-          prefill={base.NounsFlowImpl}
+          prefill={baseContracts.NounsFlowImpl}
           functionName="upgradeTo"
           placeholder="New implementation address (0x...)"
           buttonText="Upgrade To"
           onSubmit={upgrade}
         />
-        {implementation !== base.NounsFlowImpl && (
+        {implementation !== baseContracts.NounsFlowImpl && (
           <AddressForm
             title="Deployed implementation"
-            prefill={base.NounsFlowImpl}
+            prefill={baseContracts.NounsFlowImpl}
             functionName="setFlowImpl"
             placeholder="New implementation address (0x...)"
             buttonText="Set Flow Impl"
@@ -77,14 +84,14 @@ export const ManageFlow = ({ flow }: Props) => {
         )}
 
         {/* Update Verifier */}
-        {verifier !== base.TokenVerifier && (
+        {verifier !== baseContracts.TokenVerifier && (
           <AddressForm
             title="Updating"
             functionName="updateVerifier"
             placeholder="New verifier address (0x...)"
             buttonText="Update Flow Verifier"
             onSubmit={update}
-            prefill={base.TokenVerifier}
+            prefill={baseContracts.TokenVerifier}
           />
         )}
 
@@ -110,20 +117,53 @@ export const ManageFlow = ({ flow }: Props) => {
         {/* Future sections for other contract interactions can be added here */}
       </div>
 
-      <p className="mb-2 mt-4 text-sm font-medium">Manage TCR</p>
-      <div className="space-y-4">
-        <NumberForm
-          title="Change Challenge Duration"
-          functionName="challengePeriodDuration"
-          placeholder="New challenge period duration in seconds"
-          buttonText="Update Challenge Duration"
-          onSubmit={changeDuration}
-          prefill={duration ? Number(duration) : undefined}
-        />
+      <div className="space-y-3">
+        <p className="mt-4 text-sm font-medium">Manage TCR</p>
+        <ViewOnExplorer address={tcrAddress} />
+        <div className="space-y-4">
+          <NumberForm
+            title="Change Challenge Duration"
+            functionName="challengePeriodDuration"
+            placeholder="New challenge period duration in seconds"
+            buttonText="Update Challenge Duration"
+            onSubmit={changeDuration}
+            prefill={duration ? Number(duration) : undefined}
+          />
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <p className="mt-4 text-sm font-medium">Manage Arbitrator</p>
+        <ViewOnExplorer address={arbitratorAddress} />
+        <div className="space-y-4">
+          <AddressForm
+            title="Upgrade Arbitrator Implementation"
+            functionName="upgradeTo"
+            placeholder="New arbitrator implementation address (0x...)"
+            buttonText="Upgrade Arbitrator"
+            onSubmit={upgradeArbitrator}
+            prefill={arbitratorImplementation as `0x${string}`}
+          />
+        </div>
       </div>
     </div>
   )
 }
+
+const ViewOnExplorer = ({ address }: { address?: `0x${string}` }) => {
+  if (!address) return null
+
+  return (
+    <Link
+      className="text-xs underline"
+      href={explorerUrl(address, base.id, "address")}
+      target="_blank"
+    >
+      View on Explorer
+    </Link>
+  )
+}
+
 const FormField = ({
   title,
   functionName,

@@ -1,5 +1,8 @@
 import { ponder, type Context, type Event } from "@/generated"
 import { handleIncomingFlowRates } from "./lib/handle-incoming-flow-rates"
+import { grants } from "../../ponder.schema"
+import { eq, or } from "@ponder/core"
+import { and } from "@ponder/core"
 
 ponder.on("GdaV1:FlowDistributionUpdated", handleFlowDistributionUpdated)
 
@@ -14,9 +17,15 @@ async function handleFlowDistributionUpdated(params: {
   const recipient = distributor.toLowerCase()
 
   // find grant where isFlow and recipient is distributor
-  const { items } = await context.db.Grant.findMany({
-    where: { isFlow: true, OR: [{ recipient }, { managerRewardPool: recipient }] },
-  })
+  const items = await context.db.sql
+    .select()
+    .from(grants)
+    .where(
+      and(
+        eq(grants.isFlow, true),
+        or(eq(grants.recipient, recipient), eq(grants.managerRewardPool, recipient))
+      )
+    )
 
   if (!items?.length) return
 
@@ -32,14 +41,12 @@ async function handleFlowDistributionUpdated(params: {
       Number(grant.monthlyBonusPoolFlowRate) +
       newMonthlyRate
 
-    await context.db.Grant.update({
-      id: grant.id,
-      data: {
-        monthlyBaselinePoolFlowRate: newMonthlyRate.toString(),
-        monthlyOutgoingFlowRate: monthlyOutgoingFlowRate.toString(),
-        updatedAt: Number(event.block.timestamp),
-      },
+    await context.db.update(grants, { id: grant.id }).set({
+      monthlyBaselinePoolFlowRate: newMonthlyRate.toString(),
+      monthlyOutgoingFlowRate: monthlyOutgoingFlowRate.toString(),
+      updatedAt: Number(event.block.timestamp),
     })
+
     await handleIncomingFlowRates(context.db, recipient)
   }
 
@@ -49,13 +56,10 @@ async function handleFlowDistributionUpdated(params: {
       Number(grant.monthlyBonusPoolFlowRate) +
       newMonthlyRate
 
-    await context.db.Grant.update({
-      id: grant.id,
-      data: {
-        monthlyRewardPoolFlowRate: newMonthlyRate.toString(),
-        monthlyOutgoingFlowRate: monthlyOutgoingFlowRate.toString(),
-        updatedAt: Number(event.block.timestamp),
-      },
+    await context.db.update(grants, { id: grant.id }).set({
+      monthlyRewardPoolFlowRate: newMonthlyRate.toString(),
+      monthlyOutgoingFlowRate: monthlyOutgoingFlowRate.toString(),
+      updatedAt: Number(event.block.timestamp),
     })
   }
 
@@ -65,14 +69,12 @@ async function handleFlowDistributionUpdated(params: {
       Number(grant.monthlyRewardPoolFlowRate) +
       newMonthlyRate
 
-    await context.db.Grant.update({
-      id: grant.id,
-      data: {
-        monthlyBonusPoolFlowRate: newMonthlyRate.toString(),
-        monthlyOutgoingFlowRate: monthlyOutgoingFlowRate.toString(),
-        updatedAt: Number(event.block.timestamp),
-      },
+    await context.db.update(grants, { id: grant.id }).set({
+      monthlyBonusPoolFlowRate: newMonthlyRate.toString(),
+      monthlyOutgoingFlowRate: monthlyOutgoingFlowRate.toString(),
+      updatedAt: Number(event.block.timestamp),
     })
+
     await handleIncomingFlowRates(context.db, recipient)
   }
 }
