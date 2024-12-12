@@ -2,24 +2,19 @@ import "server-only"
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { UserProfile } from "@/components/user-profile/user-profile"
-import database from "@/lib/database/edge"
+import { getVoters } from "../components/get-voters"
 
 interface Props {
   contract: `0x${string}`
-  recipientId: string
+  grantId: string
   flowVotesCount: string
   isFlow?: boolean
 }
 
 export const Voters = async (props: Props) => {
-  const { contract, recipientId, flowVotesCount, isFlow } = props
+  const { contract, grantId, flowVotesCount, isFlow } = props
 
-  const voters = await database.$queryRaw<{ voter: `0x${string}`; votesCount: number }[]>`
-    SELECT voter, SUM(CAST("votesCount" AS INTEGER)) as "votesCount"
-    FROM "Vote"
-    WHERE "contract" = ${contract} AND "recipientId" = ${recipientId} AND "isStale" = 0
-    GROUP BY voter    
-  `
+  const voters = await getVoters(contract, grantId)
 
   return (
     <div className="grow rounded-xl border bg-white/50 p-5 dark:bg-transparent">

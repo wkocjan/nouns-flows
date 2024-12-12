@@ -5,8 +5,8 @@ import { anthropic } from "@/lib/ai/providers/anthropic"
 import database from "@/lib/database/edge"
 import { farcasterDb } from "@/lib/database/farcaster-edge"
 import { generateObject, generateText } from "ai"
-import dynamicIconImports from "lucide-react/dynamicIconImports"
 import { GrantPageData, grantPageSchema } from "./schema"
+import { getMediaPrompt } from "./media"
 
 export async function generateGrantPageData(id: string): Promise<GrantPageData | null> {
   const [{ flow, ...grant }, stories, casts, storiesCount, castsCount] = await Promise.all([
@@ -64,8 +64,6 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
     database.story.count({ where: { grant_ids: { has: id } } }),
     farcasterDb.cast.count({ where: { computed_tags: { has: id } } }),
   ])
-
-  const iconNames = Object.keys(dynamicIconImports)
 
   const agent = await getAgent("flo", { grantId: id, address: grant.recipient })
 
@@ -312,32 +310,13 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
 
     You can only shorten text if it's absolutely necessary and it's over the provided limit in the schema.
 
-    ## Gradients:
-    Whenever generating gradients:
-    - Provide CSS gradients for light and dark modes
-    - For dark mode, use toned colors, not too bright or vibrant
-    - For light mode, use more vibrant and bright colors
-
-    ## Icons
-    Whenever generating icons, choose name from the following dataset:    
-    
-    <icons>
-    ${iconNames.join("\n")}
-    </icons>
-
-    !!! DO NOT use any icon name that is not listed in the dataset above !!!
-
-    ## Image position
-    Whenever you need to provide image position, it can be "top", "center" or "bottom".
-    It's the vertical position of the focal point or main subject in the image.
-    So if you provide "top", it means that the main subject is at the top of the image.
-
+    ${getMediaPrompt()}
     `,
     prompt: `
     Output the grant page data in JSON format based on the following text:
     ${result.text}
 
-    Generate gradients and text color for "how", "focus" and "who" cards. Make sure these gradients are cohesive, but different from each other.
+    Generate gradients and text color for "how", "focus" and "who" cards.
 
     Analyze the cover image and provide its cropping position. 
     `,

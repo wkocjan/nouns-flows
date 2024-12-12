@@ -61,7 +61,7 @@ export function GrantChat(props: Props) {
           </DialogHeader>
           <div className="flex h-[calc(100dvh-100px)] min-w-0 flex-col">
             {user && messages.length > 0 && <Messages />}
-            <MultimodalInput className="bg-background p-2" />
+            <MultimodalInput className="bg-background p-2" autoFocus />
           </div>
         </DialogContent>
       </Dialog>

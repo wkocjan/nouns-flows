@@ -1,4 +1,5 @@
 import { ChatData } from "@/app/chat/chat-body"
+import { getVoters } from "@/app/item/[grantId]/components/get-voters"
 import { submitApplicationTool } from "@/lib/ai/tools/applications/tool"
 import { queryEmbeddingsTool } from "@/lib/ai/tools/embeddings/tool"
 import { getTools, getToolsPrompt, Tool } from "@/lib/ai/tools/tool"
@@ -71,6 +72,8 @@ async function getGrantPrompt(grantId: string | undefined) {
     take: 10,
   })
 
+  const voters = await getVoters(grant.parentContract as `0x${string}`, grant.id)
+
   return `\n\n## Grant:
   Context and information about the current grant is provided below.
 
@@ -79,6 +82,11 @@ async function getGrantPrompt(grantId: string | undefined) {
   by using the "updateGrant" tool.
 
   ${JSON.stringify(grant, null, 2)}
+
+  ### Users who voted for this grant
+  These are ETH addresses of users who voted for this grant and their votes count:
+  
+  ${JSON.stringify(voters, null, 2)}
   
   ### Stories
   Last 10 stories related to this grant:

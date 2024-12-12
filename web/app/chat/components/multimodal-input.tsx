@@ -19,10 +19,17 @@ interface Props {
   placeholder?: string
   className?: string
   onSubmit?: () => void
+  autoFocus?: boolean
 }
 
 export function MultimodalInput(props: Props) {
-  const { rows = 3, placeholder = "Send a message...", className, onSubmit } = props
+  const {
+    rows = 3,
+    placeholder = "Send a message...",
+    className,
+    onSubmit,
+    autoFocus = false,
+  } = props
   const { input, setInput, isLoading, stop, attachments, setAttachments, handleSubmit, user } =
     useAgentChat()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -117,6 +124,7 @@ export function MultimodalInput(props: Props) {
         )}
 
         <Textarea
+          autoFocus={autoFocus}
           ref={textareaRef}
           placeholder={placeholder}
           value={input}

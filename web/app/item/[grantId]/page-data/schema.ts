@@ -38,7 +38,7 @@ export const grantPageSchema = z.object({
     .array(
       z.object({
         label: z.string().describe("Make it clear what the value means (what is the unit)"),
-        value: z.number(),
+        value: z.string().max(6),
       }),
     )
     .min(4),

@@ -1,6 +1,6 @@
 interface Props {
   metrics: Array<{
-    value: number
+    value: number | string
     label: string
   }>
 }

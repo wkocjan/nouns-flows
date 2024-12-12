@@ -41,6 +41,7 @@ export function StoryChat(props: Props) {
           onSubmit={() => {
             if (!isOpen) setIsOpen(true)
           }}
+          autoFocus
         />
       </div>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>

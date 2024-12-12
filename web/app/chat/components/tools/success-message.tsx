@@ -4,7 +4,7 @@ interface Props {
   message: string
 }
 
-export const UpdateStoryResult = (props: Props) => {
+export const SuccessMessageResult = (props: Props) => {
   const { message } = props
 
   if (typeof message !== "string" || message.length === 0) return null

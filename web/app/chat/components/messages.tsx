@@ -67,7 +67,7 @@ export const Messages = () => {
         />
       )}
 
-      {isLoading && messages[messages.length - 1].role === "user" && (
+      {isLoading && (
         <div className="flex justify-center">
           <DotLoader />
         </div>
