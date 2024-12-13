@@ -13,7 +13,7 @@ export async function GrantsStories(props: Props) {
 
   const stories = await database.story.findMany({
     where: { complete: true, parent_flow_ids: { has: flowId } },
-    orderBy: { updated_at: "desc" },
+    orderBy: { created_at: "desc" },
     take: 11,
     ...getCacheStrategy(600),
   })

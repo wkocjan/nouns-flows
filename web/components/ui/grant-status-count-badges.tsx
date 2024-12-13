@@ -5,32 +5,17 @@ import Link from "next/link"
 
 interface Props {
   id: string
-  subgrants?: Grant[]
   flow: Pick<Grant, "activeRecipientCount" | "awaitingRecipientCount" | "challengedRecipientCount">
   alwaysShowAll?: boolean
-  isTopLevel?: boolean
   showLabel?: boolean
 }
 
 export const GrantStatusCountBadges = (props: Props) => {
-  const {
-    alwaysShowAll = false,
-    isTopLevel = false,
-    showLabel = false,
-    id,
-    flow,
-    subgrants,
-  } = props
+  const { alwaysShowAll = false, showLabel = false, id, flow } = props
 
-  const approved = isTopLevel
-    ? subgrants?.reduce((acc, grant) => acc + grant.activeRecipientCount, 0) || 0
-    : flow.activeRecipientCount
-  const challenged = isTopLevel
-    ? subgrants?.reduce((acc, grant) => acc + grant.challengedRecipientCount, 0) || 0
-    : flow.challengedRecipientCount
-  const awaiting = isTopLevel
-    ? subgrants?.reduce((acc, grant) => acc + grant.awaitingRecipientCount, 0) || 0
-    : flow.awaitingRecipientCount
+  const approved = flow.activeRecipientCount
+  const challenged = flow.challengedRecipientCount
+  const awaiting = flow.awaitingRecipientCount
 
   const label = showLabel ? "grants" : ""
 

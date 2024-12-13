@@ -38,11 +38,13 @@ export default async function Home() {
                 </Link>
               </h3>
               <GrantStatusCountBadges
-                subgrants={activeFlows}
                 id={pool.id}
-                flow={pool}
+                flow={{
+                  activeRecipientCount: getSum(activeFlows, "activeRecipientCount"),
+                  awaitingRecipientCount: getSum(activeFlows, "awaitingRecipientCount"),
+                  challengedRecipientCount: getSum(activeFlows, "challengedRecipientCount"),
+                }}
                 alwaysShowAll
-                isTopLevel
                 showLabel
               />
             </div>
@@ -59,6 +61,10 @@ export default async function Home() {
       <VotingBar />
     </VotingProvider>
   )
+}
+
+function getSum(flows: Grant[], key: keyof Grant): number {
+  return flows.reduce((sum, flow) => sum + (flow[key] as number), 0)
 }
 
 function sortGrants(a: Grant, b: Grant) {
