@@ -1,5 +1,7 @@
-import { ponder, type Context, type Event } from "@/generated"
+import { ponder, type Context, type Event } from "ponder:registry"
 import { handleIncomingFlowRates } from "./lib/handle-incoming-flow-rates"
+import { grants } from "../../ponder.schema"
+import { eq, or, and } from "ponder"
 
 ponder.on("BonusPool:MemberUnitsUpdated", handleMemberUnitsUpdated)
 ponder.on("BaselinePool:MemberUnitsUpdated", handleMemberUnitsUpdated)
@@ -14,11 +16,10 @@ async function handleMemberUnitsUpdated(params: {
   const { newUnits, member } = event.args
   const pool = event.log.address.toLowerCase()
 
-  const { items } = await context.db.Grant.findMany({
-    where: {
-      OR: [{ baselinePool: pool }, { bonusPool: pool }],
-    },
-  })
+  const items = await context.db.sql
+    .select()
+    .from(grants)
+    .where(or(eq(grants.baselinePool, pool), eq(grants.bonusPool, pool)))
 
   const parentGrant = items[0]
 
@@ -27,32 +28,42 @@ async function handleMemberUnitsUpdated(params: {
     throw new Error(`Parent grant not found: ${pool}`)
   }
 
+  if (parentGrant.recipient === member.toLowerCase()) {
+    // This is a flow updating it's member units on itself on initialization, skipping...
+    return
+  }
+
   const shouldUpdateBaseline = parentGrant.baselinePool === pool
   const shouldUpdateBonus = parentGrant.bonusPool === pool
 
-  if (shouldUpdateBaseline)
-    await context.db.Grant.updateMany({
-      where: {
-        parentContract: parentGrant.recipient,
-        recipient: member.toLowerCase(),
-      },
-      data: {
-        baselineMemberUnits: newUnits.toString(),
-        updatedAt: Number(event.block.timestamp),
-      },
-    })
+  const [grant] = await context.db.sql
+    .select()
+    .from(grants)
+    .where(
+      and(
+        eq(grants.recipient, member.toLowerCase()),
+        eq(grants.parentContract, parentGrant.recipient)
+      )
+    )
+    .limit(1)
 
-  if (shouldUpdateBonus)
-    await context.db.Grant.updateMany({
-      where: {
-        parentContract: parentGrant.recipient,
-        recipient: member.toLowerCase(),
-      },
-      data: {
-        bonusMemberUnits: newUnits.toString(),
-        updatedAt: Number(event.block.timestamp),
-      },
+  if (!grant) {
+    throw new Error(`Grant not found: ${member}`)
+  }
+
+  if (shouldUpdateBaseline) {
+    await context.db.update(grants, { id: grant.id }).set({
+      baselineMemberUnits: newUnits.toString(),
+      updatedAt: Number(event.block.timestamp),
     })
+  }
+
+  if (shouldUpdateBonus) {
+    await context.db.update(grants, { id: grant.id }).set({
+      bonusMemberUnits: newUnits.toString(),
+      updatedAt: Number(event.block.timestamp),
+    })
+  }
 
   await handleIncomingFlowRates(context.db, parentGrant.recipient)
 }

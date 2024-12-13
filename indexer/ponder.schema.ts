@@ -1,160 +1,167 @@
-import { createSchema } from "@ponder/core"
+import { onchainTable, index } from "ponder"
 
-export default createSchema((p) => ({
-  Grant: p.createTable(
-    {
-      id: p.string(),
-      recipient: p.string(),
-      flowId: p.string(),
-      submitter: p.string(),
-      parentContract: p.string(),
-      isTopLevel: p.boolean(),
-      isFlow: p.boolean(),
-      title: p.string(),
-      description: p.string(),
-      image: p.string(),
-      tagline: p.string().optional(),
-      url: p.string().optional(),
-      isRemoved: p.boolean(),
-      isActive: p.boolean(),
-      votesCount: p.string(),
-      monthlyIncomingFlowRate: p.string(),
-      monthlyIncomingBaselineFlowRate: p.string(),
-      monthlyIncomingBonusFlowRate: p.string(),
-      monthlyOutgoingFlowRate: p.string(),
-      monthlyRewardPoolFlowRate: p.string(),
-      monthlyBaselinePoolFlowRate: p.string(),
-      monthlyBonusPoolFlowRate: p.string(),
-      bonusMemberUnits: p.string(),
-      baselineMemberUnits: p.string(),
-      totalEarned: p.string(),
-      tcr: p.string(),
-      erc20: p.string(),
-      arbitrator: p.string(),
-      tokenEmitter: p.string(),
-      status: p.int(),
-      challengePeriodEndsAt: p.int(),
-      isDisputed: p.boolean(),
-      isResolved: p.boolean(),
-      evidenceGroupID: p.string(),
-      createdAt: p.int(),
-      baselinePool: p.string(),
-      activeRecipientCount: p.int(),
-      awaitingRecipientCount: p.int(),
-      challengedRecipientCount: p.int(),
-      bonusPool: p.string(),
-      managerRewardPool: p.string(),
-      managerRewardSuperfluidPool: p.string(),
-      superToken: p.string(),
-      updatedAt: p.int(),
-      managerRewardPoolFlowRatePercent: p.int(),
-      baselinePoolFlowRatePercent: p.int(),
-    },
-    {
-      isTopLevelIndex: p.index("isTopLevel"),
-      isFlowIndex: p.index("isFlow"),
-      isRemovedIndex: p.index("isRemoved"),
-      updatedAtIndex: p.index("updatedAt"),
-      flowIdIndex: p.index("flowId"),
-      isDisputedIndex: p.index("isDisputed"),
-      isActiveIndex: p.index("isActive"),
-    }
-  ),
-  Vote: p.createTable(
-    {
-      id: p.string(),
-      contract: p.string(),
-      recipientId: p.string().references("Grant.id"),
-      recipient: p.one("recipientId"),
-      tokenId: p.string(),
-      bps: p.int(),
-      voter: p.string(),
-      blockNumber: p.string(),
-      blockTimestamp: p.int(),
-      transactionHash: p.string(),
-      isStale: p.boolean(),
-      votesCount: p.string(),
-    },
-    {
-      voterIndex: p.index("voter"),
-      contractIndex: p.index("contract"),
-      recipientIdIndex: p.index("recipientId"),
-      isStaleIndex: p.index("isStale"),
-    }
-  ),
-  Dispute: p.createTable(
-    {
-      id: p.string(),
-      disputeId: p.string(),
-      arbitrator: p.string(),
-      arbitrable: p.string(),
-      grantId: p.string(),
-      challenger: p.string(),
-      votingStartTime: p.int(),
-      votingEndTime: p.int(),
-      revealPeriodEndTime: p.int(),
-      creationBlock: p.int(),
-      arbitrationCost: p.string(),
-      votes: p.string(),
-      // assumes 2 potential choices / parties to vote on
-      requesterPartyVotes: p.string(),
-      challengerPartyVotes: p.string(),
-      ruling: p.int(),
-      totalSupply: p.string(),
-      isExecuted: p.boolean(),
-      evidenceGroupID: p.string(),
-    },
-    {
-      arbitratorIndex: p.index("arbitrator"),
-      disputeIdIndex: p.index("disputeId"),
-      grantIdIndex: p.index("grantId"),
-      evidenceGroupIDIndex: p.index("evidenceGroupID"),
-    }
-  ),
-  DisputeVote: p.createTable(
-    {
-      id: p.string(),
-      arbitrator: p.string(),
-      disputeId: p.string(),
-      commitHash: p.string(),
-      committedAt: p.int(),
-      voter: p.string(),
-      revealedBy: p.string().optional(),
-      revealedAt: p.int().optional(),
-      choice: p.int().optional(),
-      votes: p.string().optional(),
-      reason: p.string().optional(),
-    },
-    {
-      disputeIdIndex: p.index("disputeId"),
-      arbitratorIndex: p.index("arbitrator"),
-    }
-  ),
-  TokenHolder: p.createTable(
-    {
-      id: p.string(),
-      tokenContract: p.string(),
-      holder: p.string(),
-      firstPurchase: p.int(),
-      amount: p.string(),
-    },
-    {
-      tokenContractIndex: p.index("tokenContract"),
-      holderIndex: p.index("holder"),
-    }
-  ),
-  Evidence: p.createTable(
-    {
-      id: p.string(),
-      arbitrator: p.string(),
-      evidenceGroupID: p.string(),
-      evidence: p.string(),
-      party: p.string(),
-      blockNumber: p.string(),
-    },
-    {
-      arbitratorIndex: p.index("arbitrator"),
-      evidenceGroupIDIndex: p.index("evidenceGroupID"),
-    }
-  ),
-}))
+export const grants = onchainTable(
+  "Grant",
+  (t) => ({
+    id: t.text().primaryKey(),
+    recipient: t.text().notNull(),
+    flowId: t.text().notNull(),
+    submitter: t.text().notNull(),
+    parentContract: t.text().notNull(),
+    isTopLevel: t.boolean().notNull(),
+    isFlow: t.boolean().notNull(),
+    title: t.text().notNull(),
+    description: t.text().notNull(),
+    image: t.text().notNull(),
+    tagline: t.text(),
+    url: t.text(),
+    isRemoved: t.boolean().notNull(),
+    isActive: t.boolean().notNull(),
+    votesCount: t.text().notNull(),
+    monthlyIncomingFlowRate: t.text().notNull(),
+    monthlyIncomingBaselineFlowRate: t.text().notNull(),
+    monthlyIncomingBonusFlowRate: t.text().notNull(),
+    monthlyOutgoingFlowRate: t.text().notNull(),
+    monthlyRewardPoolFlowRate: t.text().notNull(),
+    monthlyBaselinePoolFlowRate: t.text().notNull(),
+    monthlyBonusPoolFlowRate: t.text().notNull(),
+    bonusMemberUnits: t.text().notNull(),
+    baselineMemberUnits: t.text().notNull(),
+    totalEarned: t.text().notNull(),
+    tcr: t.text().notNull(),
+    erc20: t.text().notNull(),
+    arbitrator: t.text().notNull(),
+    tokenEmitter: t.text().notNull(),
+    status: t.integer().notNull(),
+    challengePeriodEndsAt: t.integer().notNull(),
+    isDisputed: t.boolean().notNull(),
+    isResolved: t.boolean().notNull(),
+    evidenceGroupID: t.text().notNull(),
+    createdAt: t.integer().notNull(),
+    baselinePool: t.text().notNull(),
+    activeRecipientCount: t.integer().notNull(),
+    awaitingRecipientCount: t.integer().notNull(),
+    challengedRecipientCount: t.integer().notNull(),
+    bonusPool: t.text().notNull(),
+    managerRewardPool: t.text().notNull(),
+    managerRewardSuperfluidPool: t.text().notNull(),
+    superToken: t.text().notNull(),
+    updatedAt: t.integer().notNull(),
+    managerRewardPoolFlowRatePercent: t.integer().notNull(),
+    baselinePoolFlowRatePercent: t.integer().notNull(),
+  }),
+  (table) => ({
+    isTopLevelIdx: index().on(table.isTopLevel),
+    isFlowIdx: index().on(table.isFlow),
+    isRemovedIdx: index().on(table.isRemoved),
+    updatedAtIdx: index().on(table.updatedAt),
+    flowIdIdx: index().on(table.flowId),
+    isDisputedIdx: index().on(table.isDisputed),
+    isActiveIdx: index().on(table.isActive),
+  })
+)
+
+export const votes = onchainTable(
+  "Vote",
+  (t) => ({
+    id: t.text().primaryKey(),
+    contract: t.text().notNull(),
+    recipientId: t.text().notNull(),
+    tokenId: t.text().notNull(),
+    bps: t.integer().notNull(),
+    voter: t.text().notNull(),
+    blockNumber: t.text().notNull(),
+    blockTimestamp: t.integer().notNull(),
+    transactionHash: t.text().notNull(),
+    isStale: t.boolean().notNull(),
+    votesCount: t.text().notNull(),
+  }),
+  (table) => ({
+    voterIdx: index().on(table.voter),
+    contractIdx: index().on(table.contract),
+    recipientIdIdx: index().on(table.recipientId),
+    isStaleIdx: index().on(table.isStale),
+  })
+)
+
+export const disputes = onchainTable(
+  "Dispute",
+  (t) => ({
+    id: t.text().primaryKey(),
+    disputeId: t.text().notNull(),
+    arbitrator: t.text().notNull(),
+    arbitrable: t.text().notNull(),
+    grantId: t.text().notNull(),
+    challenger: t.text().notNull(),
+    votingStartTime: t.integer().notNull(),
+    votingEndTime: t.integer().notNull(),
+    revealPeriodEndTime: t.integer().notNull(),
+    creationBlock: t.integer().notNull(),
+    arbitrationCost: t.text().notNull(),
+    votes: t.text().notNull(),
+    requesterPartyVotes: t.text().notNull(),
+    challengerPartyVotes: t.text().notNull(),
+    ruling: t.integer().notNull(),
+    totalSupply: t.text().notNull(),
+    isExecuted: t.boolean().notNull(),
+    evidenceGroupID: t.text().notNull(),
+  }),
+  (table) => ({
+    arbitratorIdx: index().on(table.arbitrator),
+    disputeIdIdx: index().on(table.disputeId),
+    grantIdIdx: index().on(table.grantId),
+    evidenceGroupIDIdx: index().on(table.evidenceGroupID),
+  })
+)
+
+export const disputeVotes = onchainTable(
+  "DisputeVote",
+  (t) => ({
+    id: t.text().primaryKey(),
+    arbitrator: t.text().notNull(),
+    disputeId: t.text().notNull(),
+    commitHash: t.text().notNull(),
+    committedAt: t.integer().notNull(),
+    voter: t.text().notNull(),
+    revealedBy: t.text(),
+    revealedAt: t.integer(),
+    choice: t.integer(),
+    votes: t.text(),
+    reason: t.text(),
+  }),
+  (table) => ({
+    disputeIdIdx: index().on(table.disputeId),
+    arbitratorIdx: index().on(table.arbitrator),
+  })
+)
+
+export const tokenHolders = onchainTable(
+  "TokenHolder",
+  (t) => ({
+    id: t.text().primaryKey(),
+    tokenContract: t.text().notNull(),
+    holder: t.text().notNull(),
+    firstPurchase: t.integer().notNull(),
+    amount: t.text().notNull(),
+  }),
+  (table) => ({
+    tokenContractIdx: index().on(table.tokenContract),
+    holderIdx: index().on(table.holder),
+  })
+)
+
+export const evidence = onchainTable(
+  "Evidence",
+  (t) => ({
+    id: t.text().primaryKey(),
+    arbitrator: t.text().notNull(),
+    evidenceGroupID: t.text().notNull(),
+    evidence: t.text().notNull(),
+    party: t.text().notNull(),
+    blockNumber: t.text().notNull(),
+  }),
+  (table) => ({
+    arbitratorIdx: index().on(table.arbitrator),
+    evidenceGroupIDIdx: index().on(table.evidenceGroupID),
+  })
+)

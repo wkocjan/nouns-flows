@@ -207,7 +207,7 @@ export const cfav1ForwarderConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xb271e724160dfc41d8f58dd852ca28c2797b6189)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x5f9c3e7d1bae774dcdf4ee0f5390cee36c83a04a)
  */
 export const erc20VotesArbitratorImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'payable' },
@@ -1125,14 +1125,14 @@ export const erc20VotesArbitratorImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xb271e724160dfc41d8f58dd852ca28c2797b6189)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x5f9c3e7d1bae774dcdf4ee0f5390cee36c83a04a)
  */
 export const erc20VotesArbitratorImplAddress = {
-  8453: '0xB271e724160DFc41d8F58dd852Ca28C2797b6189',
+  8453: '0x5F9C3E7D1bae774DCDf4ee0F5390cEe36c83A04A',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0xb271e724160dfc41d8f58dd852ca28c2797b6189)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x5f9c3e7d1bae774dcdf4ee0f5390cee36c83a04a)
  */
 export const erc20VotesArbitratorImplConfig = {
   address: erc20VotesArbitratorImplAddress,

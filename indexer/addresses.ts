@@ -3,7 +3,7 @@ export const mainnet = {
 } as const
 
 export const base = {
-  ERC20VotesArbitratorImpl: "0xb271e724160dfc41d8f58dd852ca28c2797b6189",
+  ERC20VotesArbitratorImpl: "0x5f9c3e7d1bae774dcdf4ee0f5390cee36c83a04a",
   TCRFactoryImpl: "0xa267acd543b3106fc421266286de1cd95773c004",
   ERC20VotesMintableImpl: "0x92f1bce6e6f6c48a7fba9be8413c83a3d3fd0349",
   TokenEmitterImpl: "0x1c6f23fb1348cc3936b774725d855bc3e9d1fbf3",

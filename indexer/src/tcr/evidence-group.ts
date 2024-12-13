@@ -1,4 +1,5 @@
-import { ponder, type Context, type Event } from "@/generated"
+import { ponder, type Context, type Event } from "ponder:registry"
+import { grants } from "../../ponder.schema"
 
 ponder.on("NounsFlowTcr:RequestEvidenceGroupID", handleRequestEvidenceGroupId)
 ponder.on("NounsFlowTcrChildren:RequestEvidenceGroupID", handleRequestEvidenceGroupId)
@@ -10,8 +11,7 @@ async function handleRequestEvidenceGroupId(params: {
   const { event, context } = params
   const { _itemID, _evidenceGroupID } = event.args
 
-  await context.db.Grant.update({
-    id: _itemID,
-    data: { evidenceGroupID: _evidenceGroupID.toString() },
+  await context.db.update(grants, { id: _itemID }).set({
+    evidenceGroupID: _evidenceGroupID.toString(),
   })
 }

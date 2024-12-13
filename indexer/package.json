@@ -11,10 +11,10 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@ponder/core": "^0.6.7",
     "@vercel/kv": "^3.0.0",
     "hono": "^4.6.3",
-    "viem": "^2.21.19"
+    "ponder": "^0.8.2",
+    "viem": "^2.21.54"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",

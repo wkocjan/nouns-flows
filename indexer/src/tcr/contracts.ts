@@ -1,9 +1,10 @@
-import { ponder } from "@/generated"
+import { ponder } from "ponder:registry"
 import { rewardPoolImplAbi } from "../../abis"
+import { grants } from "../../ponder.schema"
+import { eq } from "ponder"
 
 ponder.on("NounsFlowTcrFactory:FlowTCRDeployed", async (params) => {
   const { event, context } = params
-  const { Grant } = context.db
 
   const {
     flowTCRProxy,
@@ -32,17 +33,25 @@ ponder.on("NounsFlowTcrFactory:FlowTCRDeployed", async (params) => {
     }),
   ])
 
-  await Grant.updateMany({
-    where: { recipient: flowProxy.toLowerCase() },
-    data: {
-      superToken: superToken.toLowerCase(),
-      tcr: flowTCRProxy.toLowerCase(),
-      arbitrator: arbitratorProxy.toLowerCase(),
-      erc20: erc20Proxy.toLowerCase(),
-      parentContract: parentContract.toLowerCase(),
-      tokenEmitter: tokenEmitterProxy.toLowerCase(),
-      managerRewardPool: rewardPoolProxy.toLowerCase(),
-      managerRewardSuperfluidPool: managerRewardSuperfluidPool.toLowerCase(),
-    },
+  const [grant] = await context.db.sql
+    .select()
+    .from(grants)
+    .where(eq(grants.recipient, flowProxy.toLowerCase()))
+    .limit(1)
+
+  if (!grant) {
+    console.error({ flowProxy })
+    throw new Error(`Grant not found: ${flowProxy}`)
+  }
+
+  await context.db.update(grants, { id: grant.id }).set({
+    superToken: superToken.toLowerCase(),
+    tcr: flowTCRProxy.toLowerCase(),
+    arbitrator: arbitratorProxy.toLowerCase(),
+    erc20: erc20Proxy.toLowerCase(),
+    parentContract: parentContract.toLowerCase(),
+    tokenEmitter: tokenEmitterProxy.toLowerCase(),
+    managerRewardPool: rewardPoolProxy.toLowerCase(),
+    managerRewardSuperfluidPool: managerRewardSuperfluidPool.toLowerCase(),
   })
 })

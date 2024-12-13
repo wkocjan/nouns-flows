@@ -1,4 +1,4 @@
-import { createConfig, rateLimit } from "@ponder/core"
+import { createConfig, factory, rateLimit } from "ponder"
 import { createPublicClient, http, parseAbiItem } from "viem"
 import { base } from "viem/chains"
 import {
@@ -26,7 +26,7 @@ const START_BLOCK = 21519031
 const SECONDS_PER_BLOCK = 2
 
 export default createConfig({
-  database: { kind: "postgres", schema: "public" },
+  database: { kind: "postgres" },
   networks: {
     base: {
       chainId: base.id,
@@ -44,13 +44,13 @@ export default createConfig({
     },
     NounsFlowChildren: {
       abi: nounsFlowImplAbi,
-      factory: {
+      address: factory({
         address: baseContracts.NounsFlow,
         event: parseAbiItem(
           "event FlowRecipientCreated(bytes32 indexed recipientId, address indexed recipient, address baselinePool, address bonusPool, uint32 managerRewardPoolFlowRatePercent, uint32 baselinePoolFlowRatePercent)"
         ),
         parameter: "recipient",
-      },
+      }),
       network: "base",
       startBlock: START_BLOCK,
     },
@@ -62,13 +62,13 @@ export default createConfig({
     },
     NounsFlowTcrChildren: {
       abi: flowTcrImplAbi,
-      factory: {
+      address: factory({
         address: baseContracts.TCRFactory,
         event: parseAbiItem(
           "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy, address rewardPoolProxy, address tokenEmitterProxy, address flowProxy, address flowBaselinePool, address flowBonusPool)"
         ),
         parameter: "flowTCRProxy",
-      },
+      }),
       network: "base",
       startBlock: START_BLOCK,
     },
@@ -86,13 +86,13 @@ export default createConfig({
     },
     ArbitratorChildren: {
       abi: erc20VotesArbitratorImplAbi,
-      factory: {
+      address: factory({
         address: baseContracts.TCRFactory,
         event: parseAbiItem(
           "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy, address rewardPoolProxy, address tokenEmitterProxy, address flowProxy, address flowBaselinePool, address flowBonusPool)"
         ),
         parameter: "arbitratorProxy",
-      },
+      }),
       network: "base",
       startBlock: START_BLOCK,
     },
@@ -104,13 +104,13 @@ export default createConfig({
     },
     Erc20TokenChildren: {
       abi: erc20VotesMintableImplAbi,
-      factory: {
+      address: factory({
         address: baseContracts.TCRFactory,
         event: parseAbiItem(
           "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy, address rewardPoolProxy, address tokenEmitterProxy, address flowProxy, address flowBaselinePool, address flowBonusPool)"
         ),
         parameter: "erc20Proxy",
-      },
+      }),
       network: "base",
       startBlock: START_BLOCK,
     },
@@ -128,25 +128,25 @@ export default createConfig({
     },
     BaselinePoolChildren: {
       abi: superfluidPoolAbi,
-      factory: {
+      address: factory({
         address: baseContracts.TCRFactory,
         event: parseAbiItem(
           "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy, address rewardPoolProxy, address tokenEmitterProxy, address flowProxy, address flowBaselinePool, address flowBonusPool)"
         ),
         parameter: "flowBaselinePool",
-      },
+      }),
       network: "base",
       startBlock: START_BLOCK,
     },
     BonusPoolChildren: {
       abi: superfluidPoolAbi,
-      factory: {
+      address: factory({
         address: baseContracts.TCRFactory,
         event: parseAbiItem(
           "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy, address rewardPoolProxy, address tokenEmitterProxy, address flowProxy, address flowBaselinePool, address flowBonusPool)"
         ),
         parameter: "flowBonusPool",
-      },
+      }),
       network: "base",
       startBlock: START_BLOCK,
     },
