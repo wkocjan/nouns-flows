@@ -12,8 +12,8 @@ export async function GET() {
   try {
     const flows = await database.grant.findMany({
       where: {
-        isFlow: 1,
-        isTopLevel: 0,
+        isFlow: true,
+        isTopLevel: false,
         OR: [{ derivedData: { minimumSalary: null } }, { derivedData: null }],
       },
       select: { id: true, description: true, derivedData: true },

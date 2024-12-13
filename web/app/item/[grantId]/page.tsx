@@ -41,7 +41,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const { grantId } = await props.params
 
   const grant = await database.grant.findFirstOrThrow({
-    where: { id: grantId, isTopLevel: 0 },
+    where: { id: grantId, isTopLevel: false },
     select: { title: true, tagline: true },
     ...getCacheStrategy(1200),
   })
@@ -53,7 +53,7 @@ export default async function GrantPage(props: Props) {
   const { grantId } = await props.params
 
   const { flow, ...grant } = await database.grant.findUniqueOrThrow({
-    where: { id: grantId, isActive: 1, isTopLevel: 0 },
+    where: { id: grantId, isActive: true, isTopLevel: false },
     include: { flow: true, derivedData: { select: { pageData: true } } },
     ...getCacheStrategy(600), // ToDo: Invalidate on edit
   })

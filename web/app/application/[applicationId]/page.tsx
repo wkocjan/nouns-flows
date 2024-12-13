@@ -29,7 +29,7 @@ interface Props {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { applicationId } = (await props.params)
+  const { applicationId } = await props.params
 
   const grant = await database.grant.findFirstOrThrow({
     where: { id: applicationId },
@@ -39,7 +39,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function ApplicationPage(props: Props) {
-  const params = await props.params;
+  const params = await props.params
   const { applicationId } = params
 
   const grant = await database.grant.findUniqueOrThrow({
@@ -47,7 +47,7 @@ export default async function ApplicationPage(props: Props) {
     include: { flow: true, disputes: true },
   })
 
-  if (grant.isActive === 1 && isProduction()) return redirect(`/item/${grant.id}`)
+  if (grant.isActive && isProduction()) return redirect(`/item/${grant.id}`)
 
   const { title, description, flow, image, createdAt, isFlow, isTopLevel } = grant
 
@@ -143,7 +143,7 @@ export default async function ApplicationPage(props: Props) {
 
                 <div>
                   <h4 className="mb-1 text-[13px] text-muted-foreground">Challenged</h4>
-                  <p className="text-sm">{grant.isDisputed === 1 ? "Yes" : "No"}</p>
+                  <p className="text-sm">{grant.isDisputed ? "Yes" : "No"}</p>
                 </div>
               </div>
             </CardContent>
@@ -153,10 +153,10 @@ export default async function ApplicationPage(props: Props) {
               <CardTitle>Application status</CardTitle>
             </CardHeader>
             <CardContent>
-              {grant.isDisputed === 0 && grant.isResolved == 0 && (
+              {!grant.isDisputed && !grant.isResolved && (
                 <StatusNotDisputed grant={grant} flow={flow} />
               )}
-              {(grant.isDisputed === 1 || grant.isResolved === 1) && dispute && (
+              {(grant.isDisputed || grant.isResolved) && dispute && (
                 <StatusDisputed grant={grant} dispute={dispute} flow={flow} />
               )}
             </CardContent>

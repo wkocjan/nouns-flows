@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ApplyPage() {
   const flows = await database.grant.findMany({
-    where: { isFlow: 1, isActive: 1, isTopLevel: 0 },
+    where: { isFlow: true, isActive: true, isTopLevel: false },
     orderBy: [{ title: "asc" }],
   })
 

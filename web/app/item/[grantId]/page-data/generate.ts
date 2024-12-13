@@ -11,7 +11,7 @@ import { getMediaPrompt } from "./media"
 export async function generateGrantPageData(id: string): Promise<GrantPageData | null> {
   const [{ flow, ...grant }, stories, casts, storiesCount, castsCount] = await Promise.all([
     database.grant.findUniqueOrThrow({
-      where: { id, isActive: 1, isTopLevel: 0 },
+      where: { id, isActive: true, isTopLevel: false },
       select: {
         recipient: true,
         title: true,

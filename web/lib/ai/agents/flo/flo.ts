@@ -97,7 +97,7 @@ async function getGrantPrompt(grantId: string | undefined) {
 
 const getGrant = cache(async (grantId: string) => {
   return database.grant.findFirst({
-    where: { id: grantId, isFlow: 0 },
+    where: { id: grantId, isFlow: false },
     include: { derivedData: { select: { pageData: true } } },
   })
 })

@@ -10,8 +10,8 @@ export const getUserGrants = unstable_cache(
     const grants = await database.grant.findMany({
       where: {
         recipient: address,
-        isFlow: 0,
-        isRemoved: 0,
+        isFlow: false,
+        isRemoved: false,
       },
       select: {
         flow: true,

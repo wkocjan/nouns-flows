@@ -18,7 +18,7 @@ export async function GET() {
 
     const disputes = await database.dispute.findMany({
       where: {
-        isExecuted: 0,
+        isExecuted: false,
         revealPeriodEndTime: { gt: Number(new Date().getTime() / 1000) },
         votingEndTime: { lt: Number(new Date().getTime() / 1000) },
       },

@@ -10,8 +10,8 @@ export async function GET() {
   try {
     const grants = await database.grant.findMany({
       where: {
-        isFlow: 0,
-        isActive: 1,
+        isFlow: false,
+        isActive: true,
         OR: [{ derivedData: null }, { derivedData: { pageData: null } }],
       },
       take: 3,

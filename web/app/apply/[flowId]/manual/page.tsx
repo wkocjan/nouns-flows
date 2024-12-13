@@ -27,14 +27,14 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function ApplyFlowPage(props: Props) {
-  const { flowId } = (await props.params)
+  const { flowId } = await props.params
 
   const flow = await database.grant.findFirstOrThrow({
-    where: { id: flowId, isFlow: 1, isActive: 1 },
+    where: { id: flowId, isFlow: true, isActive: true },
     include: { derivedData: true },
   })
   const { isTopLevel } = flow
-  const isFlow = isTopLevel === 1
+  const isFlow = isTopLevel
 
   return (
     <main className="container flex h-[calc(100vh-68px)] flex-col pb-12 pt-8">

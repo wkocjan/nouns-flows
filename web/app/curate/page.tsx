@@ -32,7 +32,7 @@ export default async function CurateAndEarnPage() {
   const pool = await getPool()
 
   const flows = await database.grant.findMany({
-    where: { isFlow: 1, isActive: 1, isTopLevel: 0 },
+    where: { isFlow: true, isActive: true, isTopLevel: false },
     orderBy: { title: "asc" },
   })
 

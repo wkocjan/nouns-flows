@@ -10,7 +10,7 @@ export function isGrantChallenged(grant: Grant) {
   const { status, isDisputed, isResolved } = grant
 
   if (status === Status.ClearingRequested) return true
-  return status === Status.RegistrationRequested && isDisputed === 1 && isResolved === 0
+  return status === Status.RegistrationRequested && isDisputed && !isResolved
 }
 
 export function isGrantAwaiting(grant: Grant) {

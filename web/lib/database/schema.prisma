@@ -126,15 +126,15 @@ view Grant {
   flowId                           String  @map("flow_id")
   submitter                        String
   parentContract                   String  @map("parent_contract")
-  isTopLevel                       Int     @map("is_top_level")
-  isFlow                           Int     @map("is_flow")
+  isTopLevel                       Boolean @map("is_top_level")
+  isFlow                           Boolean @map("is_flow")
   title                            String
   description                      String
   image                            String
   tagline                          String?
   url                              String?
-  isRemoved                        Int     @map("is_removed")
-  isActive                         Int     @map("is_active")
+  isRemoved                        Boolean @map("is_removed")
+  isActive                         Boolean @map("is_active")
   votesCount                       String  @map("votes_count")
   monthlyIncomingFlowRate          String  @map("monthly_incoming_flow_rate")
   monthlyIncomingBaselineFlowRate  String  @map("monthly_incoming_baseline_flow_rate")
@@ -155,8 +155,8 @@ view Grant {
   tokenEmitter                     String  @unique @map("token_emitter")
   status                           Int
   challengePeriodEndsAt            Int     @map("challenge_period_ends_at")
-  isDisputed                       Int     @map("is_disputed")
-  isResolved                       Int     @map("is_resolved")
+  isDisputed                       Boolean @map("is_disputed")
+  isResolved                       Boolean @map("is_resolved")
   evidenceGroupID                  String  @unique @map("evidence_group_id")
   createdAt                        Int     @map("created_at")
   updatedAt                        Int     @map("updated_at")
@@ -185,15 +185,15 @@ view Grant {
 }
 
 view Vote {
-  id          String @id
+  id          String  @id
   contract    String
-  recipientId String @map("recipient_id")
-  tokenId     String @map("token_id")
+  recipientId String  @map("recipient_id")
+  tokenId     String  @map("token_id")
   bps         Int
   voter       String
-  blockNumber String @map("block_number")
-  isStale     Int    @map("is_stale")
-  votesCount  String @map("votes_count")
+  blockNumber String  @map("block_number")
+  isStale     Boolean @map("is_stale")
+  votesCount  String  @map("votes_count")
 
   @@index([contract])
   @@index([recipientId])
@@ -225,7 +225,7 @@ view Dispute {
   ruling               Int
   creationBlock        Int        @map("creation_block")
   totalSupply          String     @map("total_supply")
-  isExecuted           Int        @map("is_executed")
+  isExecuted           Boolean    @map("is_executed")
   evidenceGroupID      String     @unique @map("evidence_group_id")
   grant                Grant      @relation(fields: [grantId], references: [id])
   evidences            Evidence[]

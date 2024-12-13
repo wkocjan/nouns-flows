@@ -12,7 +12,7 @@ export const getApplicationTemplate = tool({
     const flow = await unstable_cache(
       async () => {
         return database.grant.findFirstOrThrow({
-          where: { id: flowId, isFlow: 1 },
+          where: { id: flowId, isFlow: true },
           select: { derivedData: { select: { template: true } } },
         })
       },

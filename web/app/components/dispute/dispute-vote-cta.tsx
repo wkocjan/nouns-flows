@@ -27,7 +27,7 @@ export function DisputeVoteCta(props: Props) {
 
   const text = (() => {
     switch (true) {
-      case receipt?.hasRevealed && grant.isDisputed === 1:
+      case receipt?.hasRevealed && grant.isDisputed:
         return "Voted"
       case isGrantRejectedOrUnresolved:
         return "View"

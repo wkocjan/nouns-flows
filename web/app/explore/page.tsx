@@ -15,8 +15,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ExplorePage() {
   const flows = await database.grant.findMany({
-    where: { isActive: 1, isFlow: 1, isTopLevel: 0 },
-    include: { subgrants: { where: { isActive: 1 } } },
+    where: { isActive: true, isFlow: true, isTopLevel: false },
+    include: { subgrants: { where: { isActive: true } } },
   })
 
   const pool = await getPool()

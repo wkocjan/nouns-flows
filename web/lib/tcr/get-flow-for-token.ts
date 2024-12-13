@@ -8,7 +8,7 @@ export const getFlowForToken = unstable_cache(
     if (!tokenContract) return null
 
     const flow = await database.grant.findFirst({
-      where: { erc20: tokenContract, isRemoved: 0, isFlow: 1, isActive: 1 },
+      where: { erc20: tokenContract, isRemoved: false, isFlow: true, isActive: true },
     })
 
     return flow

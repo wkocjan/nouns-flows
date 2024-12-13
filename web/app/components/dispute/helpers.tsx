@@ -62,7 +62,7 @@ export function isRequestRejected(grant: Grant, dispute?: Dispute) {
   if (!isExecuted) return false
   if (ruling !== Party.Challenger) return false
 
-  return isDisputed === 0 && isResolved === 1
+  return !isDisputed && isResolved
 }
 
 export function isDisputeWaitingForVoting(

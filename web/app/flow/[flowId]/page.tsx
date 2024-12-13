@@ -21,8 +21,8 @@ export default async function FlowPage(props: Props) {
   const { flowId } = await props.params
 
   const flow = await database.grant.findFirstOrThrow({
-    where: { id: flowId, isActive: 1 },
-    include: { subgrants: { where: { isActive: 1 }, include: { derivedData: true } } },
+    where: { id: flowId, isActive: true },
+    include: { subgrants: { where: { isActive: true }, include: { derivedData: true } } },
   })
 
   if (!flow.subgrants || flow.subgrants.length === 0) {

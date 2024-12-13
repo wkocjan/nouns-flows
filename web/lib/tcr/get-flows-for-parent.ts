@@ -8,11 +8,11 @@ export const getFlowsForParent = unstable_cache(
     if (!parentContract) return []
 
     const grants = await database.grant.findMany({
-      where: { parentContract, isRemoved: 0, isFlow: 1, isActive: 1 },
+      where: { parentContract, isRemoved: false, isFlow: true, isActive: true },
     })
 
     const parent = await database.grant.findFirstOrThrow({
-      where: { recipient: parentContract, isFlow: 1, isActive: 1 },
+      where: { recipient: parentContract, isFlow: true, isActive: true },
     })
 
     return [parent, ...grants]

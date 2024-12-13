@@ -18,7 +18,7 @@ interface Props {
 export const CurationCard = async (props: Props) => {
   const { grant, flow, className } = props
 
-  const isDisputed = grant.isDisputed === 1
+  const isDisputed = grant.isDisputed
 
   const dispute = await database.dispute.findFirst({
     where: { grantId: grant.id },

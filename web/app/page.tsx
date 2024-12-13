@@ -17,7 +17,7 @@ export default async function Home() {
   const [pool, activeFlows] = await Promise.all([
     getPool(),
     database.grant.findMany({
-      where: { isFlow: 1, isActive: 1, isTopLevel: 0 },
+      where: { isFlow: true, isActive: true, isTopLevel: false },
       include: { subgrants: true },
       ...getCacheStrategy(120),
     }),
