@@ -1,15 +1,15 @@
 "use client"
 
 import { Markdown } from "@/components/ui/markdown"
-import Gonzo from "@/public/gonzo.svg"
+import { AgentType } from "@/lib/ai/agents/agent"
 import Flo from "@/public/flo.png"
+import Gonzo from "@/public/gonzo.svg"
 import { Attachment, ToolInvocation } from "ai"
 import Image from "next/image"
 import { ReactNode } from "react"
 import { PreviewAttachment } from "./preview-attachment"
 import { SubmitApplicationResult } from "./tools/submit-application"
-import { UpdateStoryResult } from "./tools/update-story"
-import { AgentType } from "@/lib/ai/agents/agent"
+import { SuccessMessageResult } from "./tools/success-message"
 
 interface Props {
   role: string
@@ -66,7 +66,8 @@ export const MessageItem = (props: Props) => {
                 case "submitApplication":
                   return <SubmitApplicationResult key={toolCallId} draftId={Number(tool.result)} />
                 case "updateStory":
-                  return <UpdateStoryResult key={toolCallId} message={tool.result} />
+                case "updateGrant":
+                  return <SuccessMessageResult key={toolCallId} message={tool.result} />
                 default:
                   return null
               }

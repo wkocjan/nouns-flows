@@ -30,7 +30,7 @@ import { UserProfile } from "@/components/user-profile/user-profile"
 import database from "@/lib/database/edge"
 import { getFlow } from "@/lib/database/queries/flow"
 import { Status } from "@/lib/enums"
-import { getEthAddress } from "@/lib/utils"
+import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import Link from "next/link"
 import { FlowSubmenu } from "../components/flow-submenu"
 import { GrantLogoCell } from "../components/grant-logo-cell"
@@ -45,7 +45,7 @@ interface Props {
 }
 
 export default async function FlowApplicationsPage(props: Props) {
-  const { flowId } = (await props.params)
+  const { flowId } = await props.params
 
   const [flow, grants] = await Promise.all([
     getFlow(flowId),
@@ -90,7 +90,7 @@ export default async function FlowApplicationsPage(props: Props) {
 
             return (
               <TableRow key={grant.id}>
-                <GrantLogoCell image={grant.image} title={grant.title} />
+                <GrantLogoCell image={getIpfsUrl(grant.image)} title={grant.title} />
                 <GrantTitleCell title={grant.title} href={`/application/${grant.id}`} />
                 <TableCell className="max-sm:hidden">
                   <div className="flex space-x-0.5">

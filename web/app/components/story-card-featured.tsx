@@ -10,7 +10,7 @@ export function FeaturedStoryCard(props: { story: Story }) {
   const { header_image, title, tagline, created_at, id, participants } = props.story
 
   return (
-    <div className="group relative isolate flex flex-col justify-between overflow-hidden rounded-xl shadow dark:border md:col-span-2">
+    <div className="group relative isolate flex min-h-72 flex-col justify-between overflow-hidden rounded-xl shadow dark:border md:col-span-2">
       {header_image && (
         <div className="pointer-events-none absolute inset-0 -z-10 size-full overflow-hidden">
           <Image
@@ -31,7 +31,7 @@ export function FeaturedStoryCard(props: { story: Story }) {
           {participants.map((address) => (
             <UserProfile address={address as `0x${string}`} key={address}>
               {(profile) => (
-                <Avatar className="size-5">
+                <Avatar className="size-5 lg:size-6">
                   <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
                 </Avatar>
               )}
@@ -43,15 +43,17 @@ export function FeaturedStoryCard(props: { story: Story }) {
         </p>
       </div>
 
-      <div className="p-4 pt-32 md:p-6">
+      <div className="p-5 pt-36 md:p-6">
         <Link
           href={`/story/${id}`}
           className="text-base font-semibold leading-snug group-hover:text-primary"
         >
-          <h3 className="text-lg font-medium leading-tight text-white md:text-xl">{title}</h3>
+          <h3 className="text-balance text-lg font-medium leading-tight text-white md:text-xl">
+            {title}
+          </h3>
           <span className="absolute inset-0" />
         </Link>
-        <p className="mt-1.5 text-sm text-white/80">{tagline}</p>
+        <p className="mt-1.5 text-pretty text-sm text-white/80">{tagline}</p>
       </div>
     </div>
   )

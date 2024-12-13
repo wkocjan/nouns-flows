@@ -1,7 +1,4 @@
-import { Comments } from "@/components/comments/comments"
-import { AnimatedSalary } from "@/components/global/animated-salary"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
+import { AgentChatProvider } from "@/app/chat/components/agent-chat"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,201 +7,161 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Currency } from "@/components/ui/currency"
-import { Markdown } from "@/components/ui/markdown"
-import { UserProfile } from "@/components/user-profile/user-profile"
-import database from "@/lib/database/edge"
-import { getPool } from "@/lib/database/queries/pool"
-import { getEthAddress, getIpfsUrl } from "@/lib/utils"
+import { Icon } from "@/components/ui/icon"
+import { getUser } from "@/lib/auth/user"
+import database, { getCacheStrategy } from "@/lib/database/edge"
 import { Metadata } from "next"
-import Image from "next/image"
-import { ClaimableBalance } from "./components/claimable-balance"
-import { CurationCard } from "./components/curation-card"
-import { Updates } from "./components/updates"
-import { UserVotes } from "./components/user-votes"
-import { Voters } from "./components/voters"
-import { getGrantCasts } from "@/lib/embedding/get-grant-casts"
+import { notFound, redirect } from "next/navigation"
 import { Suspense } from "react"
+import { Builder } from "./cards/builder"
+import { CoverImage } from "./cards/cover-image"
+import { FocusCard } from "./cards/focus"
+import { HowCard } from "./cards/how"
+import { Media } from "./cards/media"
+import { Metrics } from "./cards/metrics"
+import { Plan } from "./cards/plan"
+import { Stats } from "./cards/stats"
+import { Timeline } from "./cards/timeline"
+import { Voters } from "./cards/voters"
+import { WhoCard } from "./cards/who"
+import { WhyCard } from "./cards/why"
+import { BgGradient } from "./components/bg-gradient"
+import { CurationCard } from "./components/curation-card"
+import { GrantChat } from "./components/grant-chat"
+import { GrantStories } from "./components/grant-stories"
+import { GrantPageData } from "./page-data/schema"
+
+interface Props {
+  params: Promise<{ grantId: string }>
+}
 
 export const runtime = "nodejs"
 
-interface Props {
-  params: Promise<{
-    grantId: string
-  }>
-}
-
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { grantId } = (await props.params)
-
-  const pool = await getPool()
+  const { grantId } = await props.params
 
   const grant = await database.grant.findFirstOrThrow({
     where: { id: grantId, isTopLevel: 0 },
     select: { title: true, tagline: true },
+    ...getCacheStrategy(1200),
   })
 
-  return { title: `${grant.title} - ${pool.title}`, description: grant.tagline }
+  return { title: grant.title, description: grant.tagline }
 }
 
 export default async function GrantPage(props: Props) {
-  const params = await props.params;
-  const { grantId } = params
+  const { grantId } = await props.params
 
-  const grant = await database.grant.findUniqueOrThrow({
+  const { flow, ...grant } = await database.grant.findUniqueOrThrow({
     where: { id: grantId, isActive: 1, isTopLevel: 0 },
-    include: {
-      flow: true,
-      disputes: {
-        orderBy: { creationBlock: "desc" },
-        include: { evidences: true },
-        take: 1,
-      },
-    },
+    include: { flow: true, derivedData: { select: { pageData: true } } },
+    ...getCacheStrategy(600), // ToDo: Invalidate on edit
   })
 
-  const { title, tagline, description, flow, image, votesCount, parentContract, isFlow } = grant
+  if (grant.isFlow) return redirect(`/flow/${grant.id}/about`)
+
+  const data = JSON.parse(grant.derivedData?.pageData ?? "null") as GrantPageData | null
+  if (!data || Object.keys(data).length === 0) notFound()
+
+  const { why, focus, who, how, builder, title } = data
+
+  const user = await getUser()
 
   return (
-    <div className="container mt-2.5 pb-24 md:mt-6">
-      <Breadcrumb className="mb-4">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/">Flows</BreadcrumbLink>
-          </BreadcrumbItem>
-
-          <BreadcrumbSeparator />
-
-          {isFlow === 0 && (
+    <AgentChatProvider
+      id={`grant-${grant.id}-${user?.address}`}
+      type="flo"
+      user={user}
+      data={{ grantId: grant.id }}
+    >
+      <div className="container mt-2.5 pb-24 md:mt-6">
+        <Breadcrumb className="mb-6">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Flows</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink href={`/flow/${flow.id}`}>{flow.title}</BreadcrumbLink>
             </BreadcrumbItem>
-          )}
-
-          {isFlow === 1 && (
-            <BreadcrumbItem>
-              <BreadcrumbLink href={`/flow/${grant.id}`}>{grant.title}</BreadcrumbLink>
+            <BreadcrumbSeparator className="max-sm:hidden" />
+            <BreadcrumbItem className="max-sm:hidden">
+              <BreadcrumbPage>{title}</BreadcrumbPage>
             </BreadcrumbItem>
-          )}
+          </BreadcrumbList>
+        </Breadcrumb>
 
-          <BreadcrumbSeparator />
+        <div className="grid grid-cols-12 gap-x-2 gap-y-4 lg:gap-x-4">
+          <CoverImage coverImage={data.coverImage} title={title} tagline={data.tagline} />
 
-          <BreadcrumbItem>
-            <BreadcrumbPage>{isFlow ? "Flow details" : title}</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+          <div className="col-span-full grid grid-cols-1 gap-x-3 gap-y-4 lg:col-span-5 lg:grid-cols-2 lg:gap-x-4">
+            <div className="flex flex-col gap-4">
+              <HowCard gradient={how.gradient} icon={how.icon} text={how.text} />
+              <WhoCard gradient={who.gradient} text={who.text} recipient={grant.recipient} />
+            </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-5">
-        <div className="md:col-span-3">
-          <div className="flex items-center space-x-4">
-            <Image
-              src={getIpfsUrl(image)}
-              alt={title}
-              width={64}
-              height={64}
-              className="size-16 shrink-0 rounded-md object-cover"
-            />
-            <div>
-              <h1 className="text-xl font-bold md:text-3xl">{title}</h1>
-              <p className="text-base text-muted-foreground md:text-lg">{tagline}</p>
+            <div className="flex flex-col gap-4">
+              <FocusCard gradient={focus.gradient} text={focus.text} />
+              <WhyCard image={why.image} text={why.text} />
             </div>
           </div>
 
-          <div className="mb-12 mt-6 space-y-5 text-pretty text-sm md:text-base">
-            <Markdown>{description}</Markdown>
+          <Metrics metrics={data.metrics} />
+
+          <Builder
+            tags={builder.tags}
+            bio={builder.bio}
+            links={builder.links}
+            recipient={grant.recipient as `0x${string}`}
+          />
+
+          {data.cards.map((card) => (
+            <div
+              key={card.title}
+              className="col-span-full rounded-xl border bg-card p-5 lg:col-span-4"
+            >
+              <div className="flex flex-col items-start gap-4">
+                <Icon name={card.icon} className="size-9 text-primary" />
+                <h3 className="font-bold tracking-tight">{card.title}</h3>
+                <p className="leading-relaxed opacity-60 max-sm:text-sm">{card.description}</p>
+              </div>
+            </div>
+          ))}
+
+          <Media media={data.media} />
+        </div>
+
+        <div className="relative mt-4 grid grid-cols-12 gap-4">
+          <BgGradient />
+
+          <div className="col-span-full lg:col-span-4">
+            <Timeline timeline={data.timeline} />
           </div>
 
-          {!isFlow && (
-            <Suspense fallback={<div>Loading...</div>}>
-              <Updates
-                casts={await getGrantCasts({ grantId: grant.id })}
-                recipient={grant.recipient}
+          <div className="col-span-full flex flex-col space-y-4 lg:col-span-4">
+            <Stats grant={grant} />
+
+            <Suspense>
+              <Voters
+                contract={grant.parentContract as `0x${string}`}
+                grantId={grant.id}
+                flowVotesCount={flow.votesCount}
               />
             </Suspense>
-          )}
+          </div>
+
+          <div className="col-span-full lg:col-span-4">
+            <Suspense>
+              <CurationCard grant={grant} flow={flow} className="h-full" />
+            </Suspense>
+          </div>
         </div>
 
-        <div className="space-y-4 md:col-span-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>About</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-                {!isFlow && (
-                  <div>
-                    <h4 className="text-[13px] text-muted-foreground">Builders</h4>
-                    <div className="mt-1 flex space-x-0.5">
-                      <UserProfile address={getEthAddress(grant.recipient)} key={grant.recipient}>
-                        {(profile) => (
-                          <Avatar className="size-7 bg-accent text-xs">
-                            <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
-                            <AvatarFallback>{profile.display_name[0].toUpperCase()}</AvatarFallback>
-                          </Avatar>
-                        )}
-                      </UserProfile>
-                    </div>
-                  </div>
-                )}
-                <div>
-                  <h4 className="text-[13px] text-muted-foreground">Monthly budget</h4>
-                  <Badge className="mt-2">
-                    <Currency>{grant.monthlyIncomingFlowRate}</Currency>
-                    /mo
-                  </Badge>
-                </div>
-                <div>
-                  <h4 className="text-[13px] text-muted-foreground">
-                    {isFlow ? "Paid out" : "Total Earned"}
-                  </h4>
-                  <p className="mt-1 text-lg font-medium">
-                    <AnimatedSalary
-                      value={grant.totalEarned}
-                      monthlyRate={grant.monthlyIncomingFlowRate}
-                    />
-                  </p>
-                </div>
-                <div>
-                  <h4 className="text-[13px] text-muted-foreground">Community Votes</h4>
-                  <p className="mt-1 text-lg font-medium">{grant.votesCount}</p>
-                </div>
-                <div>
-                  <h4 className="text-[13px] text-muted-foreground">Your Vote</h4>
-                  <p className="mt-1 text-lg font-medium">
-                    <UserVotes recipientId={grant.id} contract={getEthAddress(parentContract)} />
-                  </p>
-                </div>
-                <ClaimableBalance
-                  flow={getEthAddress(grant.parentContract)}
-                  recipient={grant.recipient}
-                  pools={[grant.flow.baselinePool, grant.flow.bonusPool].map((pool) =>
-                    getEthAddress(pool),
-                  )}
-                />
-              </div>
-            </CardContent>
-          </Card>
+        <Plan plan={data.plan} className="mt-10" />
 
-          <CurationCard grant={grant} flow={flow} dispute={grant.disputes?.[0]} />
-
-          {Number(votesCount) > 0 && (
-            <Voters contract={getEthAddress(parentContract)} recipientId={grant.id} />
-          )}
-
-          {!isFlow && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Comments</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Comments commentableId={grant.id} maxHeight={450} />
-              </CardContent>
-            </Card>
-          )}
-        </div>
+        <GrantStories grantId={grant.id} className="mt-10" />
       </div>
-    </div>
+      <GrantChat grant={grant} user={user} />
+    </AgentChatProvider>
   )
 }

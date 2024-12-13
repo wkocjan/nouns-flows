@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { erc20VotesArbitratorImplAbi } from "@/lib/abis"
 import { useDisputeVote } from "@/lib/tcr/dispute/use-dispute-votes"
 import { useArbitratorData } from "@/lib/tcr/use-arbitrator-data"
-import { cn, getEthAddress } from "@/lib/utils"
+import { getEthAddress } from "@/lib/utils"
 import { useContractTransaction } from "@/lib/wagmi/use-contract-transaction"
 import { Dispute, DisputeVote, Grant } from "@prisma/flows"
 import { ThickArrowDownIcon, ThickArrowUpIcon } from "@radix-ui/react-icons"
@@ -76,7 +76,11 @@ export function DisputeUserVote(props: Props) {
   }
 
   if (isVotingClosed) {
-    return <div className="text-sm">Voting is over. You didn&apos;t vote in this dispute.</div>
+    return (
+      <div className="text-sm text-muted-foreground">
+        Voting is over. You didn&apos;t vote in this dispute.
+      </div>
+    )
   }
 
   return (
@@ -155,8 +159,10 @@ export function DisputeUserVote(props: Props) {
 
 const UnrevealedVote = () => (
   <div className="space-y-4 text-sm">
-    <h3 className="font-medium">Your vote was not revealed in time</h3>
-    <p>This is a bug on our side. Please contact rocketman ASAP.</p>
+    <h3 className="font-medium text-muted-foreground">Your vote was not revealed in time</h3>
+    <p className="text-muted-foreground">
+      This is a bug on our side. Please contact rocketman ASAP.
+    </p>
   </div>
 )
 
@@ -164,7 +170,7 @@ const RevealedVote = ({ disputeVote, grant }: { disputeVote: DisputeVote; grant:
   const mirrored = grant.isActive
 
   return (
-    <div className="space-y-4 text-sm">
+    <div className="space-y-4 text-sm text-muted-foreground">
       <p>Your vote has been revealed and counted.</p>
       <p>
         You voted{" "}

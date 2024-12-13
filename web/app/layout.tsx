@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { getUser, hasSession } from "@/lib/auth/user"
 import { getPool } from "@/lib/database/queries/pool"
+import { isProduction } from "@/lib/utils"
 import Wagmi from "@/lib/wagmi/wagmi-provider"
 import Noggles from "@/public/noggles.svg"
 import { Analytics } from "@vercel/analytics/react"
@@ -40,7 +41,7 @@ export default async function RootLayout(props: Readonly<{ children: React.React
   return (
     <html lang="en" suppressHydrationWarning className="h-full">
       <body className={`${mono.variable} flex h-full flex-col`}>
-        <RefreshOnFocus />
+        {isProduction() && <RefreshOnFocus />}
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

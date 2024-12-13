@@ -12,5 +12,6 @@ export type ChatBody = {
 export type ChatData = {
   address?: string
   flowId?: string
+  grantId?: string
   storyId?: string
 }

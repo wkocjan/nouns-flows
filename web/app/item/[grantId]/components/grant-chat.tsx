@@ -6,22 +6,22 @@ import { MultimodalInput } from "@/app/chat/components/multimodal-input"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { User } from "@/lib/auth/user"
-import { canEditStory } from "@/lib/database/helpers"
-import { Story } from "@prisma/flows"
+import { canEditGrant } from "@/lib/database/helpers"
+import { Grant } from "@prisma/flows"
 import { RotateCcw } from "lucide-react"
 import { useState } from "react"
 
 interface Props {
   user?: User
-  story: Story
+  grant: Grant
 }
 
-export function StoryChat(props: Props) {
-  const { user, story } = props
+export function GrantChat(props: Props) {
+  const { user, grant } = props
   const [isOpen, setIsOpen] = useState(false)
   const { messages, restart } = useAgentChat()
 
-  const canEdit = canEditStory(story, user?.address)
+  const canEdit = canEditGrant(grant, user?.address)
 
   return (
     <>
@@ -37,18 +37,17 @@ export function StoryChat(props: Props) {
         <MultimodalInput
           rows={1}
           className="rounded-xl border border-background md:max-w-2xl"
-          placeholder={canEdit ? `Edit this story...` : `Ask about this story...`}
+          placeholder={canEdit ? `Edit this grant...` : `Ask about this grant...`}
           onSubmit={() => {
             if (!isOpen) setIsOpen(true)
           }}
-          autoFocus
         />
       </div>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-w-screen-md pb-0 max-sm:px-0">
           <DialogHeader className="max-sm:px-4">
             <DialogTitle className="flex items-center">
-              Ask about {story.title}
+              Ask about {grant.title}
               <Button
                 variant="ghost"
                 size="icon"
@@ -62,7 +61,7 @@ export function StoryChat(props: Props) {
           </DialogHeader>
           <div className="flex h-[calc(100dvh-100px)] min-w-0 flex-col">
             {user && messages.length > 0 && <Messages />}
-            <MultimodalInput className="bg-background p-2" />
+            <MultimodalInput className="bg-background p-2" autoFocus />
           </div>
         </DialogContent>
       </Dialog>

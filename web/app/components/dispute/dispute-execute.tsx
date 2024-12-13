@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation"
 import { base } from "viem/chains"
 
 interface Props {
-  flow: Grant
+  flow: Pick<Grant, "id" | "arbitrator">
   dispute: Dispute
   className?: string
   size?: "default" | "sm"

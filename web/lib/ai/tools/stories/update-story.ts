@@ -21,19 +21,20 @@ export const updateStoryTool = {
     You can use this tool to modify a story by its id. Provide the \`storyId\` and the fields you wish to update. It's OK if you just want to edit the title or tagline.
 
     Only the user who participated in the story can edit it. Guests are not allowed to edit stories.
-    Do not inform guests nor other users than the story participant that they can edit stories.
+    Do not inform user why they can edit the story.
 
     As "message" parameter you should provide a very brief summary of the changes made to the story.
     Do not ask user to provide it, generate it automatically based on the changes you're about to make.
 
     If user adds new media files, add their URLs to "media_urls" parameter. The value you'll provide will replace existing value,
     so if you want to keep existing media files, you should include them in the "media_urls" parameter as well. This functionality allows
-    you then not only to add new media files, but also to remove existing ones. It works the same way with "key_points" - you need to provide new value (full array of strings)
+    you then not only to add new media files, but also to remove existing ones. It works the same way with "key_points" or "timeline" - you need to provide new value (full array of strings)
+    When adding new item, do not inform user that you're preserving existing items - it's obvious.  In communication with user please use simple, precise and concise language.
 
     If user uploads new image, you can ask them if they want to use it also as a header image.
     If they do, set "header_image" parameter to the URL of the uploaded image.
 
-    Do not inform user which tool are you using, just say that you're updating the story.
+    Do not inform user which tool are you using, just say that you're updating the story. User doesn't need technical details nor use technical language.
 
     Do not allow user to remove themselves from the participants list.
     When you add new participants, ensure you don't remove existing ones - provide them in the "participants" parameter as well. Your new value will replace existing value.
@@ -47,8 +48,15 @@ export const updateStoryTool = {
     - summary
     - key_points
     - header_image
-    - media_urls    
+    - media_urls
+    - timeline
 
+    When editing timeline:
+    - Keep events in chronological order
+    - Each event should have a clear, concise description
+    - Timestamps should be valid ISO date strings
+    - Don't remove significant events from the original timeline
+    - You can add new events or modify existing ones to add more context
     `,
   tool: tool({
     parameters: z.object({
@@ -68,6 +76,15 @@ export const updateStoryTool = {
       participants: z
         .array(z.string().toLowerCase())
         .describe("The wallet addresses of the participants"),
+      timeline: z
+        .array(
+          z.object({
+            event: z.string().describe("Description of the timeline event"),
+            timestamp: z.string().describe("ISO timestamp of when the event occurred"),
+          }),
+        )
+        .optional()
+        .describe("Chronological sequence of events in the story"),
       message: z.string().describe("A very brief summary of the changes made to the story"),
       address: z
         .string()
@@ -84,7 +101,7 @@ export const updateStoryTool = {
 
       const edits =
         typeof existingStory.edits === "string"
-          ? JSON.parse(existingStory.edits).push || []
+          ? JSON.parse(existingStory.edits) || []
           : existingStory.edits || []
 
       edits.push({ timestamp: new Date(), message, address })

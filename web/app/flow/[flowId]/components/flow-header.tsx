@@ -39,13 +39,13 @@ export const FlowHeader = (props: Props) => {
         <div>
           <div className="flex items-center space-x-2">
             <Link
-              href={`/item/${flow.id}`}
+              href={`/flow/${flow.id}/about`}
               className="text-lg font-semibold hover:text-primary md:text-xl"
             >
               {flow.title}
             </Link>
             {flow.status === Status.ClearingRequested && (
-              <Link href={`/item/${flow.id}`}>
+              <Link href={`/flow/${flow.id}/about`}>
                 <Badge variant="destructive">Removal Requested</Badge>
               </Link>
             )}

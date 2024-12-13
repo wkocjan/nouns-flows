@@ -22,16 +22,16 @@ export async function POST(request: Request) {
 
     const coreMessages = convertToCoreMessages(messages)
 
-    const result = await streamText({
+    const result = streamText({
       model: anthropic("claude-3-5-sonnet-20241022"),
       system: agent.prompt + getAttachmentsPrompt(coreMessages) + context,
       messages: coreMessages,
       tools: agent.tools,
       maxSteps: 7,
-      onFinish: async ({ responseMessages }) => {
+      onFinish: async ({ response }) => {
         saveConversation({
           ...body,
-          messages: [...coreMessages, ...responseMessages],
+          messages: [...coreMessages, ...response.messages],
           address,
         })
       },
@@ -44,6 +44,7 @@ export async function POST(request: Request) {
       },
     })
   } catch (error) {
+    console.error((error as any).message)
     return new Response((error as any).message || "Internal server error", { status: 500 })
   }
 }
