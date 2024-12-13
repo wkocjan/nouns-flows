@@ -6,13 +6,17 @@ import { NextResponse } from "next/server"
 
 export const maxDuration = 300
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url)
+    const grantId = searchParams.get("grantId")
+
     const grants = await database.grant.findMany({
       where: {
         isFlow: false,
         isActive: true,
         OR: [{ derivedData: null }, { derivedData: { pageData: null } }],
+        ...(grantId ? { id: grantId } : {}),
       },
       take: 3,
     })

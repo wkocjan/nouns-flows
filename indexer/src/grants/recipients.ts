@@ -1,7 +1,8 @@
+import { and, eq } from "ponder"
 import { ponder, type Context, type Event } from "ponder:registry"
-import { addGrantEmbedding, removeGrantEmbedding } from "./embeddings/embed-grants"
 import { grants } from "../../ponder.schema"
-import { eq, and } from "ponder"
+import { updateGrantPage } from "../grant-page/update-grant-page"
+import { addGrantEmbedding, removeGrantEmbedding } from "./embeddings/embed-grants"
 
 ponder.on("NounsFlowChildren:RecipientCreated", handleRecipientCreated)
 ponder.on("NounsFlow:RecipientCreated", handleRecipientCreated)
@@ -66,6 +67,10 @@ async function handleRecipientCreated(params: {
   })
 
   await addGrantEmbedding(grant, recipientType, parentFlow.id)
+
+  if (!grant.isFlow) {
+    await updateGrantPage(grant.id)
+  }
 }
 
 async function handleRecipientRemoved(params: {
