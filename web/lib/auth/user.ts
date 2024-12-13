@@ -22,8 +22,7 @@ export const getUser = cache(async () => {
 
   return {
     address,
-    username:
-      farcasterUser?.fname || (await getEnsNameFromAddress(address)) || getShortEthAddress(address),
+    username: farcasterUser?.fname || (await getEnsNameFromAddress(address)) || "",
     avatar: farcasterUser?.avatar_url || (await getEnsAvatar(address)) || undefined,
     fid: Number(farcasterUser?.fid),
   } satisfies User
