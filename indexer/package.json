@@ -13,7 +13,7 @@
   "dependencies": {
     "@vercel/kv": "^3.0.0",
     "hono": "^4.6.3",
-    "ponder": "^0.8.1",
+    "ponder": "^0.8.2",
     "viem": "^2.21.54"
   },
   "devDependencies": {

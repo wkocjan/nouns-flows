@@ -28,37 +28,41 @@ async function handleMemberUnitsUpdated(params: {
     throw new Error(`Parent grant not found: ${pool}`)
   }
 
+  if (parentGrant.recipient === member.toLowerCase()) {
+    // This is a flow updating it's member units on itself on initialization, skipping...
+    return
+  }
+
   const shouldUpdateBaseline = parentGrant.baselinePool === pool
   const shouldUpdateBonus = parentGrant.bonusPool === pool
 
-  if (shouldUpdateBaseline) {
-    await context.db.sql
-      .update(grants)
-      .set({
-        baselineMemberUnits: newUnits.toString(),
-        updatedAt: Number(event.block.timestamp),
-      })
-      .where(
-        and(
-          eq(grants.parentContract, parentGrant.recipient),
-          eq(grants.recipient, member.toLowerCase())
-        )
+  const [grant] = await context.db.sql
+    .select()
+    .from(grants)
+    .where(
+      and(
+        eq(grants.recipient, member.toLowerCase()),
+        eq(grants.parentContract, parentGrant.recipient)
       )
+    )
+    .limit(1)
+
+  if (!grant) {
+    throw new Error(`Grant not found: ${member}`)
+  }
+
+  if (shouldUpdateBaseline) {
+    await context.db.update(grants, { id: grant.id }).set({
+      baselineMemberUnits: newUnits.toString(),
+      updatedAt: Number(event.block.timestamp),
+    })
   }
 
   if (shouldUpdateBonus) {
-    await context.db.sql
-      .update(grants)
-      .set({
-        bonusMemberUnits: newUnits.toString(),
-        updatedAt: Number(event.block.timestamp),
-      })
-      .where(
-        and(
-          eq(grants.parentContract, parentGrant.recipient),
-          eq(grants.recipient, member.toLowerCase())
-        )
-      )
+    await context.db.update(grants, { id: grant.id }).set({
+      bonusMemberUnits: newUnits.toString(),
+      updatedAt: Number(event.block.timestamp),
+    })
   }
 
   await handleIncomingFlowRates(context.db, parentGrant.recipient)

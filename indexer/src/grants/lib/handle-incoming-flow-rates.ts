@@ -67,13 +67,10 @@ export async function handleIncomingFlowRates(db: Context["db"], parentContract:
       throw new Error(`Invalid monthly incoming flow rate: ${monthlyIncomingFlowRate}`)
     }
 
-    await db.sql
-      .update(grants)
-      .set({
-        monthlyIncomingFlowRate: monthlyIncomingFlowRate.toString(),
-        monthlyIncomingBaselineFlowRate: monthlyIncomingBaselineFlowRate.toString(),
-        monthlyIncomingBonusFlowRate: monthlyIncomingBonusFlowRate.toString(),
-      })
-      .where(eq(grants.id, sibling.id))
+    await db.update(grants, { id: sibling.id }).set({
+      monthlyIncomingFlowRate: monthlyIncomingFlowRate.toString(),
+      monthlyIncomingBaselineFlowRate: monthlyIncomingBaselineFlowRate.toString(),
+      monthlyIncomingBonusFlowRate: monthlyIncomingBonusFlowRate.toString(),
+    })
   }
 }

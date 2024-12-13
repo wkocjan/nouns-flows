@@ -13,11 +13,19 @@ async function handleMetadataSet(params: {
   const { metadata } = event.args
   const flow = event.log.address.toLowerCase()
 
-  await context.db.sql
-    .update(grants)
-    .set({
-      ...metadata,
-      updatedAt: Number(event.block.timestamp),
-    })
+  const [grant] = await context.db.sql
+    .select()
+    .from(grants)
     .where(and(eq(grants.recipient, flow), eq(grants.isFlow, true)))
+    .limit(1)
+
+  if (!grant) {
+    console.error({ flow })
+    throw new Error(`Grant not found: ${flow}`)
+  }
+
+  await context.db.update(grants, { id: grant.id }).set({
+    ...metadata,
+    updatedAt: Number(event.block.timestamp),
+  })
 }
