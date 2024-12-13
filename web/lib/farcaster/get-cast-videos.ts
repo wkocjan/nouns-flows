@@ -1,5 +1,8 @@
-import { EmbedUrl } from "@neynar/nodejs-sdk/build/neynar-api/v2"
 import { Cast } from "@prisma/farcaster"
+
+interface EmbedUrl {
+  url: string
+}
 
 export function getCastVideos(cast: Cast): string[] {
   return JSON.parse(cast.embeds || "[]")

@@ -1,7 +1,5 @@
 "use server"
 
-import { v4 as uuidv4 } from "uuid"
-
 interface KeyResponse {
   pinata_api_key: string
   pinata_api_secret: string
@@ -17,7 +15,7 @@ export async function createKey(): Promise<KeyResponse | null> {
         Authorization: `Bearer ${process.env.PINATA_JWT}`,
       },
       body: JSON.stringify({
-        keyName: uuidv4().toString(),
+        keyName: Math.random().toString(36).substring(2) + Date.now().toString(36),
         permissions: { endpoints: { pinning: { pinFileToIPFS: true } } },
         maxUses: 1,
       }),
