@@ -123,50 +123,50 @@ model Story {
 view Grant {
   id                               String  @id
   recipient                        String
-  flowId                           String
+  flowId                           String  @map("flow_id")
   submitter                        String
-  parentContract                   String
-  isTopLevel                       Int
-  isFlow                           Int
+  parentContract                   String  @map("parent_contract")
+  isTopLevel                       Int     @map("is_top_level")
+  isFlow                           Int     @map("is_flow")
   title                            String
   description                      String
   image                            String
   tagline                          String?
   url                              String?
-  isRemoved                        Int
-  isActive                         Int
-  votesCount                       String
-  monthlyIncomingFlowRate          String
-  monthlyIncomingBaselineFlowRate  String
-  monthlyIncomingBonusFlowRate     String
-  monthlyOutgoingFlowRate          String
-  monthlyRewardPoolFlowRate        String
-  monthlyBaselinePoolFlowRate      String
-  monthlyBonusPoolFlowRate         String
-  bonusMemberUnits                 String
-  baselineMemberUnits              String
-  totalEarned                      String
-  activeRecipientCount             Int
-  awaitingRecipientCount           Int
-  challengedRecipientCount         Int
+  isRemoved                        Int     @map("is_removed")
+  isActive                         Int     @map("is_active")
+  votesCount                       String  @map("votes_count")
+  monthlyIncomingFlowRate          String  @map("monthly_incoming_flow_rate")
+  monthlyIncomingBaselineFlowRate  String  @map("monthly_incoming_baseline_flow_rate")
+  monthlyIncomingBonusFlowRate     String  @map("monthly_incoming_bonus_flow_rate")
+  monthlyOutgoingFlowRate          String  @map("monthly_outgoing_flow_rate")
+  monthlyRewardPoolFlowRate        String  @map("monthly_reward_pool_flow_rate")
+  monthlyBaselinePoolFlowRate      String  @map("monthly_baseline_pool_flow_rate")
+  monthlyBonusPoolFlowRate         String  @map("monthly_bonus_pool_flow_rate")
+  bonusMemberUnits                 String  @map("bonus_member_units")
+  baselineMemberUnits              String  @map("baseline_member_units")
+  totalEarned                      String  @map("total_earned")
+  activeRecipientCount             Int     @map("active_recipient_count")
+  awaitingRecipientCount           Int     @map("awaiting_recipient_count")
+  challengedRecipientCount         Int     @map("challenged_recipient_count")
   tcr                              String  @unique
   erc20                            String  @unique
   arbitrator                       String  @unique
-  tokenEmitter                     String  @unique
+  tokenEmitter                     String  @unique @map("token_emitter")
   status                           Int
-  challengePeriodEndsAt            Int
-  isDisputed                       Int
-  isResolved                       Int
-  evidenceGroupID                  String  @unique
-  createdAt                        Int
-  updatedAt                        Int
-  baselinePool                     String
-  bonusPool                        String
-  managerRewardPool                String
-  superToken                       String
-  managerRewardSuperfluidPool      String
-  managerRewardPoolFlowRatePercent Int
-  baselinePoolFlowRatePercent      Int
+  challengePeriodEndsAt            Int     @map("challenge_period_ends_at")
+  isDisputed                       Int     @map("is_disputed")
+  isResolved                       Int     @map("is_resolved")
+  evidenceGroupID                  String  @unique @map("evidence_group_id")
+  createdAt                        Int     @map("created_at")
+  updatedAt                        Int     @map("updated_at")
+  baselinePool                     String  @map("baseline_pool")
+  bonusPool                        String  @map("bonus_pool")
+  managerRewardPool                String  @map("manager_reward_pool")
+  superToken                       String  @map("super_token")
+  managerRewardSuperfluidPool      String  @map("manager_reward_superfluid_pool")
+  managerRewardPoolFlowRatePercent Int     @map("manager_reward_pool_flow_rate_percent")
+  baselinePoolFlowRatePercent      Int     @map("baseline_pool_flow_rate_percent")
 
   flow         Grant         @relation("Subgrants", fields: [flowId], references: [id])
   subgrants    Grant[]       @relation("Subgrants")
@@ -176,29 +176,29 @@ view Grant {
   evidences    Evidence[]
   derivedData  DerivedData?
 
-  @@map("Grant")
-  @@schema("public")
   @@index([isTopLevel])
   @@index([isFlow])
-  @@index([isActive]) 
+  @@index([isActive])
   @@index([isTopLevel, isFlow])
+  @@map("Grant")
+  @@schema("public")
 }
 
 view Vote {
   id          String @id
   contract    String
-  recipientId String
-  tokenId     String
+  recipientId String @map("recipient_id")
+  tokenId     String @map("token_id")
   bps         Int
   voter       String
-  blockNumber String
-  isStale     Int
-  votesCount  String
+  blockNumber String @map("block_number")
+  isStale     Int    @map("is_stale")
+  votesCount  String @map("votes_count")
 
-  @@schema("public")
   @@index([contract])
   @@index([recipientId])
   @@index([isStale])
+  @@schema("public")
 }
 
 view PonderMeta {
@@ -211,22 +211,22 @@ view PonderMeta {
 
 view Dispute {
   id                   String     @id
-  disputeId            String
+  disputeId            String     @map("dispute_id")
   arbitrator           String
   arbitrable           String
-  grantId              String
+  grantId              String     @map("grant_id")
   challenger           String
-  votingStartTime      Int
-  votingEndTime        Int
-  revealPeriodEndTime  Int
+  votingStartTime      Int        @map("voting_start_time")
+  votingEndTime        Int        @map("voting_end_time")
+  revealPeriodEndTime  Int        @map("reveal_period_end_time")
   votes                String
-  requesterPartyVotes  String
-  challengerPartyVotes String
+  requesterPartyVotes  String     @map("requester_party_votes")
+  challengerPartyVotes String     @map("challenger_party_votes")
   ruling               Int
-  creationBlock        Int
-  totalSupply          String
-  isExecuted           Int
-  evidenceGroupID      String     @unique
+  creationBlock        Int        @map("creation_block")
+  totalSupply          String     @map("total_supply")
+  isExecuted           Int        @map("is_executed")
+  evidenceGroupID      String     @unique @map("evidence_group_id")
   grant                Grant      @relation(fields: [grantId], references: [id])
   evidences            Evidence[]
 
@@ -236,46 +236,46 @@ view Dispute {
 view DisputeVote {
   id          String  @id
   arbitrator  String
-  disputeId   String
-  commitHash  String
+  disputeId   String  @map("dispute_id")
+  commitHash  String  @map("commit_hash")
   voter       String
   choice      Int?
   votes       String?
   reason      String?
-  committedAt Int
-  revealedBy  String?
-  revealedAt  Int?
+  committedAt Int     @map("committed_at")
+  revealedBy  String? @map("revealed_by")
+  revealedAt  Int?    @map("revealed_at")
 
   @@unique([disputeId, arbitrator, voter])
-  @@schema("public")
   @@index([voter])
+  @@schema("public")
 }
 
 view TokenHolder {
   id            String @id
-  tokenContract String
+  tokenContract String @map("token_contract")
   flow          Grant  @relation(fields: [tokenContract], references: [erc20])
   holder        String
-  firstPurchase Int
+  firstPurchase Int    @map("first_purchase")
   amount        String
 
   @@unique([tokenContract, holder])
-  @@schema("public")
   @@index([holder])
   @@index([holder, amount])
+  @@schema("public")
 }
 
 view Evidence {
   id              String @id
   arbitrator      String
-  evidenceGroupID String
+  evidenceGroupID String @map("evidence_group_id")
   evidence        String
   party           String
-  blockNumber     String
+  blockNumber     String @map("block_number")
 
   dispute Dispute @relation(fields: [evidenceGroupID], references: [evidenceGroupID])
   grant   Grant   @relation(fields: [evidenceGroupID], references: [evidenceGroupID])
 
-  @@schema("public")
   @@index([evidenceGroupID])
+  @@schema("public")
 }
