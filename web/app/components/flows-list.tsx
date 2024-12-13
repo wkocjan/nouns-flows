@@ -7,7 +7,7 @@ import { FlowCard } from "./flow-card"
 import { FlowsTable } from "./flows-table"
 
 interface Props {
-  flows: Array<Grant & { subgrants: Grant[] }>
+  flows: Array<Grant>
 }
 
 export default function FlowsList(props: Props) {

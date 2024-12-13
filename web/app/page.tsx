@@ -18,7 +18,6 @@ export default async function Home() {
     getPool(),
     database.grant.findMany({
       where: { isFlow: true, isActive: true, isTopLevel: false },
-      include: { subgrants: true },
       ...getCacheStrategy(120),
     }),
   ])
@@ -39,7 +38,7 @@ export default async function Home() {
                 </Link>
               </h3>
               <GrantStatusCountBadges
-                subgrants={pool.subgrants}
+                subgrants={activeFlows}
                 id={pool.id}
                 flow={pool}
                 alwaysShowAll
@@ -61,19 +60,22 @@ export default async function Home() {
     </VotingProvider>
   )
 }
-function sortGrants(a: Grant & { subgrants: Grant[] }, b: Grant & { subgrants: Grant[] }) {
-  const aIsClearingRequested = a.status === Status.ClearingRequested
-  const bIsClearingRequested = b.status === Status.ClearingRequested
-  if (aIsClearingRequested && !bIsClearingRequested) {
-    return -1
-  } else if (!aIsClearingRequested && bIsClearingRequested) {
-    return 1
+
+function sortGrants(a: Grant, b: Grant) {
+  const aApproved = a.activeRecipientCount
+  const bApproved = b.activeRecipientCount
+  const aChallenged = a.challengedRecipientCount
+  const bChallenged = b.challengedRecipientCount
+  const aAwaiting = a.awaitingRecipientCount
+  const bAwaiting = b.awaitingRecipientCount
+
+  if (aApproved !== bApproved) {
+    return bApproved - aApproved
+  } else if (aChallenged !== bChallenged) {
+    return bChallenged - aChallenged
+  } else if (aAwaiting !== bAwaiting) {
+    return bAwaiting - aAwaiting
   } else {
-    const aApprovedCount = a.subgrants.filter(isGrantApproved).length
-    const bApprovedCount = b.subgrants.filter(isGrantApproved).length
-    if (aApprovedCount !== bApprovedCount) {
-      return bApprovedCount - aApprovedCount
-    }
-    return Number(b.monthlyIncomingFlowRate) - Number(a.monthlyIncomingFlowRate)
+    return 0
   }
 }

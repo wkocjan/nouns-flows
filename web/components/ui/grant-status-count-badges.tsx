@@ -5,7 +5,7 @@ import Link from "next/link"
 
 interface Props {
   id: string
-  subgrants: Grant[]
+  subgrants?: Grant[]
   flow: Pick<Grant, "activeRecipientCount" | "awaitingRecipientCount" | "challengedRecipientCount">
   alwaysShowAll?: boolean
   isTopLevel?: boolean
