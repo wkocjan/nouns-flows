@@ -54,7 +54,9 @@ export function ActionCardContent(props: Props) {
       <div className="mb-5 mt-2.5 space-y-4 text-sm text-secondary-foreground/75 [&>*]:leading-loose">
         {isLoading && <DotLoader />}
         {!isLoading && <Markdown>{animatedText}</Markdown>}
-        {error && <p className="text-destructive">An error occurred: {error.message}</p>}
+        {error && (
+          <p className="text-destructive">An error occurred: {error.message.slice(0, 150)}</p>
+        )}
       </div>
 
       {action?.text &&
