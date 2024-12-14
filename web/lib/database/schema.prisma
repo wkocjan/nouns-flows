@@ -8,7 +8,7 @@ datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_DATABASE_URL")
-  schemas   = ["web", "public"]
+  schemas   = ["web", "onchain"]
 }
 
 model Draft {
@@ -181,7 +181,7 @@ view Grant {
   @@index([isActive])
   @@index([isTopLevel, isFlow])
   @@map("Grant")
-  @@schema("public")
+  @@schema("onchain")
 }
 
 view Vote {
@@ -198,7 +198,7 @@ view Vote {
   @@index([contract])
   @@index([recipientId])
   @@index([isStale])
-  @@schema("public")
+  @@schema("onchain")
 }
 
 view PonderMeta {
@@ -206,7 +206,7 @@ view PonderMeta {
   value String
 
   @@map("_ponder_meta")
-  @@schema("public")
+  @@schema("onchain")
 }
 
 view Dispute {
@@ -230,7 +230,7 @@ view Dispute {
   grant                Grant      @relation(fields: [grantId], references: [id])
   evidences            Evidence[]
 
-  @@schema("public")
+  @@schema("onchain")
 }
 
 view DisputeVote {
@@ -248,7 +248,7 @@ view DisputeVote {
 
   @@unique([disputeId, arbitrator, voter])
   @@index([voter])
-  @@schema("public")
+  @@schema("onchain")
 }
 
 view TokenHolder {
@@ -262,7 +262,7 @@ view TokenHolder {
   @@unique([tokenContract, holder])
   @@index([holder])
   @@index([holder, amount])
-  @@schema("public")
+  @@schema("onchain")
 }
 
 view Evidence {
@@ -277,5 +277,5 @@ view Evidence {
   grant   Grant   @relation(fields: [evidenceGroupID], references: [evidenceGroupID])
 
   @@index([evidenceGroupID])
-  @@schema("public")
+  @@schema("onchain")
 }
