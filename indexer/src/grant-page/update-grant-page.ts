@@ -9,7 +9,7 @@ export async function updateGrantPage(grantId: string) {
 
   if (!response.ok) {
     const error = await response.text()
-    throw new Error(`Failed to update grant page: ${error}`)
+    console.error(`Failed to update grant page: ${error}`)
   }
 
   const result = await response.json()
