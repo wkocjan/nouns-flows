@@ -22,8 +22,8 @@ const currentBlock = Number(
   }).getBlockNumber()
 )
 
-const START_BLOCK = 21519031
 const SECONDS_PER_BLOCK = 2
+const START_BLOCK = 21519031
 
 export default createConfig({
   database: { kind: "postgres" },
