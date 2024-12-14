@@ -19,7 +19,7 @@ import { VotingInput } from "../flow/[flowId]/components/voting-input"
 import { MonthlyBudget } from "./monthly-budget"
 
 interface Props {
-  flows: Array<Grant & { subgrants: Grant[] }>
+  flows: Array<Grant>
 }
 
 export const FlowsTable = (props: Props) => {
@@ -39,7 +39,7 @@ export const FlowsTable = (props: Props) => {
       </TableHeader>
       <TableBody>
         {flows.map((flow) => {
-          const approvedGrants = flow.subgrants.filter((g) => isGrantApproved(g)).length
+          const approvedGrants = flow.activeRecipientCount
 
           return (
             <TableRow key={flow.title}>
@@ -72,12 +72,7 @@ export const FlowsTable = (props: Props) => {
                 )}
               </TableCell>
               <TableCell>
-                <GrantStatusCountBadges
-                  subgrants={flow.subgrants}
-                  id={flow.id}
-                  flow={flow}
-                  alwaysShowAll
-                />
+                <GrantStatusCountBadges id={flow.id} flow={flow} alwaysShowAll />
               </TableCell>
               <TableCell className="text-center">
                 <AnimatedSalary

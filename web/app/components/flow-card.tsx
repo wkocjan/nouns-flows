@@ -1,5 +1,4 @@
 import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
-import { isGrantApproved } from "@/lib/database/helpers"
 import { getIpfsUrl } from "@/lib/utils"
 import { Grant } from "@prisma/flows"
 import Image from "next/image"
@@ -7,11 +6,11 @@ import Link from "next/link"
 import { MonthlyBudget } from "./monthly-budget"
 
 interface Props {
-  flow: Grant & { subgrants: Grant[] }
+  flow: Grant
 }
 
 export function FlowCard({ flow }: Props) {
-  const approvedGrants = flow.subgrants.filter((g) => isGrantApproved(g)).length
+  const approvedGrants = flow.activeRecipientCount
 
   return (
     <article className="group relative isolate flex flex-col justify-between overflow-hidden rounded-2xl bg-primary p-5">
@@ -27,12 +26,7 @@ export function FlowCard({ flow }: Props) {
 
       <div className="flex justify-between">
         <div className="relative z-20">
-          <GrantStatusCountBadges
-            subgrants={flow.subgrants}
-            id={flow.id}
-            flow={flow}
-            alwaysShowAll
-          />
+          <GrantStatusCountBadges id={flow.id} flow={flow} alwaysShowAll />
         </div>
         <MonthlyBudget
           display={flow.isFlow ? flow.monthlyOutgoingFlowRate : flow.monthlyIncomingFlowRate}

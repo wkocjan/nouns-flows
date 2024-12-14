@@ -1,19 +1,19 @@
 import { Grant, Story } from "@prisma/flows"
 import { Status } from "../enums"
 
-export function isGrantApproved(grant: Grant) {
+export function isGrantApproved(grant: Pick<Grant, "status">) {
   const { status } = grant
   return status === Status.Registered || status === Status.ClearingRequested
 }
 
-export function isGrantChallenged(grant: Grant) {
+export function isGrantChallenged(grant: Pick<Grant, "status" | "isDisputed" | "isResolved">) {
   const { status, isDisputed, isResolved } = grant
 
   if (status === Status.ClearingRequested) return true
   return status === Status.RegistrationRequested && isDisputed && !isResolved
 }
 
-export function isGrantAwaiting(grant: Grant) {
+export function isGrantAwaiting(grant: Pick<Grant, "status">) {
   return grant.status === Status.RegistrationRequested
 }
 

@@ -22,7 +22,7 @@ import { Markdown } from "@/components/ui/markdown"
 import { VideoPlayer } from "@/components/ui/video-player"
 import { UserProfile } from "@/components/user-profile/user-profile"
 import { getUser } from "@/lib/auth/user"
-import database from "@/lib/database/edge"
+import database, { getCacheStrategy } from "@/lib/database/edge"
 import { getPinataWithKey } from "@/lib/pinata/url-with-key"
 import { getIpfsUrl } from "@/lib/utils"
 import { CalendarIcon } from "lucide-react"
@@ -48,9 +48,11 @@ const getStory = cache(async (id: string) => {
   const [grants, flows] = await Promise.all([
     database.grant.findMany({
       where: { id: { in: story.grant_ids } },
+      ...getCacheStrategy(24 * 60 * 60),
     }),
     database.grant.findMany({
       where: { id: { in: story.parent_flow_ids } },
+      ...getCacheStrategy(24 * 60 * 60),
     }),
   ])
 
@@ -72,8 +74,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 export default async function Page(props: Props) {
   const { id } = await props.params
 
-  const story = await getStory(id)
-  const user = await getUser()
+  const [story, user] = await Promise.all([getStory(id), getUser()])
 
   const { title, grants, flows, key_points, updated_at, timeline, sources, author } = story
 

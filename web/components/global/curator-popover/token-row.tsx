@@ -21,13 +21,12 @@ interface Props {
     | "awaitingRecipientCount"
     | "challengedRecipientCount"
   >
-  subgrants: Grant[]
   closePopover: () => void
   balance: string
 }
 
 export function TokenRow(props: Props) {
-  const { flow, closePopover, balance, subgrants } = props
+  const { flow, closePopover, balance } = props
 
   return (
     <div className="grid grid-cols-5 items-center gap-2 border-t border-border py-2.5">
@@ -54,7 +53,7 @@ export function TokenRow(props: Props) {
         monthlyRewardPoolRate={flow.monthlyRewardPoolFlowRate}
       />
 
-      <GrantStatusCountBadges subgrants={subgrants} id={flow.id} flow={flow} />
+      <GrantStatusCountBadges id={flow.id} flow={flow} />
 
       <div className="text-center text-sm font-medium">
         <WithdrawCuratorSalaryButton pool={getEthAddress(flow.managerRewardSuperfluidPool)} />
