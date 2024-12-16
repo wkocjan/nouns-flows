@@ -6,7 +6,7 @@ import { grants } from "../../ponder.schema"
 import { and, eq } from "ponder"
 
 ponder.on("FlowTcr:ItemSubmitted", handleItemSubmitted)
-ponder.on("NounsFlowTcrChildren:ItemSubmitted", handleItemSubmitted)
+ponder.on("FlowTcrChildren:ItemSubmitted", handleItemSubmitted)
 
 async function handleItemSubmitted(params: {
   event: Event<"FlowTcr:ItemSubmitted">

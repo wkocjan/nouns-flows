@@ -3,7 +3,7 @@ import { disputes } from "../../ponder.schema"
 import { and, eq } from "ponder"
 
 ponder.on("FlowTcr:Ruling", handleRuling)
-ponder.on("NounsFlowTcrChildren:Ruling", handleRuling)
+ponder.on("FlowTcrChildren:Ruling", handleRuling)
 
 async function handleRuling(params: {
   event: Event<"FlowTcr:Ruling">

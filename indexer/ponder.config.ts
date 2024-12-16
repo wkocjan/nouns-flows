@@ -60,7 +60,7 @@ export default createConfig({
       network: "base",
       startBlock: START_BLOCK,
     },
-    NounsFlowTcrChildren: {
+    FlowTcrChildren: {
       abi: flowTcrImplAbi,
       address: factory({
         address: baseContracts.TCRFactory,

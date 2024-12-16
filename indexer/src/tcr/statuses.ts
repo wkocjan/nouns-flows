@@ -7,7 +7,7 @@ import { eq, and } from "ponder"
 import { grants } from "../../ponder.schema"
 
 ponder.on("FlowTcr:ItemStatusChange", handleItemStatusChange)
-ponder.on("NounsFlowTcrChildren:ItemStatusChange", handleItemStatusChange)
+ponder.on("FlowTcrChildren:ItemStatusChange", handleItemStatusChange)
 
 async function handleItemStatusChange(params: {
   event: Event<"FlowTcr:ItemStatusChange">

@@ -7,7 +7,7 @@ ponder.on("Arbitrator:DisputeCreated", handleDisputeCreated)
 ponder.on("ArbitratorChildren:DisputeCreated", handleDisputeCreated)
 
 ponder.on("FlowTcr:Dispute", handleDispute)
-ponder.on("NounsFlowTcrChildren:Dispute", handleDispute)
+ponder.on("FlowTcrChildren:Dispute", handleDispute)
 
 async function handleDisputeCreated(params: {
   event: Event<"Arbitrator:DisputeCreated">
