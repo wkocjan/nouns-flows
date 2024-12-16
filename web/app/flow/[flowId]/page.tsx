@@ -2,7 +2,7 @@ import "server-only"
 
 import { EmptyState } from "@/components/ui/empty-state"
 import { getUserProfiles } from "@/components/user-profile/get-user-profile"
-import database from "@/lib/database/edge"
+import database, { getCacheStrategy } from "@/lib/database/edge"
 import { Status } from "@/lib/enums"
 import { getEthAddress } from "@/lib/utils"
 import { Grant } from "@prisma/flows"
@@ -20,16 +20,23 @@ interface Props {
 export default async function FlowPage(props: Props) {
   const { flowId } = await props.params
 
-  const flow = await database.grant.findFirstOrThrow({
-    where: { id: flowId, isActive: true },
-    include: { subgrants: { where: { isActive: true }, include: { derivedData: true } } },
-  })
+  const [flow, subgrants] = await Promise.all([
+    database.grant.findFirstOrThrow({
+      where: { id: flowId, isActive: true },
+      ...getCacheStrategy(1200),
+    }),
+    database.grant.findMany({
+      where: { flowId, isActive: true },
+      include: { derivedData: true },
+      ...getCacheStrategy(1200),
+    }),
+  ])
 
-  if (!flow.subgrants || flow.subgrants.length === 0) {
+  if (!subgrants || subgrants.length === 0) {
     return <EmptyState title="No grants found" description="There are no approved grants yet" />
   }
 
-  const profiles = await getUserProfiles(flow.subgrants.map((g) => getEthAddress(g.recipient)))
+  const profiles = await getUserProfiles(subgrants.map((g) => getEthAddress(g.recipient)))
 
   return (
     <>
@@ -39,7 +46,7 @@ export default async function FlowPage(props: Props) {
 
       <GrantsList
         flow={flow}
-        grants={flow.subgrants
+        grants={subgrants
           .map((g) => ({
             ...g,
             profile: profiles.find((p) => p.address === getEthAddress(g.recipient))!,
