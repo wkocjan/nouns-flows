@@ -71,7 +71,7 @@
     "pluralize": "^8.0.0",
     "ponder": "^0.8.5",
     "react": "19.0.0",
-    "react-dom": "19.0.0-rc-66855b96-20241106",
+    "react-dom": "19.0.0",
     "react-player": "^2.16.0",
     "sonner": "^1.5.0",
     "swr": "^2.2.5",
