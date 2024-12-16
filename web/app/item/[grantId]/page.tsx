@@ -52,11 +52,14 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 export default async function GrantPage(props: Props) {
   const { grantId } = await props.params
 
-  const { flow, ...grant } = await database.grant.findUniqueOrThrow({
-    where: { id: grantId, isActive: true, isTopLevel: false },
-    include: { flow: true, derivedData: { select: { pageData: true } } },
-    ...getCacheStrategy(600), // ToDo: Invalidate on edit
-  })
+  const [user, { flow, ...grant }] = await Promise.all([
+    getUser(),
+    database.grant.findUniqueOrThrow({
+      where: { id: grantId, isActive: true, isTopLevel: false },
+      include: { flow: true, derivedData: { select: { pageData: true } } },
+      ...getCacheStrategy(600), // ToDo: Invalidate on edit
+    }),
+  ])
 
   if (grant.isFlow) return redirect(`/flow/${grant.id}/about`)
 
@@ -64,8 +67,6 @@ export default async function GrantPage(props: Props) {
   if (!data || Object.keys(data).length === 0) notFound()
 
   const { why, focus, who, how, builder, title } = data
-
-  const user = await getUser()
 
   return (
     <AgentChatProvider
