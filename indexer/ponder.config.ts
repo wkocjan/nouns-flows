@@ -21,11 +21,14 @@ const client = createPublicClient({
 })
 
 const currentBlock = Number(await client.getBlockNumber())
-const childFlows: `0x${string}`[] = (await client.readContract({
-  address: baseContracts.NounsFlow,
-  abi: nounsFlowImplAbi,
-  functionName: "getChildFlows",
-})) as `0x${string}`[]
+const childFlows: `0x${string}`[] =
+  ((await client.readContract({
+    address: baseContracts.NounsFlow,
+    abi: nounsFlowImplAbi,
+    functionName: "getChildFlows",
+  })) as `0x${string}`[]) || []
+
+const relevantFlows = [...childFlows, baseContracts.NounsFlow]
 
 const SECONDS_PER_BLOCK = 2
 const START_BLOCK = 21519031
@@ -165,7 +168,7 @@ export default createConfig({
         args: {
           // usdc on base
           token: "0xd04383398dd2426297da660f9cca3d439af9ce1b",
-          distributor: childFlows || [],
+          distributor: relevantFlows,
         },
       },
     },
