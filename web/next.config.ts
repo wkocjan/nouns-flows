@@ -1,10 +1,6 @@
 import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  experimental: {
-    after: true,
-  },
-  transpilePackages: ["lucide-react"],
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "media.giphy.com", pathname: "/**" },
