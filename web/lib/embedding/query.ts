@@ -1,7 +1,7 @@
 import { validTypes } from "@/lib/types/job"
 import { embeddingsDb } from "./db"
 
-type QueryParams = {
+interface QueryParams {
   types: (typeof validTypes)[number][]
   groups?: string[]
   users?: string[]
@@ -70,7 +70,7 @@ export async function queryEmbeddingsSimilarity({
       })
     }
 
-    const vectorQuery = `[${embeddingQuery.join(",")}]`
+    const vectorQuery = `ARRAY[${embeddingQuery.join(",")}]`
     const distanceExpr = `(embedding <=> ${vectorQuery}::vector)`
 
     const whereClauses = getWhereClauses({ types, groups, users, tags })
@@ -87,7 +87,7 @@ export async function queryEmbeddingsSimilarity({
         url_summaries 
       FROM embeddings
       WHERE ${whereClauses}
-      ORDER BY ${orderBy === "similarity" ? `ASC(${distanceExpr})` : `DESC(created_at)`}
+      ORDER BY ${orderBy === "similarity" ? `${distanceExpr} ASC` : `created_at DESC`}
       LIMIT ${numResults}
     `
     return await embeddingsDb(query)
