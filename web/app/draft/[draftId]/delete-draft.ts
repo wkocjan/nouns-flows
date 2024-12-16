@@ -3,7 +3,7 @@
 import database from "@/lib/database/edge"
 import { removeDraftEmbedding } from "@/lib/embedding/embed-drafts"
 import { revalidatePath } from "next/cache"
-import { unstable_after as after } from "next/server"
+import { after } from "next/server"
 
 export async function deleteDraft(id: number, user?: string) {
   try {

@@ -2,8 +2,9 @@
 
 import database from "@/lib/database/edge"
 import { addDraftEmbedding } from "@/lib/embedding/embed-drafts"
+import { after } from "next/server"
 import { z } from "zod"
-import { unstable_after as after } from "next/server"
+
 const schema = z
   .object({
     title: z.string().trim().min(1, "Title is required"),
