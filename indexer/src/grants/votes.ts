@@ -89,12 +89,7 @@ async function getGrantVotesCount(context: Context<"NounsFlow:VoteCast">, recipi
 }
 
 async function getGrantBudget(context: Context, parentContract: `0x${string}`, id: string) {
-  const grant = await context.db.sql
-    .select()
-    .from(grants)
-    .where(eq(grants.id, id))
-    .limit(1)
-    .then((rows) => rows[0])
+  const grant = await context.db.find(grants, { id })
 
   if (!grant) throw new Error(`Could not find grant ${id}`)
 

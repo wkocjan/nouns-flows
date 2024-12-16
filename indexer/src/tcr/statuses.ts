@@ -6,12 +6,12 @@ import { removeApplicationEmbedding } from "./embeddings/embed-applications"
 import { eq, and } from "ponder"
 import { grants } from "../../ponder.schema"
 
-ponder.on("NounsFlowTcr:ItemStatusChange", handleItemStatusChange)
-ponder.on("NounsFlowTcrChildren:ItemStatusChange", handleItemStatusChange)
+ponder.on("FlowTcr:ItemStatusChange", handleItemStatusChange)
+ponder.on("FlowTcrChildren:ItemStatusChange", handleItemStatusChange)
 
 async function handleItemStatusChange(params: {
-  event: Event<"NounsFlowTcr:ItemStatusChange">
-  context: Context<"NounsFlowTcr:ItemStatusChange">
+  event: Event<"FlowTcr:ItemStatusChange">
+  context: Context<"FlowTcr:ItemStatusChange">
 }) {
   const { event, context } = params
   const { _itemID, _itemStatus, _disputed, _resolved } = event.args
@@ -26,9 +26,7 @@ async function handleItemStatusChange(params: {
   const flow = flowResults[0]
   if (!flow) throw new Error("Flow not found for TCR item")
 
-  const grantResults = await context.db.sql.select().from(grants).where(eq(grants.id, _itemID))
-
-  const grant = grantResults[0]
+  const grant = await context.db.find(grants, { id: _itemID })
   if (!grant) throw new Error(`Grant not found: ${_itemID}`)
 
   let challengePeriodEndsAt = grant.challengePeriodEndsAt
@@ -40,7 +38,7 @@ async function handleItemStatusChange(params: {
 
     const challengePeriodDuration = await context.client.readContract({
       address: getAddress(tcr),
-      abi: context.contracts.NounsFlowTcr.abi,
+      abi: context.contracts.FlowTcr.abi,
       functionName: "challengePeriodDuration",
     })
 

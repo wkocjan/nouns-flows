@@ -53,11 +53,24 @@ export const grants = onchainTable(
   (table) => ({
     isTopLevelIdx: index().on(table.isTopLevel),
     isFlowIdx: index().on(table.isFlow),
+    baselinePoolBonusPoolIdx: index().on(table.baselinePool, table.bonusPool),
     isRemovedIdx: index().on(table.isRemoved),
     updatedAtIdx: index().on(table.updatedAt),
     flowIdIdx: index().on(table.flowId),
     isDisputedIdx: index().on(table.isDisputed),
     isActiveIdx: index().on(table.isActive),
+    arbitratorIdx: index().on(table.arbitrator),
+    arbitratorIsFlowIdx: index().on(table.arbitrator, table.isFlow),
+    recipientIdx: index().on(table.recipient),
+    recipientIsFlowIdx: index().on(table.recipient, table.isFlow),
+    recipientParentContractIdx: index().on(table.recipient, table.parentContract),
+    recipientManagerRewardPoolIdx: index().on(table.recipient, table.managerRewardPool),
+    tcrIsFlowCompoundIdx: index().on(table.tcr, table.isFlow),
+    parentContractIsActiveIsRemovedIdx: index().on(
+      table.parentContract,
+      table.isActive,
+      table.isRemoved
+    ),
   })
 )
 
@@ -81,6 +94,7 @@ export const votes = onchainTable(
     contractIdx: index().on(table.contract),
     recipientIdIdx: index().on(table.recipientId),
     isStaleIdx: index().on(table.isStale),
+    recipientIdIsStaleIdx: index().on(table.recipientId, table.isStale),
   })
 )
 

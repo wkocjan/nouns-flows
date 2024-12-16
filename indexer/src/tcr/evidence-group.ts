@@ -1,12 +1,12 @@
 import { ponder, type Context, type Event } from "ponder:registry"
 import { grants } from "../../ponder.schema"
 
-ponder.on("NounsFlowTcr:RequestEvidenceGroupID", handleRequestEvidenceGroupId)
-ponder.on("NounsFlowTcrChildren:RequestEvidenceGroupID", handleRequestEvidenceGroupId)
+ponder.on("FlowTcr:RequestEvidenceGroupID", handleRequestEvidenceGroupId)
+ponder.on("FlowTcrChildren:RequestEvidenceGroupID", handleRequestEvidenceGroupId)
 
 async function handleRequestEvidenceGroupId(params: {
-  event: Event<"NounsFlowTcr:RequestEvidenceGroupID">
-  context: Context<"NounsFlowTcr:RequestEvidenceGroupID">
+  event: Event<"FlowTcr:RequestEvidenceGroupID">
+  context: Context<"FlowTcr:RequestEvidenceGroupID">
 }) {
   const { event, context } = params
   const { _itemID, _evidenceGroupID } = event.args

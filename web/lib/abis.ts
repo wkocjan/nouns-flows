@@ -4256,7 +4256,7 @@ export const multicall3Config = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x6cb79492e90a11decc9f231d40b0c6b09ad2059b)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x2367dc09d9f7816dc77edb867ea1c57dadeeabe6)
  */
 export const nounsFlowImplAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'payable' },
@@ -5017,6 +5017,13 @@ export const nounsFlowImplAbi = [
   },
   {
     type: 'function',
+    inputs: [],
+    name: 'getChildFlows',
+    outputs: [{ name: '', internalType: 'address[]', type: 'address[]' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     inputs: [{ name: 'member', internalType: 'address', type: 'address' }],
     name: 'getClaimableBalance',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
@@ -5413,14 +5420,14 @@ export const nounsFlowImplAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x6cb79492e90a11decc9f231d40b0c6b09ad2059b)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x2367dc09d9f7816dc77edb867ea1c57dadeeabe6)
  */
 export const nounsFlowImplAddress = {
-  8453: '0x6Cb79492e90a11Decc9f231D40B0C6b09aD2059B',
+  8453: '0x2367dC09d9F7816dC77edb867Ea1C57DaDEeAbE6',
 } as const
 
 /**
- * [__View Contract on Base Basescan__](https://basescan.org/address/0x6cb79492e90a11decc9f231d40b0c6b09ad2059b)
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x2367dc09d9f7816dc77edb867ea1c57dadeeabe6)
  */
 export const nounsFlowImplConfig = {
   address: nounsFlowImplAddress,

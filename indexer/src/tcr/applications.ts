@@ -5,12 +5,12 @@ import { addApplicationEmbedding } from "./embeddings/embed-applications"
 import { grants } from "../../ponder.schema"
 import { and, eq } from "ponder"
 
-ponder.on("NounsFlowTcr:ItemSubmitted", handleItemSubmitted)
-ponder.on("NounsFlowTcrChildren:ItemSubmitted", handleItemSubmitted)
+ponder.on("FlowTcr:ItemSubmitted", handleItemSubmitted)
+ponder.on("FlowTcrChildren:ItemSubmitted", handleItemSubmitted)
 
 async function handleItemSubmitted(params: {
-  event: Event<"NounsFlowTcr:ItemSubmitted">
-  context: Context<"NounsFlowTcr:ItemSubmitted">
+  event: Event<"FlowTcr:ItemSubmitted">
+  context: Context<"FlowTcr:ItemSubmitted">
 }) {
   const { event, context } = params
   const tcr = event.log.address.toLowerCase()
@@ -45,7 +45,7 @@ async function handleItemSubmitted(params: {
 
   const challengePeriodDuration = await context.client.readContract({
     address: getAddress(tcr),
-    abi: context.contracts.NounsFlowTcr.abi,
+    abi: context.contracts.FlowTcr.abi,
     functionName: "challengePeriodDuration",
   })
 
