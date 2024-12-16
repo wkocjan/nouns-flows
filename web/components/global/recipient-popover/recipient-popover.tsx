@@ -48,7 +48,7 @@ export const RecipientPopover = (props: Props) => {
           />
         </Badge>
       </PopoverTrigger>
-      <PopoverContent className="relative flex w-full max-w-[100vw] flex-col overflow-hidden md:mr-8 md:w-[480px]">
+      <PopoverContent className="relative flex w-full max-w-[100vw] flex-col overflow-hidden md:mr-8 md:w-[520px]">
         <PopoverClose ref={closeRef} className="hidden" />
         <ScrollArea className="w-full p-2.5 pb-4 md:pb-0">
           <div>
@@ -62,7 +62,7 @@ export const RecipientPopover = (props: Props) => {
                   target="_blank"
                 >
                   <Button size="xs" variant="outline">
-                    <PlusIcon className="mr-1.5 size-3" /> Update
+                    <PlusIcon className="mr-1.5 size-3" /> Post update
                   </Button>
                 </a>
               )}
@@ -70,7 +70,7 @@ export const RecipientPopover = (props: Props) => {
             {hasGrants ? (
               <>
                 <div className="mt-6">
-                  <div className="mb-2 grid grid-cols-4 gap-2 text-xs font-medium text-muted-foreground">
+                  <div className="mb-2 grid grid-cols-4 gap-2 text-sm font-medium text-muted-foreground">
                     <div className="col-start-3 text-center">Earned</div>
                     <div className="text-center">Claimable</div>
                   </div>
@@ -79,27 +79,28 @@ export const RecipientPopover = (props: Props) => {
                       key={grant.id}
                       className="grid grid-cols-4 items-center gap-2 border-t border-border py-2"
                     >
-                      <div className="col-span-2 flex items-center space-x-2 overflow-hidden">
+                      <div className="col-span-2 flex items-center space-x-3 overflow-hidden">
                         <Image
                           src={getIpfsUrl(grant.image)}
                           alt={grant.title}
-                          className="size-6 flex-shrink-0 rounded-full object-cover"
-                          width={24}
-                          height={24}
+                          className="size-[30px] flex-shrink-0 rounded-full object-cover"
+                          width={30}
+                          height={30}
                         />
                         <Link
                           href={`/item/${grant.id}`}
-                          className="truncate text-sm hover:underline"
+                          className="truncate text-base hover:underline"
                           onClick={closePopover}
                         >
                           {grant.title}
                         </Link>
                       </div>
-                      <Currency as="div" className="text-center text-sm font-medium">
+                      <Currency as="div" className="text-center text-base font-medium">
                         {grant.totalEarned}
                       </Currency>
                       <div className="flex items-center justify-center">
                         <WithdrawSalaryButton
+                          size="default"
                           onSuccess={refetch}
                           flow={getEthAddress(grant.parentContract)}
                           pools={[grant.flow.baselinePool, grant.flow.bonusPool].map((pool) =>
