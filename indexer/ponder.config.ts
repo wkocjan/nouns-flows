@@ -15,12 +15,17 @@ import { base as baseContracts } from "./addresses"
 
 const isDev = process.env.NODE_ENV === "development"
 
-const currentBlock = Number(
-  await createPublicClient({
-    chain: base,
-    transport: http(process.env.PONDER_RPC_URL_8453),
-  }).getBlockNumber()
-)
+const client = createPublicClient({
+  chain: base,
+  transport: http(process.env.PONDER_RPC_URL_8453),
+})
+
+const currentBlock = Number(await client.getBlockNumber())
+const childFlows: `0x${string}`[] = (await client.readContract({
+  address: baseContracts.NounsFlow,
+  abi: nounsFlowImplAbi,
+  functionName: "getChildFlows",
+})) as `0x${string}`[]
 
 const SECONDS_PER_BLOCK = 2
 const START_BLOCK = 21519031
@@ -160,6 +165,7 @@ export default createConfig({
         args: {
           // usdc on base
           token: "0xd04383398dd2426297da660f9cca3d439af9ce1b",
+          distributor: childFlows || [],
         },
       },
     },

@@ -6,7 +6,7 @@ import { useIsGuest } from "@/lib/auth/use-is-guest"
 import { useLogin } from "@/lib/auth/use-login"
 import { User } from "@/lib/auth/user"
 import { MAX_VOTING_POWER, NOUNS_TOKEN } from "@/lib/config"
-import { openseaNftUrl } from "@/lib/utils"
+import { getShortEthAddress, openseaNftUrl } from "@/lib/utils"
 import { useDelegatedTokens } from "@/lib/voting/delegated-tokens/use-delegated-tokens"
 import { useVotingPower } from "@/lib/voting/use-voting-power"
 import Image from "next/image"
@@ -51,7 +51,9 @@ export const MenuAvatar = (props: Props) => {
           <PopoverContent className="w-full max-w-[100vw] md:mr-8 md:w-[380px]">
             <PopoverClose ref={closeRef} className="hidden" />
             <div className="mb-4 flex items-center justify-between">
-              <span className="text-sm font-medium">{user.username}</span>
+              <span className="text-sm font-medium">
+                {user.username || getShortEthAddress(user.address)}
+              </span>
               <div className="flex items-center space-x-2.5">
                 <span className="max-sm:hidden">
                   <ModeToggle />
