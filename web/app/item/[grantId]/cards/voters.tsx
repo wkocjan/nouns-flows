@@ -25,7 +25,8 @@ export const Voters = async (props: Props) => {
           <br />
           <br />
           {!isFlow &&
-            `The budget is a minimal support based on the ${flowVotesCount} votes for the parent flow.`}
+            Number(flowVotesCount) <= 1000 &&
+            `The parent budget has limited support (${flowVotesCount} votes).`}
         </div>
       )}
       {voters.length > 0 && (
