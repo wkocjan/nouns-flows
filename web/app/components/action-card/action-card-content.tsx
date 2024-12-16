@@ -11,6 +11,7 @@ import Link from "next/link"
 import { useEffect, useRef } from "react"
 import { GuidanceChat } from "./guidance-chat"
 import { guidanceSchema } from "./guidance-utils"
+import { useAuthenticated } from "@/lib/auth/use-authenticated"
 
 interface Props {
   user?: User
@@ -23,6 +24,7 @@ export function ActionCardContent(props: Props) {
   const { user, animated } = props
 
   const hasSubmitted = useRef(false)
+  const { ready } = useAuthenticated()
 
   const { object, submit, isLoading, error } = useObject({
     api: "/api/action-card",
@@ -48,18 +50,25 @@ export function ActionCardContent(props: Props) {
   const action = props.action || object?.action
   const text = props.text || object?.text || ""
 
+  const showText = !isLoading && ready
+
   return (
     <>
       <h2 className="text-lg font-semibold text-secondary-foreground">gm {user?.username}</h2>
       <div className="mb-5 mt-2.5 space-y-4 text-sm text-secondary-foreground/75 [&>*]:leading-loose">
-        {isLoading && <DotLoader />}
-        {!isLoading && <Markdown>{animatedText}</Markdown>}
+        {!showText && (
+          <div className="pt-2.5">
+            <DotLoader />
+          </div>
+        )}
+        {showText && <Markdown>{animatedText}</Markdown>}
         {error && (
           <p className="text-destructive">An error occurred: {error.message.slice(0, 150)}</p>
         )}
       </div>
 
-      {action?.text &&
+      {showText &&
+        action?.text &&
         (() => {
           const Component = animated ? motion.div : "div"
           const motionProps = animated
