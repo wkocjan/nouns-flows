@@ -1,8 +1,5 @@
-import { drizzle } from "drizzle-orm/neon-serverless"
-import { Pool } from "@neondatabase/serverless"
+import { neon } from "@neondatabase/serverless"
 
-const pool = new Pool({
-  connectionString: process.env.EMBEDDINGS_POSTGRES_URL as string,
-})
+const embeddingsDb = neon(process.env.EMBEDDINGS_POSTGRES_URL as string)
 
-export const embeddingsDb = drizzle(pool)
+export { embeddingsDb }
