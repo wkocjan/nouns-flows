@@ -6,12 +6,12 @@ import { removeApplicationEmbedding } from "./embeddings/embed-applications"
 import { eq, and } from "ponder"
 import { grants } from "../../ponder.schema"
 
-ponder.on("NounsFlowTcr:ItemStatusChange", handleItemStatusChange)
+ponder.on("FlowTcr:ItemStatusChange", handleItemStatusChange)
 ponder.on("NounsFlowTcrChildren:ItemStatusChange", handleItemStatusChange)
 
 async function handleItemStatusChange(params: {
-  event: Event<"NounsFlowTcr:ItemStatusChange">
-  context: Context<"NounsFlowTcr:ItemStatusChange">
+  event: Event<"FlowTcr:ItemStatusChange">
+  context: Context<"FlowTcr:ItemStatusChange">
 }) {
   const { event, context } = params
   const { _itemID, _itemStatus, _disputed, _resolved } = event.args
@@ -38,7 +38,7 @@ async function handleItemStatusChange(params: {
 
     const challengePeriodDuration = await context.client.readContract({
       address: getAddress(tcr),
-      abi: context.contracts.NounsFlowTcr.abi,
+      abi: context.contracts.FlowTcr.abi,
       functionName: "challengePeriodDuration",
     })
 

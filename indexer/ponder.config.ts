@@ -54,7 +54,7 @@ export default createConfig({
       network: "base",
       startBlock: START_BLOCK,
     },
-    NounsFlowTcr: {
+    FlowTcr: {
       abi: flowTcrImplAbi,
       address: baseContracts.FlowTCR,
       network: "base",

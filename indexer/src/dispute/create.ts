@@ -6,7 +6,7 @@ import { and, eq } from "ponder"
 ponder.on("Arbitrator:DisputeCreated", handleDisputeCreated)
 ponder.on("ArbitratorChildren:DisputeCreated", handleDisputeCreated)
 
-ponder.on("NounsFlowTcr:Dispute", handleDispute)
+ponder.on("FlowTcr:Dispute", handleDispute)
 ponder.on("NounsFlowTcrChildren:Dispute", handleDispute)
 
 async function handleDisputeCreated(params: {
@@ -51,8 +51,8 @@ async function handleDisputeCreated(params: {
 }
 
 async function handleDispute(params: {
-  event: Event<"NounsFlowTcr:Dispute">
-  context: Context<"NounsFlowTcr:Dispute">
+  event: Event<"FlowTcr:Dispute">
+  context: Context<"FlowTcr:Dispute">
 }) {
   const { event, context } = params
   const { _arbitrator, _disputeID, _itemID, _evidenceGroupID } = event.args

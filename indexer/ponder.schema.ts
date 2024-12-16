@@ -58,6 +58,9 @@ export const grants = onchainTable(
     flowIdIdx: index().on(table.flowId),
     isDisputedIdx: index().on(table.isDisputed),
     isActiveIdx: index().on(table.isActive),
+    arbitratorIdx: index().on(table.arbitrator),
+    arbitratorIsFlowIdx: index().on(table.arbitrator, table.isFlow),
+    recipientIdx: index().on(table.recipient),
   })
 )
 

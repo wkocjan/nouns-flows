@@ -1,12 +1,12 @@
 import { ponder, type Context, type Event } from "ponder:registry"
 import { evidence } from "../../ponder.schema"
 
-ponder.on("NounsFlowTcr:Evidence", handleEvidence)
+ponder.on("FlowTcr:Evidence", handleEvidence)
 ponder.on("NounsFlowTcrChildren:Evidence", handleEvidence)
 
 async function handleEvidence(params: {
-  event: Event<"NounsFlowTcr:Evidence">
-  context: Context<"NounsFlowTcr:Evidence">
+  event: Event<"FlowTcr:Evidence">
+  context: Context<"FlowTcr:Evidence">
 }) {
   const { event, context } = params
   const { _arbitrator, _evidenceGroupID, _evidence, _party } = event.args
