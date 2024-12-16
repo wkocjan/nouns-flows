@@ -1,23 +1,20 @@
-import { pgTable, text, timestamp, varchar, vector, integer } from "drizzle-orm/pg-core"
 import { validTypes } from "../types/job"
 
-export const embeddings = pgTable("embeddings", {
-  id: varchar("id", { length: 36 }).primaryKey(),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at").defaultNow(),
-  type: varchar("type", { length: 50 }).$type<(typeof validTypes)[number]>(), // Typed to match JobBody type
-  version: integer("version").default(1),
-  content: text("content"),
-  content_hash: varchar("content_hash", { length: 64 }).unique(),
-  embedding: vector("embedding", { dimensions: 1536 }), // Store as vector
-  groups: text("groups").array(), // Array of groups/communities eg: nouns
-  users: text("users").array(), // Array of user addresses
-  tags: text("tags").array(), // Array of tags for future use maybe
-  external_id: text("external_id"), // id helpful for linking to other tables / documents
-  urls: text("urls").array(), // Array of urls
-  url_summaries: text("url_summaries").array(), // Array of url summaries
-  raw_content: text("raw_content"), // Raw content from the source
-  external_url: text("external_url"), // External url from the source
-})
-
-export type Embedding = typeof embeddings.$inferSelect
+export type Embedding = {
+  id: string
+  created_at: Date
+  updated_at: Date
+  type: (typeof validTypes)[number]
+  version: number
+  content: string
+  content_hash: string
+  embedding: number[]
+  groups: string[]
+  users: string[]
+  tags: string[]
+  external_id: string
+  urls: string[]
+  url_summaries: string[]
+  raw_content: string
+  external_url: string
+}

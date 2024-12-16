@@ -1,9 +1,7 @@
-import { embeddingsDb } from "./db"
-import { embeddings } from "./schema"
 import { validTypes } from "@/lib/types/job"
-import { and, arrayOverlaps, asc, desc, inArray, sql } from "drizzle-orm"
+import { embeddingsDb } from "./db"
 
-type QueryParams = {
+interface QueryParams {
   types: (typeof validTypes)[number][]
   groups?: string[]
   users?: string[]
@@ -19,33 +17,34 @@ async function queryEmbeddingsWithoutSimilarity({
   tags = [],
   numResults = 10,
 }: QueryParams) {
-  return await embeddingsDb
-    .select({
-      id: embeddings.id,
-      content: embeddings.content,
-      similarity: sql<number>`1`, // Default similarity of 1 when not doing vector search
-      type: embeddings.type,
-      groups: embeddings.groups,
-      users: embeddings.users,
-      tags: embeddings.tags,
-      external_id: embeddings.external_id,
-    })
-    .from(embeddings)
-    .where(getWhereClause({ types, groups, users, tags }))
-    .limit(numResults)
+  const whereClauses = getWhereClauses({ types, groups, users, tags })
+  const query = `
+    SELECT 
+      id, 
+      content, 
+      1 AS similarity, 
+      type, 
+      groups, 
+      users, 
+      tags, 
+      external_id 
+    FROM embeddings
+    WHERE ${whereClauses}
+    LIMIT ${numResults}
+  `
+  return await embeddingsDb(query)
 }
 
-function getWhereClause({ types, groups = [], users = [], tags = [] }: QueryParams) {
-  return and(
-    // If types array is provided, require matching type
-    ...(types.length > 0 ? [inArray(embeddings.type, types)] : []),
-    // If tags array is provided, require matching tags
-    ...(tags.length > 0 ? [arrayOverlaps(embeddings.tags, tags)] : []),
-    // If users array is provided, require matching users
-    ...(users.length > 0 ? [arrayOverlaps(embeddings.users, users)] : []),
-    // If groups array is provided, require matching groups
-    ...(groups.length > 0 ? [arrayOverlaps(embeddings.groups, groups)] : []),
-  )
+function getWhereClauses({ types, groups = [], users = [], tags = [] }: QueryParams) {
+  const clauses = []
+  if (types.length > 0)
+    clauses.push(`type = ANY(ARRAY[${types.map((type) => `'${type}'`).join(",")}])`)
+  if (tags.length > 0) clauses.push(`tags && ARRAY[${tags.map((tag) => `'${tag}'`).join(",")}]`)
+  if (users.length > 0)
+    clauses.push(`users && ARRAY[${users.map((user) => `'${user}'`).join(",")}]`)
+  if (groups.length > 0)
+    clauses.push(`groups && ARRAY[${groups.map((group) => `'${group}'`).join(",")}]`)
+  return clauses.join(" AND ")
 }
 
 export async function queryEmbeddingsSimilarity({
@@ -71,25 +70,27 @@ export async function queryEmbeddingsSimilarity({
       })
     }
 
-    const vectorQuery = `[${embeddingQuery.join(",")}]`
-    const distanceExpr = sql<number>`(embeddings.embedding <=> ${vectorQuery}::vector)`
+    const vectorQuery = `ARRAY[${embeddingQuery.join(",")}]`
+    const distanceExpr = `(embedding <=> ${vectorQuery}::vector)`
 
-    return await embeddingsDb
-      .select({
-        id: embeddings.id,
-        content: embeddings.content,
-        type: embeddings.type,
-        groups: embeddings.groups,
-        users: embeddings.users,
-        tags: embeddings.tags,
-        external_id: embeddings.external_id,
-        external_url: embeddings.external_url,
-        url_summaries: embeddings.url_summaries,
-      })
-      .from(embeddings)
-      .where(getWhereClause({ types, groups, users, tags }))
-      .orderBy(orderBy === "similarity" ? asc(distanceExpr) : desc(embeddings.created_at))
-      .limit(numResults)
+    const whereClauses = getWhereClauses({ types, groups, users, tags })
+    const query = `
+      SELECT 
+        id, 
+        content, 
+        type, 
+        groups, 
+        users, 
+        tags, 
+        external_id, 
+        external_url, 
+        url_summaries 
+      FROM embeddings
+      WHERE ${whereClauses}
+      ORDER BY ${orderBy === "similarity" ? `${distanceExpr} ASC` : `created_at DESC`}
+      LIMIT ${numResults}
+    `
+    return await embeddingsDb(query)
   } catch (error) {
     console.error(error)
     throw new Error((error as Error).message || "Failed to query embeddings")

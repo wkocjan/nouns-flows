@@ -1,9 +1,7 @@
 import { embeddingsDb } from "@/lib/embedding/db"
-import { embeddings } from "@/lib/embedding/schema"
 import { getFarcasterUsersByEthAddress } from "@/lib/farcaster/get-user"
 import { getFarcasterUserChannels } from "@/lib/farcaster/get-user-channels"
 import { getEthAddress } from "@/lib/utils"
-import { and, arrayContains, desc, eq } from "drizzle-orm"
 import { headers } from "next/headers"
 import { cache } from "react"
 
@@ -82,17 +80,17 @@ async function getFarcasterAccountPrompt(
 }
 
 async function getBuilderProfilePrompt(fid: number): Promise<string> {
-  const builderProfiles = await embeddingsDb
-    .select()
-    .from(embeddings)
-    .where(
-      and(
-        arrayContains(embeddings.users, [fid.toString()]),
-        eq(embeddings.type, "builder-profile"),
-      ),
-    )
-    .orderBy(desc(embeddings.created_at))
-    .limit(1)
+  const query = `
+    SELECT 
+      raw_content 
+    FROM embeddings
+    WHERE 
+      users && ARRAY['${fid.toString()}'] AND 
+      type = 'builder-profile'
+    ORDER BY created_at DESC
+    LIMIT 1
+  `
+  const builderProfiles = await embeddingsDb(query)
 
   const builderProfile = builderProfiles[0]
 
