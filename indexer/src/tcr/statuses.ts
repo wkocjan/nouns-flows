@@ -26,9 +26,7 @@ async function handleItemStatusChange(params: {
   const flow = flowResults[0]
   if (!flow) throw new Error("Flow not found for TCR item")
 
-  const grantResults = await context.db.sql.select().from(grants).where(eq(grants.id, _itemID))
-
-  const grant = grantResults[0]
+  const grant = await context.db.find(grants, { id: _itemID })
   if (!grant) throw new Error(`Grant not found: ${_itemID}`)
 
   let challengePeriodEndsAt = grant.challengePeriodEndsAt

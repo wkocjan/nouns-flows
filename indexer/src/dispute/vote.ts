@@ -2,6 +2,7 @@ import { ponder, type Context, type Event } from "ponder:registry"
 import { Party } from "../enums"
 import { disputes, disputeVotes } from "../../ponder.schema"
 import { eq, and } from "ponder"
+import { getDisputePrimaryKey } from "./create"
 
 ponder.on("Arbitrator:VoteCommitted", handleVoteCommitted)
 ponder.on("ArbitratorChildren:VoteCommitted", handleVoteCommitted)
@@ -41,12 +42,9 @@ async function handleVoteRevealed(params: {
 
   const arbitrator = event.log.address.toLowerCase()
   const revealedBy = event.transaction.from.toLowerCase()
-
-  const [dispute] = await context.db.sql
-    .select()
-    .from(disputes)
-    .where(and(eq(disputes.disputeId, disputeId.toString()), eq(disputes.arbitrator, arbitrator)))
-    .limit(1)
+  const dispute = await context.db.find(disputes, {
+    id: getDisputePrimaryKey(disputeId, arbitrator),
+  })
 
   if (!dispute) throw new Error("Dispute not found")
 

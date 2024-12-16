@@ -29,7 +29,7 @@ async function handleDisputeCreated(params: {
   const challenger = event.transaction.from.toLowerCase()
 
   await context.db.insert(disputes).values({
-    id: `${id}_${arbitrator}`,
+    id: getDisputePrimaryKey(id, arbitrator),
     disputeId: id.toString(),
     grantId: "",
     evidenceGroupID: "",
@@ -57,7 +57,6 @@ async function handleDispute(params: {
   const { event, context } = params
   const { _arbitrator, _disputeID, _itemID, _evidenceGroupID } = event.args
 
-  const disputeId = _disputeID.toString()
   const arbitrator = _arbitrator.toString().toLowerCase()
 
   await context.db.update(grants, { id: _itemID.toString() }).set({ isDisputed: true })
@@ -75,8 +74,12 @@ async function handleDispute(params: {
     awaitingRecipientCount: row.awaitingRecipientCount - 1,
   }))
 
-  await context.db.update(disputes, { id: `${disputeId}_${arbitrator}` }).set({
+  await context.db.update(disputes, { id: getDisputePrimaryKey(_disputeID, arbitrator) }).set({
     grantId: _itemID.toString(),
     evidenceGroupID: _evidenceGroupID.toString(),
   })
+}
+
+export function getDisputePrimaryKey(disputeId: bigint, arbitrator: string) {
+  return `${disputeId.toString()}_${arbitrator}`
 }
