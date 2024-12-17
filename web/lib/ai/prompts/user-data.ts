@@ -1,6 +1,7 @@
 import { embeddingsDb } from "@/lib/embedding/db"
 import { getFarcasterUsersByEthAddress } from "@/lib/farcaster/get-user"
 import { getFarcasterUserChannels } from "@/lib/farcaster/get-user-channels"
+import { serialize } from "@/lib/serialize"
 import { getEthAddress } from "@/lib/utils"
 import { headers } from "next/headers"
 import { cache } from "react"
@@ -68,9 +69,9 @@ async function getFarcasterAccountPrompt(
     channelIds.push(...channels.map((c) => c.channelId))
   }
 
-  const prompt = `Here is the list of Farcaster users that are connected to the ${address}: ${JSON.stringify(farcasterUsers)}. You may learn something about the user from this information.
+  const prompt = `Here is the list of Farcaster users that are connected to the ${address}: ${serialize(farcasterUsers)}. You may learn something about the user from this information.
   
-    The user is a member of the following Farcaster channels: ${JSON.stringify(Array.from(new Set(channelIds)))}.
+    The user is a member of the following Farcaster channels: ${serialize(Array.from(new Set(channelIds)))}.
   
     If the user has exactly one Farcaster account connected to the address, you can use it for the application. Inform briefly the user that their Farcaster account will be used for the application. If user has more Farcaster accounts, you can ask them to pick one.
     
@@ -100,6 +101,6 @@ async function getBuilderProfilePrompt(fid: number): Promise<string> {
   }
 
   return `Here is a builder profile for the user, compiled from all of their public posts on Farcaster.
-  ${JSON.stringify(builderProfile.raw_content)}
+  ${serialize(builderProfile.raw_content)}
   `
 }

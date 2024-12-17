@@ -10,6 +10,7 @@ import { updateStoryTool } from "../../tools/stories/update-story"
 import { Agent } from "../agent"
 import { gonzoPersonalityPrompt } from "./personality"
 import { canEditStory } from "@/lib/database/helpers"
+import { serialize } from "@/lib/serialize"
 
 export async function getGonzo(data: ChatData): Promise<Agent> {
   const tools: Tool[] = [queryEmbeddingsTool]
@@ -42,7 +43,7 @@ async function getGonzoPrompt(data: ChatData, tools: Tool[]) {
 
 function getDataPrompt(data: ChatData) {
   if (!data || Object.keys(data).length === 0) return ""
-  return `\n\n# Additional data:\n${JSON.stringify(data, null, 2)}`
+  return `\n\n# Additional data:\n${serialize(data)}`
 }
 
 async function getStoryPrompt(storyId: string | undefined) {
@@ -51,7 +52,7 @@ async function getStoryPrompt(storyId: string | undefined) {
   const story = await getStory(storyId)
   if (!story) return ""
 
-  return `\n\n## Story:\nContext about the current story:\n${JSON.stringify(story, null, 2)}`
+  return `\n\n## Story:\nContext about the current story:\n${serialize(story)}`
 }
 
 const getStory = cache(async (storyId: string) => {

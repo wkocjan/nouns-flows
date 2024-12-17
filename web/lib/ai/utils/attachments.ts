@@ -1,3 +1,4 @@
+import { serialize } from "@/lib/serialize"
 import { CoreMessage } from "ai"
 
 export function extractAttachments(messages: Array<CoreMessage>): string[] {
@@ -20,5 +21,5 @@ export function getAttachmentsPrompt(messages: Array<CoreMessage>) {
   const attachments = extractAttachments(messages)
   if (attachments.length === 0) return null
 
-  return `\n\nHere is the list of all the attachments: ${JSON.stringify(attachments)}`
+  return `\n\nHere is the list of all the attachments: ${serialize(attachments)}`
 }
