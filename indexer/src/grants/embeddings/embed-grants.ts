@@ -7,26 +7,24 @@ import { getContentHash } from "../../hash"
 import { cleanTextForEmbedding } from "../../clean"
 import { Grant } from "../../../types"
 
-export async function addGrantEmbedding(
-  grant: Grant,
-  recipientType: RecipientType,
-  parentId: string
-) {
+export function addGrantEmbedding(grant: Grant, recipientType: RecipientType) {
   if (recipientType === RecipientType.ExternalAccount) {
-    return embedGrant(grant, parentId)
+    return embedGrant(grant)
   }
   if (recipientType === RecipientType.FlowContract) {
-    return embedFlowContract(grant, parentId)
+    return embedFlowContract(grant)
   }
 
   throw new Error("Invalid recipient type")
 }
 
-export async function removeGrantEmbedding(grant: Grant) {
+export function removeGrantEmbedding(grant: Grant) {
   const content = getGrantContent(grant)
   const type = grant.isFlow ? "flow" : "grant"
   const contentHash = getContentHash(content, type)
-  await deleteEmbeddingRequest(contentHash, type)
+  return deleteEmbeddingRequest(contentHash, type)
+    .then(() => console.log(`Deleted embedding for grant ${grant.id}`))
+    .catch((error) => console.error(`Failed to delete embedding for grant ${grant.id}:`, error))
 }
 
 const getGrantContent = (grant: Grant) => {
@@ -42,7 +40,7 @@ const getGrantContent = (grant: Grant) => {
   )
 }
 
-async function embedGrant(grant: Grant, parentId: string) {
+function embedGrant(grant: Grant) {
   const users = getNonzeroLowercasedAddresses([grant.recipient])
 
   const content = getGrantContent(grant)
@@ -52,11 +50,13 @@ async function embedGrant(grant: Grant, parentId: string) {
     content,
     groups: ["nouns"],
     users,
-    tags: [EmbeddingTag.Grants, parentId],
+    tags: [EmbeddingTag.Grants],
     externalId: grant.id.toString(),
   }
 
-  await postToEmbeddingsQueueRequest(payload)
+  return postToEmbeddingsQueueRequest(payload)
+    .then(() => console.log(`Created embedding for grant ${grant.id}`))
+    .catch((error) => console.error(`Failed to create embedding for grant ${grant.id}:`, error))
 }
 
 const getFlowContractContent = (grant: Grant) => {
@@ -71,7 +71,7 @@ const getFlowContractContent = (grant: Grant) => {
   return `this is a flow contract budget that people can apply for. here is the flow data: ${cleanedGrant}`
 }
 
-async function embedFlowContract(grant: Grant, parentId: string) {
+function embedFlowContract(grant: Grant) {
   const users = getNonzeroLowercasedAddresses([grant.recipient])
 
   const content = getFlowContractContent(grant)
@@ -81,9 +81,13 @@ async function embedFlowContract(grant: Grant, parentId: string) {
     content,
     groups: ["nouns"],
     users,
-    tags: [EmbeddingTag.Flows, parentId],
+    tags: [EmbeddingTag.Flows],
     externalId: grant.id.toString(),
   }
 
-  await postToEmbeddingsQueueRequest(payload)
+  return postToEmbeddingsQueueRequest(payload)
+    .then(() => console.log(`Created embedding for flow contract ${grant.id}`))
+    .catch((error) =>
+      console.error(`Failed to create embedding for flow contract ${grant.id}:`, error)
+    )
 }

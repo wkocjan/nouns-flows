@@ -179,5 +179,10 @@ export default createConfig({
       interval: (process.env.NODE_ENV === "development" ? 3600 : 60) / SECONDS_PER_BLOCK, // 1 hour in dev, 1 minute otherwise
       startBlock: currentBlock,
     },
+    RecipientCounts: {
+      network: "base",
+      interval: (process.env.NODE_ENV === "development" ? 3600 : 300) / SECONDS_PER_BLOCK, // 1 hour in dev, 5 minutes otherwise
+      startBlock: currentBlock,
+    },
   },
 })
