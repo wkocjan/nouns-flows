@@ -20,7 +20,6 @@
     "@blocknote/react": "^0.21.0",
     "@chainsafe/persistent-merkle-tree": "^0.8.0",
     "@chainsafe/ssz": "^0.17.1",
-    "@dagrejs/dagre": "^1.1.4",
     "@lodestar/types": "^1.22.0",
     "@neondatabase/serverless": "^0.10.2",
     "@number-flow/react": "^0.4.4",
