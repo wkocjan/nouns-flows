@@ -1,4 +1,4 @@
-import database from "@/lib/database/edge"
+import database, { getCacheStrategy } from "@/lib/database/edge"
 import { getPool } from "@/lib/database/queries/pool"
 import { FullDiagram } from "./diagram"
 import { Metadata } from "next"
@@ -14,12 +14,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ExplorePage() {
-  const flows = await database.grant.findMany({
-    where: { isActive: true, isFlow: true, isTopLevel: false },
-    include: { subgrants: { where: { isActive: true } } },
-  })
-
-  const pool = await getPool()
+  const [flows, pool] = await Promise.all([
+    database.grant.findMany({
+      where: { isActive: true, isFlow: true, isTopLevel: false },
+      include: { subgrants: { where: { isActive: true } } },
+      ...getCacheStrategy(3600),
+    }),
+    getPool(),
+  ])
 
   return (
     <main className="flex grow flex-col">

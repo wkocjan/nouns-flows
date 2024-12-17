@@ -19,7 +19,7 @@ export function CTAButtons() {
       {!isActive && (
         <Button variant={showVotingToggle ? "outline" : "default"}>
           <Link href={`/apply`}>
-            Apply <span className="max-sm:hidden">for a grant</span>
+            Apply <span className="max-sm:hidden">for grant</span>
           </Link>
         </Button>
       )}

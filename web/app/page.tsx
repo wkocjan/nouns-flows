@@ -12,6 +12,8 @@ import FlowsList from "./components/flows-list"
 import { FlowsStories } from "./components/flows-stories"
 import { CTAButtons } from "./flow/[flowId]/components/cta-buttons"
 import { VotingBar } from "./flow/[flowId]/components/voting-bar"
+import { FullDiagram } from "./explore/diagram"
+import { Suspense } from "react"
 
 export default async function Home() {
   const [pool, activeFlows] = await Promise.all([
@@ -26,10 +28,12 @@ export default async function Home() {
 
   return (
     <VotingProvider chainId={base.id} contract={getEthAddress(pool.recipient)}>
-      <main className="container pb-24">
-        <FlowsStories />
+      <main>
+        <div className="container">
+          <FlowsStories />
+        </div>
 
-        <div className="mt-12 flex items-center justify-between">
+        <div className="container mt-12 flex items-center justify-between">
           <div>
             <div className="flex items-center space-x-4">
               <h3 className="font-semibold leading-none tracking-tight md:text-lg">
@@ -54,13 +58,49 @@ export default async function Home() {
           <CTAButtons />
         </div>
 
-        <div className="mt-6">
+        <div className="container mt-6">
           <FlowsList flows={activeFlows} />
+        </div>
+
+        <div className="mt-12">
+          <div className="container mb-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-semibold leading-none tracking-tight md:text-lg">
+                  <Link href="/explore" className="hover:text-primary">
+                    Dive into the flow
+                  </Link>
+                </h3>
+                <p className="mt-1 text-sm text-muted-foreground max-sm:hidden">
+                  Explore the builders making impact
+                </p>
+              </div>
+              <CTAButtons />
+            </div>
+          </div>
+          <div className="flex h-[750px] grow flex-col">
+            <Suspense
+              fallback={
+                <div className="flex h-full items-center justify-center">Loading diagram...</div>
+              }
+            >
+              <FullDiagram flows={await getFlows()} pool={pool} />
+            </Suspense>
+          </div>
         </div>
       </main>
       <VotingBar />
     </VotingProvider>
   )
+}
+
+const getFlows = async () => {
+  const flows = await database.grant.findMany({
+    where: { isActive: true, isFlow: true, isTopLevel: false },
+    include: { subgrants: { where: { isActive: true } } },
+    ...getCacheStrategy(3600),
+  })
+  return flows
 }
 
 function getSum(flows: Grant[], key: keyof Grant): number {

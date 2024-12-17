@@ -1,58 +1,107 @@
 "use client"
 
-import { Badge } from "@/components/ui/badge"
 import { Currency } from "@/components/ui/currency"
+import { getIpfsUrl } from "@/lib/utils"
 import { Grant } from "@prisma/flows"
 import { Handle, Node, NodeProps, Position } from "@xyflow/react"
+import Image from "next/image"
 import Link from "next/link"
 import { memo } from "react"
 
-function FlowNode(props: NodeProps<Node<{ flow: Grant }, "flow">>) {
-  const {
-    targetPosition = Position.Left,
-    sourcePosition = Position.Right,
-    width,
-    height,
-    data,
-  } = props
-  const { title, id, monthlyIncomingFlowRate } = data.flow
+export type IFlowNode = Node<{ flow: Grant }, "flow">
+
+function FlowNode(props: NodeProps<IFlowNode>) {
+  const { targetPosition = Position.Left, sourcePosition = Position.Right, width, height } = props
+  const { image, title, monthlyIncomingFlowRate, id } = props.data.flow
 
   return (
-    <div
-      className="pointer-events-auto flex cursor-auto rounded-lg border bg-card p-2.5"
-      style={{ width, height }}
-    >
-      <div className="flex grow items-center justify-center">
-        <div className="ml-2.5 flex flex-col items-center pr-1.5">
-          <h2 className="line-clamp-1 font-medium">
-            <Link href={`/flow/${id}`} className="duration-100 hover:text-primary">
-              {title}
-            </Link>
-          </h2>
+    <Link href={`/flow/${id}`} className="block">
+      <div
+        className="group pointer-events-auto relative isolate inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-full border bg-card"
+        style={{ width, height }}
+      >
+        {image && (
+          <div className="pointer-events-none absolute inset-0 -z-10 size-full overflow-hidden rounded-full">
+            <Image
+              src={getIpfsUrl(image)}
+              alt={title}
+              className="size-full animate-pulse object-cover blur-md"
+              width={240}
+              height={240}
+              priority
+            />
+          </div>
+        )}
 
-          <div className="mt-2 flex items-center space-x-1">
-            <Badge>
-              <Currency>{monthlyIncomingFlowRate}</Currency>
-              /mo
-            </Badge>
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-gray-900/30 via-gray-900/10" />
+
+        <div className="flex flex-col items-center justify-center space-y-4">
+          <div className="px-6 text-center text-3xl font-medium text-white">{title}</div>
+          <div className="rounded-md bg-primary px-2.5 py-1 font-medium text-primary-foreground">
+            <Currency>{monthlyIncomingFlowRate}</Currency>
+            /mo
           </div>
         </div>
+
+        <Handle
+          type="target"
+          id="top"
+          position={Position.Top}
+          isConnectable={false}
+          style={{ background: "var(--color-primary)" }}
+        />
+        <Handle
+          type="target"
+          id="right"
+          position={Position.Right}
+          isConnectable={false}
+          style={{ background: "var(--color-primary)" }}
+        />
+        <Handle
+          type="target"
+          id="bottom"
+          position={Position.Bottom}
+          isConnectable={false}
+          style={{ background: "var(--color-primary)" }}
+        />
+        <Handle
+          type="target"
+          id="left"
+          position={Position.Left}
+          isConnectable={false}
+          style={{ background: "var(--color-primary)" }}
+        />
+
+        <Handle
+          type="source"
+          id="top"
+          position={Position.Top}
+          isConnectable={false}
+          style={{ background: "var(--color-primary)" }}
+        />
+        <Handle
+          type="source"
+          id="right"
+          position={Position.Right}
+          isConnectable={false}
+          style={{ background: "var(--color-primary)" }}
+        />
+        <Handle
+          type="source"
+          id="bottom"
+          position={Position.Bottom}
+          isConnectable={false}
+          style={{ background: "var(--color-primary)" }}
+        />
+        <Handle
+          type="source"
+          id="left"
+          position={Position.Left}
+          isConnectable={false}
+          style={{ background: "var(--color-primary)" }}
+        />
       </div>
-
-      <Handle
-        type="target"
-        position={targetPosition}
-        isConnectable={false}
-        style={{ background: "var(--primary)" }}
-      />
-
-      <Handle
-        type="source"
-        position={sourcePosition}
-        isConnectable={false}
-        style={{ background: "var(--primary)" }}
-      />
-    </div>
+    </Link>
   )
 }
 
