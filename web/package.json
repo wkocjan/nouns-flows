@@ -4,13 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "prebuild": "node edge-prebuild.js && prisma generate --no-engine --no-hints && prisma generate --schema=./lib/database/farcaster.prisma --no-hints --no-engine",
     "build": "NODE_OPTIONS=--max-old-space-size=6144 next build",
     "start": "next start",
-    "lint": "next lint",
-    "prebuild": "node edge-prebuild.js && prisma generate --no-engine --no-hints && prisma generate --schema=./lib/database/farcaster.prisma --no-hints --no-engine",
-    "db:push": "prisma db push",
-    "db:generate": "prisma generate --no-hints && prisma generate --no-hints --schema=./lib/database/farcaster.prisma",
-    "typecheck": "tsc"
+    "db:generate": "prisma generate --no-hints && prisma generate --no-hints --schema=./lib/database/farcaster.prisma"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.0.5",
@@ -46,7 +43,6 @@
     "@radix-ui/react-tooltip": "^1.1.5",
     "@reservoir0x/relay-sdk": "^1.3.3",
     "@tanstack/react-query": "5.56.2",
-    "@types/uuid": "^10.0.0",
     "@vercel/analytics": "^1.4.1",
     "@vercel/blob": "^0.27.0",
     "@vercel/functions": "^1.5.2",
@@ -72,7 +68,6 @@
     "swr": "^2.2.5",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
-    "uuid": "^10.0.0",
     "viem": "~2.21.36",
     "wagmi": "^2.14.1",
     "zod": "^3.24.1"
@@ -80,7 +75,6 @@
   "devDependencies": {
     "@next/bundle-analyzer": "^15.1.0",
     "@types/node": "^20",
-    "@types/pg": "^8.11.10",
     "@types/pluralize": "^0.0.33",
     "@types/react": "19.0.1",
     "@types/react-dom": "19.0.2",
@@ -89,7 +83,6 @@
     "eslint-config-next": "15.1.0",
     "fs-extra": "^11.2.0",
     "glob": "^11.0.0",
-    "pino-pretty": "^13.0.0",
     "postcss": "^8.4.49",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.9",
