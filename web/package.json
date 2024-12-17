@@ -12,9 +12,6 @@
   "dependencies": {
     "@ai-sdk/anthropic": "^1.0.5",
     "@ai-sdk/openai": "^1.0.8",
-    "@blocknote/core": "^0.21.0",
-    "@blocknote/mantine": "^0.21.0",
-    "@blocknote/react": "^0.21.0",
     "@chainsafe/persistent-merkle-tree": "^0.8.0",
     "@chainsafe/ssz": "^0.17.1",
     "@lodestar/types": "^1.22.0",
