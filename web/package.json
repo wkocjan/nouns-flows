@@ -60,8 +60,6 @@
     "embla-carousel-react": "^8.5.1",
     "framer-motion": "^11.11.17",
     "jose": "^5.9.6",
-    "linkify-react": "^4.2.0",
-    "linkifyjs": "^4.2.0",
     "lucide-react": "^0.468.0",
     "markdown-to-jsx": "^7.7.1",
     "next": "15.1.0",

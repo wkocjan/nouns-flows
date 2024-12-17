@@ -149,12 +149,6 @@ importers:
       jose:
         specifier: ^5.9.6
         version: 5.9.6
-      linkify-react:
-        specifier: ^4.2.0
-        version: 4.2.0(linkifyjs@4.2.0)(react@19.0.0)
-      linkifyjs:
-        specifier: ^4.2.0
-        version: 4.2.0
       lucide-react:
         specifier: ^0.468.0
         version: 0.468.0(react@19.0.0)
@@ -4970,12 +4964,6 @@ packages:
 
   linkify-it@5.0.0:
     resolution: {integrity: sha512-5aHCbzQRADcdP+ATqnDuhhJ/MRIqDkZX5pyjFHRRysS8vZ5AbqGEoFIb6pYHPZ+L/OC2Lc+xT8uHVVR5CAK/wQ==}
-
-  linkify-react@4.2.0:
-    resolution: {integrity: sha512-dIcDGo+n4FP2FPIHDcqB7cUE+omkcEgQJpc7sNNP4+XZ9FUhFAkKjGnHMzsZM+B4yF93sK166z9K5cKTe/JpzA==}
-    peerDependencies:
-      linkifyjs: ^4.0.0
-      react: '>= 15.0.0'
 
   linkifyjs@4.2.0:
     resolution: {integrity: sha512-pCj3PrQyATaoTYKHrgWRF3SJwsm61udVh+vuls/Rl6SptiDhgE7ziUIudAedRY9QEfynmM7/RmLEfPUyw1HPCw==}
@@ -13144,11 +13132,6 @@ snapshots:
   linkify-it@5.0.0:
     dependencies:
       uc.micro: 2.1.0
-
-  linkify-react@4.2.0(linkifyjs@4.2.0)(react@19.0.0):
-    dependencies:
-      linkifyjs: 4.2.0
-      react: 19.0.0
 
   linkifyjs@4.2.0: {}
 
