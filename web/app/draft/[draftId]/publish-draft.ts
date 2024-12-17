@@ -8,8 +8,9 @@ export async function publishDraft(id: number, transactionHash: string) {
       where: { id, isOnchain: false },
       data: { transactionHash, isOnchain: true },
     })
+
     return { error: false }
   } catch (error) {
-    return { error: (error as Error).message || "Failed to save draft" }
+    return { error: (error as Error).message || "Failed to publish draft" }
   }
 }

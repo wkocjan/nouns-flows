@@ -10,5 +10,5 @@ export async function getVoters(contract: `0x${string}`, recipientId: string) {
          GROUP BY voter    
         `
 
-  return voters.map((v) => ({ ...v, votesCount: v.votes_count.toString() }))
+  return voters.map((v) => ({ voter: v.voter, votesCount: v.votes_count.toString() }))
 }

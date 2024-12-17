@@ -11,7 +11,7 @@ import { getMediaPrompt } from "./media"
 export async function generateGrantPageData(id: string): Promise<GrantPageData | null> {
   const [{ flow, ...grant }, stories, casts, storiesCount, castsCount] = await Promise.all([
     database.grant.findUniqueOrThrow({
-      where: { id, isActive: true, isTopLevel: false },
+      where: { id, isFlow: false },
       select: {
         recipient: true,
         title: true,
@@ -19,6 +19,7 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
         image: true,
         tagline: true,
         createdAt: true,
+        isActive: true,
         flow: { select: { id: true, tagline: true, title: true, description: true } },
       },
     }),
@@ -97,6 +98,8 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
     Casts Count (about this grant):
     ${castsCount}
     ----
+
+    Grant status: ${grant.isActive ? "Approved (active)" : "Application"}
     
     Conduct a thorough analysis of the provided data, following these steps:
 
@@ -109,14 +112,14 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
       - Explain how the grant fits into the category and its goals (flow).
       - Identify any dependencies or connections with other projects in the flow.
 
-    3. Stories Data Analysis:
+    3. Stories Data Analysis (if grant is active):
       - Summarize important points about the grant's progress.
       - List significant milestones achieved, with dates if available.
       - For each story, provide a brief summary and note significant events, achievements, or challenges.
       - Identify common themes or patterns across the stories.
       - List all images from the stories.
 
-    4. Casts Data Analysis:
+    4. Casts Data Analysis (if grant is active):
       - Extract any additional context not covered in the grant description or stories.
       - Note any recurring topics or concerns mentioned in the casts.
 
@@ -201,6 +204,7 @@ export async function generateGrantPageData(id: string): Promise<GrantPageData |
     - Focus on progress and impact, not budget or community votes
     - Extract interesting numeric data if lacking specific metrics
     - From the label it should be clear what the value means (what's the unit)
+    - For applications (non-approved grants) use some metrics from the grant description
     
     ### Builder
     Structure:

@@ -1,12 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { DateTime } from "@/components/ui/date-time"
-import { Grant } from "@prisma/flows"
-import { Cast, Profile } from "@prisma/farcaster"
-import Linkify from "linkify-react"
-import { VideoPlayer } from "./video-player"
 import { getCastImages } from "@/lib/farcaster/get-cast-images"
 import { getCastVideos } from "@/lib/farcaster/get-cast-videos"
+import { Cast, Profile } from "@prisma/farcaster"
+import { Grant } from "@prisma/flows"
+import { VideoPlayer } from "./video-player"
 
 interface Props {
   cast: Cast & { profile: Profile; grant?: Pick<Grant, "title" | "image"> | null }
@@ -49,17 +48,7 @@ export const CastCard = (props: Props) => {
         </a>
       </CardHeader>
       <CardContent>
-        <div className="whitespace-pre-line text-sm">
-          <Linkify
-            options={{
-              className:
-                "hover:underline duration-100 break-all text-primary transition-colors leading-loose",
-              target: "_blank",
-            }}
-          >
-            {cast.text}
-          </Linkify>
-        </div>
+        <div className="whitespace-pre-line text-sm">{cast.text}</div>
 
         {((videos.length || 0) > 0 || (images.length || 0) > 0) && (
           <div className="mt-4 grid grid-cols-1 gap-2.5">

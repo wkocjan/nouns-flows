@@ -1,3 +1,5 @@
+import { MAX_GRANTS_PER_USER } from "@/lib/config"
+import { countUserActiveGrants } from "@/lib/database/queries/grant"
 import { embeddingsDb } from "@/lib/embedding/db"
 import { getFarcasterUsersByEthAddress } from "@/lib/farcaster/get-user"
 import { getFarcasterUserChannels } from "@/lib/farcaster/get-user-channels"
@@ -9,9 +11,14 @@ import { cache } from "react"
 export const getUserDataPrompt = cache(async (address?: string) => {
   const { farcasterAccountPrompt, fid } = await getFarcasterAccountPrompt(address)
 
+  const userActiveGrants = await countUserActiveGrants()
+
   return `## User data
   
   ${address ? `The address of the user is ${address}. ` : "The user is not logged in."}
+
+  This user has ${userActiveGrants} active grants. There is a limit of active grants per user: ${MAX_GRANTS_PER_USER}.
+  It means that the user ${userActiveGrants >= MAX_GRANTS_PER_USER ? "has reached the limit and cannot apply for another grant" : "has not reached the limit and can apply for grant"}.
   
   ${farcasterAccountPrompt}
 

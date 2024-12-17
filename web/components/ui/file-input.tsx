@@ -42,7 +42,7 @@ export function FileInput({ name, accept, onSuccess, maxFileSizeMB = 5 }: Props)
         disabled={isUploading}
         className="pr-10"
       />
-      <input type="hidden" name={name} value={url} />
+      <input type="hidden" name={name} value={url || ""} />
       <div className="absolute inset-y-0 right-0 flex items-center pl-3">
         {url && (
           <Image

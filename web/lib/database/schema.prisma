@@ -15,7 +15,6 @@ model Draft {
   id              Int      @id @default(autoincrement())
   title           String
   description     String
-  blocks          String?
   tagline         String?
   image           String
   users           String[]
@@ -34,25 +33,6 @@ model Draft {
   @@index([flowId])
   @@index([createdAt])
   @@map("Draft")
-  @@schema("web")
-}
-
-model Comment {
-  id            String   @id @default(cuid())
-  content       String
-  author        String
-  commentableId String
-  parentId      String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
-  replies Comment[] @relation("CommentReplies")
-
-  @@index([commentableId])
-  @@index([parentId])
-  @@index([author])
-  @@map("Comment")
   @@schema("web")
 }
 

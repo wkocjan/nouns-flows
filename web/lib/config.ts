@@ -1,5 +1,5 @@
-import { nounsTokenAddress } from "./abis"
 import { base as baseContracts } from "../addresses"
+import { nounsTokenAddress } from "./abis"
 
 // Flow contracts
 export const NOUNS_FLOW = baseContracts.NounsFlow
@@ -35,3 +35,5 @@ export const NOUNS_CHANNEL_ID = "nouns"
 export const FLOWS_CHANNEL_ID = "flows"
 
 export const MULTICALL_ADDRESS = "0xcA11bde05977b3631167028862bE2a173976CA11" as `0x${string}`
+
+export const MAX_GRANTS_PER_USER = 2

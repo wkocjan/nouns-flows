@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input"
 import { Markdown } from "@/components/ui/markdown"
 import { MarkdownInput } from "@/components/ui/markdown-input"
 import { getIpfsUrl } from "@/lib/utils"
-import { Block } from "@blocknote/core"
 import { Draft } from "@prisma/flows"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -17,12 +16,11 @@ import { useCanManageDraft } from "./use-can-manage-draft"
 interface Props {
   draft: Draft
   edit?: boolean
-  blocks: Block[]
   markdown: string
 }
 
 export default function DraftContent(props: Props) {
-  const { draft, blocks, markdown, edit = false } = props
+  const { draft, markdown, edit = false } = props
   const { image, title } = draft
   const [isEditMode, setIsEditMode] = useState(false)
   const { address } = useAccount()
@@ -46,7 +44,7 @@ export default function DraftContent(props: Props) {
   }
 
   return (
-    <form action={handleSubmit} id="draft-edit">
+    <form action={handleSubmit} id="draft-edit" className="flex h-full flex-col">
       <div className="flex items-center space-x-4">
         <Image
           src={getIpfsUrl(image, "pinata")}
@@ -67,10 +65,15 @@ export default function DraftContent(props: Props) {
           )}
         </div>
       </div>
-      <div className="mt-6 space-y-5 text-pretty text-sm md:text-base">
+      <div className="mt-6 grow space-y-5 text-pretty text-sm md:text-base">
         {!isEditMode && <Markdown>{markdown}</Markdown>}
         {isEditMode && (
-          <MarkdownInput name="description" initialBlocks={blocks} initialMarkdown={markdown} />
+          <MarkdownInput
+            name="description"
+            initialValue={markdown}
+            className="h-full"
+            minHeight={480}
+          />
         )}
       </div>
     </form>

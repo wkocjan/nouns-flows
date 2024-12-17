@@ -19,6 +19,10 @@
     {
       "path": "/crons/derived-data/minimum-salary",
       "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/crons/derived-data/grant-page",
+      "schedule": "0 */2 * * *"
     }
   ]
 }
