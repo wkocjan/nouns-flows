@@ -1,5 +1,4 @@
-import { Comments } from "@/components/comments/comments"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -33,7 +32,7 @@ interface Props {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { draftId } = (await props.params)
+  const { draftId } = await props.params
 
   const draft = await database.draft.findFirstOrThrow({
     where: { id: Number(draftId) },
@@ -43,8 +42,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function DraftPage(props: Props) {
-  const searchParams = await props.searchParams;
-  const params = await props.params;
+  const searchParams = await props.searchParams
+  const params = await props.params
   const { draftId } = params
 
   const draft = await database.draft.findUniqueOrThrow({
@@ -52,13 +51,13 @@ export default async function DraftPage(props: Props) {
     include: { flow: { include: { derivedData: true } } },
   })
 
-  const { title, flow, isOnchain, createdAt, users, isFlow, description, blocks } = draft
+  const { title, flow, isOnchain, createdAt, users, isFlow, description } = draft
 
   const costs = getTcrCosts(flow)
   const edit = searchParams.edit === "true"
 
   return (
-    <div className="container mt-2.5 pb-24 md:mt-6">
+    <div className="container mt-2.5 flex grow flex-col pb-12 md:mt-6">
       <div className="flex flex-col max-md:space-y-4 md:flex-row md:items-center md:justify-between">
         <Breadcrumb className="mb-4 mr-2">
           <BreadcrumbList>
@@ -66,15 +65,11 @@ export default async function DraftPage(props: Props) {
               <BreadcrumbLink href="/">Flows</BreadcrumbLink>
             </BreadcrumbItem>
 
-            <>
-              <BreadcrumbSeparator />
+            <BreadcrumbSeparator />
 
-              <BreadcrumbItem>
-                <BreadcrumbLink href={`/flow/${flow.id}/drafts`}>
-                  {flow.title} Drafts
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            </>
+            <BreadcrumbItem>
+              <BreadcrumbLink href={`/flow/${flow.id}/drafts`}>{flow.title} Drafts</BreadcrumbLink>
+            </BreadcrumbItem>
 
             <BreadcrumbSeparator />
 
@@ -89,14 +84,9 @@ export default async function DraftPage(props: Props) {
         </div>
       </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-5 md:gap-20">
+      <div className="mt-8 grid grow grid-cols-1 gap-8 md:grid-cols-5 md:gap-20">
         <div className="md:col-span-3">
-          <DraftContent
-            draft={draft}
-            edit={edit}
-            blocks={blocks ? JSON.parse(blocks) : undefined}
-            markdown={description}
-          />
+          <DraftContent draft={draft} edit={edit} markdown={description} />
         </div>
 
         <div className="space-y-4 md:col-span-2">
@@ -114,7 +104,6 @@ export default async function DraftPage(props: Props) {
                         {(profile) => (
                           <Avatar className="size-7 bg-accent text-xs">
                             <AvatarImage src={profile.pfp_url} alt={profile.display_name} />
-                            <AvatarFallback>{profile.display_name[0].toUpperCase()}</AvatarFallback>
                           </Avatar>
                         )}
                       </UserProfile>
@@ -154,15 +143,6 @@ export default async function DraftPage(props: Props) {
               symbol={(await costs).symbol}
             />
           </Suspense>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Comments</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Comments commentableId={`draft-${flow.id}-${draft.id}`} maxHeight={450} />
-            </CardContent>
-          </Card>
         </div>
       </div>
     </div>

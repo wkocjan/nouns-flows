@@ -1,7 +1,5 @@
-import { and, eq } from "ponder"
 import { ponder, type Context, type Event } from "ponder:registry"
 import { grants } from "../../ponder.schema"
-import { updateGrantPage } from "../grant-page/update-grant-page"
 import { addGrantEmbedding, removeGrantEmbedding } from "./embeddings/embed-grants"
 
 ponder.on("NounsFlowChildren:RecipientCreated", handleRecipientCreated)
@@ -59,10 +57,6 @@ async function handleRecipientCreated(params: {
   })
 
   addGrantEmbedding(grant, recipientType)
-
-  if (!grant.isFlow) {
-    updateGrantPage(grant.id)
-  }
 }
 
 async function handleRecipientRemoved(params: {

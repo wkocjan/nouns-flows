@@ -5,6 +5,7 @@ import { Markdown } from "@/components/ui/markdown"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import database from "@/lib/database/edge"
 import { getFlow } from "@/lib/database/queries/flow"
+import { countUserActiveGrants } from "@/lib/database/queries/grant"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { Metadata } from "next"
 import { ApplyForm } from "../components/apply-form"
@@ -12,9 +13,7 @@ import { ApplyForm } from "../components/apply-form"
 export const runtime = "nodejs"
 
 interface Props {
-  params: Promise<{
-    flowId: string
-  }>
+  params: Promise<{ flowId: string }>
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
@@ -33,16 +32,16 @@ export default async function ApplyFlowPage(props: Props) {
     where: { id: flowId, isFlow: true, isActive: true },
     include: { derivedData: true },
   })
-  const { isTopLevel } = flow
-  const isFlow = isTopLevel
+
+  const userActiveGrants = await countUserActiveGrants()
 
   return (
     <main className="container flex h-[calc(100vh-68px)] flex-col pb-12 pt-8">
       <h3 className="text-pretty font-semibold tracking-tight">
-        {isTopLevel ? "Suggest new flow" : `Apply for a grant in "${flow.title}"`}
+        {flow.isTopLevel ? "Suggest new flow" : `Apply for a grant in "${flow.title}"`}
       </h3>
       <p className="mt-1.5 max-w-screen-md whitespace-pre-line text-balance text-sm text-muted-foreground">
-        {isTopLevel
+        {flow.isTopLevel
           ? "Suggest a new funding flow to help people make impact."
           : "Review guidelines below, outline your project, highlight its impact, and demonstrate how it meets the flow's requirements and objectives."}
       </p>
@@ -51,9 +50,12 @@ export default async function ApplyFlowPage(props: Props) {
           <CardContent className="flex grow flex-col">
             <ApplyForm
               flow={flow}
-              isFlow={isFlow}
+              isFlow={flow.isTopLevel}
+              userActiveGrants={userActiveGrants}
               template={
-                isFlow ? defaultFlowTemplate : flow.derivedData?.template || defaultGrantTemplate
+                flow.isTopLevel
+                  ? defaultFlowTemplate
+                  : flow.derivedData?.template || defaultGrantTemplate
               }
             />
           </CardContent>

@@ -6,9 +6,8 @@ import { convertToCoreMessages, streamText } from "ai"
 import { ChatBody } from "./chat-body"
 import { saveConversation } from "./save-conversation"
 
-export const dynamic = "force-dynamic"
-export const revalidate = 0
 export const runtime = "nodejs"
+export const maxDuration = 300
 
 export async function POST(request: Request) {
   const body: ChatBody = await request.json()

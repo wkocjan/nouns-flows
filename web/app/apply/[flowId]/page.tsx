@@ -6,13 +6,11 @@ import { ApplicationChat } from "./components/application-chat"
 export const runtime = "nodejs"
 
 interface Props {
-  params: Promise<{
-    flowId: string
-  }>
+  params: Promise<{ flowId: string }>
 }
 
 export default async function ApplyPage(props: Props) {
-  const { flowId } = (await props.params)
+  const { flowId } = await props.params
 
   const flow = await getFlow(flowId)
   const user = await getUser()

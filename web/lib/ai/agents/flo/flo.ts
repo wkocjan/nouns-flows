@@ -3,7 +3,7 @@ import { getVoters } from "@/app/item/[grantId]/components/get-voters"
 import { submitApplicationTool } from "@/lib/ai/tools/applications/tool"
 import { queryEmbeddingsTool } from "@/lib/ai/tools/embeddings/tool"
 import { getTools, getToolsPrompt, Tool } from "@/lib/ai/tools/tool"
-import database from "@/lib/database/edge"
+import database, { getCacheStrategy } from "@/lib/database/edge"
 import { canEditGrant } from "@/lib/database/helpers"
 import { cache } from "react"
 import { aboutPrompt } from "../../prompts/about"
@@ -19,10 +19,7 @@ export async function getFlo(data: ChatData): Promise<Agent> {
 
   if (data.grantId && data.address) {
     const grant = await getGrant(data.grantId)
-
-    if (grant && canEditGrant(grant, data.address)) {
-      tools.push(updateGrantTool)
-    }
+    if (grant && canEditGrant(grant, data.address)) tools.push(updateGrantTool)
   }
 
   return {
@@ -34,9 +31,10 @@ export async function getFlo(data: ChatData): Promise<Agent> {
 async function getFloPrompt(data: ChatData, tools: Tool[]) {
   let prompt = `${aboutPrompt}\n\n`
   prompt += `${floPersonalityPrompt}\n`
-  prompt += await getGrantPrompt(data.grantId)
-  prompt += await getUserDataPrompt(data.address)
   prompt += getDataPrompt(data)
+  prompt += await getUserDataPrompt(data.address)
+  prompt += await getGrantPrompt(data.grantId)
+  prompt += await getApplicationTemplate(data.flowId)
   prompt += await getAllNounishCitizensPrompt()
   prompt += getToolsPrompt(tools)
 
@@ -101,3 +99,24 @@ const getGrant = cache(async (grantId: string) => {
     include: { derivedData: { select: { pageData: true } } },
   })
 })
+
+async function getApplicationTemplate(flowId: string | undefined) {
+  if (!flowId) return null
+
+  const flow = await database.grant.findFirstOrThrow({
+    where: { id: flowId, isFlow: true },
+    select: { derivedData: { select: { template: true } }, title: true },
+    ...getCacheStrategy(1800),
+  })
+
+  if (!flow.derivedData?.template) return null
+
+  return `### Application template for "${flow.title}" flow
+
+  Here is the application template for flow with ID = ${flowId} in markdown format.
+  
+  Do not use "applicationTemplate" tool to get template for this flow.
+
+  ${flow.derivedData.template}
+  `
+}

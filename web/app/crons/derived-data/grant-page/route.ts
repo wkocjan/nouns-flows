@@ -6,17 +6,12 @@ import { NextResponse } from "next/server"
 
 export const maxDuration = 300
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url)
-    const grantId = searchParams.get("grantId")
-
     const grants = await database.grant.findMany({
       where: {
         isFlow: false,
-        isActive: true,
         OR: [{ derivedData: null }, { derivedData: { pageData: null } }],
-        ...(grantId ? { id: grantId } : {}),
       },
       take: 3,
     })
@@ -36,24 +31,19 @@ export async function GET(request: Request) {
 }
 
 async function generateAndStoreGrantPageData(grantId: string) {
-  try {
-    const data = await generateGrantPageData(grantId)
-    if (!data) throw new Error("Failed to generate grant page data")
+  const data = await generateGrantPageData(grantId)
+  if (!data) throw new Error("Failed to generate grant page data")
 
-    const pageData = JSON.stringify(data)
+  const pageData = JSON.stringify(data)
 
-    const hasDerivedData = await database.derivedData.count({ where: { grantId } })
+  const hasDerivedData = await database.derivedData.count({ where: { grantId } })
 
-    if (hasDerivedData > 0) {
-      await database.derivedData.update({ where: { grantId }, data: { pageData } })
-    } else {
-      await database.derivedData.create({ data: { grantId, pageData } })
-    }
-
-    console.debug(`Stored page data for ${data.title} in the DB`)
-    return data
-  } catch (error) {
-    console.error((error as any).message, { grantId })
-    return null
+  if (hasDerivedData > 0) {
+    await database.derivedData.update({ where: { grantId }, data: { pageData } })
+  } else {
+    await database.derivedData.create({ data: { grantId, pageData } })
   }
+
+  console.debug(`Stored page data for ${data.title} in the DB`)
+  return data
 }

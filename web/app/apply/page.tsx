@@ -101,7 +101,10 @@ export default async function ApplyPage() {
       </div>
       <div className="mx-auto mt-16 max-w-screen-lg text-center text-sm text-muted-foreground">
         Not seeing the flow you want? <br className="md:hidden" />
-        <Link href={`/apply/${pool.id}`} className="text-primary underline hover:text-primary/80">
+        <Link
+          href={`/apply/${pool.id}/manual`}
+          className="text-primary underline hover:text-primary/80"
+        >
           Create a new one
         </Link>
       </div>

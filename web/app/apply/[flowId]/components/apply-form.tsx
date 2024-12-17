@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { MarkdownInput } from "@/components/ui/markdown-input"
 import { useLogin } from "@/lib/auth/use-login"
+import { MAX_GRANTS_PER_USER } from "@/lib/config"
 import { getShortEthAddress } from "@/lib/utils"
 import { Grant } from "@prisma/flows"
 import { useRouter } from "next/navigation"
@@ -22,10 +23,11 @@ interface Props {
   flow: Grant
   isFlow: boolean
   template: string
+  userActiveGrants: number
 }
 
 export function ApplyForm(props: Props) {
-  const { flow, isFlow, template } = props
+  const { flow, isFlow, template, userActiveGrants } = props
   const { isConnected, address } = useAccount()
   const { login } = useLogin()
 
@@ -38,6 +40,8 @@ export function ApplyForm(props: Props) {
 
   const recipientExists = useRecipientExists(flow.recipient, address)
 
+  const isMaxGrantsReached = !isFlow && userActiveGrants >= MAX_GRANTS_PER_USER
+
   async function handleSubmit(formData: FormData) {
     if (!isConnected) {
       toast.error("You need to sign in to submit the application")
@@ -46,6 +50,11 @@ export function ApplyForm(props: Props) {
 
     if (recipientExists) {
       toast.error("You have already applied to this flow")
+      return
+    }
+
+    if (isMaxGrantsReached) {
+      toast.error("You have reached the maximum number of active grants")
       return
     }
 
@@ -69,6 +78,15 @@ export function ApplyForm(props: Props) {
             <br />
             Only one application per user is allowed.
           </AlertDescription>
+        </Alert>
+      )}
+
+      {isMaxGrantsReached && (
+        <Alert variant="destructive">
+          <AlertTitle className="text-base">
+            You have reached the maximum number of active grants
+          </AlertTitle>
+          <AlertDescription>You can't apply for another grant</AlertDescription>
         </Alert>
       )}
 
@@ -112,18 +130,16 @@ export function ApplyForm(props: Props) {
         </div>
       </div>
 
-      {isFlow && (
-        <div className="space-y-1.5">
-          <Label htmlFor="tagline">Tagline</Label>
-          <Input placeholder="Short and sweet" id="tagline" name="tagline" />
-        </div>
-      )}
+      <div className="space-y-1.5">
+        <Label htmlFor="tagline">Tagline</Label>
+        <Input placeholder="Short and sweet" id="tagline" name="tagline" />
+      </div>
 
       <div className="flex grow flex-col space-y-1.5">
         <Label>Description</Label>
         <MarkdownInput
           name="description"
-          initialMarkdown={template}
+          initialValue={template}
           minHeight={320}
           className="grow"
         />
@@ -145,7 +161,7 @@ export function ApplyForm(props: Props) {
           </div>
         </div>
 
-        <SubmitButton disabled={recipientExists || isGuest} />
+        <SubmitButton disabled={recipientExists || isGuest || isMaxGrantsReached} />
       </div>
     </form>
   )
