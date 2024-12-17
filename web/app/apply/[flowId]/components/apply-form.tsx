@@ -86,7 +86,7 @@ export function ApplyForm(props: Props) {
           <AlertTitle className="text-base">
             You have reached the maximum number of active grants
           </AlertTitle>
-          <AlertDescription>You can't apply for another grant</AlertDescription>
+          <AlertDescription>You can&apos;t apply for another grant</AlertDescription>
         </Alert>
       )}
 
