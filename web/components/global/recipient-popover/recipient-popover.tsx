@@ -102,6 +102,7 @@ export const RecipientPopover = (props: Props) => {
                       <div className="flex items-center justify-center">
                         <WithdrawSalaryButton
                           size="default"
+                          builder={address}
                           onSuccess={refetch}
                           flow={getEthAddress(grant.parentContract)}
                           pools={[grant.flow.baselinePool, grant.flow.bonusPool].map((pool) =>

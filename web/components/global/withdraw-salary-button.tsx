@@ -11,17 +11,19 @@ import { useBulkPoolWithdrawMacro } from "./hooks/use-bulk-pool-withdraw-macro"
 export const WithdrawSalaryButton = ({
   pools,
   flow,
+  builder,
   size = "sm",
   onSuccess,
 }: {
   pools: `0x${string}`[]
   flow: `0x${string}`
+  builder: `0x${string}`
   size?: ButtonProps["size"]
   onSuccess?: () => void
 }) => {
   const { withdraw } = useBulkPoolWithdrawMacro(pools, onSuccess)
 
-  const { balance, isLoading } = useClaimableFlowsBalance(flow)
+  const { balance, isLoading } = useClaimableFlowsBalance(flow, builder)
 
   const getTextSize = (size: ButtonProps["size"]) => {
     switch (size) {
