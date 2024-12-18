@@ -92,7 +92,9 @@ const TokenListItem = ({
         {balance && (
           <div className="flex flex-col items-end justify-between">
             <span className="text-xl">{formatUSDValue(ethPrice || 0, payment)}</span>
-            <span className="text-sm opacity-50">{formatEther(balance)}</span>
+            <span className="text-sm opacity-50">
+              {Number(formatEther(balance)).toFixed(Number(formatEther(balance)) % 1 ? 2 : 0)}
+            </span>
           </div>
         )}
       </div>

@@ -17,8 +17,10 @@ export function formatUSDValue(ethPrice: number, ethAmount: bigint): string {
     return `$${usdValue.toFixed(4)}`
   } else if (usdValue < 1) {
     return `$${usdValue.toFixed(3)}`
-  } else if (usdValue < 1e6) {
+  } else if (usdValue < 10) {
     return `$${usdValue.toFixed(2)}`
+  } else if (usdValue < 1e6) {
+    return `$${usdValue.toFixed(0)}`
   } else {
     return `$${(usdValue / 1000000).toFixed(2)}M`
   }

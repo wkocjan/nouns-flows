@@ -1,4 +1,5 @@
-import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
+"use client"
+
 import { TcrTokenBalance } from "@/components/ui/tcr-token-balance"
 import { getEthAddress, getIpfsUrl } from "@/lib/utils"
 import { Grant } from "@prisma/flows"
@@ -6,6 +7,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { formatEther, getAddress } from "viem"
 import { WithdrawCuratorSalaryButton } from "../withdraw-curator-salary-button"
+import { useETHPrice } from "@/app/token/hooks/useETHPrice"
 
 interface Props {
   flow: Pick<
@@ -20,6 +22,7 @@ interface Props {
     | "activeRecipientCount"
     | "awaitingRecipientCount"
     | "challengedRecipientCount"
+    | "tokenEmitter"
   >
   closePopover: () => void
   balance: string
@@ -27,6 +30,7 @@ interface Props {
 
 export function TokenRow(props: Props) {
   const { flow, closePopover, balance } = props
+  const { ethPrice } = useETHPrice()
 
   return (
     <div className="grid grid-cols-4 items-center gap-2 border-t border-border py-2.5">
@@ -49,8 +53,10 @@ export function TokenRow(props: Props) {
       <TcrTokenBalance
         erc20={getAddress(flow.erc20)}
         className="text-center text-sm font-medium"
+        tokenEmitter={getEthAddress(flow.tokenEmitter)}
         balance={formatEther(BigInt(balance))}
         monthlyRewardPoolRate={flow.monthlyRewardPoolFlowRate}
+        ethPrice={ethPrice || 0}
       />
 
       <div className="pr-2 text-right text-sm font-medium">

@@ -24,6 +24,7 @@ export const getUserTcrTokens = cache(async (address: `0x${string}`) => {
             challengedRecipientCount: true,
             title: true,
             erc20: true,
+            tokenEmitter: true,
             arbitrator: true,
             image: true,
             subgrants: { include: { disputes: true } },
