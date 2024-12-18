@@ -1,5 +1,5 @@
 import { createConfig, factory, rateLimit } from "ponder"
-import { createPublicClient, http, parseAbiItem } from "viem"
+import { createPublicClient, getAbiItem, http } from "viem"
 import { base } from "viem/chains"
 import {
   erc20VotesArbitratorImplAbi,
@@ -47,9 +47,10 @@ export default createConfig({
       abi: nounsFlowImplAbi,
       address: factory({
         address: baseContracts.NounsFlow,
-        event: parseAbiItem(
-          "event FlowRecipientCreated(bytes32 indexed recipientId, address indexed recipient, address baselinePool, address bonusPool, uint32 managerRewardPoolFlowRatePercent, uint32 baselinePoolFlowRatePercent)"
-        ),
+        event: getAbiItem({
+          abi: nounsFlowImplAbi,
+          name: "FlowRecipientCreated",
+        }),
         parameter: "recipient",
       }),
       network: "base",
@@ -65,9 +66,10 @@ export default createConfig({
       abi: flowTcrImplAbi,
       address: factory({
         address: baseContracts.TCRFactory,
-        event: parseAbiItem(
-          "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy, address rewardPoolProxy, address tokenEmitterProxy, address flowProxy, address flowBaselinePool, address flowBonusPool)"
-        ),
+        event: getAbiItem({
+          abi: tcrFactoryImplAbi,
+          name: "FlowTCRDeployed",
+        }),
         parameter: "flowTCRProxy",
       }),
       network: "base",
@@ -89,9 +91,10 @@ export default createConfig({
       abi: erc20VotesArbitratorImplAbi,
       address: factory({
         address: baseContracts.TCRFactory,
-        event: parseAbiItem(
-          "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy, address rewardPoolProxy, address tokenEmitterProxy, address flowProxy, address flowBaselinePool, address flowBonusPool)"
-        ),
+        event: getAbiItem({
+          abi: tcrFactoryImplAbi,
+          name: "FlowTCRDeployed",
+        }),
         parameter: "arbitratorProxy",
       }),
       network: "base",
@@ -109,9 +112,10 @@ export default createConfig({
       abi: tokenEmitterImplAbi,
       address: factory({
         address: baseContracts.TCRFactory,
-        event: parseAbiItem(
-          "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy, address rewardPoolProxy, address tokenEmitterProxy, address flowProxy, address flowBaselinePool, address flowBonusPool)"
-        ),
+        event: getAbiItem({
+          abi: tcrFactoryImplAbi,
+          name: "FlowTCRDeployed",
+        }),
         parameter: "tokenEmitterProxy",
       }),
       network: "base",
@@ -128,9 +132,10 @@ export default createConfig({
       abi: erc20VotesMintableImplAbi,
       address: factory({
         address: baseContracts.TCRFactory,
-        event: parseAbiItem(
-          "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy, address rewardPoolProxy, address tokenEmitterProxy, address flowProxy, address flowBaselinePool, address flowBonusPool)"
-        ),
+        event: getAbiItem({
+          abi: tcrFactoryImplAbi,
+          name: "FlowTCRDeployed",
+        }),
         parameter: "erc20Proxy",
       }),
       network: "base",
@@ -152,9 +157,10 @@ export default createConfig({
       abi: superfluidPoolAbi,
       address: factory({
         address: baseContracts.TCRFactory,
-        event: parseAbiItem(
-          "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy, address rewardPoolProxy, address tokenEmitterProxy, address flowProxy, address flowBaselinePool, address flowBonusPool)"
-        ),
+        event: getAbiItem({
+          abi: tcrFactoryImplAbi,
+          name: "FlowTCRDeployed",
+        }),
         parameter: "flowBaselinePool",
       }),
       network: "base",
@@ -164,9 +170,10 @@ export default createConfig({
       abi: superfluidPoolAbi,
       address: factory({
         address: baseContracts.TCRFactory,
-        event: parseAbiItem(
-          "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy, address rewardPoolProxy, address tokenEmitterProxy, address flowProxy, address flowBaselinePool, address flowBonusPool)"
-        ),
+        event: getAbiItem({
+          abi: tcrFactoryImplAbi,
+          name: "FlowTCRDeployed",
+        }),
         parameter: "flowBonusPool",
       }),
       network: "base",
@@ -189,7 +196,7 @@ export default createConfig({
   blocks: {
     Balance: {
       network: "base",
-      interval: (process.env.NODE_ENV === "development" ? 3600 : 60) / SECONDS_PER_BLOCK, // 1 hour in dev, 1 minute otherwise
+      interval: (process.env.NODE_ENV === "development" ? 120 : 60) / SECONDS_PER_BLOCK, // 2 min in dev, 1 minute otherwise
       startBlock: currentBlock,
     },
   },
