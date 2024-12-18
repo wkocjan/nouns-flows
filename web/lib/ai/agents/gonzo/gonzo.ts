@@ -30,20 +30,28 @@ export async function getGonzo(data: ChatData): Promise<Agent> {
 }
 
 async function getGonzoPrompt(data: ChatData, tools: Tool[]) {
-  let prompt = `${aboutPrompt}\n\n`
-  prompt += `${gonzoPersonalityPrompt}\n`
-  prompt += await getStoryPrompt(data.storyId)
-  prompt += await getUserDataPrompt(data.address)
-  prompt += getDataPrompt(data)
-  prompt += await getAllNounishCitizensPrompt()
-  prompt += getToolsPrompt(tools)
+  const about = `${aboutPrompt}\n\n`
+  const personality = `${gonzoPersonalityPrompt}\n`
+  const story = await getStoryPrompt(data.storyId)
+  const userData = await getUserDataPrompt(data.address)
+  const dataPrompt = getDataPrompt(data)
+  const nounishCitizens = await getAllNounishCitizensPrompt()
+  const toolsPrompt = getToolsPrompt(tools)
 
-  return prompt
+  return `
+  ${about}
+  ${personality}
+  ${story}
+  ${userData}
+  ${dataPrompt}
+  ${nounishCitizens}
+  ${toolsPrompt}
+  `
 }
 
 function getDataPrompt(data: ChatData) {
   if (!data || Object.keys(data).length === 0) return ""
-  return `\n\n# Additional data:\n${serialize(data)}`
+  return `\n\n# Additional data:\n${JSON.stringify(data)}`
 }
 
 async function getStoryPrompt(storyId: string | undefined) {
@@ -52,7 +60,7 @@ async function getStoryPrompt(storyId: string | undefined) {
   const story = await getStory(storyId)
   if (!story) return ""
 
-  return `\n\n## Story:\nContext about the current story:\n${serialize(story)}`
+  return `\n\n## Story:\nContext about the current story:\n${JSON.stringify(story)}`
 }
 
 const getStory = cache(async (storyId: string) => {

@@ -1,6 +1,16 @@
 "use client"
 
 import { SwapTokenButton } from "@/app/token/swap-token-button"
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -9,9 +19,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { flowTcrImplAbi } from "@/lib/abis"
 import { useLogin } from "@/lib/auth/use-login"
+import { meetsMinimumSalary } from "@/lib/database/helpers"
 import { RecipientType } from "@/lib/enums"
 import { useTcrData } from "@/lib/tcr/use-tcr-data"
 import { useTcrToken } from "@/lib/tcr/use-tcr-token"
@@ -65,34 +75,47 @@ export function DraftPublishButton(props: Props) {
 
   const hasEnoughBalance = token.balance >= addItemCost
   const hasEnoughAllowance = token.allowance >= addItemCost
-  const currentMinimumSalary =
-    Number(flow.monthlyBaselinePoolFlowRate) /
-    Number(
-      flow.activeRecipientCount + flow.awaitingRecipientCount - flow.challengedRecipientCount + 1,
+
+  if (!meetsMinimumSalary(flow)) {
+    return (
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button type="button" ref={ref} size={size}>
+            {action}
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>This flow is not accepting new grants</AlertDialogTitle>
+            <AlertDialogDescription className="pt-1.5 leading-relaxed">
+              &quot;{flow.title}&quot; cannot accept any more grants at this time. Please try again
+              later when spots open up.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Okay</AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     )
-  const canPublish = Number(flow.derivedData?.minimumSalary || "0") <= currentMinimumSalary
+  }
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        {!canPublish ? (
-          <DisabledPublishButton action={action} size={size} />
-        ) : (
-          <Button
-            type="button"
-            onClick={(e) => {
-              if (!address) {
-                e.preventDefault()
-                login()
-              }
-            }}
-            disabled={!canPublish}
-            ref={ref}
-            size={size}
-          >
-            {action}
-          </Button>
-        )}
+        <Button
+          type="button"
+          onClick={(e) => {
+            if (!address) {
+              e.preventDefault()
+              login()
+            }
+          }}
+          ref={ref}
+          size={size}
+        >
+          {action}
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-screen-sm">
         <DialogHeader>
@@ -209,29 +232,5 @@ export function DraftPublishButton(props: Props) {
         </div>
       </DialogContent>
     </Dialog>
-  )
-}
-
-const CantPublishTooltip = () => {
-  return (
-    <TooltipContent className="text-center">
-      This flow is not accepting new grants.
-      <br />
-      Please check back soon.
-      <br />
-    </TooltipContent>
-  )
-}
-
-const DisabledPublishButton = ({ action, size }: { action: string; size?: "default" | "sm" }) => {
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button disabled size={size}>
-          {action}
-        </Button>
-      </TooltipTrigger>
-      <CantPublishTooltip />
-    </Tooltip>
   )
 }

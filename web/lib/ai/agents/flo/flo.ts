@@ -3,17 +3,17 @@ import { getVoters } from "@/app/item/[grantId]/components/get-voters"
 import { submitApplicationTool } from "@/lib/ai/tools/applications/tool"
 import { queryEmbeddingsTool } from "@/lib/ai/tools/embeddings/tool"
 import { getTools, getToolsPrompt, Tool } from "@/lib/ai/tools/tool"
-import database, { getCacheStrategy } from "@/lib/database/edge"
+import database from "@/lib/database/edge"
 import { canEditGrant } from "@/lib/database/helpers"
 import { cache } from "react"
 import { aboutPrompt } from "../../prompts/about"
 import { getAllNounishCitizensPrompt } from "../../prompts/nounish-citizens"
 import { getUserDataPrompt } from "../../prompts/user-data"
+import { getTemplateForFlow } from "../../tools/application-template/application-template"
 import { applicationTemplateTool } from "../../tools/application-template/tool"
 import { updateGrantTool } from "../../tools/grants/update-grant"
 import { Agent } from "../agent"
 import { floPersonalityPrompt } from "./personality"
-import { serialize } from "@/lib/serialize"
 
 export async function getFlo(data: ChatData): Promise<Agent> {
   const tools: Tool[] = [queryEmbeddingsTool, submitApplicationTool, applicationTemplateTool]
@@ -44,7 +44,7 @@ async function getFloPrompt(data: ChatData, tools: Tool[]) {
 
 function getDataPrompt(data: ChatData) {
   if (!data || Object.keys(data).length === 0) return ""
-  return `\n\n# Additional data:\n${serialize(data)}`
+  return `\n\n# Additional data:\n${JSON.stringify(data)}`
 }
 
 async function getGrantPrompt(grantId: string | undefined) {
@@ -83,17 +83,17 @@ async function getGrantPrompt(grantId: string | undefined) {
 
   The grant title is ${grant.title} with grant id ${grantId}.
 
-  ${serialize(grant)}
+  ${JSON.stringify(grant)}
 
   ### Users who voted for this grant
   These are ETH addresses of users who voted for this grant and their votes count:
   
-  ${serialize(voters)}
+  ${JSON.stringify(voters)}
   
   ### Stories
   Last 10 stories related to this grant:
   
-  ${serialize(stories)}
+  ${JSON.stringify(stories)}
   `
 }
 
@@ -107,20 +107,11 @@ const getGrant = cache(async (grantId: string) => {
 async function getApplicationTemplate(flowId: string | undefined) {
   if (!flowId) return null
 
-  const flow = await database.grant.findFirstOrThrow({
-    where: { id: flowId, isFlow: true },
-    select: { derivedData: { select: { template: true } }, title: true },
-    ...getCacheStrategy(1800),
-  })
+  const template = await getTemplateForFlow(flowId)
+  if (!template) return null
 
-  if (!flow.derivedData?.template) return null
-
-  return `### Application template for "${flow.title}" flow
-
-  Here is the application template for flow with ID = ${flowId} in markdown format.
-  
-  Do not use "applicationTemplate" tool to get template for this flow.
-
-  ${flow.derivedData.template}
-  `
+  return (
+    template +
+    `\n\nDo not query "applicationTemplate" tool to get template for this flow. Above is all you need for this flow.`
+  )
 }

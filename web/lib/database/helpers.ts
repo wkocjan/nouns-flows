@@ -1,4 +1,4 @@
-import { Grant, Story } from "@prisma/flows"
+import { DerivedData, Grant, Story } from "@prisma/flows"
 import { Status } from "../enums"
 
 export function isGrantApproved(grant: Pick<Grant, "status">) {
@@ -32,4 +32,27 @@ export function canEditStory(story: Story, user: string | undefined) {
 
 export function canEditGrant(grant: Pick<Grant, "recipient">, user: string | undefined) {
   return user && [grant.recipient, rocketman, woj].includes(user)
+}
+
+export function meetsMinimumSalary(
+  flow: Pick<
+    Grant,
+    | "monthlyBaselinePoolFlowRate"
+    | "activeRecipientCount"
+    | "awaitingRecipientCount"
+    | "challengedRecipientCount"
+  > & { derivedData: DerivedData | null },
+) {
+  const {
+    monthlyBaselinePoolFlowRate,
+    activeRecipientCount,
+    awaitingRecipientCount,
+    challengedRecipientCount,
+  } = flow
+
+  const currentMinimumSalary =
+    Number(monthlyBaselinePoolFlowRate) /
+    (activeRecipientCount + awaitingRecipientCount - challengedRecipientCount + 1)
+
+  return currentMinimumSalary >= Number(flow.derivedData?.minimumSalary || 0)
 }

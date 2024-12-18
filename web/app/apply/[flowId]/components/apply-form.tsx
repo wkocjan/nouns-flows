@@ -9,8 +9,9 @@ import { Label } from "@/components/ui/label"
 import { MarkdownInput } from "@/components/ui/markdown-input"
 import { useLogin } from "@/lib/auth/use-login"
 import { MAX_GRANTS_PER_USER } from "@/lib/config"
+import { meetsMinimumSalary } from "@/lib/database/helpers"
 import { getShortEthAddress } from "@/lib/utils"
-import { Grant } from "@prisma/flows"
+import { DerivedData, Grant } from "@prisma/flows"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useFormStatus } from "react-dom"
@@ -20,7 +21,7 @@ import { saveDraft } from "./save-draft"
 import { useRecipientExists } from "./useRecipientExists"
 
 interface Props {
-  flow: Grant
+  flow: Grant & { derivedData: DerivedData | null }
   isFlow: boolean
   template: string
   userActiveGrants: number
@@ -102,17 +103,25 @@ export function ApplyForm(props: Props) {
         </Alert>
       )}
 
+      {!isFlow && !meetsMinimumSalary(flow) && (
+        <Alert variant="warning">
+          <AlertTitle className="text-base">This flow is not accepting new grants</AlertTitle>
+          <AlertDescription>
+            &quot;{flow.title}&quot; cannot accept any more grants at this time. You can still
+            create a new draft, but you won&apos;t be able to publish it until new spots open up.
+          </AlertDescription>
+        </Alert>
+      )}
+
       {isFlow && (
-        <Alert variant="warning" className="flex items-center justify-between space-x-4">
-          <div>
-            <AlertTitle className="text-base">This is not a grant application!</AlertTitle>
-            <AlertDescription>
-              You&apos;re about to suggest new flow (budget category) to add to the platform.
-              You&apos;re not applying for a grant and you won&apos;t earn any salary upon succesful
-              application. Return to the apply page to create a grant that fits within a specific
-              flow.
-            </AlertDescription>
-          </div>
+        <Alert variant="warning">
+          <AlertTitle className="text-base">This is not a grant application!</AlertTitle>
+          <AlertDescription>
+            You&apos;re about to suggest new flow (budget category) to add to the platform.
+            You&apos;re not applying for a grant and you won&apos;t earn any salary upon succesful
+            application. Return to the apply page to create a grant that fits within a specific
+            flow.
+          </AlertDescription>
         </Alert>
       )}
 

@@ -4,14 +4,14 @@ import { getUserAddressFromCookie } from "@/lib/auth/get-user-from-cookie"
 import { kv } from "@vercel/kv"
 import { cookies } from "next/headers"
 
-export const runtime = "edge"
+export const runtime = "nodejs"
 export const maxDuration = 30
 
 export async function POST(req: Request) {
   const address = await getUserAddressFromCookie()
 
   if (!address) {
-    (await cookies()).set("guidance-guest", "true", { maxAge: 60 * 60 * 24 * 7 }) // 7 days
+    ;(await cookies()).set("guidance-guest", "true", { maxAge: 60 * 60 * 24 * 7 }) // 7 days
   }
 
   const cachedGuidance = await kv.get(getGuidanceCacheKey(address))

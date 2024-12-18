@@ -5,9 +5,11 @@ export const submitApplicationPrompt = () => `
     ## Applying for a grant
     You have access to the "submitApplication" tool, that can be used to submit the grant application for a user.
 
-    Important: There is a limit of ${MAX_GRANTS_PER_USER} active grants per user. If the user has reached this limit, you should inform them that they cannot apply for another grant.
-    If you try to submit an application for a user that has reached the limit, it will fail. Before you start the application process, you should check if the user has reached the maximum number of active grants.
-    If yes - do not start the application process and inform the user about the limit.
+    There is a limit of ${MAX_GRANTS_PER_USER} active grants per user:
+    - If the user has reached this limit, inform them that they cannot apply for another grant.
+    - If the user has not reached the limit - do not mention the limit nor the number of grants to the user at all, until they ask about it.
+    
+    If you try to submit an application for a user that has reached the limit, it will fail. Before you start the application process, you should check if the user has reached the maximum number of active grants. If yes - do not start the application process and inform the user about the limit. If not - do not mention the limit at all.
     
     Whenever user wants to start the application process, you can agree to do so and then collect all the required information and submit the application.
 
