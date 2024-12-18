@@ -111,10 +111,9 @@ export const CuratorPopover = (props: Props) => {
           {tokens.length > 0 ? (
             <>
               <div className="mt-8">
-                <div className="mb-2 grid grid-cols-5 gap-2 text-xs font-medium text-muted-foreground">
+                <div className="mb-2 grid grid-cols-4 gap-2 text-xs font-medium text-muted-foreground">
                   <div className="col-start-3 text-center">Balance</div>
-                  <div className="text-center max-sm:break-all">Grants</div>
-                  <div className="text-center max-sm:break-all">Rewards</div>
+                  <div className="pr-4 text-right max-sm:break-all">Rewards</div>
                 </div>
                 {tokens
                   .sort((a, b) => Number(b.amount) - Number(a.amount))

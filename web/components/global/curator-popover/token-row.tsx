@@ -29,7 +29,7 @@ export function TokenRow(props: Props) {
   const { flow, closePopover, balance } = props
 
   return (
-    <div className="grid grid-cols-5 items-center gap-2 border-t border-border py-2.5">
+    <div className="grid grid-cols-4 items-center gap-2 border-t border-border py-2.5">
       <div className="col-span-2 flex items-center space-x-2 overflow-hidden">
         <Image
           src={getIpfsUrl(flow.image)}
@@ -53,9 +53,7 @@ export function TokenRow(props: Props) {
         monthlyRewardPoolRate={flow.monthlyRewardPoolFlowRate}
       />
 
-      <GrantStatusCountBadges id={flow.id} flow={flow} />
-
-      <div className="text-center text-sm font-medium">
+      <div className="pr-2 text-right text-sm font-medium">
         <WithdrawCuratorSalaryButton pool={getEthAddress(flow.managerRewardSuperfluidPool)} />
       </div>
     </div>
