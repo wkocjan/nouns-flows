@@ -180,6 +180,20 @@ export const tokenEmitters = onchainTable(
   })
 )
 
+// useful for quick in memory lookups
+export const flowRecipients = onchainTable(
+  "FlowRecipient",
+  (t) => ({
+    // id is the contract address
+    id: t.text().primaryKey(),
+    // id of the grant in the parent flow
+    grantId: t.text().notNull(),
+  }),
+  (table) => ({
+    grantIdIdx: index().on(table.grantId),
+  })
+)
+
 export const evidence = onchainTable(
   "Evidence",
   (t) => ({

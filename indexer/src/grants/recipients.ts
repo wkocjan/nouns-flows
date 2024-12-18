@@ -1,5 +1,5 @@
 import { ponder, type Context, type Event } from "ponder:registry"
-import { grants } from "ponder:schema"
+import { flowRecipients, grants } from "ponder:schema"
 import { addGrantEmbedding, removeGrantEmbedding } from "./embeddings/embed-grants"
 import { and, eq } from "ponder"
 
@@ -26,18 +26,24 @@ async function handleFlowRecipientCreated(params: {
     baselinePoolFlowRatePercent,
   } = event.args
 
+  const flowContract = recipient.toLowerCase()
+
   await context.db.update(grants, { id: recipientId.toString() }).set({
     baselinePool: baselinePool.toLowerCase(),
     bonusPool: bonusPool.toLowerCase(),
     managerRewardPoolFlowRatePercent,
     baselinePoolFlowRatePercent,
-    recipient: recipient.toLowerCase(),
+    recipient: flowContract,
     updatedAt: Number(event.block.timestamp),
     isActive: true,
   })
 
   // don't update recipient counts here because it's already done in the recipient created event
   // eg: the recipient created event is emitted when a flow recipient is created anyway
+  await context.db.insert(flowRecipients).values({
+    id: flowContract,
+    grantId: recipientId.toString(),
+  })
 }
 
 async function handleRecipientCreated(params: {
@@ -87,6 +93,8 @@ async function handleRecipientRemoved(params: {
   await context.db.update(grants, { id: parentFlow.id }).set({
     activeRecipientCount: parentFlow.activeRecipientCount - 1,
   })
+
+  await context.db.sql.delete(flowRecipients).where(eq(flowRecipients.id, flowAddress))
 
   await removeGrantEmbedding(removedGrant)
 }

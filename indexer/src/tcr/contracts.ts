@@ -1,6 +1,6 @@
 import { ponder } from "ponder:registry"
 import { rewardPoolImplAbi } from "../../abis"
-import { grants, tokenEmitters } from "ponder:schema"
+import { flowRecipients, grants, tokenEmitters } from "ponder:schema"
 import { eq } from "ponder"
 
 ponder.on("NounsFlowTcrFactory:FlowTCRDeployed", async (params) => {
@@ -33,18 +33,14 @@ ponder.on("NounsFlowTcrFactory:FlowTCRDeployed", async (params) => {
     }),
   ])
 
-  const [grant] = await context.db.sql
-    .select()
-    .from(grants)
-    .where(eq(grants.recipient, flowProxy.toLowerCase()))
-    .limit(1)
+  const flowRecipient = await context.db.find(flowRecipients, { id: flowProxy.toLowerCase() })
 
-  if (!grant) {
+  if (!flowRecipient) {
     console.error({ flowProxy })
     throw new Error(`Grant not found: ${flowProxy}`)
   }
 
-  await context.db.update(grants, { id: grant.id }).set({
+  await context.db.update(grants, { id: flowRecipient.grantId }).set({
     superToken: superToken.toLowerCase(),
     tcr: flowTCRProxy.toLowerCase(),
     arbitrator: arbitratorProxy.toLowerCase(),
