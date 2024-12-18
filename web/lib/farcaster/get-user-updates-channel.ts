@@ -9,7 +9,7 @@ const emptyResponse = {
   hasFarcasterAccount: false,
   isNounsMember: false,
   isFlowsMember: false,
-  updatesChannel: FLOWS_CHANNEL_ID,
+  updatesChannel: null,
 }
 
 export const getUserUpdatesChannel = cache(async (address: `0x${string}` | undefined) => {
@@ -29,7 +29,7 @@ export const getUserUpdatesChannel = cache(async (address: `0x${string}` | undef
       hasFarcasterAccount: true,
       isNounsMember,
       isFlowsMember,
-      updatesChannel: isNounsMember ? NOUNS_CHANNEL_ID : FLOWS_CHANNEL_ID,
+      updatesChannel: isNounsMember ? NOUNS_CHANNEL_ID : isFlowsMember ? FLOWS_CHANNEL_ID : null,
     }
   } catch (e: any) {
     console.error(e?.message)

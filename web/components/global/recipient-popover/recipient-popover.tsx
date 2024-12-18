@@ -30,9 +30,13 @@ export const RecipientPopover = (props: Props) => {
 
   const hasGrants = grants.length > 0
 
-  const { isFlowsMember, isNounsMember, updatesChannel, hasFarcasterAccount } = data || {}
+  const { isFlowsMember, updatesChannel, hasFarcasterAccount } = data || {}
 
-  const canPostUpdates = !isLoading && (isNounsMember || isFlowsMember)
+  const canPostUpdates = !isLoading && !!hasFarcasterAccount
+  const channelLink = updatesChannel
+    ? `https://warpcast.com/~/compose?text=&channelKey=${updatesChannel}`
+    : "https://warpcast.com/~/compose?text="
+
   const needsVerify = !isLoading && !hasFarcasterAccount
   const shouldJoinFlowsChannel = !isLoading && !isFlowsMember
 
@@ -57,10 +61,7 @@ export const RecipientPopover = (props: Props) => {
                 You&apos;re earning <Currency>{earnings.yearly}</Currency> per year.
               </p>
               {canPostUpdates && (
-                <a
-                  href={`https://warpcast.com/~/compose?text=&channelKey=${updatesChannel}`}
-                  target="_blank"
-                >
+                <a href={channelLink} target="_blank">
                   <Button size="xs" variant="outline">
                     <PlusIcon className="mr-1.5 size-3" /> Post update
                   </Button>
