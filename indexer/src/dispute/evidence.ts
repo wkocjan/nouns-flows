@@ -1,5 +1,5 @@
 import { ponder, type Context, type Event } from "ponder:registry"
-import { evidence } from "../../ponder.schema"
+import { evidence } from "ponder:schema"
 
 ponder.on("FlowTcr:Evidence", handleEvidence)
 ponder.on("FlowTcrChildren:Evidence", handleEvidence)

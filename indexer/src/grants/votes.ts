@@ -1,7 +1,7 @@
 import { ponder, type Context, type Event } from "ponder:registry"
 import { getMonthlyIncomingFlowRate } from "./lib/monthly-flow"
 import { handleIncomingFlowRates } from "./lib/handle-incoming-flow-rates"
-import { votes, grants } from "../../ponder.schema"
+import { votes, grants } from "ponder:schema"
 import { eq, not } from "ponder"
 import { and } from "ponder"
 

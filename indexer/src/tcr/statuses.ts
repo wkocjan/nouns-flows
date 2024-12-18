@@ -2,7 +2,7 @@ import { ponder, type Context, type Event } from "ponder:registry"
 import { Status } from "../enums"
 import { getAddress } from "viem"
 import { removeApplicationEmbedding } from "./embeddings/embed-applications"
-import { grants } from "../../ponder.schema"
+import { grants } from "ponder:schema"
 
 ponder.on("FlowTcr:ItemStatusChange", handleItemStatusChange)
 ponder.on("FlowTcrChildren:ItemStatusChange", handleItemStatusChange)

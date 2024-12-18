@@ -3,7 +3,7 @@ import { zeroAddress } from "viem"
 import { rewardPoolImplAbi } from "../../abis"
 import { Status } from "../enums"
 import { base as baseContracts } from "../../addresses"
-import { grants } from "../../ponder.schema"
+import { grants } from "ponder:schema"
 
 ponder.on("NounsFlow:FlowInitialized", async (params) => {
   const { context, event } = params

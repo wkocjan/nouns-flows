@@ -5,7 +5,7 @@ import {
   type disputeVotes,
   type tokenHolders,
   type evidence,
-} from "./ponder.schema"
+} from "ponder:schema"
 
 export type Grant = typeof grants.$inferSelect
 export type Vote = typeof votes.$inferSelect

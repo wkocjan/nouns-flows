@@ -1,6 +1,6 @@
 import { ponder } from "ponder:registry"
 import { rewardPoolImplAbi } from "../../abis"
-import { grants } from "../../ponder.schema"
+import { grants } from "ponder:schema"
 import { eq } from "ponder"
 
 ponder.on("NounsFlowTcrFactory:FlowTCRDeployed", async (params) => {

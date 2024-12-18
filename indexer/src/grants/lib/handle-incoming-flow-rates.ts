@@ -1,6 +1,6 @@
-import { type Context } from "ponder:registry"
-import { grants } from "../../../ponder.schema"
 import { and, eq } from "ponder"
+import { type Context } from "ponder:registry"
+import { grants } from "ponder:schema"
 
 export async function handleIncomingFlowRates(db: Context["db"], parentContract: string) {
   const items = await db.sql

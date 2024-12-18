@@ -1,6 +1,6 @@
 import { ponder } from "ponder:registry"
 import { getTotalEarned } from "./lib/total-earned"
-import { grants } from "../../ponder.schema"
+import { grants } from "ponder:schema"
 import { eq } from "ponder"
 
 ponder.on("Balance:block", async (params) => {

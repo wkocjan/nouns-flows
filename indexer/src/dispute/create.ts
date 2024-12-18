@@ -1,7 +1,7 @@
-import { ponder, type Context, type Event } from "ponder:registry"
-import { Party } from "../enums"
-import { disputes, grants } from "../../ponder.schema"
 import { and, eq } from "ponder"
+import { ponder, type Context, type Event } from "ponder:registry"
+import { disputes, grants } from "ponder:schema"
+import { Party } from "../enums"
 
 ponder.on("Arbitrator:DisputeCreated", handleDisputeCreated)
 ponder.on("ArbitratorChildren:DisputeCreated", handleDisputeCreated)

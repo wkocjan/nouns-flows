@@ -1,5 +1,5 @@
 import { ponder, type Context, type Event } from "ponder:registry"
-import { grants } from "../../ponder.schema"
+import { grants } from "ponder:schema"
 import { addGrantEmbedding, removeGrantEmbedding } from "./embeddings/embed-grants"
 import { and, eq } from "ponder"
 

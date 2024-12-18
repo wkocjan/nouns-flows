@@ -1,6 +1,6 @@
 import { ponder, type Context, type Event } from "ponder:registry"
 import { Party } from "../enums"
-import { disputes, disputeVotes } from "../../ponder.schema"
+import { disputes, disputeVotes } from "ponder:schema"
 import { eq, and } from "ponder"
 import { getDisputePrimaryKey } from "./create"
 

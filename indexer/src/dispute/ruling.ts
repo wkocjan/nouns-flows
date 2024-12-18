@@ -1,5 +1,5 @@
 import { ponder, type Context, type Event } from "ponder:registry"
-import { disputes } from "../../ponder.schema"
+import { disputes } from "ponder:schema"
 import { and, eq } from "ponder"
 
 ponder.on("FlowTcr:Ruling", handleRuling)

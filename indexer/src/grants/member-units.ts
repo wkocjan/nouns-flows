@@ -1,6 +1,6 @@
 import { ponder, type Context, type Event } from "ponder:registry"
 import { handleIncomingFlowRates } from "./lib/handle-incoming-flow-rates"
-import { grants } from "../../ponder.schema"
+import { grants } from "ponder:schema"
 import { eq, or, and } from "ponder"
 
 ponder.on("BonusPool:MemberUnitsUpdated", handleMemberUnitsUpdated)

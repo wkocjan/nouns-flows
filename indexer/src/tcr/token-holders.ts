@@ -1,6 +1,6 @@
 import { ponder, type Context, type Event } from "ponder:registry"
 import { zeroAddress } from "viem"
-import { tokenHolders } from "../../ponder.schema"
+import { tokenHolders } from "ponder:schema"
 
 ponder.on("Erc20Token:Transfer", handleTransfer)
 ponder.on("Erc20TokenChildren:Transfer", handleTransfer)

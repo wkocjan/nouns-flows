@@ -1,5 +1,5 @@
 import { ponder, type Context, type Event } from "ponder:registry"
-import { disputes, grants } from "../../ponder.schema"
+import { disputes, grants } from "ponder:schema"
 import { and, eq } from "ponder"
 
 ponder.on("Arbitrator:DisputeExecuted", handleDisputeExecute)
