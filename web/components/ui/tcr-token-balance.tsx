@@ -85,34 +85,31 @@ const TcrTokenBalanceWithTooltip = ({
               <div className="justify-self-end">
                 <Currency currency="ETH">{worthInETH}</Currency>
               </div>
-              <div>Cost Basis</div>
-              <div className="justify-self-end">
-                <Currency currency="ETH">{costBasis}</Currency>
-              </div>
-            </div>
-          </div>
-          <div className="space-y-1">
-            <div className="text-base font-medium">History</div>
-            <div className="grid grid-cols-2 justify-items-start gap-x-4 gap-y-1 text-sm">
-              <div>Bought</div>
-              <div className="justify-self-end">
-                <Currency currency="ERC20">{totalBought}</Currency>
-              </div>
-
-              {hasSold && (
+              {false && (
                 <>
-                  <div>Sold</div>
+                  <div>Cost Basis</div>
                   <div className="justify-self-end">
-                    <Currency currency="ERC20">{totalSold}</Currency>
-                  </div>
-                  <div>Sale Proceeds</div>
-                  <div className="justify-self-end">
-                    <Currency currency="ETH">{totalSaleProceeds}</Currency>
+                    <Currency currency="ETH">{costBasis}</Currency>
                   </div>
                 </>
               )}
             </div>
           </div>
+          {hasSold && (
+            <div className="space-y-1">
+              <div className="text-base font-medium">Sales</div>
+              <div className="grid grid-cols-2 justify-items-start gap-x-4 gap-y-1 text-sm">
+                <div>Sold</div>
+                <div className="justify-self-end">
+                  <Currency currency="ERC20">{totalSold}</Currency>
+                </div>
+                <div>Sale Proceeds</div>
+                <div className="justify-self-end">
+                  <Currency currency="ETH">{totalSaleProceeds}</Currency>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </TooltipContent>
     </Tooltip>
