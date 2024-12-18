@@ -72,25 +72,28 @@ model Conversation {
 }
 
 model Story {
-  id              String   @id @default(uuid())
-  title           String
-  summary         String
-  key_points      String[]
-  participants    String[]
-  header_image    String?
-  timeline        Json
-  sentiment       String   @db.VarChar(10)
-  completeness    Int
-  complete        Boolean
-  sources         String[]
-  created_at      DateTime @default(now())
-  updated_at      DateTime @updatedAt
-  media_urls      String[]
-  author          String
-  tagline         String
-  grant_ids       String[]
-  parent_flow_ids String[]
-  edits           Json?
+  id                    String    @id @default(uuid())
+  title                 String
+  summary               String
+  key_points           String[]
+  participants         String[]
+  header_image         String?
+  timeline             Json
+  sentiment            String    @db.VarChar(10)
+  completeness         Decimal   @db.Decimal(3,2)
+  complete             Boolean
+  sources              String[]
+  created_at           DateTime  @default(now())
+  updated_at           DateTime  @updatedAt
+  media_urls           String[]
+  author               String
+  tagline              String
+  grant_ids            String[]
+  parent_flow_ids      String[]
+  cast_hashes          String[]
+  mint_urls            String[]
+  info_needed_to_complete String?
+  edits                Json?
 
   @@index([complete])
   @@index([id])
