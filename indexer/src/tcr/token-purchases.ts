@@ -23,7 +23,7 @@ async function handleTokensBought(params: {
 
   // Update token holder record with buy info
   await context.db.update(tokenHolders, { id: `${erc20}-${holder}` }).set((row) => ({
-    totalBought: (row.totalBought || BigInt(0)) + amount,
-    costBasis: (row.costBasis || BigInt(0)) + cost,
+    totalBought: (BigInt(row.totalBought) + BigInt(amount)).toString(),
+    costBasis: (BigInt(row.costBasis) + BigInt(cost)).toString(),
   }))
 }

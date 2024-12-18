@@ -241,6 +241,10 @@ view TokenHolder {
   holder        String
   firstPurchase Int    @map("first_purchase")
   amount        String
+  totalBought   String @map("total_bought")
+  totalSold     String @map("total_sold")
+  costBasis     String @map("cost_basis")
+  totalSaleProceeds String @map("total_sale_proceeds")
 
   @@unique([tokenContract, holder])
   @@index([holder])

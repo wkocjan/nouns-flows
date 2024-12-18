@@ -119,13 +119,13 @@ export const CuratorPopover = (props: Props) => {
                 </div>
                 {tokens
                   .sort((a, b) => Number(b.amount) - Number(a.amount))
-                  .map(({ id, flow, amount }) => (
+                  .map(({ flow, ...holderInfo }) => (
                     <TokenRow
-                      key={id}
+                      key={holderInfo.id}
                       flow={flow}
-                      balance={amount}
                       closePopover={closePopover}
                       ethPrice={ethPrice || 0}
+                      holderInfo={holderInfo}
                     />
                   ))}
               </div>

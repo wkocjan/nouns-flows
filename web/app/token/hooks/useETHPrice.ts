@@ -13,7 +13,9 @@ export function useETHPrice(skip?: boolean) {
 export function formatUSDValue(ethPrice: number, ethAmount: bigint): string {
   const usdValue = (Number(ethAmount) / 1e18) * ethPrice
 
-  if (usdValue < 0.01) {
+  if (usdValue === 0) {
+    return `$${usdValue.toFixed(2)}`
+  } else if (usdValue < 0.01) {
     return `$${usdValue.toFixed(4)}`
   } else if (usdValue < 1) {
     return `$${usdValue.toFixed(3)}`

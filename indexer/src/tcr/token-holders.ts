@@ -33,10 +33,10 @@ async function handleTransfer(params: {
         holder: to,
         amount: value.toString(),
         firstPurchase: Number(event.block.timestamp),
-        totalBought: BigInt(0),
-        totalSold: BigInt(0),
-        costBasis: BigInt(0),
-        totalSaleProceeds: BigInt(0),
+        totalBought: "0",
+        totalSold: "0",
+        costBasis: "0",
+        totalSaleProceeds: "0",
       })
       .onConflictDoUpdate((row) => ({
         amount: (BigInt(row.amount) + value).toString(),

@@ -4,18 +4,19 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip"
 import { useERC20Supply } from "@/lib/tcr/use-erc20-supply"
 import { useSellTokenQuote } from "@/app/token/hooks/useSellTokenQuote"
 import { base } from "viem/chains"
-
+import { TokenHolder } from "@prisma/flows"
 import { formatUSDValue } from "@/app/token/hooks/useETHPrice"
+import { formatEther } from "viem"
 
 export const TcrTokenBalance = ({
-  balance,
   className,
   erc20,
   tokenEmitter,
   monthlyRewardPoolRate,
   ethPrice,
+  holderInfo,
 }: {
-  balance: string
+  holderInfo: TokenHolder
   className: string
   erc20: `0x${string}`
   tokenEmitter: `0x${string}`
@@ -23,19 +24,19 @@ export const TcrTokenBalance = ({
   ethPrice: number
 }) => {
   const { totalSupply } = useERC20Supply(erc20)
-  const { payment: worth } = useSellTokenQuote(
+  const { payment: worthInETH } = useSellTokenQuote(
     tokenEmitter,
-    BigInt(Number(balance) * 1e18),
+    BigInt(holderInfo.amount),
     base.id,
   )
 
   return (
     <div className={cn("flex items-center justify-center", className)}>
       <TcrTokenBalanceWithTooltip
-        balance={balance}
+        holderInfo={holderInfo}
         totalSupply={totalSupply}
         monthlyRewardPoolRate={monthlyRewardPoolRate}
-        worth={worth}
+        worthInETH={worthInETH}
         ethPrice={ethPrice}
       />
     </div>
@@ -43,32 +44,75 @@ export const TcrTokenBalance = ({
 }
 
 const TcrTokenBalanceWithTooltip = ({
-  balance,
   totalSupply,
   monthlyRewardPoolRate,
-  worth,
+  worthInETH,
   ethPrice,
+  holderInfo,
 }: {
-  balance: string
   totalSupply: bigint
   monthlyRewardPoolRate: string
-  worth: bigint
+  worthInETH: bigint
   ethPrice: number
+  holderInfo: TokenHolder
 }) => {
+  const { amount, costBasis, totalBought, totalSold, totalSaleProceeds } = holderInfo
+  const balance = formatEther(BigInt(amount))
+  const balanceUSD = formatUSDValue(ethPrice, worthInETH)
+  const hasSold = Number(totalSold) > 0
   return (
     <Tooltip>
       <TooltipTrigger>
         <div className="flex flex-col items-end justify-between">
-          <span>{formatUSDValue(ethPrice, worth)}</span>
+          <span>{balanceUSD}</span>
         </div>
       </TooltipTrigger>
       <TooltipContent>
-        <div className="flex flex-col gap-2">
-          <div>
+        <div className="flex flex-col gap-4 p-1">
+          <div className="mb-2 border-b border-border pb-2 text-sm">
             Earning {formatPercentage(balance, totalSupply)}% of the{" "}
-            <Currency>{monthlyRewardPoolRate}</Currency>/mo reward pool
+            <Currency>{monthlyRewardPoolRate}</Currency>/mo pool
           </div>
-          <div>Balance: {Number(balance).toFixed(Number(balance) % 1 ? 2 : 0)}</div>
+
+          <div className="space-y-1">
+            <div className="text-base font-medium">Details</div>
+            <div className="grid grid-cols-2 justify-items-start gap-x-4 gap-y-1 text-sm">
+              <div>Balance</div>
+              <div className="justify-self-end">
+                <Currency currency="ERC20">{amount}</Currency>
+              </div>
+              <div>ETH Value</div>
+              <div className="justify-self-end">
+                <Currency currency="ETH">{worthInETH}</Currency>
+              </div>
+              <div>Cost Basis</div>
+              <div className="justify-self-end">
+                <Currency currency="ETH">{costBasis}</Currency>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-1">
+            <div className="text-base font-medium">History</div>
+            <div className="grid grid-cols-2 justify-items-start gap-x-4 gap-y-1 text-sm">
+              <div>Bought</div>
+              <div className="justify-self-end">
+                <Currency currency="ERC20">{totalBought}</Currency>
+              </div>
+
+              {hasSold && (
+                <>
+                  <div>Sold</div>
+                  <div className="justify-self-end">
+                    <Currency currency="ERC20">{totalSold}</Currency>
+                  </div>
+                  <div>Sale Proceeds</div>
+                  <div className="justify-self-end">
+                    <Currency currency="ETH">{totalSaleProceeds}</Currency>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </TooltipContent>
     </Tooltip>
