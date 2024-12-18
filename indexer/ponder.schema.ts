@@ -157,10 +157,26 @@ export const tokenHolders = onchainTable(
     holder: t.text().notNull(),
     firstPurchase: t.integer().notNull(),
     amount: t.text().notNull(),
+    totalBought: t.bigint().notNull(),
+    totalSold: t.bigint().notNull(),
+    costBasis: t.bigint().notNull(),
+    totalSaleProceeds: t.bigint().notNull(),
   }),
   (table) => ({
     tokenContractIdx: index().on(table.tokenContract),
     holderIdx: index().on(table.holder),
+  })
+)
+
+// useful for quick in memory lookups
+export const tokenEmitters = onchainTable(
+  "TokenEmitter",
+  (t) => ({
+    id: t.text().primaryKey(),
+    erc20: t.text().notNull(),
+  }),
+  (table) => ({
+    erc20Idx: index().on(table.erc20),
   })
 )
 

@@ -10,6 +10,7 @@ import {
   tcrFactoryImplAbi,
   gdav1Address,
   gdav1ImplAbi,
+  tokenEmitterImplAbi,
 } from "./abis"
 import { base as baseContracts } from "./addresses"
 
@@ -94,6 +95,27 @@ export default createConfig({
         parameter: "arbitratorProxy",
       }),
       network: "base",
+      startBlock: START_BLOCK,
+    },
+    TokenEmitter: {
+      abi: tokenEmitterImplAbi,
+      address: baseContracts.TokenEmitter,
+      network: "base",
+      startBlock: START_BLOCK,
+      // so we can pull erc20
+      includeTransactionReceipts: true,
+    },
+    TokenEmitterChildren: {
+      abi: tokenEmitterImplAbi,
+      address: factory({
+        address: baseContracts.TCRFactory,
+        event: parseAbiItem(
+          "event FlowTCRDeployed(address indexed sender, address indexed flowTCRProxy, address indexed arbitratorProxy, address erc20Proxy, address rewardPoolProxy, address tokenEmitterProxy, address flowProxy, address flowBaselinePool, address flowBonusPool)"
+        ),
+        parameter: "tokenEmitterProxy",
+      }),
+      network: "base",
+      includeTransactionReceipts: true,
       startBlock: START_BLOCK,
     },
     Erc20Token: {

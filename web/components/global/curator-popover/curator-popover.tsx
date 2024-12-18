@@ -16,6 +16,7 @@ import { AnimatedSalary } from "../animated-salary"
 import { CuratorGrants } from "./curator-grants"
 import { useUserTcrTokens } from "./hooks/use-user-tcr-tokens"
 import { TokenRow } from "./token-row"
+import { useETHPrice } from "@/app/token/hooks/useETHPrice"
 
 interface Props {
   flow: Grant
@@ -25,6 +26,7 @@ interface Props {
 export const CuratorPopover = (props: Props) => {
   const { flow, address } = props
   const { tokens, earnings } = useUserTcrTokens(address)
+  const { ethPrice } = useETHPrice()
 
   const closeRef = useRef<HTMLButtonElement>(null)
   const closePopover = () => closeRef.current?.click()
@@ -118,7 +120,13 @@ export const CuratorPopover = (props: Props) => {
                 {tokens
                   .sort((a, b) => Number(b.amount) - Number(a.amount))
                   .map(({ id, flow, amount }) => (
-                    <TokenRow key={id} flow={flow} balance={amount} closePopover={closePopover} />
+                    <TokenRow
+                      key={id}
+                      flow={flow}
+                      balance={amount}
+                      closePopover={closePopover}
+                      ethPrice={ethPrice || 0}
+                    />
                   ))}
               </div>
             </>

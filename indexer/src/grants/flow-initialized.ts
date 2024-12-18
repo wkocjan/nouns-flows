@@ -3,7 +3,7 @@ import { zeroAddress } from "viem"
 import { rewardPoolImplAbi } from "../../abis"
 import { Status } from "../enums"
 import { base as baseContracts } from "../../addresses"
-import { grants } from "ponder:schema"
+import { grants, tokenEmitters } from "ponder:schema"
 
 ponder.on("NounsFlow:FlowInitialized", async (params) => {
   const { context, event } = params
@@ -78,5 +78,11 @@ ponder.on("NounsFlow:FlowInitialized", async (params) => {
     isResolved: false,
     evidenceGroupID: "",
     isActive: true,
+  })
+
+  // insert into token emitters
+  await context.db.insert(tokenEmitters).values({
+    id: baseContracts.TokenEmitter,
+    erc20: baseContracts.ERC20VotesMintable,
   })
 })

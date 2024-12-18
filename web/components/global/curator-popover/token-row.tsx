@@ -7,7 +7,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { formatEther, getAddress } from "viem"
 import { WithdrawCuratorSalaryButton } from "../withdraw-curator-salary-button"
-import { useETHPrice } from "@/app/token/hooks/useETHPrice"
 
 interface Props {
   flow: Pick<
@@ -26,11 +25,11 @@ interface Props {
   >
   closePopover: () => void
   balance: string
+  ethPrice: number
 }
 
 export function TokenRow(props: Props) {
-  const { flow, closePopover, balance } = props
-  const { ethPrice } = useETHPrice()
+  const { flow, closePopover, balance, ethPrice } = props
 
   return (
     <div className="grid grid-cols-4 items-center gap-2 border-t border-border py-2.5">

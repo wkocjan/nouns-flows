@@ -16,6 +16,7 @@ import { getEthAddress } from "@/lib/utils"
 import { useAccount } from "wagmi"
 import { useERC20Balances } from "@/lib/tcr/use-erc20-balances"
 import { useLogin } from "@/lib/auth/use-login"
+import { useRouter } from "next/navigation"
 
 interface Props {
   flow: Grant
@@ -28,6 +29,7 @@ interface Props {
 }
 
 export function SwapTokenButton(props: Props) {
+  const router = useRouter()
   const {
     flow,
     defaultTokenAmount = BigInt(1e18),
@@ -36,6 +38,7 @@ export function SwapTokenButton(props: Props) {
     extraInfo,
     onSuccess = () => {
       // close dialog
+      router.refresh()
       ref.current?.click()
     },
   } = props

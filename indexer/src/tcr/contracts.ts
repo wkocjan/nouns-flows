@@ -1,6 +1,6 @@
 import { ponder } from "ponder:registry"
 import { rewardPoolImplAbi } from "../../abis"
-import { grants } from "ponder:schema"
+import { grants, tokenEmitters } from "ponder:schema"
 import { eq } from "ponder"
 
 ponder.on("NounsFlowTcrFactory:FlowTCRDeployed", async (params) => {
@@ -53,5 +53,10 @@ ponder.on("NounsFlowTcrFactory:FlowTCRDeployed", async (params) => {
     tokenEmitter: tokenEmitterProxy.toLowerCase(),
     managerRewardPool: rewardPoolProxy.toLowerCase(),
     managerRewardSuperfluidPool: managerRewardSuperfluidPool.toLowerCase(),
+  })
+
+  await context.db.insert(tokenEmitters).values({
+    id: tokenEmitterProxy.toLowerCase(),
+    erc20: erc20Proxy.toLowerCase(),
   })
 })
