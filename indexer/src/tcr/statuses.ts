@@ -43,4 +43,11 @@ async function handleItemStatusChange(params: {
     isResolved: _resolved,
     challengePeriodEndsAt,
   })
+
+  if (_itemStatus === Status.ClearingRequested) {
+    await context.db.update(grants, { id: _itemID }).set((row) => ({
+      challengedRecipientCount: row.challengedRecipientCount + 1,
+      awaitingRecipientCount: row.awaitingRecipientCount - 1,
+    }))
+  }
 }
