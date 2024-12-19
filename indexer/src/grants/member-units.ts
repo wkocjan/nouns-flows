@@ -5,6 +5,7 @@ import {
   bonusPoolToGrantId,
   flowContractToGrantId,
   grants,
+  parentFlowToChildren,
   recipientAndParentToGrantId,
 } from "ponder:schema"
 import { eq, and } from "ponder"
@@ -110,6 +111,8 @@ async function getGrant(db: Context["db"], recipient: string, parentContract: st
 }
 
 async function handleRemovedGrant(db: Context["db"], recipient: string, parentContract: string) {
+  const grant = await getGrant(db, recipient, parentContract)
+
   await Promise.all([
     db.delete(recipientAndParentToGrantId, {
       recipientAndParent: `${recipient.toLowerCase()}-${parentContract.toLowerCase()}`,
@@ -117,5 +120,8 @@ async function handleRemovedGrant(db: Context["db"], recipient: string, parentCo
     db.delete(flowContractToGrantId, {
       contract: recipient,
     }),
+    db.update(parentFlowToChildren, { parentFlowContract: parentContract }).set((row) => ({
+      childGrantIds: row.childGrantIds.filter((id) => id !== grant.id),
+    })),
   ])
 }

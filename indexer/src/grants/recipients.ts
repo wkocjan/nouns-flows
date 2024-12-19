@@ -171,8 +171,5 @@ async function handleRecipientRemovedMappings(
     db.delete(parentFlowToChildren, {
       parentFlowContract: recipient,
     }),
-    db.update(parentFlowToChildren, { parentFlowContract: flowContract }).set((row) => ({
-      childGrantIds: row.childGrantIds.filter((id) => id !== grantId),
-    })),
   ])
 }
