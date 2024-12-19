@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "ponder dev",
-    "start": "ponder start & (sleep 120 && node onchain-view.js)",
+    "start": "ponder start",
     "codegen": "ponder codegen",
     "lint": "eslint .",
     "typecheck": "tsc"
