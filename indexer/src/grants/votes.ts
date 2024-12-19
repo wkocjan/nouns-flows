@@ -28,21 +28,26 @@ async function handleVoteCast(params: {
   let hasPreviousVotes = false
 
   // Mark old votes for this token as stale
-  const oldVote = await context.db.find(votes, { id: getVoteId(contract, tokenId) })
+  const oldVotes = await context.db.sql
+    .delete(votes)
+    .where(
+      and(
+        eq(votes.contract, contract),
+        eq(votes.tokenId, tokenId.toString()),
+        not(eq(votes.blockNumber, blockNumber))
+      )
+    )
+    .returning()
 
-  if (oldVote) {
-    affectedGrantsIds.set(oldVote.recipientId, -BigInt(oldVote.votesCount))
+  oldVotes.forEach((oldVote) => {
+    const existingVotes = affectedGrantsIds.get(oldVote.recipientId) ?? BigInt(0)
+    affectedGrantsIds.set(oldVote.recipientId, existingVotes - BigInt(oldVote.votesCount))
     hasPreviousVotes = true
-  }
-
-  // remove old vote
-  await context.db.delete(votes, {
-    id: getVoteId(contract, tokenId),
   })
 
   // Create the new vote
   await context.db.insert(votes).values({
-    id: getVoteId(contract, tokenId),
+    id: `${contract}_${recipientId}_${voter}_${blockNumber}_${tokenId}`,
     contract,
     recipientId: recipientId.toString(),
     tokenId: tokenId.toString(),
@@ -72,10 +77,6 @@ async function handleVoteCast(params: {
   if (!hasPreviousVotes) {
     await handleIncomingFlowRates(context.db, contract)
   }
-}
-
-function getVoteId(contract: `0x${string}`, tokenId: bigint) {
-  return `${contract}_${tokenId.toString()}`
 }
 
 async function getGrantBudget(context: Context, parentContract: `0x${string}`, id: string) {
