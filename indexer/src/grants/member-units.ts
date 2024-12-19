@@ -1,7 +1,12 @@
 import { ponder, type Context, type Event } from "ponder:registry"
 import { handleIncomingFlowRates } from "./lib/handle-incoming-flow-rates"
-import { grants } from "ponder:schema"
-import { eq, or, and } from "ponder"
+import {
+  baselinePoolToGrantId,
+  bonusPoolToGrantId,
+  grants,
+  recipientAndParentToGrantId,
+} from "ponder:schema"
+import { eq, and } from "ponder"
 
 ponder.on("BonusPool:MemberUnitsUpdated", handleMemberUnitsUpdated)
 ponder.on("BaselinePool:MemberUnitsUpdated", handleMemberUnitsUpdated)
@@ -16,17 +21,7 @@ async function handleMemberUnitsUpdated(params: {
   const { newUnits, member } = event.args
   const pool = event.log.address.toLowerCase()
 
-  const items = await context.db.sql
-    .select()
-    .from(grants)
-    .where(or(eq(grants.baselinePool, pool), eq(grants.bonusPool, pool)))
-
-  const parentGrant = items[0]
-
-  if (!parentGrant) {
-    console.error({ pool })
-    throw new Error(`Parent grant not found: ${pool}`)
-  }
+  const parentGrant = await getParentGrant(context.db, pool)
 
   if (parentGrant.recipient === member.toLowerCase()) {
     // This is a flow updating it's member units on itself on initialization, skipping...
@@ -36,16 +31,7 @@ async function handleMemberUnitsUpdated(params: {
   const shouldUpdateBaseline = parentGrant.baselinePool === pool
   const shouldUpdateBonus = parentGrant.bonusPool === pool
 
-  const [grant] = await context.db.sql
-    .select()
-    .from(grants)
-    .where(
-      and(
-        eq(grants.recipient, member.toLowerCase()),
-        eq(grants.parentContract, parentGrant.recipient)
-      )
-    )
-    .limit(1)
+  const grant = await getGrant(context.db, member, parentGrant.recipient)
 
   if (!grant) {
     throw new Error(`Grant not found: ${member}`)
@@ -66,4 +52,51 @@ async function handleMemberUnitsUpdated(params: {
   }
 
   await handleIncomingFlowRates(context.db, parentGrant.recipient)
+}
+
+async function getParentGrant(db: Context["db"], pool: string) {
+  const [grantBonus, grantBaseline] = await Promise.all([
+    db.find(bonusPoolToGrantId, { bonusPool: pool }),
+    db.find(baselinePoolToGrantId, { baselinePool: pool }),
+  ])
+
+  if (!grantBonus && !grantBaseline) {
+    throw new Error(`Parent grant not found: ${pool}`)
+  }
+
+  if (grantBonus && grantBaseline) {
+    throw new Error(`Multiple parent grants found: ${pool}`)
+  }
+
+  const grantResult = grantBonus || grantBaseline
+
+  if (!grantResult) {
+    throw new Error(`Parent grant result not found: ${pool}`)
+  }
+
+  const parent = await db.find(grants, { id: grantResult.grantId })
+
+  if (!parent) {
+    throw new Error(`Parent grant not found: ${pool}`)
+  }
+
+  return parent
+}
+
+async function getGrant(db: Context["db"], recipient: string, parentContract: string) {
+  const recipientAndParentLookup = await db.find(recipientAndParentToGrantId, {
+    recipientAndParent: `${recipient.toLowerCase()}-${parentContract.toLowerCase()}`,
+  })
+
+  if (!recipientAndParentLookup) {
+    throw new Error(`Recipient and parent lookup not found: ${recipient}-${parentContract}`)
+  }
+
+  const grant = await db.find(grants, { id: recipientAndParentLookup.grantId })
+
+  if (!grant) {
+    throw new Error(`Grant not found: ${recipient}`)
+  }
+
+  return grant
 }

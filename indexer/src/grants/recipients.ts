@@ -1,7 +1,12 @@
 import { ponder, type Context, type Event } from "ponder:registry"
-import { flowContractToGrantId, grants } from "ponder:schema"
+import {
+  bonusPoolToGrantId,
+  baselinePoolToGrantId,
+  flowContractToGrantId,
+  grants,
+  recipientAndParentToGrantId,
+} from "ponder:schema"
 import { addGrantEmbedding, removeGrantEmbedding } from "./embeddings/embed-grants"
-import { and, eq } from "ponder"
 
 ponder.on("NounsFlowChildren:RecipientCreated", handleRecipientCreated)
 ponder.on("NounsFlow:RecipientCreated", handleRecipientCreated)
@@ -27,8 +32,9 @@ async function handleFlowRecipientCreated(params: {
   } = event.args
 
   const flowContract = recipient.toLowerCase()
+  const grantId = recipientId.toString()
 
-  await context.db.update(grants, { id: recipientId.toString() }).set({
+  await context.db.update(grants, { id: grantId }).set({
     baselinePool: baselinePool.toLowerCase(),
     bonusPool: bonusPool.toLowerCase(),
     managerRewardPoolFlowRatePercent,
@@ -40,10 +46,7 @@ async function handleFlowRecipientCreated(params: {
 
   // don't update recipient counts here because it's already done in the recipient created event
   // eg: the recipient created event is emitted when a flow recipient is created anyway
-  await context.db.insert(flowContractToGrantId).values({
-    contract: flowContract,
-    grantId: recipientId.toString(),
-  })
+  await createMappings(context.db, flowContract, grantId, bonusPool, baselinePool)
 }
 
 async function handleRecipientCreated(params: {
@@ -69,6 +72,11 @@ async function handleRecipientCreated(params: {
   await context.db.update(grants, { id: parentFlow.id }).set({
     awaitingRecipientCount: parentFlow.awaitingRecipientCount - 1,
     activeRecipientCount: parentFlow.activeRecipientCount + 1,
+  })
+
+  await context.db.insert(recipientAndParentToGrantId).values({
+    recipientAndParent: `${recipient.toLowerCase()}-${parentFlow.recipient.toLowerCase()}`,
+    grantId: grant.id,
   })
 
   await addGrantEmbedding(grant, recipientType, parentFlow.id)
@@ -107,4 +115,27 @@ async function getParentFlow(db: Context["db"], parentFlow: string) {
   if (!flow) throw new Error("Flow not found for recipient")
 
   return flow
+}
+
+async function createMappings(
+  db: Context["db"],
+  flowContract: string,
+  grantId: string,
+  bonusPool: string,
+  baselinePool: string
+) {
+  await Promise.all([
+    db.insert(flowContractToGrantId).values({
+      contract: flowContract,
+      grantId,
+    }),
+    db.insert(bonusPoolToGrantId).values({
+      bonusPool: bonusPool.toLowerCase(),
+      grantId,
+    }),
+    db.insert(baselinePoolToGrantId).values({
+      baselinePool: baselinePool.toLowerCase(),
+      grantId,
+    }),
+  ])
 }

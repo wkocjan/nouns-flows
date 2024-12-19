@@ -8,7 +8,6 @@ import {
   tcrToGrantId,
   tokenEmitterToErc20,
 } from "ponder:schema"
-import { eq } from "ponder"
 
 ponder.on("NounsFlowTcrFactory:FlowTCRDeployed", async (params) => {
   const { event, context } = params

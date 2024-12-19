@@ -168,65 +168,6 @@ export const tokenHolders = onchainTable(
   })
 )
 
-// useful for quick in memory lookups
-export const tokenEmitterToErc20 = onchainTable(
-  "TokenEmitterToErc20",
-  (t) => ({
-    tokenEmitter: t.text().primaryKey(),
-    erc20: t.text().notNull(),
-  }),
-  (table) => ({
-    erc20Idx: index().on(table.erc20),
-  })
-)
-
-// useful for quick in memory lookups
-export const flowContractToGrantId = onchainTable(
-  "FlowContractToGrantId",
-  (t) => ({
-    // id is the contract address
-    contract: t.text().primaryKey(),
-    // id of the grant in the parent flow
-    grantId: t.text().notNull(),
-  }),
-  (table) => ({
-    grantIdIdx: index().on(table.grantId),
-  })
-)
-
-export const rewardPoolContractToGrantId = onchainTable(
-  "RewardPoolContractToGrantId",
-  (t) => ({
-    contract: t.text().primaryKey(),
-    grantId: t.text().notNull(),
-  }),
-  (table) => ({
-    grantIdIdx: index().on(table.grantId),
-  })
-)
-
-export const arbitratorToGrantId = onchainTable(
-  "ArbitratorToGrantId",
-  (t) => ({
-    arbitrator: t.text().primaryKey(),
-    grantId: t.text().notNull(),
-  }),
-  (table) => ({
-    grantIdIdx: index().on(table.grantId),
-  })
-)
-
-export const tcrToGrantId = onchainTable(
-  "TcrToGrantId",
-  (t) => ({
-    tcr: t.text().primaryKey(),
-    grantId: t.text().notNull(),
-  }),
-  (table) => ({
-    grantIdIdx: index().on(table.grantId),
-  })
-)
-
 export const evidence = onchainTable(
   "Evidence",
   (t) => ({
@@ -240,5 +181,94 @@ export const evidence = onchainTable(
   (table) => ({
     arbitratorIdx: index().on(table.arbitrator),
     evidenceGroupIDIdx: index().on(table.evidenceGroupID),
+  })
+)
+
+/**
+ * Lookup tables
+ */
+
+export const tokenEmitterToErc20 = onchainTable(
+  "_kv_TokenEmitterToErc20",
+  (t) => ({
+    tokenEmitter: t.text().primaryKey(),
+    erc20: t.text().notNull(),
+  }),
+  (table) => ({
+    erc20Idx: index().on(table.erc20),
+  })
+)
+
+export const flowContractToGrantId = onchainTable(
+  "_kv_FlowContractToGrantId",
+  (t) => ({
+    contract: t.text().primaryKey(),
+    grantId: t.text().notNull(),
+  }),
+  (table) => ({
+    grantIdIdx: index().on(table.grantId),
+  })
+)
+
+export const arbitratorToGrantId = onchainTable(
+  "_kv_ArbitratorToGrantId",
+  (t) => ({
+    arbitrator: t.text().primaryKey(),
+    grantId: t.text().notNull(),
+  }),
+  (table) => ({
+    grantIdIdx: index().on(table.grantId),
+  })
+)
+
+export const tcrToGrantId = onchainTable(
+  "_kv_TcrToGrantId",
+  (t) => ({
+    tcr: t.text().primaryKey(),
+    grantId: t.text().notNull(),
+  }),
+  (table) => ({
+    grantIdIdx: index().on(table.grantId),
+  })
+)
+
+export const bonusPoolToGrantId = onchainTable(
+  "_kv_BonusPoolToGrantId",
+  (t) => ({
+    bonusPool: t.text().primaryKey(),
+    grantId: t.text().notNull(),
+  }),
+  (table) => ({})
+)
+
+export const baselinePoolToGrantId = onchainTable(
+  "_kv_BaselinePoolToGrantId",
+  (t) => ({
+    baselinePool: t.text().primaryKey(),
+    grantId: t.text().notNull(),
+  }),
+  (table) => ({})
+)
+
+export const rewardPoolContractToGrantId = onchainTable(
+  "_kv_RewardPoolContractToGrantId",
+  (t) => ({
+    contract: t.text().primaryKey(),
+    grantId: t.text().notNull(),
+  }),
+  (table) => ({
+    grantIdIdx: index().on(table.grantId),
+  })
+)
+
+export const recipientAndParentToGrantId = onchainTable(
+  "_kv_RecipientAndParentToGrantId",
+  (t) => ({
+    recipientAndParent: t.text().primaryKey(),
+    grantId: t.text().notNull(),
+  }),
+  (table) => ({
+    grantIdIdx: index().on(table.grantId),
+    recipientAndParentIdx: index().on(table.recipientAndParent),
   })
 )

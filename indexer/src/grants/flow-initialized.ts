@@ -5,6 +5,8 @@ import { Status } from "../enums"
 import { base as baseContracts } from "../../addresses"
 import {
   arbitratorToGrantId,
+  baselinePoolToGrantId,
+  bonusPoolToGrantId,
   flowContractToGrantId,
   grants,
   rewardPoolContractToGrantId,
@@ -42,8 +44,11 @@ ponder.on("NounsFlow:FlowInitialized", async (params) => {
       : Promise.resolve(zeroAddress),
   ])
 
+  // This is because the top level flow has no parent flow contract
+  const grantId = contract
+
   await context.db.insert(grants).values({
-    id: contract,
+    id: grantId,
     ...metadata,
     recipient: contract,
     isTopLevel: true,
@@ -87,10 +92,22 @@ ponder.on("NounsFlow:FlowInitialized", async (params) => {
     isActive: true,
   })
 
-  await createMappings(context.db, contract, contract)
+  await createMappings(
+    context.db,
+    contract,
+    grantId,
+    bonusPool.toLowerCase(),
+    baselinePool.toLowerCase()
+  )
 })
 
-async function createMappings(db: Context["db"], contract: string, grantId: string) {
+async function createMappings(
+  db: Context["db"],
+  contract: string,
+  grantId: string,
+  bonusPool: string,
+  baselinePool: string
+) {
   await Promise.all([
     db.insert(tokenEmitterToErc20).values({
       tokenEmitter: baseContracts.TokenEmitter,
@@ -110,6 +127,14 @@ async function createMappings(db: Context["db"], contract: string, grantId: stri
     }),
     db.insert(arbitratorToGrantId).values({
       arbitrator: baseContracts.ERC20VotesArbitrator,
+      grantId,
+    }),
+    db.insert(bonusPoolToGrantId).values({
+      bonusPool,
+      grantId,
+    }),
+    db.insert(baselinePoolToGrantId).values({
+      baselinePool,
       grantId,
     }),
   ])
