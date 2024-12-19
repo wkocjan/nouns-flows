@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "ponder dev",
-    "start": "ponder start",
+    "start": "ponder start & (sleep 120 && node onchain-view.js)",
     "codegen": "ponder codegen",
     "lint": "eslint .",
     "typecheck": "tsc"
@@ -14,13 +14,16 @@
     "@vercel/kv": "^3.0.0",
     "hono": "^4.6.14",
     "ponder": "^0.8.7",
-    "viem": "^2.21.55"
+    "viem": "^2.21.55",
+    "pg": "^8.11.3",
+    "dotenv": "^16.3.1"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
     "eslint": "^9.17.0",
     "eslint-config-ponder": "^0.8.7",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "@types/pg": "^8.10.9"
   },
   "engines": {
     "node": ">=18.14"
