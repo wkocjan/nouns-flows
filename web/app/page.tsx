@@ -1,8 +1,6 @@
 import { GrantStatusCountBadges } from "@/components/ui/grant-status-count-badges"
 import database, { getCacheStrategy } from "@/lib/database/edge"
-import { isGrantApproved } from "@/lib/database/helpers"
 import { getPool } from "@/lib/database/queries/pool"
-import { Status } from "@/lib/enums"
 import { getEthAddress } from "@/lib/utils"
 import { VotingProvider } from "@/lib/voting/voting-context"
 import { Grant } from "@prisma/flows"

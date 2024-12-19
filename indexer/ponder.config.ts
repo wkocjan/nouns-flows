@@ -1,5 +1,5 @@
 import { createConfig, factory, rateLimit } from "ponder"
-import { createPublicClient, getAbiItem, http } from "viem"
+import { getAbiItem, http } from "viem"
 import { base } from "viem/chains"
 import {
   erc20VotesArbitratorImplAbi,
@@ -16,14 +16,6 @@ import { base as baseContracts } from "./addresses"
 
 const isDev = process.env.NODE_ENV === "development"
 
-const client = createPublicClient({
-  chain: base,
-  transport: http(process.env.PONDER_RPC_URL_8453),
-})
-
-const currentBlock = Number(await client.getBlockNumber())
-
-const SECONDS_PER_BLOCK = 2
 const START_BLOCK = 21519031
 
 export default createConfig({
@@ -191,13 +183,6 @@ export default createConfig({
           token: "0xd04383398dd2426297da660f9cca3d439af9ce1b",
         },
       },
-    },
-  },
-  blocks: {
-    Balance: {
-      network: "base",
-      interval: (process.env.NODE_ENV === "development" ? 120 : 60) / SECONDS_PER_BLOCK, // 2 min in dev, 1 minute otherwise
-      startBlock: currentBlock,
     },
   },
 })

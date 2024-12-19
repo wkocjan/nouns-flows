@@ -103,7 +103,7 @@ model Story {
   @@schema("web")
 }
 
-view Grant {
+model Grant {
   id                               String  @id
   recipient                        String
   flowId                           String  @map("flow_id")
