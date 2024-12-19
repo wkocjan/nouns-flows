@@ -9,7 +9,7 @@ import { Address } from "viem"
 
 export const getVotingPower = unstable_cache(
   async (address: string | undefined) => {
-    if (!address) return BigInt(0)
+    if (!address) return "0"
 
     try {
       const votingPower = await l1Client.readContract({
@@ -19,10 +19,10 @@ export const getVotingPower = unstable_cache(
         args: [getEthAddress(address) as Address],
       })
 
-      return (votingPower ?? BigInt(0)) * VOTING_POWER_SCALE
+      return ((votingPower ?? BigInt(0)) * VOTING_POWER_SCALE).toString()
     } catch (error) {
       console.error("Error getting voting power:", error)
-      return BigInt(0)
+      return "0"
     }
   },
   ["voting-power"],

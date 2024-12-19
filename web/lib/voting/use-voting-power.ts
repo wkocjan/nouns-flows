@@ -12,7 +12,7 @@ export function useVotingPower() {
   )
 
   return {
-    votingPower: votingPower || BigInt(0),
+    votingPower: BigInt(votingPower ?? "0"),
     isLoading,
   }
 }
