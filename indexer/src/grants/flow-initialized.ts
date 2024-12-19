@@ -9,6 +9,7 @@ import {
   bonusPoolToGrantId,
   flowContractToGrantId,
   grants,
+  parentFlowToChildren,
   rewardPoolContractToGrantId,
   tcrToGrantId,
   tokenEmitterToErc20,
@@ -136,6 +137,10 @@ async function createMappings(
     db.insert(baselinePoolToGrantId).values({
       baselinePool,
       grantId,
+    }),
+    db.insert(parentFlowToChildren).values({
+      parentFlowContract: contract,
+      childGrantIds: [],
     }),
   ])
 }

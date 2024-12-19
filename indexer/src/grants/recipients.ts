@@ -5,6 +5,7 @@ import {
   flowContractToGrantId,
   grants,
   recipientAndParentToGrantId,
+  parentFlowToChildren,
 } from "ponder:schema"
 import { addGrantEmbedding, removeGrantEmbedding } from "./embeddings/embed-grants"
 
@@ -46,7 +47,7 @@ async function handleFlowRecipientCreated(params: {
 
   // don't update recipient counts here because it's already done in the recipient created event
   // eg: the recipient created event is emitted when a flow recipient is created anyway
-  await createMappings(context.db, flowContract, grantId, bonusPool, baselinePool)
+  await createFlowMappings(context.db, flowContract, grantId, bonusPool, baselinePool)
 }
 
 async function handleRecipientCreated(params: {
@@ -55,16 +56,17 @@ async function handleRecipientCreated(params: {
 }) {
   const { event, context } = params
   const {
-    recipient: { recipient, metadata, recipientType },
+    recipient: { recipient: rawRecipient, metadata, recipientType },
     recipientId,
   } = event.args
+  const recipient = rawRecipient.toLowerCase()
 
   const flowAddress = event.log.address.toLowerCase()
   const parentFlow = await getParentFlow(context.db, flowAddress)
 
   const grant = await context.db.update(grants, { id: recipientId.toString() }).set({
     ...metadata,
-    recipient: recipient.toLowerCase(),
+    recipient,
     updatedAt: Number(event.block.timestamp),
     isActive: true,
   })
@@ -74,10 +76,7 @@ async function handleRecipientCreated(params: {
     activeRecipientCount: parentFlow.activeRecipientCount + 1,
   })
 
-  await context.db.insert(recipientAndParentToGrantId).values({
-    recipientAndParent: `${recipient.toLowerCase()}-${parentFlow.recipient.toLowerCase()}`,
-    grantId: grant.id,
-  })
+  await handleRecipientMappings(context.db, recipient, flowAddress, grant.id)
 
   await addGrantEmbedding(grant, recipientType, parentFlow.id)
 }
@@ -102,7 +101,7 @@ async function handleRecipientRemoved(params: {
     activeRecipientCount: parentFlow.activeRecipientCount - 1,
   })
 
-  //todo handle deletion of mappings
+  await handleRecipientRemovedMappings(context.db, removedGrant.recipient, flowAddress, recipientId)
 
   await removeGrantEmbedding(removedGrant)
 }
@@ -117,7 +116,7 @@ async function getParentFlow(db: Context["db"], parentFlow: string) {
   return flow
 }
 
-async function createMappings(
+async function createFlowMappings(
   db: Context["db"],
   flowContract: string,
   grantId: string,
@@ -137,5 +136,43 @@ async function createMappings(
       baselinePool: baselinePool.toLowerCase(),
       grantId,
     }),
+    db.insert(parentFlowToChildren).values({
+      parentFlowContract: flowContract,
+      childGrantIds: [],
+    }),
+  ])
+}
+
+async function handleRecipientMappings(
+  db: Context["db"],
+  recipient: string,
+  flowContract: string,
+  grantId: string
+) {
+  await Promise.all([
+    db.insert(recipientAndParentToGrantId).values({
+      recipientAndParent: `${recipient.toLowerCase()}-${flowContract}`,
+      grantId,
+    }),
+
+    db.update(parentFlowToChildren, { parentFlowContract: flowContract }).set((row) => ({
+      childGrantIds: [...row.childGrantIds, grantId],
+    })),
+  ])
+}
+
+async function handleRecipientRemovedMappings(
+  db: Context["db"],
+  recipient: string,
+  flowContract: string,
+  grantId: string
+) {
+  await Promise.all([
+    db.delete(parentFlowToChildren, {
+      parentFlowContract: recipient,
+    }),
+    db.update(parentFlowToChildren, { parentFlowContract: flowContract }).set((row) => ({
+      childGrantIds: row.childGrantIds.filter((id) => id !== grantId),
+    })),
   ])
 }

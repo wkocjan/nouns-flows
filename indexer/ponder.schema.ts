@@ -269,3 +269,12 @@ export const recipientAndParentToGrantId = onchainTable(
     recipientAndParentIdx: index().on(table.recipientAndParent),
   })
 )
+
+export const parentFlowToChildren = onchainTable(
+  "_kv_ParentFlowToChildren",
+  (t) => ({
+    parentFlowContract: t.text().primaryKey(),
+    childGrantIds: t.text().array().notNull(),
+  }),
+  (table) => ({})
+)

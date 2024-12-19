@@ -1,18 +1,27 @@
 import { and, eq } from "ponder"
 import { type Context } from "ponder:registry"
-import { flowContractToGrantId, grants } from "ponder:schema"
+import { flowContractToGrantId, grants, parentFlowToChildren } from "ponder:schema"
+
+async function getRelevantGrants(db: Context["db"], parentContract: string) {
+  const res = await db.find(parentFlowToChildren, { parentFlowContract: parentContract })
+  if (!res?.childGrantIds.length) return []
+
+  const grantIds = res.childGrantIds
+
+  const relevantGrants = await Promise.all(
+    grantIds.map(async (grantId) => db.find(grants, { id: grantId }))
+  )
+
+  // ensure not null, throw if any are null
+  if (relevantGrants.some((grant) => grant === null)) {
+    throw new Error(`Null grant found: ${parentContract}`)
+  }
+
+  return relevantGrants.filter((grant) => grant !== null)
+}
 
 export async function handleIncomingFlowRates(db: Context["db"], parentContract: string) {
-  const items = await db.sql
-    .select()
-    .from(grants)
-    .where(
-      and(
-        eq(grants.parentContract, parentContract),
-        eq(grants.isActive, true),
-        eq(grants.isRemoved, false)
-      )
-    )
+  const items = await getRelevantGrants(db, parentContract)
 
   if (!items?.length) return
 

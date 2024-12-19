@@ -3,6 +3,7 @@ import { handleIncomingFlowRates } from "./lib/handle-incoming-flow-rates"
 import {
   baselinePoolToGrantId,
   bonusPoolToGrantId,
+  flowContractToGrantId,
   grants,
   recipientAndParentToGrantId,
 } from "ponder:schema"
@@ -52,6 +53,11 @@ async function handleMemberUnitsUpdated(params: {
   }
 
   await handleIncomingFlowRates(context.db, parentGrant.recipient)
+
+  if (shouldUpdateBaseline && newUnits === 0n) {
+    // we assume that if the new units are 0 in the baseline pool, the grant is being removed
+    await handleRemovedGrant(context.db, grant.recipient, parentGrant.recipient)
+  }
 }
 
 async function getParentGrant(db: Context["db"], pool: string) {
@@ -89,7 +95,9 @@ async function getGrant(db: Context["db"], recipient: string, parentContract: st
   })
 
   if (!recipientAndParentLookup) {
-    throw new Error(`Recipient and parent lookup not found: ${recipient}-${parentContract}`)
+    throw new Error(
+      `Recipient and parent lookup not found: ${recipient.toLowerCase()}-${parentContract.toLowerCase()}`
+    )
   }
 
   const grant = await db.find(grants, { id: recipientAndParentLookup.grantId })
@@ -99,4 +107,15 @@ async function getGrant(db: Context["db"], recipient: string, parentContract: st
   }
 
   return grant
+}
+
+async function handleRemovedGrant(db: Context["db"], recipient: string, parentContract: string) {
+  await Promise.all([
+    db.delete(recipientAndParentToGrantId, {
+      recipientAndParent: `${recipient.toLowerCase()}-${parentContract.toLowerCase()}`,
+    }),
+    db.delete(flowContractToGrantId, {
+      contract: recipient,
+    }),
+  ])
 }

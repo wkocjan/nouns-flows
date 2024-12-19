@@ -1,23 +1,18 @@
 "use client"
 
-import { NOUNS_TOKEN, VOTING_POWER_SCALE } from "@/lib/config"
-import { mainnet } from "viem/chains"
-import { useAccount, useReadContract } from "wagmi"
-import { nounsTokenAbi } from "../abis"
+import useSWR from "swr"
+import { useAccount } from "wagmi"
+import { getVotingPower } from "./get-voting-power"
 
 export function useVotingPower() {
   const { address } = useAccount()
 
-  const { data, ...rest } = useReadContract({
-    address: NOUNS_TOKEN,
-    chainId: mainnet.id,
-    abi: nounsTokenAbi,
-    functionName: "getCurrentVotes",
-    args: address ? [address] : undefined,
-    query: { enabled: !!address },
-  })
+  const { data: votingPower, isLoading } = useSWR(address ? ["voting-power", address] : null, () =>
+    getVotingPower(address),
+  )
+
   return {
-    votingPower: (data ?? BigInt(0)) * VOTING_POWER_SCALE,
-    ...rest,
+    votingPower: votingPower || BigInt(0),
+    isLoading,
   }
 }

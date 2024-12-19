@@ -13,10 +13,11 @@ import { ManageFlow } from "./manage-flow"
 
 interface Props {
   flow: FlowWithGrants
+  votingPower: number
 }
 
 export const FlowHeader = (props: Props) => {
-  const { flow } = props
+  const { flow, votingPower } = props
   const { isTopLevel } = flow
 
   const TOTAL_PERCENT = 1e6 // 100% in basis points
@@ -58,7 +59,8 @@ export const FlowHeader = (props: Props) => {
       <div
         className={cn("grid w-full gap-x-4 gap-y-8 text-sm max-sm:text-xs md:w-auto md:shrink-0", {
           "grid-cols-2 md:grid-cols-2": isTopLevel,
-          "grid-cols-2 md:grid-cols-4": !isTopLevel,
+          "grid-cols-2 md:grid-cols-4": !isTopLevel && votingPower > 0,
+          "grid-cols-2 md:grid-cols-3": !isTopLevel && votingPower === 0,
         })}
       >
         <div className="max-sm:flex max-sm:flex-col max-sm:items-start md:text-center">
@@ -139,10 +141,12 @@ export const FlowHeader = (props: Props) => {
               <p className="text-sm font-medium">{flow.votesCount} </p>
             </div>
 
-            <FlowHeaderUserVotes
-              parent={getEthAddress(flow.parentContract)}
-              recipientId={flow.id}
-            />
+            {votingPower > 0 && (
+              <FlowHeaderUserVotes
+                parent={getEthAddress(flow.parentContract)}
+                recipientId={flow.id}
+              />
+            )}
           </>
         )}
       </div>
