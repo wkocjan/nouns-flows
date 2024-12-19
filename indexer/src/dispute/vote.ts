@@ -1,7 +1,6 @@
 import { ponder, type Context, type Event } from "ponder:registry"
 import { Party } from "../enums"
 import { disputes, disputeVotes } from "ponder:schema"
-import { eq, and } from "ponder"
 import { getDisputePrimaryKey } from "./create"
 
 ponder.on("Arbitrator:VoteCommitted", handleVoteCommitted)
@@ -21,13 +20,22 @@ async function handleVoteCommitted(params: {
   const voter = event.transaction.from.toLowerCase()
 
   await context.db.insert(disputeVotes).values({
-    id: `${disputeId}_${arbitrator}_${voter}`,
+    id: getDisputeVotePrimaryKey(disputeId, arbitrator, voter, commitHash),
     disputeId: disputeId.toString(),
     committedAt: Number(event.block.timestamp),
     commitHash,
     arbitrator,
     voter,
   })
+}
+
+function getDisputeVotePrimaryKey(
+  disputeId: bigint,
+  arbitrator: string,
+  voter: string,
+  commitHash: string
+) {
+  return `${disputeId}_${arbitrator.toLowerCase()}_${voter.toLowerCase()}_${commitHash}`
 }
 
 async function handleVoteRevealed(params: {
@@ -49,8 +57,10 @@ async function handleVoteRevealed(params: {
   if (!dispute) throw new Error("Dispute not found")
 
   // Update vote
-  await context.db.sql
-    .update(disputeVotes)
+  await context.db
+    .update(disputeVotes, {
+      id: getDisputeVotePrimaryKey(disputeId, arbitrator, voter, commitHash),
+    })
     .set({
       choice,
       votes: votes.toString(),
@@ -58,14 +68,6 @@ async function handleVoteRevealed(params: {
       revealedAt: Number(event.block.timestamp),
       revealedBy: revealedBy.toLowerCase(),
     })
-    .where(
-      and(
-        eq(disputeVotes.disputeId, disputeId.toString()),
-        eq(disputeVotes.arbitrator, arbitrator.toLowerCase()),
-        eq(disputeVotes.voter, voter.toLowerCase()),
-        eq(disputeVotes.commitHash, commitHash)
-      )
-    )
 
   // Update dispute
   const partyVotes = choice === Party.Requester ? "requesterPartyVotes" : "challengerPartyVotes"
