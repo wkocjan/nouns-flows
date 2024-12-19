@@ -1,6 +1,6 @@
 import { and, eq } from "ponder"
 import { ponder, type Context, type Event } from "ponder:registry"
-import { disputes, grants } from "ponder:schema"
+import { arbitratorToGrantId, disputes, grants } from "ponder:schema"
 import { Party } from "../enums"
 
 ponder.on("Arbitrator:DisputeCreated", handleDisputeCreated)
@@ -61,15 +61,10 @@ async function handleDispute(params: {
 
   await context.db.update(grants, { id: _itemID.toString() }).set({ isDisputed: true })
 
-  const items = await context.db.sql
-    .select()
-    .from(grants)
-    .where(and(eq(grants.arbitrator, arbitrator), eq(grants.isFlow, true)))
+  const parent = await context.db.find(arbitratorToGrantId, { arbitrator })
+  if (!parent) throw new Error("Arbitrator not found")
 
-  const parent = items[0]
-  if (!parent) throw new Error("Parent grant not found")
-
-  await context.db.update(grants, { id: parent.id }).set((row) => ({
+  await context.db.update(grants, { id: parent.grantId }).set((row) => ({
     challengedRecipientCount: row.challengedRecipientCount + 1,
     awaitingRecipientCount: row.awaitingRecipientCount - 1,
   }))

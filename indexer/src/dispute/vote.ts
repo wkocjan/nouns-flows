@@ -70,11 +70,8 @@ async function handleVoteRevealed(params: {
   // Update dispute
   const partyVotes = choice === Party.Requester ? "requesterPartyVotes" : "challengerPartyVotes"
 
-  await context.db.sql
-    .update(disputes)
-    .set({
-      votes: (BigInt(dispute.votes) + votes).toString(),
-      [partyVotes]: (BigInt(dispute[partyVotes]) + votes).toString(),
-    })
-    .where(eq(disputes.id, dispute.id))
+  await context.db.update(disputes, { id: dispute.id }).set({
+    votes: (BigInt(dispute.votes) + votes).toString(),
+    [partyVotes]: (BigInt(dispute[partyVotes]) + votes).toString(),
+  })
 }

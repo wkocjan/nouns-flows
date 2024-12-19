@@ -169,10 +169,10 @@ export const tokenHolders = onchainTable(
 )
 
 // useful for quick in memory lookups
-export const tokenEmitters = onchainTable(
-  "TokenEmitter",
+export const tokenEmitterToErc20 = onchainTable(
+  "TokenEmitterToErc20",
   (t) => ({
-    id: t.text().primaryKey(),
+    tokenEmitter: t.text().primaryKey(),
     erc20: t.text().notNull(),
   }),
   (table) => ({
@@ -181,12 +181,45 @@ export const tokenEmitters = onchainTable(
 )
 
 // useful for quick in memory lookups
-export const flowRecipients = onchainTable(
-  "FlowRecipient",
+export const flowContractToGrantId = onchainTable(
+  "FlowContractToGrantId",
   (t) => ({
     // id is the contract address
-    id: t.text().primaryKey(),
+    contract: t.text().primaryKey(),
     // id of the grant in the parent flow
+    grantId: t.text().notNull(),
+  }),
+  (table) => ({
+    grantIdIdx: index().on(table.grantId),
+  })
+)
+
+export const rewardPoolContractToGrantId = onchainTable(
+  "RewardPoolContractToGrantId",
+  (t) => ({
+    contract: t.text().primaryKey(),
+    grantId: t.text().notNull(),
+  }),
+  (table) => ({
+    grantIdIdx: index().on(table.grantId),
+  })
+)
+
+export const arbitratorToGrantId = onchainTable(
+  "ArbitratorToGrantId",
+  (t) => ({
+    arbitrator: t.text().primaryKey(),
+    grantId: t.text().notNull(),
+  }),
+  (table) => ({
+    grantIdIdx: index().on(table.grantId),
+  })
+)
+
+export const tcrToGrantId = onchainTable(
+  "TcrToGrantId",
+  (t) => ({
+    tcr: t.text().primaryKey(),
     grantId: t.text().notNull(),
   }),
   (table) => ({

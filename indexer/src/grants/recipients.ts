@@ -1,5 +1,5 @@
 import { ponder, type Context, type Event } from "ponder:registry"
-import { flowRecipients, grants } from "ponder:schema"
+import { flowContractToGrantId, grants } from "ponder:schema"
 import { addGrantEmbedding, removeGrantEmbedding } from "./embeddings/embed-grants"
 import { and, eq } from "ponder"
 
@@ -40,8 +40,8 @@ async function handleFlowRecipientCreated(params: {
 
   // don't update recipient counts here because it's already done in the recipient created event
   // eg: the recipient created event is emitted when a flow recipient is created anyway
-  await context.db.insert(flowRecipients).values({
-    id: flowContract,
+  await context.db.insert(flowContractToGrantId).values({
+    contract: flowContract,
     grantId: recipientId.toString(),
   })
 }
@@ -94,18 +94,17 @@ async function handleRecipientRemoved(params: {
     activeRecipientCount: parentFlow.activeRecipientCount - 1,
   })
 
-  await context.db.sql.delete(flowRecipients).where(eq(flowRecipients.id, flowAddress))
+  //todo handle deletion of mappings
 
   await removeGrantEmbedding(removedGrant)
 }
 
 async function getParentFlow(db: Context["db"], parentFlow: string) {
-  const [flow] = await db.sql
-    .select()
-    .from(grants)
-    .where(and(eq(grants.recipient, parentFlow), eq(grants.isFlow, true)))
-    .limit(1)
+  const flowGrantId = await db.find(flowContractToGrantId, { contract: parentFlow })
+  if (!flowGrantId) throw new Error("Flow not found for recipient")
 
+  const flow = await db.find(grants, { id: flowGrantId.grantId })
   if (!flow) throw new Error("Flow not found for recipient")
+
   return flow
 }

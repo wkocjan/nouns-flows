@@ -1,9 +1,16 @@
-import { ponder } from "ponder:registry"
+import { Context, ponder } from "ponder:registry"
 import { zeroAddress } from "viem"
 import { rewardPoolImplAbi } from "../../abis"
 import { Status } from "../enums"
 import { base as baseContracts } from "../../addresses"
-import { grants, tokenEmitters } from "ponder:schema"
+import {
+  arbitratorToGrantId,
+  flowContractToGrantId,
+  grants,
+  rewardPoolContractToGrantId,
+  tcrToGrantId,
+  tokenEmitterToErc20,
+} from "ponder:schema"
 
 ponder.on("NounsFlow:FlowInitialized", async (params) => {
   const { context, event } = params
@@ -80,9 +87,30 @@ ponder.on("NounsFlow:FlowInitialized", async (params) => {
     isActive: true,
   })
 
-  // insert into token emitters
-  await context.db.insert(tokenEmitters).values({
-    id: baseContracts.TokenEmitter,
-    erc20: baseContracts.ERC20VotesMintable,
-  })
+  await createMappings(context.db, contract, contract)
 })
+
+async function createMappings(db: Context["db"], contract: string, grantId: string) {
+  await Promise.all([
+    db.insert(tokenEmitterToErc20).values({
+      tokenEmitter: baseContracts.TokenEmitter,
+      erc20: baseContracts.ERC20VotesMintable,
+    }),
+    db.insert(flowContractToGrantId).values({
+      contract,
+      grantId,
+    }),
+    db.insert(tcrToGrantId).values({
+      tcr: baseContracts.FlowTCR,
+      grantId,
+    }),
+    db.insert(rewardPoolContractToGrantId).values({
+      contract: baseContracts.RewardPool,
+      grantId,
+    }),
+    db.insert(arbitratorToGrantId).values({
+      arbitrator: baseContracts.ERC20VotesArbitrator,
+      grantId,
+    }),
+  ])
+}

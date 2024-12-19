@@ -1,5 +1,5 @@
 import { ponder, type Context, type Event } from "ponder:registry"
-import { tokenEmitters, tokenHolders } from "ponder:schema"
+import { tokenEmitterToErc20, tokenHolders } from "ponder:schema"
 
 ponder.on("TokenEmitter:TokensSold", handleTokensSold)
 ponder.on("TokenEmitterChildren:TokensSold", handleTokensSold)
@@ -14,8 +14,8 @@ async function handleTokensSold(params: {
   const holder = seller.toLowerCase()
 
   const tokenEmitter = event.log.address.toLowerCase()
-  const tokenEmitterRecord = await context.db.find(tokenEmitters, {
-    id: tokenEmitter,
+  const tokenEmitterRecord = await context.db.find(tokenEmitterToErc20, {
+    tokenEmitter,
   })
 
   if (!tokenEmitterRecord) throw new Error("Token emitter not found")

@@ -2,8 +2,7 @@ import { ponder, type Context, type Event } from "ponder:registry"
 import { decodeAbiParameters, getAddress } from "viem"
 import { RecipientType, Status } from "../enums"
 import { addApplicationEmbedding } from "./embeddings/embed-applications"
-import { grants } from "ponder:schema"
-import { and, eq } from "ponder"
+import { grants, tcrToGrantId } from "ponder:schema"
 
 ponder.on("FlowTcr:ItemSubmitted", handleItemSubmitted)
 ponder.on("FlowTcrChildren:ItemSubmitted", handleItemSubmitted)
@@ -17,12 +16,7 @@ async function handleItemSubmitted(params: {
 
   const { _submitter, _data, _itemID, _evidenceGroupID } = event.args
 
-  const [flow] = await context.db.sql
-    .select()
-    .from(grants)
-    .where(and(eq(grants.tcr, tcr), eq(grants.isFlow, true)))
-
-  if (!flow) throw new Error("Flow not found for TCR item")
+  const flow = await getFlowFromTcr(context.db, tcr)
 
   const [recipient, metadata, recipientType] = decodeAbiParameters(
     [
@@ -101,4 +95,18 @@ async function handleItemSubmitted(params: {
   if (!grant) throw new Error("Grant not found")
 
   await addApplicationEmbedding(grant, flow.id)
+}
+
+async function getFlowFromTcr(db: Context["db"], tcr: string) {
+  const flowId = await db.find(tcrToGrantId, {
+    tcr,
+  })
+  if (!flowId) throw new Error("Flow ID not found for TCR item")
+
+  const flow = await db.find(grants, {
+    id: flowId.grantId,
+  })
+  if (!flow) throw new Error("Flow not found for TCR item")
+
+  return flow
 }

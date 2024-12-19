@@ -1,6 +1,6 @@
 import { and, eq } from "ponder"
 import { type Context } from "ponder:registry"
-import { grants } from "ponder:schema"
+import { flowContractToGrantId, grants } from "ponder:schema"
 
 export async function handleIncomingFlowRates(db: Context["db"], parentContract: string) {
   const items = await db.sql
@@ -16,10 +16,10 @@ export async function handleIncomingFlowRates(db: Context["db"], parentContract:
 
   if (!items?.length) return
 
-  const parents = await db.sql.select().from(grants).where(eq(grants.recipient, parentContract))
+  const parentGrantId = await db.find(flowContractToGrantId, { contract: parentContract })
+  if (!parentGrantId) throw new Error(`Parent id not found: ${parentContract}`)
 
-  const parent = parents?.[0]
-
+  const parent = await db.find(grants, { id: parentGrantId.grantId })
   if (!parent) throw new Error(`Parent not found: ${parentContract}`)
 
   const secondsPerMonth = 60 * 60 * 24 * 30
