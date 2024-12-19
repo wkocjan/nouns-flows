@@ -1,7 +1,7 @@
 import { ponder, type Context, type Event } from "ponder:registry"
 import { getMonthlyIncomingFlowRate } from "./lib/monthly-flow"
 import { handleIncomingFlowRates } from "./lib/handle-incoming-flow-rates"
-import { votes, grants } from "ponder:schema"
+import { votes, grants, votesByTokenIdAndContract } from "ponder:schema"
 import { eq, not } from "ponder"
 import { and } from "ponder"
 
@@ -28,16 +28,7 @@ async function handleVoteCast(params: {
   let hasPreviousVotes = false
 
   // Mark old votes for this token as stale
-  const oldVotes = await context.db.sql
-    .delete(votes)
-    .where(
-      and(
-        eq(votes.contract, contract),
-        eq(votes.tokenId, tokenId.toString()),
-        not(eq(votes.blockNumber, blockNumber))
-      )
-    )
-    .returning()
+  const oldVotes = await getOldVotes(context.db, contract, tokenId, blockNumber)
 
   oldVotes.forEach((oldVote) => {
     const existingVotes = affectedGrantsIds.get(oldVote.recipientId) ?? BigInt(0)
@@ -45,9 +36,11 @@ async function handleVoteCast(params: {
     hasPreviousVotes = true
   })
 
+  const voteId = `${contract}_${recipientId}_${voter}_${blockNumber}_${tokenId}`
+
   // Create the new vote
   await context.db.insert(votes).values({
-    id: `${contract}_${recipientId}_${voter}_${blockNumber}_${tokenId}`,
+    id: voteId,
     contract,
     recipientId: recipientId.toString(),
     tokenId: tokenId.toString(),
@@ -58,6 +51,16 @@ async function handleVoteCast(params: {
     transactionHash,
     votesCount: votesCount.toString(),
   })
+
+  await context.db
+    .insert(votesByTokenIdAndContract)
+    .values({
+      contractTokenId: `${contract}_${tokenId}`,
+      voteIds: [voteId],
+    })
+    .onConflictDoUpdate((row) => ({
+      voteIds: Array.from(new Set([...row.voteIds, voteId])),
+    }))
 
   for (const [affectedGrantId, votesDelta] of affectedGrantsIds) {
     const monthlyIncomingFlowRate = await getGrantBudget(
@@ -85,4 +88,41 @@ async function getGrantBudget(context: Context, parentContract: `0x${string}`, i
   if (!grant) throw new Error(`Could not find grant ${id}`)
 
   return getMonthlyIncomingFlowRate(context, parentContract, grant.recipient)
+}
+
+async function getOldVotes(
+  db: Context["db"],
+  contract: `0x${string}`,
+  tokenId: bigint,
+  blockNumber: string
+) {
+  const existingVoteIds = await db.find(votesByTokenIdAndContract, {
+    contractTokenId: `${contract}_${tokenId}`,
+  })
+
+  if (!existingVoteIds) return []
+
+  const existingVotesRaw = await Promise.all(
+    existingVoteIds.voteIds.map((voteId) => db.find(votes, { id: voteId }))
+  )
+
+  // filter out nulls
+  const existingVotesNotNull = existingVotesRaw.filter(
+    (vote) => vote !== undefined && vote !== null
+  )
+
+  // include votes that come before the latest vote block number
+  // since all votescast events happen in the same block per vote
+  const oldVotes = existingVotesNotNull.filter((vote) => vote.blockNumber !== blockNumber)
+
+  // delete all old votes
+  await Promise.all(oldVotes.map((vote) => db.delete(votes, { id: vote.id })))
+
+  await db
+    .update(votesByTokenIdAndContract, { contractTokenId: `${contract}_${tokenId}` })
+    .set((row) => ({
+      voteIds: row.voteIds.filter((voteId) => !oldVotes.some((oldVote) => oldVote.id === voteId)),
+    }))
+
+  return oldVotes
 }

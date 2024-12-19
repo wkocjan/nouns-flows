@@ -278,3 +278,12 @@ export const parentFlowToChildren = onchainTable(
   }),
   (table) => ({})
 )
+
+export const votesByTokenIdAndContract = onchainTable(
+  "_kv_VotesByTokenIdAndContract",
+  (t) => ({
+    contractTokenId: t.text().primaryKey(),
+    voteIds: t.text().array().notNull(),
+  }),
+  (table) => ({})
+)
