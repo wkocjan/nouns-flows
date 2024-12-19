@@ -11,7 +11,6 @@ export async function getTokenVotes(contract: `0x${string}`, tokenIds: string[])
     where: {
       contract,
       tokenId: { in: tokenIds },
-      isStale: false,
     },
     distinct: ["recipientId"],
   })

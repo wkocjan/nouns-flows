@@ -175,12 +175,10 @@ view Vote {
   bps         Int
   voter       String
   blockNumber String  @map("block_number")
-  isStale     Boolean @map("is_stale")
   votesCount  String  @map("votes_count")
 
   @@index([contract])
   @@index([recipientId])
-  @@index([isStale])
   @@schema("onchain")
 }
 

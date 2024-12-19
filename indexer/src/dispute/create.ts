@@ -76,5 +76,5 @@ async function handleDispute(params: {
 }
 
 export function getDisputePrimaryKey(disputeId: bigint, arbitrator: string) {
-  return `${disputeId.toString()}_${arbitrator}`
+  return `${disputeId.toString()}_${arbitrator.toLowerCase()}`
 }

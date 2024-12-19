@@ -86,15 +86,12 @@ export const votes = onchainTable(
     blockNumber: t.text().notNull(),
     blockTimestamp: t.integer().notNull(),
     transactionHash: t.text().notNull(),
-    isStale: t.boolean().notNull(),
     votesCount: t.text().notNull(),
   }),
   (table) => ({
     voterIdx: index().on(table.voter),
     contractIdx: index().on(table.contract),
     recipientIdIdx: index().on(table.recipientId),
-    isStaleIdx: index().on(table.isStale),
-    recipientIdIsStaleIdx: index().on(table.recipientId, table.isStale),
   })
 )
 

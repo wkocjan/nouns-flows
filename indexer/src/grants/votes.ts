@@ -22,32 +22,27 @@ async function handleVoteCast(params: {
   const contract = event.log.address.toLowerCase() as `0x${string}`
   const votesCount = bps / (totalWeight / BigInt(1e18))
 
-  const affectedGrantsIds = new Set([recipientId.toString()])
+  const affectedGrantsIds = new Map<string, bigint>()
+  affectedGrantsIds.set(recipientId.toString(), votesCount)
 
   let hasPreviousVotes = false
 
   // Mark old votes for this token as stale
-  const oldVotes = await context.db.sql
-    .update(votes)
-    .set({ isStale: true })
-    .where(
-      and(
-        eq(votes.contract, contract),
-        eq(votes.tokenId, tokenId.toString()),
-        eq(votes.isStale, false),
-        not(eq(votes.blockNumber, blockNumber))
-      )
-    )
-    .returning()
+  const oldVote = await context.db.find(votes, { id: getVoteId(contract, tokenId) })
 
-  oldVotes.forEach((vote) => {
-    affectedGrantsIds.add(vote.recipientId)
+  if (oldVote) {
+    affectedGrantsIds.set(oldVote.recipientId, -BigInt(oldVote.votesCount))
     hasPreviousVotes = true
+  }
+
+  // remove old vote
+  await context.db.delete(votes, {
+    id: getVoteId(contract, tokenId),
   })
 
   // Create the new vote
   await context.db.insert(votes).values({
-    id: `${contract}_${recipientId}_${voter}_${blockNumber}_${tokenId}`,
+    id: getVoteId(contract, tokenId),
     contract,
     recipientId: recipientId.toString(),
     tokenId: tokenId.toString(),
@@ -56,20 +51,20 @@ async function handleVoteCast(params: {
     blockNumber,
     blockTimestamp,
     transactionHash,
-    isStale: false,
     votesCount: votesCount.toString(),
   })
 
-  for (const affectedGrantId of affectedGrantsIds) {
-    const [votesCount, monthlyIncomingFlowRate] = await Promise.all([
-      getGrantVotesCount(context, affectedGrantId),
-      getGrantBudget(context as Context, contract, affectedGrantId),
-    ])
+  for (const [affectedGrantId, votesDelta] of affectedGrantsIds) {
+    const monthlyIncomingFlowRate = await getGrantBudget(
+      context as Context,
+      contract,
+      affectedGrantId
+    )
 
-    await context.db.update(grants, { id: affectedGrantId }).set({
-      votesCount,
+    await context.db.update(grants, { id: affectedGrantId }).set((row) => ({
+      votesCount: (BigInt(row.votesCount) + votesDelta).toString(),
       monthlyIncomingFlowRate,
-    })
+    }))
   }
 
   // if is a new voter, then we are adding new member units to the total
@@ -79,13 +74,8 @@ async function handleVoteCast(params: {
   }
 }
 
-async function getGrantVotesCount(context: Context<"NounsFlow:VoteCast">, recipientId: string) {
-  const result = await context.db.sql
-    .select()
-    .from(votes)
-    .where(and(eq(votes.recipientId, recipientId), eq(votes.isStale, false)))
-
-  return result.reduce((acc: bigint, v) => acc + BigInt(v.votesCount), BigInt(0)).toString()
+function getVoteId(contract: `0x${string}`, tokenId: bigint) {
+  return `${contract}_${tokenId.toString()}`
 }
 
 async function getGrantBudget(context: Context, parentContract: `0x${string}`, id: string) {

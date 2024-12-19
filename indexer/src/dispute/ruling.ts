@@ -1,6 +1,7 @@
 import { ponder, type Context, type Event } from "ponder:registry"
 import { disputes } from "ponder:schema"
 import { and, eq } from "ponder"
+import { getDisputePrimaryKey } from "./create"
 
 ponder.on("FlowTcr:Ruling", handleRuling)
 ponder.on("FlowTcrChildren:Ruling", handleRuling)
@@ -12,15 +13,11 @@ async function handleRuling(params: {
   const { event, context } = params
   const { _arbitrator, _disputeID, _ruling } = event.args
 
-  await context.db.sql
-    .update(disputes)
+  await context.db
+    .update(disputes, {
+      id: getDisputePrimaryKey(_disputeID, _arbitrator),
+    })
     .set({
       ruling: Number(_ruling),
     })
-    .where(
-      and(
-        eq(disputes.disputeId, _disputeID.toString()),
-        eq(disputes.arbitrator, _arbitrator.toString().toLowerCase())
-      )
-    )
 }
