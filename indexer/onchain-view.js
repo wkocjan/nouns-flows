@@ -16,6 +16,10 @@ async function createSchemaView() {
   })
 
   try {
+    console.debug("View creation will start in 5 minutes...")
+    await sleep(5 * 60 * 1000)
+
+    console.debug("Creating views...")
     await client.connect()
 
     const commitSHA = process.env.RAILWAY_GIT_COMMIT_SHA
@@ -65,3 +69,7 @@ createSchemaView().catch((error) => {
   console.error("Fatal error:", error)
   process.exit(1)
 })
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
